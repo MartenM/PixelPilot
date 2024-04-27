@@ -1,4 +1,6 @@
 # Pixel Pilot
+[![NuGet Version](https://img.shields.io/nuget/vpre/PixelPilot.Core?style=flat-square&logo=nuget&link=https%3A%2F%2Fwww.nuget.org%2Fpackages%2FPixelPilot.Core%2F%20)](https://www.nuget.org/packages/PixelPilot.Core/)
+
 A C# library for interacting with the game [PixelWalker](https://pixelwalker.net)
 
 ![Example bot](https://img.martenm.nl/g/1F2Fx)
