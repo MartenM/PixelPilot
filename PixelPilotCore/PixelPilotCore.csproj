@@ -5,9 +5,11 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>PixelPilot</RootNamespace>
-        <Description>Used to make PixelWalker bots. Allows for easy interactions with the game, while still keeping the abstraction levels low.</Description>
+        <Description>Core library for creating bots in PixelWalker.</Description>
         <Title>PixelPilotCore</Title>
         <Authors>MartenM</Authors>
+        <RepositoryUrl>https://github.com/MartenM/PixelPilot</RepositoryUrl>
+        <PackageTags>PixelWalker</PackageTags>
     </PropertyGroup>
 
     <ItemGroup>

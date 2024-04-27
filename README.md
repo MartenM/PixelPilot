@@ -1,5 +1,5 @@
 # Pixel Pilot
-An C# libary for interacting with the game [PixelWalker](https://pixelwalker.net)
+A C# library for interacting with the game [PixelWalker](https://pixelwalker.net)
 
 ![Example bot](https://img.martenm.nl/g/1F2Fx)
 
@@ -12,6 +12,10 @@ An C# libary for interacting with the game [PixelWalker](https://pixelwalker.net
 * **PixelPilotCore**: The core of the project. Bare minimum client to interact with the game.
 * **PixelPilotTests**: All test related to the project.
 * **PixelPilotExample**: An example bot.
+
+### To-Do's:
+- [] Implement all packets.
+- [] Implement common World and Player abstractions (seperate package)
 
 ## Example
 ```csharp
@@ -68,4 +72,6 @@ client.OnClientConnected += (_) =>
 Thread.Sleep(-1);
 ```
 
+
+Enjoy the library? Leave a ⭐
 
