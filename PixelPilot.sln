@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelPilotCore", "PixelPilotCore\PixelPilotCore.csproj", "{3492FA89-A4FB-49E9-95DD-D63D6D649B59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelPilotTests", "PixelPilotTests\PixelPilotTests.csproj", "{DDBAB55E-FC16-4BF8-8A97-CA3A1A843D39}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelPilotExample", "PixelPilotExample\PixelPilotExample.csproj", "{173C3E46-B7EE-4480-AFC4-33E15A847BE3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3492FA89-A4FB-49E9-95DD-D63D6D649B59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3492FA89-A4FB-49E9-95DD-D63D6D649B59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3492FA89-A4FB-49E9-95DD-D63D6D649B59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3492FA89-A4FB-49E9-95DD-D63D6D649B59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDBAB55E-FC16-4BF8-8A97-CA3A1A843D39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDBAB55E-FC16-4BF8-8A97-CA3A1A843D39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDBAB55E-FC16-4BF8-8A97-CA3A1A843D39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDBAB55E-FC16-4BF8-8A97-CA3A1A843D39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{173C3E46-B7EE-4480-AFC4-33E15A847BE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{173C3E46-B7EE-4480-AFC4-33E15A847BE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{173C3E46-B7EE-4480-AFC4-33E15A847BE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{173C3E46-B7EE-4480-AFC4-33E15A847BE3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
