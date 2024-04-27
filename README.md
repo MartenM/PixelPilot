@@ -14,8 +14,8 @@ A C# library for interacting with the game [PixelWalker](https://pixelwalker.net
 * **PixelPilotExample**: An example bot.
 
 ### To-Do's:
-- [] Implement all packets.
-- [] Implement common World and Player abstractions (seperate package)
+- [ ] Implement all packets.
+- [ ] Implement common World and Player abstractions (seperate package)
 
 ## Example
 ```csharp
