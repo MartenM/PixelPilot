@@ -10,7 +10,6 @@
         <Authors>MartenM</Authors>
         <RepositoryUrl>https://github.com/MartenM/PixelPilot</RepositoryUrl>
         <PackageTags>PixelWalker</PackageTags>
-        <PackageLicenseUrl>https://github.com/MartenM/PixelPilot/blob/main/LICENSE</PackageLicenseUrl>
     </PropertyGroup>
 
     <ItemGroup>
