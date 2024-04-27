@@ -39,7 +39,7 @@ static class WorldMessageTypeExtensions
         {
             WorldMessageType.PlayerInit => typeof(InitPacket),
             WorldMessageType.PlayerJoined => typeof(PlayerJoinPacket),
-            WorldMessageType.PlayerLeft => typeof(PlayerLeavePacket),
+            WorldMessageType.PlayerLeft => typeof(PlayerLeftPacket),
             WorldMessageType.ChatMessage => typeof(PlayerChatPacket),
             WorldMessageType.PlayerMoved => typeof(PlayerMovePacket),
             WorldMessageType.PlayerGodMode => typeof(PlayerGodmodePacket),
