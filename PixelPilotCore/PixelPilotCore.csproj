@@ -15,6 +15,7 @@
         <PackageIcon>package_logo.png</PackageIcon>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <Version>1.0.1</Version>
     </PropertyGroup>
 
     <ItemGroup>
