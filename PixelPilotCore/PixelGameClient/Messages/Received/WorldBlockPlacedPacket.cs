@@ -15,6 +15,8 @@ public class WorldBlockPlacedPacket : IPixelGamePacket
     public int? ExtraInt3 { get; }
 
     public bool? ExtraBool { get; }
+    
+    public byte? ExtraByte { get; }
 
     public WorldBlockPlacedPacket(int playerId, int x, int y, int layer, int blockId)
     {
@@ -33,6 +35,27 @@ public class WorldBlockPlacedPacket : IPixelGamePacket
         Layer = layer;
         BlockId = blockId;
         ExtraInt1 = extraInt1;
+    }
+    
+    public WorldBlockPlacedPacket(int playerId, int x, int y, int layer, int blockId, int extraInt1, byte extraByte)
+    {
+        PlayerID = playerId;
+        X = x;
+        Y = y;
+        Layer = layer;
+        BlockId = blockId;
+        ExtraInt1 = extraInt1;
+        ExtraByte = extraByte;
+    }
+    
+    public WorldBlockPlacedPacket(int playerId, int x, int y, int layer, int blockId, byte extraByte)
+    {
+        PlayerID = playerId;
+        X = x;
+        Y = y;
+        Layer = layer;
+        BlockId = blockId;
+        ExtraByte = extraByte;
     }
     
     public WorldBlockPlacedPacket(int playerId, int x, int y, int layer, int blockId, int extraInt1, int extraInt2, int extraInt3)
