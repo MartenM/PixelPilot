@@ -71,29 +71,21 @@ public class PacketConverter
         {
             case PacketFieldType.String:
                 return reader.ReadString();
-                break;
             case PacketFieldType.Boolean:
                 return reader.ReadBoolean();
-                break;
             case PacketFieldType.Byte:
                 return reader.ReadByte();
-                break;
             case PacketFieldType.Int16:
                 return reader.ReadInt16BE();
-                break;
             case PacketFieldType.Int32:
                 return reader.ReadInt32BE();
-                break;
             case PacketFieldType.Int64:
                 return reader.ReadInt64();
-                break;
             case PacketFieldType.ByteArray:
                 var length = reader.Read7BitEncodedInt();
                 return reader.ReadBytes(length);
-                break;
             case PacketFieldType.Double:
                 return reader.ReadDoubleBE();
-                break;
             default:
                 throw new Exception($"Could not deserialize type. {fieldType}");
         }

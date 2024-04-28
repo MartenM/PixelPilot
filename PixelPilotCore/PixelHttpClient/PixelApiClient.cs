@@ -15,9 +15,6 @@ public class PixelApiClient : IDisposable
     private readonly ILogger _logger = LogManager.GetLogger("API");
     private readonly HttpClient _client;
 
-    private string? _email;
-    private string? _password;
-
     public PixelApiClient(string accountToken)
     {
         _client = new HttpClient();
