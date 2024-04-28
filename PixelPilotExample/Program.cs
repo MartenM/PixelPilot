@@ -32,7 +32,7 @@ world.OnBlockPlaced += (_, playerId, oldBlock, _) =>
     client.Send(oldBlock.AsPacketOut());
 };
 
-await client.Connect(RoomType.Pixelwalker4, "r082b210d67df52");
+await client.Connect("r082b210d67df52");
 
 
 // Executed when the client receives a packet!
@@ -48,6 +48,11 @@ client.OnPacketReceived += (_, packet) =>
             return;
         }
         if (chat.Message.Equals(".ping")) client.Send(new PlayerChatOutPacket($"Pong! ({chat.Id})"));
+    }
+
+    if (packet is PlayerJoinPacket join)
+    {
+        client.Send(new PlayerChatOutPacket($"/giveedit {join.Username}"));
     }
 };
 

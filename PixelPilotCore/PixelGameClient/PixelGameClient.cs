@@ -19,6 +19,7 @@ public class PixelPilotClient : IDisposable
     private readonly PixelApiClient _apiClient;
     private WebsocketClient? _socketClient;
     private PacketConverter _packetConverter = new();
+    public string? RoomType { get; private set; }
 
     /// <summary>
     /// Indicates if the client will try to automatically reconnect if the
@@ -62,15 +63,43 @@ public class PixelPilotClient : IDisposable
     public event ClientConnected? OnClientConnected;
     public delegate void ClientConnected(object sender);
 
-    public PixelPilotClient(string accountToken)
-    {
-        _apiClient = new PixelApiClient(accountToken);
-        AutomaticReconnect = true;
-    }
+    /// <summary>
+    /// Create a PixelPilot client using an account token.
+    /// Automatically reconnects.
+    /// </summary>
+    /// <param name="accountToken">A valid account token</param>
+    public PixelPilotClient(string accountToken) : this(accountToken, true)
+    { }
     
+    /// <summary>
+    /// Create a PixelPilot client using an account token.
+    /// </summary>
+    /// <param name="accountToken">A valid account token</param>
+    /// <param name="automaticReconnect">If the bot should reconnect</param>
     public PixelPilotClient(string accountToken, bool automaticReconnect)
     {
         _apiClient = new PixelApiClient(accountToken);
+        AutomaticReconnect = automaticReconnect;
+    }
+    
+    /// <summary>
+    /// Create a PixelPilotClient using the email and password login method.
+    /// Automatically reconnects.
+    /// </summary>
+    /// <param name="email">Valid email</param>
+    /// <param name="password">Valid password</param>
+    public PixelPilotClient(string email, string password) : this(email, password, true)
+    { }
+    
+    /// <summary>
+    /// Create a PixelPilotClient using the email and password login method.
+    /// </summary>
+    /// <param name="email">Valid email</param>
+    /// <param name="password">Valid password</param>
+    /// <param name="automaticReconnect">If the bot should reconnect</param>
+    public PixelPilotClient(string email, string password, bool automaticReconnect)
+    {
+        _apiClient = new PixelApiClient(email, password);
         AutomaticReconnect = automaticReconnect;
     }
 
@@ -80,8 +109,10 @@ public class PixelPilotClient : IDisposable
     /// <param name="roomType">The type of the room.</param>
     /// <param name="roomId">The ID of the room.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
-    public async Task Connect(RoomType roomType, String roomId)
+    public async Task Connect(string roomId)
     {
+        var roomType = (await _apiClient.GetRoomTypes())![0];
+        
         var joinRequest = await _apiClient.GetJoinKey(roomType, roomId);
         if (joinRequest?.Token == null)
         {

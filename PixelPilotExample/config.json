@@ -1,5 +1,7 @@
 ﻿{
-  "AccountToken": "Secret key value",
+  "AccountToken": "Secret key value if you want to use the token login",
+  "LoginEmail": "Email",
+  "LoginPassword": "Password",
   "Logging": {
     "LogLevel": {
       "Default": "Information",
