@@ -3,7 +3,7 @@
 
 A C# library for interacting with the game [PixelWalker](https://pixelwalker.net)
 
-![Example bot](https://img.martenm.nl/g/1F2Fx)
+![Example bot](https://i.imgur.com/47bDpAc.gifv)
 
 ## Features
 * Strongly typed packets.
