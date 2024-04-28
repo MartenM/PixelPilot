@@ -89,7 +89,11 @@ public class PixelPilotClient : IDisposable
         _socketClient = new WebsocketClient(new Uri(gameRoomUrl));
         _socketClient.ReconnectTimeout = TimeSpan.FromSeconds(5000);
         _socketClient.IsReconnectionEnabled = AutomaticReconnect;
-        _socketClient.ReconnectionHappened.Subscribe(info => _logger.LogWarning($"Reconnection happened, type: {info.Type}"));
+        _socketClient.ReconnectionHappened.Subscribe(info =>
+        {
+            if (info.Type == ReconnectionType.Initial) return;
+            _logger.LogWarning($"Reconnection happened, type: {info.Type}");
+        });
         _socketClient.DisconnectionHappened.Subscribe(info =>
         {
             IsConnected = false;
@@ -189,6 +193,7 @@ public class PixelPilotClient : IDisposable
         {
             _send(InitPacket.AsSendingBytes());
 
+            _logger.LogInformation("Connected to the room successfully");
             IsConnected = true;
             OnClientConnected?.Invoke(this);
         }
