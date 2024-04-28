@@ -17,9 +17,9 @@ public class InitPacket : IPixelGamePacket
     public byte[] GlobalSwitchStates { get; set; }
     public int Width { get; set; }
     public int Height { get; set; }
-    public byte[] Buffer { get; set; }
+    public byte[] WorldData { get; set; }
     
-    public InitPacket(int id, string cId, string username, int face, bool isAdmin, double x, double y, bool canEdit, bool canGod, string roomTitle, int players, string owner, byte[] globalSwitchStates, int width, int height, byte[] buffer)
+    public InitPacket(int id, string cId, string username, int face, bool isAdmin, double x, double y, bool canEdit, bool canGod, string roomTitle, int players, string owner, byte[] globalSwitchStates, int width, int height, byte[] worldData)
     {
         Id = id;
         CId = cId;
@@ -35,7 +35,7 @@ public class InitPacket : IPixelGamePacket
         GlobalSwitchStates = globalSwitchStates;
         Width = width;
         Height = height;
-        Buffer = buffer;
+        WorldData = worldData;
         IsAdmin = isAdmin;
     }
 

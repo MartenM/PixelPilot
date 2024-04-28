@@ -15,9 +15,9 @@ public class WorldBlockPlacedOutPacket : ReflectivePixelOutPacket
     public int? ExtraInt2 { get; }
     public int? ExtraInt3 { get; }
 
-    public bool? ExtraBool { get; }
+    public byte? ExtraByte { get; }
     
-    public WorldBlockPlacedOutPacket(int x, int y, int layer, int blockId, int? extraInt1, int? extraInt2, int? extraInt3, bool? extraBool) : base(WorldMessageType.WorldBlockPlaced)
+    public WorldBlockPlacedOutPacket(int x, int y, int layer, int blockId, int? extraInt1, int? extraInt2, int? extraInt3, byte? extraByte) : base(WorldMessageType.WorldBlockPlaced)
     {
         X = x;
         Y = y;
@@ -26,7 +26,7 @@ public class WorldBlockPlacedOutPacket : ReflectivePixelOutPacket
         ExtraInt1 = extraInt1;
         ExtraInt2 = extraInt2;
         ExtraInt3 = extraInt3;
-        ExtraBool = extraBool;
+        ExtraByte = extraByte;
     }
     
     public WorldBlockPlacedOutPacket(int x, int y, int layer, int blockId) : base(WorldMessageType.WorldBlockPlaced)
@@ -38,7 +38,7 @@ public class WorldBlockPlacedOutPacket : ReflectivePixelOutPacket
         ExtraInt1 = null;
         ExtraInt2 = null;
         ExtraInt3 = null;
-        ExtraBool = null;
+        ExtraByte = null;
     }
     
     public WorldBlockPlacedOutPacket(int x, int y, int layer, int blockId, int? extraInt1) : base(WorldMessageType.WorldBlockPlaced)
@@ -50,7 +50,7 @@ public class WorldBlockPlacedOutPacket : ReflectivePixelOutPacket
         ExtraInt1 = extraInt1;
         ExtraInt2 = null;
         ExtraInt3 = null;
-        ExtraBool = null;
+        ExtraByte = null;
     }
 
     protected override List<dynamic> GetFields()

@@ -40,6 +40,11 @@ public class PixelPilotClient : IDisposable
     }
     
     /// <summary>
+    /// The player ID of the client.
+    /// </summary>
+    public int? BotId { get; private set; }
+    
+    /// <summary>
     /// Event that occurs when a packet is received.
     /// </summary>
     public event PacketReceived? OnPacketReceived;
@@ -189,12 +194,13 @@ public class PixelPilotClient : IDisposable
         }
 
         // Init packet needs to return the first 2 bytes.
-        if (packet is InitPacket)
+        if (packet is InitPacket init)
         {
             _send(InitPacket.AsSendingBytes());
 
             _logger.LogInformation("Connected to the room successfully");
             IsConnected = true;
+            BotId = init.Id;
             OnClientConnected?.Invoke(this);
         }
 

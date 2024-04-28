@@ -35,36 +35,7 @@ public class PacketConverter
         {
             var fieldType = (PacketFieldType) reader.ReadByte();
 
-            switch (fieldType)
-            {
-                case PacketFieldType.String:
-                    fields.Add(reader.ReadString());
-                    break;
-                case PacketFieldType.Boolean:
-                    fields.Add(reader.ReadBoolean());
-                    break;
-                case PacketFieldType.Byte:
-                    fields.Add(reader.ReadByte());
-                    break;
-                case PacketFieldType.Int16:
-                    fields.Add(reader.ReadInt16BE());
-                    break;
-                case PacketFieldType.Int32:
-                    fields.Add(reader.ReadInt32BE());
-                    break;
-                case PacketFieldType.Int64:
-                    fields.Add(reader.ReadInt64());
-                    break;
-                case PacketFieldType.ByteArray:
-                    var length = reader.Read7BitEncodedInt();
-                    fields.Add(reader.ReadBytes(length));
-                    break;
-                case PacketFieldType.Double:
-                    fields.Add(reader.ReadDoubleBE());
-                    break;
-                default:
-                    throw new Exception($"Could not deserialize type. {fieldType} at {memoryStream.Position}");
-            }
+            fields.Add(ReadType(reader, fieldType));
         }
             
         // Get the correct type
@@ -92,6 +63,40 @@ public class PacketConverter
         // Construct the packet and return it.
         IPixelGamePacket packet = (IPixelGamePacket) constructorInfo.Invoke(fields.ToArray());
         return packet;
+    }
+
+    public static dynamic ReadType(BinaryReader reader, PacketFieldType fieldType)
+    {
+        switch (fieldType)
+        {
+            case PacketFieldType.String:
+                return reader.ReadString();
+                break;
+            case PacketFieldType.Boolean:
+                return reader.ReadBoolean();
+                break;
+            case PacketFieldType.Byte:
+                return reader.ReadByte();
+                break;
+            case PacketFieldType.Int16:
+                return reader.ReadInt16BE();
+                break;
+            case PacketFieldType.Int32:
+                return reader.ReadInt32BE();
+                break;
+            case PacketFieldType.Int64:
+                return reader.ReadInt64();
+                break;
+            case PacketFieldType.ByteArray:
+                var length = reader.Read7BitEncodedInt();
+                return reader.ReadBytes(length);
+                break;
+            case PacketFieldType.Double:
+                return reader.ReadDoubleBE();
+                break;
+            default:
+                throw new Exception($"Could not deserialize type. {fieldType}");
+        }
     }
 
     /// <summary>
