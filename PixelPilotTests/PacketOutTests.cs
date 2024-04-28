@@ -43,7 +43,6 @@ public class PacketOutTests
     [Test]
     public void PacketPlayerMoveOutTest()
     {
-        // {"Id":1,"X":592,"Y":1104,"VelocityX":0,"VelocityY":0,"ModX":0,"ModY":2,"Horizontal":0,"Vertical":0,"Spacedown":false,"SpaceJustDown":false,"TickId":77541}
         string move =
             "6b-0a-06-40-82-80-00-00-00-00-00-06-40-91-40-00-00-00-00-00-06-00-00-00-00-00-00-00-00-06-c0-4a-00-00-00-00-00-00-06-00-00-00-00-00-00-00-00-06-40-00-00-00-00-00-00-00-03-00-00-00-00-03-00-00-00-00-07-01-07-01-03-00-00-04-e1".ToUpper();
         
