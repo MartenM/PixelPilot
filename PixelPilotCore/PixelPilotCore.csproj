@@ -16,7 +16,8 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <Version>1.0.2</Version>
+        <Version>1.1.0</Version>
+        <PackageReleaseNotes>This update adds support for World interactions (block placement).</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
