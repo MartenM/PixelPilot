@@ -32,7 +32,7 @@ world.OnBlockPlaced += (_, playerId, oldBlock, _) =>
     client.Send(oldBlock.AsPacketOut());
 };
 
-await client.Connect(RoomType.Pixelwalker3, "r082b210d67df52");
+await client.Connect(RoomType.Pixelwalker4, "r082b210d67df52");
 
 
 // Executed when the client receives a packet!
