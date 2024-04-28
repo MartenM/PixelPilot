@@ -75,16 +75,15 @@ public class PacketConverter
             throw new PacketTypeNotFoundException(worldMessageType);
         }
 
-        var constructorInfo = packetType.GetConstructors().FirstOrDefault(con => con.GetParameters().Length == fields.Count);
-        if (constructorInfo == null)
+        // Find constructor based on length and type.
+        var constructorInfo = packetType.GetConstructors().FirstOrDefault(con =>
         {
-            LogPacketTypeConversionError(fields, packetType);
-            throw new PacketConstructorException(fields, packetType);
-        }
-            
-        // Verify that the types of the constructor match.
-        var parameters = constructorInfo.GetParameters(); 
-        if (parameters.Where((info, i) => info.ParameterType != fields[i].GetType()).Any())
+            if (con.GetParameters().Length != fields.Count) return false;
+            if (con.GetParameters().Where((info, i) => info.ParameterType != fields[i].GetType()).Any()) return false;
+            return con.GetParameters().Length == fields.Count;
+        });
+        
+        if (constructorInfo == null)
         {
             LogPacketTypeConversionError(fields, packetType);
             throw new PacketConstructorException(fields, packetType);
@@ -101,7 +100,7 @@ public class PacketConverter
     /// </summary>
     /// <param name="receivedFields">The list of fields received.</param>
     /// <param name="packetType">The type of the packet.</param>
-    private void LogPacketTypeConversionError(List<dynamic> receivedFields, Type packetType)
+    private void LogPacketTypeConversionError(IReadOnlyCollection<dynamic> receivedFields, Type packetType)
     {
         var builder = new StringBuilder();
         builder.AppendLine($"The packet type ({packetType.Name}) was found, but no constructor matching the message could be found.");
