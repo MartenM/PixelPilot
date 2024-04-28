@@ -7,11 +7,9 @@ public static class PlatformUtil
 {
     public static Thread GetThread(PixelPilotClient client)
     {
-        return new Thread(() =>
-        {
             var betaBlocks = new List<int>();
             betaBlocks.AddRange(Enumerable.Range(62, 6));
-            var blocks = new Thread(() =>
+            return new Thread(() =>
             {
                 int currentIndex = 0;
                 while (client.IsConnected)
@@ -25,6 +23,5 @@ public static class PlatformUtil
                     currentIndex = (currentIndex + 1) % betaBlocks.Count;
                 }
             });
-        });
     }
 }
