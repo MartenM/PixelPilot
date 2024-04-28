@@ -49,13 +49,18 @@ static class WorldMessageTypeExtensions
             WorldMessageType.PlayerRespawn => typeof(PlayerRespawnPacket),
             WorldMessageType.WorldBlockPlaced => typeof(WorldBlockPlacedPacket),
             WorldMessageType.PlayerCrown => typeof(PlayerCrownPacket),
+            WorldMessageType.UpdateRights => typeof(PlayerUpdateRightsPacket),
             WorldMessageType.PlayerReset => typeof(PlayerResetPacket),
             WorldMessageType.PlayerCheckpoint => typeof(PlayerCheckpointPacket),
             WorldMessageType.PlayerKeyPressed => typeof(PlayerKeyPressedPacket),
             WorldMessageType.PlayerLocalSwitchChanged => typeof(LocalSwitchChangedPacket),
+            WorldMessageType.PlayerLocalSwitchReset => typeof(LocalSwitchResetPacket),
             WorldMessageType.GlobalSwitchChanged => typeof(GlobalSwitchChangedPacket),
+            WorldMessageType.GlobalSwitchReset => typeof(GlobalSwitchResetPacket),
             WorldMessageType.WorldReloaded => typeof(WorldReloadedPacket),
             WorldMessageType.WorldCleared => typeof(WorldClearedPacket),
+            WorldMessageType.WorldMetadata => typeof(WorldMetaPacket),
+            WorldMessageType.SystemMessage => typeof(SystemMessagePacket),
             _ => null
         };
     }
