@@ -4,7 +4,6 @@ using PixelPilot.PixelGameClient;
 using PixelPilot.PixelGameClient.Messages.Received;
 using PixelPilot.PixelGameClient.Messages.Send;
 using PixelPilot.PixelGameClient.World;
-using PixelPilot.PixelGameClient.World.Constants;
 using PixelPilotExample;
 
 // Load the configuration. Don't store your account token in the code :)
@@ -26,7 +25,7 @@ var client = new PixelPilotClient(config.AccountToken, false);
 // Allow it to listen to client updates.
 var world = new PixelWorld();
 client.OnPacketReceived += world.HandlePacket;
-world.OnBlockPlaced += (_, playerId, oldBlock, newBlock) =>
+world.OnBlockPlaced += (_, playerId, oldBlock, _) =>
 {
     if (client.BotId == playerId) return;
     //client.Send(new PlayerChatOutPacket($"A {newBlock.Block} was placed by user with ID 1!"));
