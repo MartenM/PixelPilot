@@ -2,7 +2,7 @@
 
 public enum RoomType
 {
-    Pixelwalker3
+    Pixelwalker4
 }
 
 public static class RoomTypeExtensions
@@ -11,8 +11,8 @@ public static class RoomTypeExtensions
     {
         switch (type)
         {
-            case RoomType.Pixelwalker3:
-                return "pixelwalker3";
+            case RoomType.Pixelwalker4:
+                return "pixelwalker4";
             default:
                 throw new NotImplementedException("This room type does not exist (yet!)");
         }
