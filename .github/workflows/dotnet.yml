@@ -82,8 +82,23 @@ jobs:
           cd PixelPilotCore
           dotnet pack --configuration Release --output ${{ env.NuGetDirectory }}
 
-      - name: Publish NuGet
-        run: echo "🚀 Publishing (${{needs.deploy-planner.outputs.tag}}) to NuGet!"
+      # Publish the NuGet package as an artifact, so they can be used in the following jobs
+      - uses: actions/upload-artifact@v3
+        with:
+          name: nuget
+          if-no-files-found: error
+          retention-days: 7
+          path: ${{ env.NuGetDirectory }}/*.nupkg
+
+      # Publish all NuGet packages to NuGet.org
+      # Use --skip-duplicate to prevent errors if a package with the same version already exists.
+      # If you retry a failed workflow, already published packages will be skipped without error.
+      - name: Publish NuGet package
+        run: |
+          echo "🚀 Publishing (${{needs.deploy-planner.outputs.tag}}) to NuGet!"
+          foreach($file in (Get-ChildItem "${{ env.NuGetDirectory }}" -Recurse -Include *.nupkg)) {
+              dotnet nuget push $file --api-key "${{ secrets.NUGET_TOKEN }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
+          }
       
       # Create and publish the release
       - name: Create Github Release
