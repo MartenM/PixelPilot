@@ -14,7 +14,6 @@
         <PackageId>PixelPilot.Core</PackageId>
         <PackageIcon>package_logo.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Version>1.1.2</Version>
         <PackageReleaseNotes>This update adds support for World interactions (block placement).</PackageReleaseNotes>
