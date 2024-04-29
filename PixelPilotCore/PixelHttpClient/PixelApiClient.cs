@@ -7,14 +7,20 @@ using PixelPilot.PixelHttpClient.Responses;
 
 namespace PixelPilot.PixelHttpClient;
 
-/**
- * Used to interact with the HTTP endpoint.
- */
+/// <summary>
+/// Used to make HTTP API request instead of using the websocket.
+/// Required for obtaining information used to join a world.
+/// </summary>
 public class PixelApiClient : IDisposable
 {
     private readonly ILogger _logger = LogManager.GetLogger("API");
     private readonly HttpClient _client;
 
+    /// <summary>
+    /// PixelApiClient that authenticates using a token.
+    /// Does not verify validity.
+    /// </summary>
+    /// <param name="accountToken">A valid account token</param>
     public PixelApiClient(string accountToken)
     {
         _client = new HttpClient();
@@ -22,6 +28,13 @@ public class PixelApiClient : IDisposable
         _client.DefaultRequestHeaders.Add("Authorization", accountToken);
     }
 
+    /// <summary>
+    /// PixelApiClient that authenticates using email and password.
+    /// </summary>
+    /// <param name="email">User e-mail</param>
+    /// <param name="password">User password</param>
+    /// <exception cref="PixelApiException">When the login failed</exception>
+    /// <exception cref="InvalidOperationException">Something went very wrong</exception>
     public PixelApiClient(string email, string password)
     {
         _client = new HttpClient();
@@ -33,7 +46,7 @@ public class PixelApiClient : IDisposable
 
         // Auth failure, we cannot continue.
         if (response.Result is AuthErrorResponse)
-            throw new Exception("Failed to retrieve login token using the given information.");
+            throw new PixelApiException("Failed to retrieve login token using the given information.");
         
         // Success
         if (response.Result is AuthSuccessResponse successResponse)
@@ -44,11 +57,13 @@ public class PixelApiClient : IDisposable
 
         throw new InvalidOperationException("Something went wrong while converting your email and password.");
     }
-
-    /**
-     * Request the join key from the API server.
-     * Either returns the join key or NULL.
-     */
+    
+    /// <summary>
+    /// Request a join key for the given room from the API server.
+    /// </summary>
+    /// <param name="roomType">The room type</param>
+    /// <param name="roomId">ID of the room</param>
+    /// <returns></returns>
     public async Task<JoinKeyResponse?> GetJoinKey(string roomType, string roomId)
     {
         var roomTokenUrl = $"{EndPoints.ApiEndpoint}/api/joinkey/{roomType}/{roomId}";
@@ -56,10 +71,10 @@ public class PixelApiClient : IDisposable
         return await JsonSerializer.DeserializeAsync<JoinKeyResponse>(await _client.GetStreamAsync(roomTokenUrl));
     }
     
-    /**
-     * Request the join key from the API server.
-     * Either returns the join key or NULL.
-     */
+    /// <summary>
+    /// Request the available room types from the game server.
+    /// </summary>
+    /// <returns>A list of room types</returns>
     public async Task<List<string>?> GetRoomTypes()
     {
         var apiUrl = $"{EndPoints.GameHttpEndpoint}/listroomtypes";

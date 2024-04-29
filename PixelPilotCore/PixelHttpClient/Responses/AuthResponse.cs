@@ -10,10 +10,10 @@ public interface IAuthResponse
 public class AuthSuccessResponse : IAuthResponse
 {
     [JsonPropertyName("record")]
-    public PlayerData PlayerData { get; set; }
+    public PlayerData Data { get; set; } = null!;
     
     [JsonPropertyName("token")]
-    public string Token { get; set; }
+    public string Token { get; set; }  = null!;
 }
 
 public class AuthErrorResponse : IAuthResponse
@@ -22,7 +22,7 @@ public class AuthErrorResponse : IAuthResponse
     public int Code { get; set; }
     
     [JsonPropertyName("message")]
-    public string Message { get; set; }
+    public string Message { get; set; }  = null!;
 }
 
 public class PlayerData
@@ -35,7 +35,6 @@ public class PlayerData
     
     [JsonPropertyName("face")]
     public int Face { get; set; }
-    
-    [JsonPropertyName("username")]
-    public string Username { get; set; }
+
+    [JsonPropertyName("username")] public string Username { get; set; } = null!;
 }

@@ -28,7 +28,7 @@ public class PixelWorld
    
     public PixelWorld()
     {
-        
+        _worldData = new IPixelBlock[2, 0, 0];
     }
     public PixelWorld(int height, int width)
     {

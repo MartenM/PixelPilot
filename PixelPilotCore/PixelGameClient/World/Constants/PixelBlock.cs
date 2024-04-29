@@ -2,6 +2,9 @@
 
 namespace PixelPilot.PixelGameClient.World.Constants;
 
+/// <summary>
+/// All blocks available in the game as of 29-04-2024.
+/// </summary>
 public enum PixelBlock : int
 {
     Empty = 0,
