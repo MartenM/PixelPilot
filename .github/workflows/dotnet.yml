@@ -72,7 +72,7 @@ jobs:
     needs: deploy-planner
     runs-on: ubuntu-latest
     env: 
-      ReleaseTextFile: ${{ github.workspace }}/release/release.txt
+      ReleaseTextFile: ${{ github.workspace }}/release.txt
     steps:
       - name: Checkout
         uses: actions/checkout@v4
