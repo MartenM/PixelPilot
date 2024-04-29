@@ -9,11 +9,14 @@ on:
   pull_request:
     branches: [ "main" ]
 
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_NOLOGO: true
+  NuGetDirectory: ${{ github.workspace}}/nuget
+
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET
@@ -26,3 +29,66 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
+
+  # Create a NUGET release if branch is main.
+  # Only execute on pushes to main
+  deploy-planner:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    needs: build
+    outputs: 
+      new_tag: ${{ steps.tag_check.outputs.should-run }}
+      tag: ${{ steps.tag_check.outputs.tag }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: kzrnm/get-net-sdk-project-versions-action@v2
+        id: get-version
+        with:
+          proj-path: PixelPilotCore/PixelPilotCore.csproj
+      # Create the TAG env variable
+      - name: create-tag-env
+        run: echo "TAG=v${{steps.get-version.outputs.version}}" >> $GITHUB_ENV
+      - name: Check for new tag
+        id: tag_check
+        run: |
+          if git show-ref --tags --verify --quiet "refs/tags/${env.TAG}"; then
+            echo "❌ Tag ${env.TAG} exists"
+            echo "should-run=false" >> $GITHUB_OUTPUT
+          else
+            echo "✅ Tag ${env.TAG} does not exist yet. Creating a release."
+            echo "should-run=true" >> $GITHUB_OUTPUT
+            echo "tag=${env.TAG}" >> $GITHUB_OUTPUT
+          fi
+  create-core-release:
+    if: needs.deploy-planner.outputs.should-run == 'true'
+    needs: deploy-planner
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Create NuGet package
+        run: |
+          cd PixelPilotCore
+          dotnet pack --configuration Release --output ${{ env.NuGetDirectory }}
+
+      - name: Publish NuGet
+        run: echo "🚀 Publishing (${{needs.deploy-planner.outputs.tag}}) to NuGet!"
+      
+      # Create and publish the release
+      - name: create-release
+        uses: softprops/action-gh-release@v1
+        id: release
+        with:
+          name: ${{ needs.deploy-planner.outputs.tag }}
+          tag_name: ${{ needs.deploy-planner.outputs.tag }}
+          token: ${{ secrets.RELEASE_TOKEN }}
+          body: "🚀 Now available on NuGet https://www.nuget.org/packages/PixelPilot.Core"
