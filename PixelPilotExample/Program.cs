@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using PixelPilot.Models;
 using PixelPilot.PixelGameClient;
 using PixelPilot.PixelGameClient.Messages.Received;
 using PixelPilot.PixelGameClient.Messages.Send;
@@ -22,37 +21,34 @@ if (config == null)
 var client = new PixelPilotClient(config.AccountToken, false);
 
 // Create a PixelWorld class and attach the client to it.
-// Allow it to listen to client updates.
+// Allow it to listen to client updates. Not required!
 var world = new PixelWorld();
 client.OnPacketReceived += world.HandlePacket;
 world.OnBlockPlaced += (_, playerId, oldBlock, _) =>
 {
     if (client.BotId == playerId) return;
-    //client.Send(new PlayerChatOutPacket($"A {newBlock.Block} was placed by user with ID 1!"));
     client.Send(oldBlock.AsPacketOut());
 };
-
-await client.Connect("r082b210d67df52");
 
 
 // Executed when the client receives a packet!
 client.OnPacketReceived += (_, packet) =>
 {
-    // Use strongly typed packets!
-    if (packet is PlayerChatPacket chat)
+    switch (packet)
     {
-        if (chat.Message.Equals(".stop"))
-        {
+        // Use strongly typed packets!
+        case PlayerChatPacket { Message: ".stop" }:
             client.Disconnect();
             Environment.Exit(0);
             return;
+        case PlayerChatPacket { Message: ".ping" } chat:
+        {
+            client.Send(new PlayerChatOutPacket($"Pong! ({chat.Id})"));
+            break;
         }
-        if (chat.Message.Equals(".ping")) client.Send(new PlayerChatOutPacket($"Pong! ({chat.Id})"));
-    }
-
-    if (packet is PlayerJoinPacket join)
-    {
-        client.Send(new PlayerChatOutPacket($"/giveedit {join.Username}"));
+        case PlayerJoinPacket join:
+            client.Send(new PlayerChatOutPacket($"/giveedit {join.Username}"));
+            break;
     }
 };
 
@@ -65,6 +61,9 @@ client.OnClientConnected += (_) =>
     PlatformUtil.GetThread(client).Start();
     client.Send(new PlayerMoveOutPacket(592, 1056, 0, 0, 0, 0, 0, 0, false, false, 100)); 
 };
+
+// Connect to a room.
+await client.Connect("r082b210d67df52");
 
 // Don't terminate.
 Thread.Sleep(-1);
