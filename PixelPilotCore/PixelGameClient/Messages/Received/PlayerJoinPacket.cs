@@ -2,7 +2,7 @@
 
 public class PlayerJoinPacket : IPixelGamePacket
 {
-    public PlayerJoinPacket(int id, string cuid, string username, int face, bool isAdmin, double x, double y, int unknownA, int unknownB, int unknownC, bool godmode, bool modmode, bool hasCrown, byte[] buffer)
+    public PlayerJoinPacket(int id, string cuid, string username, int face, bool isAdmin, double x, double y, int coins, int blueCoins, int deaths, bool godmode, bool modmode, bool hasCrown, byte[] buffer)
     {
         Id = id;
         Cuid = cuid;
@@ -11,9 +11,9 @@ public class PlayerJoinPacket : IPixelGamePacket
         IsAdmin = isAdmin;
         X = x;
         Y = y;
-        UnknownA = unknownA;
-        UnknownB = unknownB;
-        UnknownC = unknownC;
+        Coins = coins;
+        BlueCoins = blueCoins;
+        Deaths = deaths;
         Godmode = godmode;
         Modmode = modmode;
         HasCrown = hasCrown;
@@ -27,9 +27,9 @@ public class PlayerJoinPacket : IPixelGamePacket
     public bool IsAdmin { get; }
     public double X { get; }
     public double Y { get; }
-    public int UnknownA { get; }
-    public int UnknownB { get; }
-    public int UnknownC { get; }
+    public int Coins { get; }
+    public int BlueCoins { get; }
+    public int Deaths { get; }
     public bool Godmode { get; }
     public bool Modmode { get; }
     public bool HasCrown { get; }
