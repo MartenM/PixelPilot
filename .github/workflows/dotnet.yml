@@ -8,6 +8,7 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:
 
 env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
@@ -99,9 +100,11 @@ jobs:
       - name: Publish NuGet package
         run: |
           echo "🚀 Publishing (${{needs.deploy-planner.outputs.tag}}) to NuGet!"
-          foreach($file in (Get-ChildItem "${{ env.NuGetDirectory }}" -Recurse -Include *.nupkg)) {
-              dotnet nuget push $file --api-key "${{ secrets.NUGET_TOKEN }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
-          }
+          for file in $( find ${{ env.NuGetDirectory }} -type f -name "*.nupkg" )
+          do
+            echo "📎 Pushing $file"
+            dotnet nuget push $file --api-key "${{ secrets.NUGET_TOKEN }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
+          done
       
       # Create and publish the release
       - name: Create Github Release
