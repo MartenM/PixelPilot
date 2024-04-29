@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using PixelPilot;
 using PixelPilot.PixelGameClient;
 using PixelPilot.PixelGameClient.Messages.Received;
 using PixelPilot.PixelGameClient.Messages.Send;
@@ -6,11 +7,13 @@ using PixelPilot.PixelGameClient.World;
 using PixelPilotExample;
 
 // Load the configuration. Don't store your account token in the code :)
-var config = new ConfigurationBuilder()
+var configuration = new ConfigurationBuilder()
     .AddJsonFile("config.json")
     .AddEnvironmentVariables()
-    .Build().Get<BasicConfig>();
+    .Build();
 
+LogManager.Configure(configuration.GetSection("Logging"));
+var config = configuration.Get<BasicConfig>();
 if (config == null)
 {
     Console.WriteLine("The configuration file could not be loaded.");
