@@ -54,13 +54,14 @@ jobs:
       - name: Check for new tag
         id: tag_check
         run: |
-          if git show-ref --tags --verify --quiet "refs/tags/${env.TAG}"; then
-            echo "❌ Tag ${env.TAG} exists"
+          echo "Running check for tag: ${{ env.TAG }}"
+          if git show-ref --tags --verify --quiet "refs/tags/${{ env.TAG }}"; then
+            echo "❌ Tag ${{ env.TAG }} exists"
             echo "should-run=false" >> $GITHUB_OUTPUT
           else
-            echo "✅ Tag ${env.TAG} does not exist yet. Creating a release."
+            echo "✅ Tag ${{ env.TAG }} does not exist yet. Creating a release."
             echo "should-run=true" >> $GITHUB_OUTPUT
-            echo "tag=${env.TAG}" >> $GITHUB_OUTPUT
+            echo "tag=${{ env.TAG }}" >> $GITHUB_OUTPUT
           fi
   create-core-release:
     if: needs.deploy-planner.outputs.should-run == 'true'
