@@ -6,9 +6,9 @@ public class PlayerUpdateRightsPacket : IPixelGamePacket
      {
           EditRights = editRights;
           Godmode = godmode;
-          Id = id;
+          PlayerId = id;
      }
-     public int Id { get; }
+     public int PlayerId { get; }
      public bool EditRights { get; }
      public bool Godmode { get; }
 }

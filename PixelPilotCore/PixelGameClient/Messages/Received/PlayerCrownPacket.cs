@@ -4,8 +4,8 @@ public class PlayerCrownPacket : IPixelGamePacket
 {
     public PlayerCrownPacket(int id)
     {
-        Id = id;
+        PlayerId = id;
     }
 
-    public int Id { get; }
+    public int PlayerId { get; }
 }

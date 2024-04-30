@@ -4,10 +4,10 @@ public class PlayerChatPacket : IPixelGamePacket
 {
     public PlayerChatPacket(int id, string message)
     {
-        Id = id;
+        PlayerId = id;
         Message = message;
     }
 
-    public int Id { get; }
+    public int PlayerId { get; }
     public string Message { get; }
 }

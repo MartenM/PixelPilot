@@ -4,10 +4,10 @@ public class PlayerGodmodePacket : IPixelGamePacket
 {
     public PlayerGodmodePacket(int id, bool isEnabled)
     {
-        Id = id;
+        PlayerId = id;
         IsEnabled = isEnabled;
     }
 
-    public int Id { get; }
+    public int PlayerId { get; }
     public bool IsEnabled { get; }
 }

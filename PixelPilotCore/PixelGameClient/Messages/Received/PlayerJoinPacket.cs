@@ -4,7 +4,7 @@ public class PlayerJoinPacket : IPixelGamePacket
 {
     public PlayerJoinPacket(int id, string cuid, string username, int face, bool isAdmin, double x, double y, int coins, int blueCoins, int deaths, bool godmode, bool modmode, bool hasCrown, byte[] buffer)
     {
-        Id = id;
+        PlayerId = id;
         Cuid = cuid;
         Username = username;
         Face = face;
@@ -20,7 +20,7 @@ public class PlayerJoinPacket : IPixelGamePacket
         Buffer = buffer;
     }
 
-    public int Id { get; }
+    public int PlayerId { get; }
     public string Cuid { get; }
     public string Username { get; }
     public int Face { get; }

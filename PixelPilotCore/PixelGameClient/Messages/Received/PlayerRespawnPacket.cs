@@ -4,12 +4,12 @@ public class PlayerRespawnPacket : IPixelGamePacket
 {
     public PlayerRespawnPacket(int id, int x, int y)
     {
-        Id = id;
+        PlayerId = id;
         X = x;
         Y = y;
     }
 
-    public int Id { get; }
+    public int PlayerId { get; }
     public int X { get; }
     public int Y { get; }
 }

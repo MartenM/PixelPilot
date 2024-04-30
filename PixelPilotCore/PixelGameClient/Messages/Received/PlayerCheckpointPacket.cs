@@ -4,9 +4,9 @@
 /// Send by the server to force change a checkpoint position.
 /// When -1,-1 no checkpoint is set.
 /// </summary>
-public class PlayerCheckpointPacket : IPixelGamePacket
+public class CheckpointPacket : IPixelGamePacket
 {
-    public PlayerCheckpointPacket(int x, int y)
+    public CheckpointPacket(int x, int y)
     {
         X = x;
         Y = y;

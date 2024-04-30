@@ -4,7 +4,7 @@ public class PlayerMovePacket : IPixelGamePacket
 {
     public PlayerMovePacket(int id, double x, double y, double velocityX, double velocityY, double modX, double modY, int horizontal, int vertical, bool spacedown, bool spaceJustDown, int tickId)
     {
-        Id = id;
+        PlayerId = id;
         X = x;
         Y = y;
         VelocityX = velocityX;
@@ -18,7 +18,7 @@ public class PlayerMovePacket : IPixelGamePacket
         TickId = tickId;
     }
 
-    public int Id { get; }
+    public int PlayerId { get; }
     public double X { get; }
     public double Y { get; }
     public double VelocityX { get; }

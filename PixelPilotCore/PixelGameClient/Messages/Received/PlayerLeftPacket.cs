@@ -2,10 +2,10 @@
 
 public class PlayerLeftPacket : IPixelGamePacket
 {
-    public int Id { get; }
+    public int PlayerId { get; }
     
     public PlayerLeftPacket(int id)
     {
-        Id = id;
+        PlayerId = id;
     }
 }

@@ -1,8 +1,8 @@
 ﻿namespace PixelPilot.PixelGameClient.Messages.Received;
 
-public class PlayerKeyPressedPacket : IPixelGamePacket
+public class KeyPressedPacket : IPixelGamePacket
 {
-    public PlayerKeyPressedPacket(byte key)
+    public KeyPressedPacket(byte key)
     {
         Key = key;
     }

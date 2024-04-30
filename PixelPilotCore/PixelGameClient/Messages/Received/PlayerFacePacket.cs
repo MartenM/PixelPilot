@@ -4,10 +4,10 @@ public class PlayerFacePacket : IPixelGamePacket
 {
     public PlayerFacePacket(int id, int face)
     {
-        Id = id;
+        PlayerId = id;
         Face = face;
     }
 
-    public int Id { get; }
+    public int PlayerId { get; }
     public int Face { get; }
 }
