@@ -110,9 +110,9 @@ jobs:
       # Create release text. Use commits up until the last vx.x.x tag to describe it.
       - name: Create release text
         run: |
-          echo "🚀 Now available on NuGet https://www.nuget.org/packages/PixelPilot.Core" > ${{env.ReleaseTextFile}}
-          echo "## Changes:" > ${{env.ReleaseTextFile}}
-          git log $(git describe --tags --match "v*" --abbrev=0)..HEAD --oneline > ${{env.ReleaseTextFile}}
+          echo "🚀 Now available on NuGet https://www.nuget.org/packages/PixelPilot.Core" >> ${{env.ReleaseTextFile}}
+          echo "## Changes:" >> ${{env.ReleaseTextFile}}
+          git log $(git describe --tags --match "v*" --abbrev=0)..HEAD --oneline >> ${{env.ReleaseTextFile}}
       
       # Create and publish the release
       - name: Create Github Release
