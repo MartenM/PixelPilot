@@ -4,7 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelPilotCore", "PixelPilo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelPilotTests", "PixelPilotTests\PixelPilotTests.csproj", "{DDBAB55E-FC16-4BF8-8A97-CA3A1A843D39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelPilotExample", "PixelPilotExample\PixelPilotExample.csproj", "{173C3E46-B7EE-4480-AFC4-33E15A847BE3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleBot", "ExampleBot\ExampleBot.csproj", "{173C3E46-B7EE-4480-AFC4-33E15A847BE3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
