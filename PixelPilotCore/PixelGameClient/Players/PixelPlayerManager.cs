@@ -18,6 +18,7 @@ public abstract class PixelPlayerManager<T> where T : IPixelPlayer
         get;
         private set;
     } = -1;
+    public int ClientId { get; private set; }
     
     /// <summary>
     /// Fired before the player properties are changed.
@@ -66,6 +67,11 @@ public abstract class PixelPlayerManager<T> where T : IPixelPlayer
     /// <param name="packet">The packet</param>
     public void HandlePacket(object sender, IPixelGamePacket packet)
     {
+        if (packet is InitPacket init)
+        {
+            ClientId = init.PlayerId;
+            return;
+        }
         if (packet is not IPixelGamePlayerPacket playerPacket) return;
 
         // Join check should always be done first.
@@ -85,6 +91,15 @@ public abstract class PixelPlayerManager<T> where T : IPixelPlayer
             
             OnPlayerLeft?.Invoke(this, leftPlayer!);
             _logger.LogDebug($"'{leftPlayer!.Username}' left the world.");
+            return;
+        }
+
+        // Don't track the for now.
+        if (playerPacket.PlayerId == ClientId) return;
+
+        if (!_players.ContainsKey(playerPacket.PlayerId))
+        {
+            _logger.LogDebug($"{packet.GetType().Name} received but player {playerPacket.PlayerId} does not exist.");
             return;
         }
         

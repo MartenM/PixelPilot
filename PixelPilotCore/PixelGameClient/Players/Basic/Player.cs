@@ -56,11 +56,7 @@ public class Player : IPixelPlayer
     public int GoldCoins { get; set; }
     public int BlueCoins { get; set; }
     public int Deaths { get; set; }
-    public bool Godmode
-    {
-        get => Godmode || Modmode;
-        set => Godmode = value;
-    }
+    public bool Godmode { get; set; }
     public bool Modmode { get; set; }
     public bool HasCrown { get; set; }
     public bool CanGod { get; set; }
