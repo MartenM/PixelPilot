@@ -15,7 +15,8 @@
         <PackageIcon>package_logo.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <Version>1.1.4</Version>
+        <Version>1.1.5</Version>
+        <PackageReleaseNotes>Included first iteration player management.</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
