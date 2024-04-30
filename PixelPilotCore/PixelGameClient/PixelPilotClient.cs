@@ -4,7 +4,6 @@ using PixelPilot.Models;
 using PixelPilot.PixelGameClient.Messages;
 using PixelPilot.PixelGameClient.Messages.Exceptions;
 using PixelPilot.PixelGameClient.Messages.Received;
-using PixelPilot.PixelGameClient.Messages.Send;
 using PixelPilot.PixelHttpClient;
 using Websocket.Client;
 

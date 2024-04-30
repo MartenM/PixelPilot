@@ -1,6 +1,6 @@
 ﻿namespace PixelPilot.PixelGameClient.Messages.Received;
 
-public class PlayerLeftPacket : IPixelGamePacket
+public class PlayerLeftPacket : IPixelGamePlayerPacket
 {
     public int PlayerId { get; }
     

@@ -1,6 +1,6 @@
 ﻿namespace PixelPilot.PixelGameClient.Messages.Received;
 
-public class PlayerStatsChangePacket : IPixelGamePacket
+public class PlayerStatsChangePacket : IPixelGamePlayerPacket
 {
     public PlayerStatsChangePacket(int id, int goldCoins, int blueCoins, int deathCount)
     {

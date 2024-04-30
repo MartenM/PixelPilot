@@ -105,7 +105,7 @@ public class PixelWorld
             var block = DeserializeBlock(place);
             var oldBlock = _worldData[place.Layer, place.X, place.Y];
             _worldData[place.Layer, place.X, place.Y] = block;
-            OnBlockPlaced?.Invoke(this, place.PlayerID, oldBlock, block);
+            OnBlockPlaced?.Invoke(this, place.PlayerId, oldBlock, block);
         }
     }
     

@@ -1,6 +1,6 @@
 ﻿namespace PixelPilot.PixelGameClient.Messages.Received;
 
-public class PlayerRespawnPacket : IPixelGamePacket
+public class PlayerRespawnPacket : IPixelGamePlayerPacket
 {
     public PlayerRespawnPacket(int id, int x, int y)
     {

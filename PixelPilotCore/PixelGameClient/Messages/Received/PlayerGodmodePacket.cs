@@ -1,6 +1,6 @@
 ﻿namespace PixelPilot.PixelGameClient.Messages.Received;
 
-public class PlayerGodmodePacket : IPixelGamePacket
+public class PlayerGodmodePacket : IPixelGamePlayerPacket
 {
     public PlayerGodmodePacket(int id, bool isEnabled)
     {

@@ -1,6 +1,6 @@
 ﻿namespace PixelPilot.PixelGameClient.Messages.Received;
 
-public class PlayerUpdateRightsPacket : IPixelGamePacket
+public class PlayerUpdateRightsPacket : IPixelGamePlayerPacket
 {
      public PlayerUpdateRightsPacket(int id, bool editRights, bool godmode)
      {

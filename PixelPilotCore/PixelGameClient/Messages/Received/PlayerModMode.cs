@@ -1,13 +1,13 @@
 ﻿namespace PixelPilot.PixelGameClient.Messages.Received;
 
-public class PlayerModMode : IPixelGamePacket
+public class PlayerModMode : IPixelGamePlayerPacket
 {
-    public PlayerModMode(int id, bool enabled)
+    public PlayerModMode(int id, bool isEnabled)
     {
         PlayerId = id;
-        Enabled = enabled;
+        IsEnabled = isEnabled;
     }
 
     public int PlayerId { get; }
-    public bool Enabled { get; }
+    public bool IsEnabled { get; }
 }

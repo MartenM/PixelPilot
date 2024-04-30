@@ -1,6 +1,6 @@
 ﻿namespace PixelPilot.PixelGameClient.Messages.Received;
 
-public class PlayerJoinPacket : IPixelGamePacket
+public class PlayerJoinPacket : IPixelGamePlayerPacket
 {
     public PlayerJoinPacket(int id, string cuid, string username, int face, bool isAdmin, double x, double y, int coins, int blueCoins, int deaths, bool godmode, bool modmode, bool hasCrown, byte[] buffer)
     {

@@ -4,6 +4,7 @@ using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using PixelPilot.Models;
 using PixelPilot.PixelHttpClient.Responses;
+using PixelPilot.PixelHttpClient.Responses.Auth;
 
 namespace PixelPilot.PixelHttpClient;
 

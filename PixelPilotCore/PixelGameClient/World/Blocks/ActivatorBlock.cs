@@ -1,4 +1,5 @@
-﻿using PixelPilot.PixelGameClient.Messages.Send;
+﻿using PixelPilot.PixelGameClient.Messages;
+using PixelPilot.PixelGameClient.Messages.Send;
 
 namespace PixelPilot.PixelGameClient.World.Blocks;
 

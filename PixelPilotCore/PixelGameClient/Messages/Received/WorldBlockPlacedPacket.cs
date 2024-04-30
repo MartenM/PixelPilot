@@ -1,6 +1,6 @@
 ﻿namespace PixelPilot.PixelGameClient.Messages.Received;
 
-public class WorldBlockPlacedPacket : IPixelGamePacket
+public class WorldBlockPlacedPacket : IPixelGamePlayerPacket
 {
     // Basic information that every block placement has.
     public int PlayerId { get; }

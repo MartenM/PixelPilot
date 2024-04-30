@@ -1,6 +1,6 @@
 ﻿namespace PixelPilot.PixelGameClient.Messages.Received;
 
-public class PlayerChatPacket : IPixelGamePacket
+public class PlayerChatPacket : IPixelGamePlayerPacket
 {
     public PlayerChatPacket(int id, string message)
     {

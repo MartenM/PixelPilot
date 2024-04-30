@@ -1,6 +1,6 @@
 ﻿namespace PixelPilot.PixelGameClient.Messages.Received;
 
-public class PlayerMovePacket : IPixelGamePacket
+public class PlayerMovePacket : IPixelGamePlayerPacket
 {
     public PlayerMovePacket(int id, double x, double y, double velocityX, double velocityY, double modX, double modY, int horizontal, int vertical, bool spacedown, bool spaceJustDown, int tickId)
     {
