@@ -2,7 +2,7 @@
 using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
-using PixelPilot.Models;
+using PixelPilot.Common;
 using PixelPilot.PixelHttpClient.Responses;
 using PixelPilot.PixelHttpClient.Responses.Auth;
 

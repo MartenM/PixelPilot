@@ -1,4 +1,4 @@
-﻿namespace PixelPilot.Models;
+﻿namespace PixelPilot.PixelGameClient.Messages.Constants;
 
 public enum MessageType : byte
 {

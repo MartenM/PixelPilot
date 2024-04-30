@@ -1,4 +1,4 @@
-﻿namespace PixelPilot.Models;
+﻿namespace PixelPilot.Common;
 
 public static class EndPoints
 {

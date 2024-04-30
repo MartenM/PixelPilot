@@ -1,5 +1,4 @@
-﻿using PixelPilot.Models;
-using PixelPilot.PixelGameClient.Messages.Constants;
+﻿using PixelPilot.PixelGameClient.Messages.Constants;
 
 namespace PixelPilot.PixelGameClient.Messages.Send;
 

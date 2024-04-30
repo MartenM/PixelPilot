@@ -3,6 +3,7 @@ using PixelPilot;
 using PixelPilot.PixelGameClient;
 using PixelPilot.PixelGameClient.Messages.Received;
 using PixelPilot.PixelGameClient.Messages.Send;
+using PixelPilot.PixelGameClient.Players.Basic;
 using PixelPilot.PixelGameClient.World;
 using PixelPilotExample;
 
@@ -23,6 +24,11 @@ if (config == null)
 // Create a client.
 var client = new PixelPilotClient(config.AccountToken, false);
 
+// Player manager allows you to easily keep track of player stats.
+// For advanced users, it can be extended to include relevant information for you.
+var playerManager = new PlayerManager();
+client.OnPacketReceived += playerManager.HandlePacket;
+
 // Create a PixelWorld class and attach the client to it.
 // Allow it to listen to client updates. Not required!
 var world = new PixelWorld();
@@ -37,16 +43,19 @@ world.OnBlockPlaced += (_, playerId, oldBlock, _) =>
 // Executed when the client receives a packet!
 client.OnPacketReceived += (_, packet) =>
 {
+    // Make use of strongly typed packets!
     switch (packet)
     {
-        // Use strongly typed packets!
         case PlayerChatPacket { Message: ".stop" }:
             client.Disconnect();
             Environment.Exit(0);
             return;
         case PlayerChatPacket { Message: ".ping" } chat:
         {
-            client.Send(new PlayerChatOutPacket($"Pong! ({chat.PlayerId})"));
+            var player = playerManager.GetPlayer(chat.PlayerId);
+            if (player == null) return;
+
+            client.Send(new PlayerChatOutPacket($"Pong! ({player.Username})"));
             break;
         }
         case PlayerJoinPacket join:
