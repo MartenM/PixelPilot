@@ -2,8 +2,8 @@
 
 public class InitPacket : IPixelGamePacket
 {
-    public int Id { get; set; }
-    public string CId { get; set; }
+    public int PlayerId { get; set; }
+    public string AccountId { get; set; }
     public string Username { get; set; }
     public int Face { get; set; }
     public bool IsAdmin { get; set; }
@@ -21,8 +21,8 @@ public class InitPacket : IPixelGamePacket
     
     public InitPacket(int id, string cId, string username, int face, bool isAdmin, double x, double y, bool canEdit, bool canGod, string roomTitle, int players, string owner, byte[] globalSwitchStates, int width, int height, byte[] worldData)
     {
-        Id = id;
-        CId = cId;
+        PlayerId = id;
+        AccountId = cId;
         Username = username;
         Face = face;
         X = x;

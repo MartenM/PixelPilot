@@ -231,7 +231,7 @@ public class PixelPilotClient : IDisposable
 
             _logger.LogInformation("Connected to the room successfully");
             IsConnected = true;
-            BotId = init.Id;
+            BotId = init.PlayerId;
             OnClientConnected?.Invoke(this);
         }
 

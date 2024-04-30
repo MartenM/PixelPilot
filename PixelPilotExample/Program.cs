@@ -46,7 +46,7 @@ client.OnPacketReceived += (_, packet) =>
             return;
         case PlayerChatPacket { Message: ".ping" } chat:
         {
-            client.Send(new PlayerChatOutPacket($"Pong! ({chat.Id})"));
+            client.Send(new PlayerChatOutPacket($"Pong! ({chat.PlayerId})"));
             break;
         }
         case PlayerJoinPacket join:

@@ -3,7 +3,7 @@
 public class WorldBlockPlacedPacket : IPixelGamePacket
 {
     // Basic information that every block placement has.
-    public int PlayerID { get; }
+    public int PlayerId { get; }
     public int X { get; }
     public int Y { get; }
     public int Layer { get; }
@@ -20,7 +20,7 @@ public class WorldBlockPlacedPacket : IPixelGamePacket
 
     public WorldBlockPlacedPacket(int playerId, int x, int y, int layer, int blockId)
     {
-        PlayerID = playerId;
+        PlayerId = playerId;
         X = x;
         Y = y;
         Layer = layer;
@@ -29,7 +29,7 @@ public class WorldBlockPlacedPacket : IPixelGamePacket
     
     public WorldBlockPlacedPacket(int playerId, int x, int y, int layer, int blockId, int extraInt1)
     {
-        PlayerID = playerId;
+        PlayerId = playerId;
         X = x;
         Y = y;
         Layer = layer;
@@ -39,7 +39,7 @@ public class WorldBlockPlacedPacket : IPixelGamePacket
     
     public WorldBlockPlacedPacket(int playerId, int x, int y, int layer, int blockId, int extraInt1, byte extraByte)
     {
-        PlayerID = playerId;
+        PlayerId = playerId;
         X = x;
         Y = y;
         Layer = layer;
@@ -50,7 +50,7 @@ public class WorldBlockPlacedPacket : IPixelGamePacket
     
     public WorldBlockPlacedPacket(int playerId, int x, int y, int layer, int blockId, byte extraByte)
     {
-        PlayerID = playerId;
+        PlayerId = playerId;
         X = x;
         Y = y;
         Layer = layer;
@@ -60,7 +60,7 @@ public class WorldBlockPlacedPacket : IPixelGamePacket
     
     public WorldBlockPlacedPacket(int playerId, int x, int y, int layer, int blockId, int extraInt1, int extraInt2, int extraInt3)
     {
-        PlayerID = playerId;
+        PlayerId = playerId;
         X = x;
         Y = y;
         Layer = layer;
@@ -72,7 +72,7 @@ public class WorldBlockPlacedPacket : IPixelGamePacket
     
     public WorldBlockPlacedPacket(int playerId, int x, int y, int layer, int blockId, int extraInt1, bool extraBool)
     {
-        PlayerID = playerId;
+        PlayerId = playerId;
         X = x;
         Y = y;
         Layer = layer;
