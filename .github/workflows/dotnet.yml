@@ -40,7 +40,8 @@ jobs:
     needs: build
     outputs: 
       new-tag-found: ${{ steps.tag_check.outputs.new-tag-found }}
-      tag: ${{ steps.tag_check.outputs.tag }}
+      new-tag: ${{ steps.tag_check.outputs.new-tag }}
+      previous-tag: ${{ steps.tag_check.outputs.previous-tag }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -64,7 +65,8 @@ jobs:
           else
             echo "✅ Tag ${{ env.TAG }} does not exist yet. Creating a release."
             echo "new-tag-found=true" >> $GITHUB_OUTPUT
-            echo "tag=${{ env.TAG }}" >> $GITHUB_OUTPUT
+            echo "new-tag=${{ env.TAG }}" >> $GITHUB_OUTPUT
+            echo "previous-tag=$(git describe --tags --match "v*" --abbrev=0)" >> $GITHUB_OUTPUT
           fi
   create-core-release:
     name: Deploy PixelPilot.Core
@@ -76,9 +78,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          # Fetch the last 50 commits to ensure the tag is in them.
-          fetch-depth: 40
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
@@ -103,7 +102,7 @@ jobs:
       # If you retry a failed workflow, already published packages will be skipped without error.
       - name: Publish NuGet package
         run: |
-          echo "🚀 Publishing (${{needs.deploy-planner.outputs.tag}}) to NuGet!"
+          echo "🚀 Publishing (${{needs.deploy-planner.outputs.new-tag}}) to NuGet!"
           for file in $( find ${{ env.NuGetDirectory }} -type f -name "*.nupkg" )
           do
             echo "📎 Pushing $file"
@@ -114,15 +113,15 @@ jobs:
       - name: Create release text
         run: |
           echo "🚀 Now available on NuGet https://www.nuget.org/packages/PixelPilot.Core" >> ${{env.ReleaseTextFile}}
-          echo "## Changes:" >> ${{env.ReleaseTextFile}}
-          git log $(git describe --tags --match "v*" --abbrev=0)..HEAD --oneline >> ${{env.ReleaseTextFile}}
+          echo "\n\n" >> ${{env.ReleaseTextFile}}
+          echo "**Full Changelog**: https://github.com/MartenM/PixelPilot/compare/${{ needs.deploy-planner.outputs.previous-tag }}...${{ needs.deploy-planner.outputs.new-tag }}" >> ${{env.ReleaseTextFile}}
       
       # Create and publish the release
       - name: Create Github Release
         uses: softprops/action-gh-release@v2
         id: release
         with:
-          name: ${{ needs.deploy-planner.outputs.tag }}
-          tag_name: ${{ needs.deploy-planner.outputs.tag }}
+          name: ${{ needs.deploy-planner.outputs.new-tag }}
+          tag_name: ${{ needs.deploy-planner.outputs.new-tag }}
           token: ${{ secrets.RELEASE_TOKEN }}
           body_path: ${{env.ReleaseTextFile}}
