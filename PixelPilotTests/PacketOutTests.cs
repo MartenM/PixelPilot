@@ -31,8 +31,8 @@ public class PacketOutTests
     [Test]
     public void PacketWorldBlockPlacedOutTest()
     {
-        string blockPlaced = "6b-05-03-00-00-00-22-03-00-00-00-46-03-00-00-00-01-03-00-00-00-31".ToUpper();
-        string coinDoorPlaced = "6b-05-03-00-00-00-22-03-00-00-00-46-03-00-00-00-01-03-00-00-00-1a-03-00-00-00-19".ToUpper();
+        var blockPlaced = "6b-05-03-00-00-00-22-03-00-00-00-46-03-00-00-00-01-03-00-00-00-31".ToUpper();
+        var coinDoorPlaced = "6b-05-03-00-00-00-22-03-00-00-00-46-03-00-00-00-01-03-00-00-00-1a-03-00-00-00-19".ToUpper();
         var simple = new WorldBlockPlacedOutPacket(34, 70, 1, 49);
         var coinDoor = new WorldBlockPlacedOutPacket(34, 70, 1, 26, 25);
         
