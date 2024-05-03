@@ -2,7 +2,7 @@
 
 public class PlayerTeleportedPacket : IPixelGamePlayerPacket
 {
-    public PlayerTeleportedPacket(int id, int x, int y)
+    public PlayerTeleportedPacket(int id, double x, double y)
     {
         PlayerId = id;
         X = x;
@@ -10,8 +10,8 @@ public class PlayerTeleportedPacket : IPixelGamePlayerPacket
     }
 
     public int PlayerId { get; }
-    public int X { get; }
-    public int Y { get; }
+    public double X { get; }
+    public double Y { get; }
     
     
 }
