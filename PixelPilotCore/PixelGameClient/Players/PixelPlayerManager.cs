@@ -48,8 +48,7 @@ public abstract class PixelPlayerManager<T> where T : IPixelPlayer
     /// <returns>A IPixelPlayer or NULL</returns>
     public T? GetPlayer(int id)
     {
-        if (_players.ContainsKey(id)) return default;
-        return _players[id];
+        return _players.GetValueOrDefault(id);
     }
 
     /// <summary>
