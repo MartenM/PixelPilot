@@ -22,7 +22,7 @@ public class PacketOutTests
     [Test]
     public void PacketFaceOutTest()
     {
-        string faceChange = "6b-0b-03-00-00-00-02".ToUpper();
+        string faceChange = "6b-0c-03-00-00-00-02".ToUpper();
         
         var packet = new PlayerFaceOutPacket(2);
         Assert.That(BitConverter.ToString(packet.ToBinaryPacket()), Is.EqualTo(faceChange), "Packets should be constructed properly.");
