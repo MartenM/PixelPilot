@@ -15,6 +15,8 @@ public class Player : IPixelPlayer
         Username = packet.Username;
         Face = packet.Face;
         IsAdmin = packet.IsAdmin;
+        Godmode = packet.HasGod;
+        CanEdit = packet.HasEdit;
         X = packet.X;
         Y = packet.Y;
         GoldCoins = packet.Coins;

@@ -22,6 +22,7 @@ static class WorldMessageTypeExtensions
             WorldMessageType.PlayerCrown => typeof(PlayerCrownPacket),
             WorldMessageType.UpdateRights => typeof(PlayerUpdateRightsPacket),
             WorldMessageType.PlayerReset => typeof(PlayerResetPacket),
+            WorldMessageType.PlayerTeleported => typeof(PlayerTeleportedPacket),
             WorldMessageType.PlayerCheckpoint => typeof(CheckpointPacket),
             WorldMessageType.PlayerKeyPressed => typeof(KeyPressedPacket),
             WorldMessageType.PlayerLocalSwitchChanged => typeof(LocalSwitchChangedPacket),

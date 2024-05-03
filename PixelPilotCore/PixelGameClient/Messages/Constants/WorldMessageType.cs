@@ -13,6 +13,7 @@ public enum WorldMessageType : int
     PlayerJoined,
     PlayerLeft,
     PlayerMoved,
+    PlayerTeleported,
     PlayerFace,
     PlayerGodMode,
     PlayerModMode,
