@@ -113,7 +113,7 @@ jobs:
       - name: Create release text
         run: |
           echo "🚀 Now available on NuGet https://www.nuget.org/packages/PixelPilot.Core" >> ${{env.ReleaseTextFile}}
-          echo "\n\n" >> ${{env.ReleaseTextFile}}
+          echo -e "\n" >> ${{env.ReleaseTextFile}}
           echo "**Full Changelog**: https://github.com/MartenM/PixelPilot/compare/${{ needs.deploy-planner.outputs.previous-tag }}...${{ needs.deploy-planner.outputs.new-tag }}" >> ${{env.ReleaseTextFile}}
       
       # Create and publish the release
