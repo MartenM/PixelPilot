@@ -19,6 +19,6 @@ public class PortalBlock : BasicBlock
 
     public override IPixelGamePacketOut AsPacketOut()
     {
-        return new WorldBlockPlacedOutPacket(X, Y, Layer, BlockId, Direction, TargetId, PortalId, null);
+        return new WorldBlockPlacedOutPacket(X, Y, Layer, BlockId, Direction, PortalId, TargetId, null);
     }
 }

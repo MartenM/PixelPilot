@@ -146,7 +146,7 @@ public class PixelWorld
         var extraFields = blockType.GetPacketFieldTypes();
 
         // Read the extra fields
-        var extra = extraFields.Select(fieldT => PacketConverter.ReadType(reader, fieldT)).ToList();
+        var extra = extraFields.Select(fieldT => PacketConverter.ReadTypeLe(reader, fieldT)).ToList();
         
         // Construct the block and return it. Hooray.
         switch (blockType)
@@ -156,7 +156,7 @@ public class PixelWorld
             case BlockType.Morphable:
                 return new MorphableBlock(x, y, layer, (int)block, extra[0]);
             case BlockType.Portal:
-                return new PortalBlock(x, y, layer, (int)block, extra[2], extra[1], extra[0]);
+                return new PortalBlock(x, y, layer, (int)block, extra[1], extra[2], extra[0]);
             case BlockType.SwitchActivator:
                 return new ActivatorBlock(x, y, layer, (int) block, extra[0], extra[1]);
             case BlockType.SwitchResetter:
@@ -173,9 +173,7 @@ public class PixelWorld
         // We want to construct a PixelBlock.
         // First we need to know what type it is.
         // Then we can fill in the rest.
-
         var blockType = block.GetBlockType();
-        var extraFields = blockType.GetPacketFieldTypes();
         
         // Construct the block and return it. Hooray.
         switch (blockType)
@@ -185,7 +183,7 @@ public class PixelWorld
             case BlockType.Morphable:
                 return new MorphableBlock(packet.X, packet.Y, packet.Layer, (int)block, packet.ExtraInt1!.Value);
             case BlockType.Portal:
-                return new PortalBlock(packet.X, packet.Y, packet.Layer, (int)block, packet.ExtraInt3!.Value, packet.ExtraInt2!.Value, packet.ExtraInt1!.Value);
+                return new PortalBlock(packet.X, packet.Y, packet.Layer, (int)block, packet.ExtraInt2!.Value, packet.ExtraInt3!.Value, packet.ExtraInt1!.Value);
             case BlockType.SwitchActivator:
                 return new ActivatorBlock(packet.X, packet.Y, packet.Layer, (int) block, packet.ExtraInt1!.Value, packet.ExtraByte!.Value == 1);
             case BlockType.SwitchResetter:

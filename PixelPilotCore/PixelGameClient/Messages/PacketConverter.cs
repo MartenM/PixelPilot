@@ -64,6 +64,13 @@ public class PacketConverter
         return packet;
     }
 
+    /// <summary>
+    /// Reads data of a specified type from a BinaryReader according to the provided PacketFieldType.
+    /// </summary>
+    /// <param name="reader">The BinaryReader to read from.</param>
+    /// <param name="fieldType">The type of data to read.</param>
+    /// <returns>The data read from the BinaryReader.</returns>
+    /// <exception cref="Exception">Thrown when the provided fieldType is not supported.</exception>
     public static dynamic ReadType(BinaryReader reader, PacketFieldType fieldType)
     {
         switch (fieldType)
@@ -78,6 +85,39 @@ public class PacketConverter
                 return reader.ReadInt16BE();
             case PacketFieldType.Int32:
                 return reader.ReadInt32BE();
+            case PacketFieldType.Int64:
+                return reader.ReadInt64();
+            case PacketFieldType.ByteArray:
+                var length = reader.Read7BitEncodedInt();
+                return reader.ReadBytes(length);
+            case PacketFieldType.Double:
+                return reader.ReadDoubleBE();
+            default:
+                throw new Exception($"Could not deserialize type. {fieldType}");
+        }
+    }
+    
+    /// <summary>
+    /// Reads data of a specified type from a BinaryReader in little-endian format according to the provided PacketFieldType.
+    /// </summary>
+    /// <param name="reader">The BinaryReader to read from.</param>
+    /// <param name="fieldType">The type of data to read.</param>
+    /// <returns>The data read from the BinaryReader.</returns>
+    /// <exception cref="Exception">Thrown when the provided fieldType is not supported.</exception>
+    public static dynamic ReadTypeLe(BinaryReader reader, PacketFieldType fieldType)
+    {
+        switch (fieldType)
+        {
+            case PacketFieldType.String:
+                return reader.ReadString();
+            case PacketFieldType.Boolean:
+                return reader.ReadBoolean();
+            case PacketFieldType.Byte:
+                return reader.ReadByte();
+            case PacketFieldType.Int16:
+                return reader.ReadInt16();
+            case PacketFieldType.Int32:
+                return reader.ReadInt32();
             case PacketFieldType.Int64:
                 return reader.ReadInt64();
             case PacketFieldType.ByteArray:
