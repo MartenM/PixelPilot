@@ -5,6 +5,7 @@ using PixelPilot.PixelGameClient.Messages.Received;
 using PixelPilot.PixelGameClient.Messages.Send;
 using PixelPilot.PixelGameClient.Players.Basic;
 using PixelPilot.PixelGameClient.World;
+using PixelPilot.PixelGameClient.World.Blocks;
 using PixelPilotExample;
 
 // Load the configuration. Don't store your account token in the code :)
@@ -55,7 +56,7 @@ client.OnPacketReceived += (_, packet) =>
             var player = playerManager.GetPlayer(chat.PlayerId);
             if (player == null) return;
 
-            client.Send(new PlayerChatOutPacket($"Pong! ({player.Username})"));
+            client.Send(new PlayerChatOutPacket($"Pong! ({player.Username}, {player.X}, {player.Y})"));
             break;
         }
         case PlayerJoinPacket join:
