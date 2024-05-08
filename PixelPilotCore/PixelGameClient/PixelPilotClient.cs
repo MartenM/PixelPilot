@@ -14,6 +14,9 @@ namespace PixelPilot.PixelGameClient;
 /// </summary>
 public class PixelPilotClient : IDisposable
 {
+    // Constants
+    public static readonly int SecondsBeforeGatewayTimeout = 3;
+    
     private readonly ILogger _logger = LogManager.GetLogger("Client");
     private readonly PixelApiClient _apiClient;
     private WebsocketClient? _socketClient;
@@ -231,12 +234,41 @@ public class PixelPilotClient : IDisposable
             _logger.LogInformation("Connected to the room successfully");
             IsConnected = true;
             BotId = init.PlayerId;
-            OnClientConnected?.Invoke(this);
+            
+            InvokeWithTimings("ClientConnected", () =>
+            {
+                return Task.Run(() => OnClientConnected?.Invoke(this));
+            }).Wait();
         }
 
         // Fire the event to be used by the API users.
-        OnPacketReceived?.Invoke(this, packet);
+        InvokeWithTimings("PacketReceived", () =>
+        {
+            return Task.Run(() => OnPacketReceived?.Invoke(this, packet));
+        }).Wait();
     }
+
+    private async Task InvokeWithTimings(string name, Func<Task> invoker)
+    {
+        try
+        {
+            var timerTask = Task.Delay(TimeSpan.FromSeconds(SecondsBeforeGatewayTimeout));
+            var handlerTask = invoker();
+            
+            // Run both, check which one finishes first.
+            if (await Task.WhenAny(timerTask, handlerTask).ConfigureAwait(false) == timerTask)
+            {
+                _logger.LogWarning($"A {name} handler is blocking the GateWay task. This might result in your bot disconnecting! Consider offloading heavy-work to a different thread.");
+            }
+
+            await handlerTask.ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex,$"A {name} handler has thrown an unexpected error.");
+        }
+    }
+    
     public void Dispose()
     {
         _apiClient.Dispose();
