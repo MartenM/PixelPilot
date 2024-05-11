@@ -16,4 +16,6 @@ public interface IPixelBlock
     public PixelBlock Block => (PixelBlock) BlockId;
 
     public IPixelGamePacketOut AsPacketOut();
+
+    public IPixelBlock Copy();
 }
