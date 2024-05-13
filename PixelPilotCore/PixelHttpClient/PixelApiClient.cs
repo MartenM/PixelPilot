@@ -69,7 +69,18 @@ public class PixelApiClient : IDisposable
     {
         var roomTokenUrl = $"{EndPoints.ApiEndpoint}/api/joinkey/{roomType}/{roomId}";
         _logger.LogInformation($"API Request: {roomTokenUrl}");
-        return await JsonSerializer.DeserializeAsync<JoinKeyResponse>(await _client.GetStreamAsync(roomTokenUrl));
+
+        try
+        {
+            return await JsonSerializer.DeserializeAsync<JoinKeyResponse>(await _client.GetStreamAsync(roomTokenUrl));
+        }
+        catch (HttpRequestException ex)
+        {
+            if (ex.StatusCode == HttpStatusCode.Forbidden)
+                throw new PixelApiException("Couldn't fetch the join key. Are you sure your token is still valid?");
+
+            throw;
+        }
     }
     
     /// <summary>
@@ -83,10 +94,10 @@ public class PixelApiClient : IDisposable
         return await JsonSerializer.DeserializeAsync<List<string>>(await _client.GetStreamAsync(apiUrl));
     }
     
-    /**
-     * Request the join key from the API server.
-     * Either returns the join key or NULL.
-     */
+    /// <summary>
+    /// Retrieves the mappings from the game API.
+    /// </summary>
+    /// <returns>A <see cref="MappingsResponse"/> containing the mappings, or null if the mappings are not available.</returns>
     public async Task<MappingsResponse?> GetMappings()
     {
         var apiUrl = $"{EndPoints.GameHttpEndpoint}/mappings";
