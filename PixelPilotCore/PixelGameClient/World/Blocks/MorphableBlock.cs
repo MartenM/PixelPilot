@@ -11,13 +11,15 @@ public class MorphableBlock : BasicBlock
 {
     public int Morph { get; set; }
     
-    public MorphableBlock(int x, int y, int layer, int blockId, int morph) : base(x, y, layer, blockId)
+    public MorphableBlock(int blockId, int morph) : base(blockId)
     {
         Morph = morph;
     }
 
-    public override IPixelGamePacketOut AsPacketOut()
+    public override IPixelGamePacketOut AsPacketOut(int x, int y, int layer)
     {
-        return new WorldBlockPlacedOutPacket(X, Y, Layer, BlockId, Morph);
+        return new WorldBlockPlacedOutPacket(x, y, layer, BlockId, Morph);
     }
+
+    
 }

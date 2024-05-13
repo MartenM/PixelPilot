@@ -5,7 +5,6 @@ using PixelPilot.PixelGameClient.Messages.Received;
 using PixelPilot.PixelGameClient.Messages.Send;
 using PixelPilot.PixelGameClient.Players.Basic;
 using PixelPilot.PixelGameClient.World;
-using PixelPilot.PixelGameClient.World.Blocks;
 using PixelPilotExample;
 
 // Load the configuration. Don't store your account token in the code :)

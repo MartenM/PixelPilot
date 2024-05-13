@@ -10,15 +10,15 @@ public class PortalBlock : BasicBlock
     
     public int Direction { get; set; }
     
-    public PortalBlock(int x, int y, int layer, int blockId, int portalId, int targetId, int direction) : base(x, y, layer, blockId)
+    public PortalBlock(int blockId, int portalId, int targetId, int direction) : base(blockId)
     {
         PortalId = portalId;
         TargetId = targetId;
         Direction = direction;
     }
 
-    public override IPixelGamePacketOut AsPacketOut()
+    public override IPixelGamePacketOut AsPacketOut(int x, int y, int layer)
     {
-        return new WorldBlockPlacedOutPacket(X, Y, Layer, BlockId, Direction, PortalId, TargetId, null);
+        return new WorldBlockPlacedOutPacket(x, y, layer, BlockId, Direction, PortalId, TargetId, null);
     }
 }
