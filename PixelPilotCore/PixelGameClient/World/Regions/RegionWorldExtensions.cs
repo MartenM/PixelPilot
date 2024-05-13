@@ -22,7 +22,7 @@ public static class RegionWorldExtensions
             }
         } 
         
-        return new Region($"Region-{x}-{y}-{width}-{height}", "PixelPilot", );
+        return new Region($"Region-{x}-{y}-{width}-{height}", "PixelPilot", regionBlocks);
     }
 
     public static void PasteRegion(this PixelWorld world, Region region, int x, int y)
