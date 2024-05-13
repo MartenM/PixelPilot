@@ -7,14 +7,14 @@ public class ActivatorBlock : BasicBlock
 {
     public int SwitchId { get; set; }
     public bool Status { get; set; }
-    public ActivatorBlock(int x, int y, int layer, int blockId, int switchId, bool status) : base(x, y, layer, blockId)
+    public ActivatorBlock(int blockId, int switchId, bool status) : base(blockId)
     {
         SwitchId = switchId;
         Status = status;
     }
 
-    public override IPixelGamePacketOut AsPacketOut()
+    public override IPixelGamePacketOut AsPacketOut(int x, int y, int layer)
     {
-        return new WorldBlockPlacedOutPacket(X, Y, Layer, BlockId, SwitchId, null, null, Convert.ToByte(Status));
+        return new WorldBlockPlacedOutPacket(x, y, layer, BlockId, SwitchId, null, null, Convert.ToByte(Status));
     }
 }

@@ -7,13 +7,13 @@ public class ResetterBlock : BasicBlock
 {
     public bool Status { get; }
     
-    public ResetterBlock(int x, int y, int layer, int blockId, bool activated) : base(x, y, layer, blockId)
+    public ResetterBlock(int blockId, bool activated) : base(blockId)
     {
         Status = activated;
     }
 
-    public override IPixelGamePacketOut AsPacketOut()
+    public override IPixelGamePacketOut AsPacketOut(int x, int y, int layer)
     {
-        return new WorldBlockPlacedOutPacket(X, Y, Layer, BlockId, null, null, null, Convert.ToByte(Status));
+        return new WorldBlockPlacedOutPacket(x, y, layer, BlockId, null, null, null, Convert.ToByte(Status));
     }
 }
