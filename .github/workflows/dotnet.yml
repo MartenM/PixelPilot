@@ -51,7 +51,7 @@ jobs:
         uses: kzrnm/get-net-sdk-project-versions-action@v2
         id: get-version
         with:
-          proj-path: PixelPilotCore/PixelPilotCore.csproj
+          proj-path: src/PixelPilot.Core/PixelPilot.Core.csproj
       # Create the TAG env variable
       - name: Create new tag
         run: echo "TAG=v${{steps.get-version.outputs.version}}" >> $GITHUB_ENV
@@ -86,7 +86,7 @@ jobs:
         run: dotnet restore
       - name: Create NuGet package
         run: |
-          cd PixelPilotCore
+          cd src/PixelPilot.Core
           dotnet pack --configuration Release --output ${{ env.NuGetDirectory }}
 
       # Publish the NuGet package as an artifact, so they can be used in the following jobs

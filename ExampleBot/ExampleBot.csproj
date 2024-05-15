@@ -10,8 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\PixelPilotCore\PixelPilotCore.csproj" />
-      <ProjectReference Include="..\src\PixelPilotCore\PixelPilotCore.csproj" />
+      <ProjectReference Include="..\src\PixelPilot.Core\PixelPilot.Core.csproj" />
     </ItemGroup>
 
     <ItemGroup>

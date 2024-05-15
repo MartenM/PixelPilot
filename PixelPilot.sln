@@ -2,9 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleBot", "ExampleBot\ExampleBot.csproj", "{173C3E46-B7EE-4480-AFC4-33E15A847BE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelPilotCore", "src\PixelPilotCore\PixelPilotCore.csproj", "{7E6259D6-5561-48C5-9603-44105859EBE4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelPilot.Core", "src\PixelPilot.Core\PixelPilot.Core.csproj", "{7E6259D6-5561-48C5-9603-44105859EBE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelPilotTests", "src\PixelPilotTests\PixelPilotTests.csproj", "{02E83426-163D-4791-8340-32611FA41EAF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelPilot.Tests", "src\PixelPilot.Tests\PixelPilot.Tests.csproj", "{02E83426-163D-4791-8340-32611FA41EAF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

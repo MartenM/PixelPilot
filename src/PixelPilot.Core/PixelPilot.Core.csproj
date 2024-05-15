@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
         <RootNamespace>PixelPilot</RootNamespace>
         <Description>Core library for creating bots in PixelWalker.</Description>
-        <Title>PixelPilotCore</Title>
+        <Title>PixelPilot.Core</Title>
         <Authors>MartenM</Authors>
         <RepositoryUrl>https://github.com/MartenM/PixelPilot</RepositoryUrl>
         <PackageTags>PixelWalker, Bot</PackageTags>
@@ -17,6 +17,7 @@
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Version>1.1.9</Version>
         <PackageReleaseNotes>Included first iteration player management.</PackageReleaseNotes>
+        <AssemblyName>PixelPilot.Core</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
