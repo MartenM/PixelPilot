@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using PixelPilot;
+using PixelPilot.Common.Logging;
 using PixelPilot.PixelGameClient;
 using PixelPilot.PixelGameClient.Messages.Received;
 using PixelPilot.PixelGameClient.Messages.Send;

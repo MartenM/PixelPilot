@@ -1,6 +1,7 @@
 ﻿using System.Net.WebSockets;
 using Microsoft.Extensions.Logging;
 using PixelPilot.Common;
+using PixelPilot.Common.Logging;
 using PixelPilot.PixelGameClient.Messages;
 using PixelPilot.PixelGameClient.Messages.Exceptions;
 using PixelPilot.PixelGameClient.Messages.Received;
