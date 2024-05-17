@@ -1,34 +1,33 @@
 # Pixel Pilot
-[![NuGet Version](https://img.shields.io/nuget/vpre/PixelPilot.Core?style=flat-square&logo=nuget&link=https%3A%2F%2Fwww.nuget.org%2Fpackages%2FPixelPilot.Core%2F%20)](https://www.nuget.org/packages/PixelPilot.Core/) ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/MartenM/PixelPilot/dotnet.yml?branch=main&style=flat-square)
+[![NuGet Version](https://img.shields.io/nuget/vpre/PixelPilot.Core?style=flat-square&logo=nuget&link=https%3A%2F%2Fwww.nuget.org%2Fpackages%2FPixelPilot.Core%2F%20)](https://www.nuget.org/packages/PixelPilot.Core/) 
+![Build Project](https://img.shields.io/github/actions/workflow/status/MartenM/PixelPilot/dotnet.yml?branch=main&style=flat-square&logo=githubactions&logoColor=white&label=Build)
+![Deploy documentation](https://img.shields.io/github/actions/workflow/status/MartenM/PixelPilot/docs.yml?branch=main&style=flat-square&logo=githubpages&label=Deploy%20Docs&link=https%3A%2F%2Fmartenm.github.io%2FPixelPilotDocs%2F)
+
 
 
 A C# library for interacting with the game [PixelWalker](https://pixelwalker.net)
 
 ![Example bot](https://i.imgur.com/47bDpAc.gif)
 
-## Features
+## 📄 Documentation
+
+- [https://martenm.github.io/PixelPilotDocs](https://martenm.github.io/PixelPilotDocs/guides/introduction.html)
+
+## ✨ Features
 * Strongly typed packets.
-* PixelPilotCore has minor abstractions.
-* Split into multiple projects. Use only what you need.
+* PixelPilot.Core has minor abstracts
+* Lightweight
+* Useful helper classes (optional)
 
-### Projects:
-* **PixelPilotCore**: The core of the project. Bare minimum client to interact with the game.
-* **PixelPilotTests**: All test related to the project.
-* **PixelPilotExample**: An example bot.
 
-### To-Do's:
-- [x] Implement all packets.
-- [ ] Implement common World and Player abstractions (seperate package)
+
+### 🛠 Projects:
+* **PixelPilot.Core**: The core of the project. Bare minimum client to interact with the game.
+* **PixelPilot.Tests**: All test related to the project.
+
 
 ## Example
 ```csharp
-using Microsoft.Extensions.Configuration;
-using PixelPilot.PixelGameClient;
-using PixelPilot.PixelGameClient.Messages.Received;
-using PixelPilot.PixelGameClient.Messages.Send;
-using PixelPilot.PixelGameClient.World;
-using PixelPilotExample;
-
 // Load the configuration. Don't store your account token in the code :)
 var config = new ConfigurationBuilder()
     .AddJsonFile("config.json")
@@ -44,17 +43,6 @@ if (config == null)
 // Create a client.
 var client = new PixelPilotClient(config.AccountToken, false);
 
-// Create a PixelWorld class and attach the client to it.
-// Allow it to listen to client updates. Not required!
-var world = new PixelWorld();
-client.OnPacketReceived += world.HandlePacket;
-world.OnBlockPlaced += (_, playerId, oldBlock, _) =>
-{
-    if (client.BotId == playerId) return;
-    client.Send(oldBlock.AsPacketOut());
-};
-
-
 // Executed when the client receives a packet!
 client.OnPacketReceived += (_, packet) =>
 {
@@ -65,14 +53,6 @@ client.OnPacketReceived += (_, packet) =>
             client.Disconnect();
             Environment.Exit(0);
             return;
-        case PlayerChatPacket { Message: ".ping" } chat:
-        {
-            client.Send(new PlayerChatOutPacket($"Pong! ({chat.Id})"));
-            break;
-        }
-        case PlayerJoinPacket join:
-            client.Send(new PlayerChatOutPacket($"/giveedit {join.Username}"));
-            break;
     }
 };
 
@@ -81,9 +61,6 @@ client.OnPacketReceived += (_, packet) =>
 client.OnClientConnected += (_) =>
 {
     client.Send(new PlayerChatOutPacket("Hello world using the PixelPilot API."));
-    Thread.Sleep(250);
-    PlatformUtil.GetThread(client).Start();
-    client.Send(new PlayerMoveOutPacket(592, 1056, 0, 0, 0, 0, 0, 0, false, false, 100)); 
 };
 
 // Connect to a room.
