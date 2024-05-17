@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using System.Diagnostics;
+using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
@@ -17,6 +19,8 @@ public class PixelApiClient : IDisposable
     private readonly ILogger _logger = LogManager.GetLogger("API");
     private readonly HttpClient _client;
 
+    private string _version = "0.0.0";
+    
     /// <summary>
     /// PixelApiClient that authenticates using a token.
     /// Does not verify validity.
@@ -24,8 +28,9 @@ public class PixelApiClient : IDisposable
     /// <param name="accountToken">A valid account token</param>
     public PixelApiClient(string accountToken)
     {
+        SetVersion();
         _client = new HttpClient();
-        _client.DefaultRequestHeaders.Add("User-Agent", "PixelPilot/1.0.0");
+        _client.DefaultRequestHeaders.Add("User-Agent", $"PixelPilot/{_version}");
         _client.DefaultRequestHeaders.Add("Authorization", accountToken);
     }
 
@@ -38,25 +43,38 @@ public class PixelApiClient : IDisposable
     /// <exception cref="InvalidOperationException">Something went very wrong</exception>
     public PixelApiClient(string email, string password)
     {
+        SetVersion();
         _client = new HttpClient();
-        _client.DefaultRequestHeaders.Add("User-Agent", "PixelPilot/1.0.0");
+        _client.DefaultRequestHeaders.Add("User-Agent", $"PixelPilot/{_version}");
         
         // Retrieve token
         var response = GetAuth(email, password);
         response.Wait();
 
+        var result = response.Result;
+
         // Auth failure, we cannot continue.
-        if (response.Result is AuthErrorResponse)
+        if (result is AuthErrorResponse authResponse)
+        {
             throw new PixelApiException("Failed to retrieve login token using the given information.");
+        }
+            
         
         // Success
-        if (response.Result is AuthSuccessResponse successResponse)
+        if (result is AuthSuccessResponse successResponse)
         {
             _client.DefaultRequestHeaders.Add("Authorization", successResponse.Token);
             return;
         }
 
         throw new InvalidOperationException("Something went wrong while converting your email and password.");
+    }
+
+    private void SetVersion()
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+        var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+        _version = fileVersionInfo.ProductVersion?.Split("+")[0] ?? "0.0.0";
     }
     
     /// <summary>
