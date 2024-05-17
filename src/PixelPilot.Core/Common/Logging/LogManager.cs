@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace PixelPilot;
+namespace PixelPilot.Common.Logging;
 
 /// <summary>
 /// The LogManager class provides static access to loggers though the project.
