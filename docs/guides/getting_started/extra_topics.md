@@ -65,3 +65,9 @@ if (config == null)
     return;
 }
 ```
+
+### Grabbing a logger
+It can be useful to do your logging using the provided `LogManager`. In order to get a logger you can use the following code snippet:
+```csharp
+private ILogger _logger = LogManager.GetLogger("YourLogger");
+```
