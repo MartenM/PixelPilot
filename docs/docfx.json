@@ -41,6 +41,7 @@
       "_appTitle": "PixelPilot",
       "_appFooter": "PixelPilot © 2024",
       "_appLogoPath": "images/pixel_pilot.png",
+      "_appFaviconPath": "images/pixel_pilot.png",
       "_enableSearch": true,
       "pdf": false
     }
