@@ -17,10 +17,10 @@ All incoming packets implement the interface `IPixelGamePacket`. Packets that ar
 Packets that you can send implement the interface 'IPixelGamePacketOut'. We will get to sending packets in a bit. 
 A list of all incoming and outgoing packets can be found here:
 
-| Packet Type | Documentation                                                  |
-|-------------|----------------------------------------------------------------|
-| Incoming    | [List](/api/PixelPilot.PixelGameClient.Messages.Received.html) |
-| Outgoing    | [List](/api/PixelPilot.PixelGameClient.Messages.Send.html)     |
+| Packet Type | Documentation                                       |
+|-------------|-----------------------------------------------------|
+| Incoming    | <xref:PixelPilot.PixelGameClient.Messages.Received> |
+| Outgoing    | <xref:PixelPilot.PixelGameClient.Messages.Send>     |
 
 ## Handling specific packets (Giving god on join)
 Executing something on each packet received is not that useful. Luckily, with the use of some casting we can easily execute actions when we receive a specific packet.
