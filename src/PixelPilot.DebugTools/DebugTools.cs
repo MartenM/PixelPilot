@@ -8,7 +8,7 @@ public class DebugTools
     public class Options
     {
         [Option('t', "tool", Required = true, HelpText = "The debug tool you want to use.")]
-        public string Tool { get; set; }
+        public string Tool { get; set; } = null!;
         
         [Option('v', "verbose", Required = false, HelpText = "Set output to verbose messages.")]
         public bool Verbose { get; set; }
