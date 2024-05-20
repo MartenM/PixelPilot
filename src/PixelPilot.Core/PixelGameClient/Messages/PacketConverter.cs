@@ -34,7 +34,6 @@ public class PacketConverter
         while (memoryStream.Position < memoryStream.Length)
         {
             var fieldType = (PacketFieldType) reader.ReadByte();
-
             fields.Add(ReadType(reader, fieldType));
         }
             

@@ -7,7 +7,7 @@
           "files": [
             "**/*.csproj"
           ],
-          "exclude": ["PixelPilot.Tests/*.csproj"]
+          "exclude": ["PixelPilot.Tests/*.csproj", "PixelPilot.DebugTools/*.csproj"]
         }
       ],
       "dest": "api"
