@@ -24,6 +24,7 @@ A C# library for interacting with the game [PixelWalker](https://pixelwalker.net
 ### 🛠 Projects:
 * **PixelPilot.Core**: The core of the project. Bare minimum client to interact with the game.
 * **PixelPilot.Tests**: All test related to the project.
+* **PixelPilot.DebugTools**: Useful CLI programs to help development of PixelPilot.
 
 
 ## Example
