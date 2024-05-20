@@ -27,6 +27,7 @@ public interface IPixelPlayer
     public bool Godmode { get; set; }
     public bool Modmode { get; set; }
     public bool HasCrown { get; set; }
+    public bool HasCompletedWorld { get; set; }
     
     public bool CanGod { get; set; }
     public bool CanEdit { get; set; }

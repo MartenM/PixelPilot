@@ -88,12 +88,19 @@ public class PixelWorld
         
         using var stream = new MemoryStream(buffer);
         using var reader = new BinaryReader(stream);
-        
-        // Background
-        DeserializeLayer(0, reader);
-        
-        // Foreground
-        DeserializeLayer(1, reader);
+
+        try
+        {
+            // Background
+            DeserializeLayer(0, reader);
+
+            // Foreground
+            DeserializeLayer(1, reader);
+        }
+        catch (EndOfStreamException ex)
+        {
+            _logger.LogError(ex, "The World reader unexpectedly reached the end of the stream. Are you sure the API is up-to-date?");
+        }
 
         if (stream.Position != stream.Length)
             throw new Exception(

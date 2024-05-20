@@ -2,6 +2,7 @@
 using PixelPilot.Common.Logging;
 using PixelPilot.PixelGameClient.Messages;
 using PixelPilot.PixelGameClient.Messages.Received;
+using PixelPilot.PixelGameClient.World.Constants;
 
 namespace PixelPilot.PixelGameClient.Players;
 
@@ -129,17 +130,23 @@ public abstract class PixelPlayerManager<T> where T : IPixelPlayer
                 player.SpaceJustDown = move.SpaceJustDown;
                 player.TickId = move.TickId;
                 break;
-            case PlayerCrownPacket:
+            case PlayerTouchBlockPacket {BlockId: (int) PixelBlock.Crown}:
                 // Remove crown from other player.
                 if (CrownedPlayerId != -1 && _players.TryGetValue(CrownedPlayerId, out var otherPlayer)) otherPlayer.HasCrown = false;
                 CrownedPlayerId = player.Id;
                 player.HasCrown = true;
                 break;
+            case PlayerTouchBlockPacket {BlockId: (int) PixelBlock.Trophy}:
+                player.HasCompletedWorld = true;
+                break;
+            case PlayerTouchBlockPacket {BlockId: (int) PixelBlock.ResetPoint} block:
+                ResetPlayer(player, block.X, block.Y);
+                break;
+            case PlayerTouchBlockPacket {BlockId: (int) PixelBlock.GodModeActivator}:
+                player.CanGod = true;
+                break;
             case PlayerResetPacket reset:
-                player.X = reset.X;
-                player.Y = reset.Y;
-                player.HasCrown = false;
-                if (CrownedPlayerId == player.Id) CrownedPlayerId = -1;
+                ResetPlayer(player, reset.X, reset.Y);
                 break;
             case PlayerRespawnPacket respawn:
                 player.X = respawn.X;
@@ -160,5 +167,15 @@ public abstract class PixelPlayerManager<T> where T : IPixelPlayer
         }
         
         OnPlayerStatusChanged?.Invoke(sender, player);
+    }
+
+    private void ResetPlayer(T player, int x, int y)
+    {
+        if (CrownedPlayerId == player.Id) CrownedPlayerId = -1;
+        
+        player.HasCompletedWorld = false;
+        player.HasCrown = false;
+        player.X = x;
+        player.Y = y;
     }
 }

@@ -23,6 +23,7 @@ public class Player : IPixelPlayer
         BlueCoins = packet.BlueCoins;
         Deaths = packet.Deaths;
         HasCrown = packet.HasCrown;
+        HasCompletedWorld = packet.HasCompletedWorld;
         Godmode = packet.Godmode;
         Modmode = packet.Modmode;
         CanGod = false;
@@ -61,6 +62,7 @@ public class Player : IPixelPlayer
     public bool Godmode { get; set; }
     public bool Modmode { get; set; }
     public bool HasCrown { get; set; }
+    public bool HasCompletedWorld { get; set; }
     public bool CanGod { get; set; }
     public bool CanEdit { get; set; }
     

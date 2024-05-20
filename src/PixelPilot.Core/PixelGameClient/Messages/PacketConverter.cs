@@ -141,7 +141,6 @@ public class PacketConverter
     {
         var builder = new StringBuilder();
         builder.AppendLine($"The packet type ({packetType.Name}) was found, but no constructor matching the message could be found.");
-        _logger.LogInformation($"Fields: {String.Join(", ", receivedFields.Select(f => f.ToString()))}");
         builder.AppendLine($"Received packet: \t {String.Join(", ", receivedFields.Select(f => f.GetType().ToString()))}");
         foreach (var constructor in packetType.GetConstructors())
         {
@@ -149,6 +148,7 @@ public class PacketConverter
         }
         
         _logger.LogWarning(builder.ToString());
+        _logger.LogWarning($"Fields: {String.Join(", ", receivedFields.Select(f => f.ToString()))}");
     }
 
     /// <summary>
