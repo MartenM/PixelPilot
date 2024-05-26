@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelPilot.Tests", "src\Pix
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelPilot.DebugTools", "src\PixelPilot.DebugTools\PixelPilot.DebugTools.csproj", "{3BE19C01-DA43-4D7B-9387-42DC457FAFF3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelPilot.Physics", "src\PixelPilot.Physics\PixelPilot.Physics.csproj", "{98CD9B0A-35BD-41BF-B39F-EFEE3B8FBA30}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{3BE19C01-DA43-4D7B-9387-42DC457FAFF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BE19C01-DA43-4D7B-9387-42DC457FAFF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BE19C01-DA43-4D7B-9387-42DC457FAFF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98CD9B0A-35BD-41BF-B39F-EFEE3B8FBA30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98CD9B0A-35BD-41BF-B39F-EFEE3B8FBA30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98CD9B0A-35BD-41BF-B39F-EFEE3B8FBA30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98CD9B0A-35BD-41BF-B39F-EFEE3B8FBA30}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

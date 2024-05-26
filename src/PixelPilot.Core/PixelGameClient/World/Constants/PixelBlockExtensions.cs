@@ -54,4 +54,41 @@ public static class PixelBlockExtensions
                 return BlockType.Normal;
         }
     }
+
+    public static bool IsClimbable(this PixelBlock pixelBlock)
+    {
+        switch (pixelBlock)
+        {
+            case PixelBlock.JungleVineHorizontal:
+            case PixelBlock.JungleVineVertical:
+                return true;
+            default:
+                return false;
+        }
+    }
+    
+    public static bool IsBoost(this PixelBlock pixelBlock)
+    {
+        switch (pixelBlock)
+        {
+            case PixelBlock.BoostDown:
+            case PixelBlock.BoostUp:
+            case PixelBlock.BoostLeft:
+            case PixelBlock.BoostRight:
+                return true;
+            default:
+                return false;
+        }
+    }
+    
+    public static bool IsLiquide(this PixelBlock pixelBlock)
+    {
+        switch (pixelBlock)
+        {
+            case PixelBlock.Water:
+                return true;
+            default:
+                return false;
+        }
+    }
 }
