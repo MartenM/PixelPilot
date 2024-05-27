@@ -1,8 +1,8 @@
 ﻿namespace PixelPilot.PixelHttpClient.Responses.Collections;
 
-public class ICollectionEntry
+public interface ICollectionEntry
 {
-    public string CollectionId { get; }
-    public string CollectionName { get; }
-    public string Created { get; }
+    public string CollectionId { get; set; }
+    public string CollectionName { get; set; }
+    public string Created { get; set; }
 }
