@@ -17,4 +17,19 @@ public class ActivatorBlock : BasicBlock
     {
         return new WorldBlockPlacedOutPacket(x, y, layer, BlockId, SwitchId, null, null, Convert.ToByte(Status));
     }
+
+    public override byte[] AsWorldBuffer(int x, int y, int layer, int customId)
+    {
+        using MemoryStream memoryStream = new MemoryStream();
+        using BinaryWriter writer = new BinaryWriter(memoryStream);
+        
+        writer.Write(x);
+        writer.Write(y);
+        writer.Write(layer);
+        writer.Write(customId);
+        writer.Write(SwitchId);
+        writer.Write(Convert.ToByte(Status));
+
+        return memoryStream.ToArray();
+    }
 }

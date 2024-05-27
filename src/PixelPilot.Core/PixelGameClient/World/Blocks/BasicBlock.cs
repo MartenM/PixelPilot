@@ -26,4 +26,22 @@ public class BasicBlock : IPixelBlock
     {
         return new PlacedBlock(x, y, layer, this);
     }
+    
+    public byte[] AsWorldBuffer(int x, int y, int layer)
+    {
+        return AsWorldBuffer(x, y, layer, BlockId);
+    }
+
+    public virtual byte[] AsWorldBuffer(int x, int y, int layer, int customId)
+    {
+        using MemoryStream memoryStream = new MemoryStream();
+        using BinaryWriter writer = new BinaryWriter(memoryStream);
+        
+        writer.Write(x);
+        writer.Write(y);
+        writer.Write(layer);
+        writer.Write(customId);
+
+        return memoryStream.ToArray();
+    }
 }

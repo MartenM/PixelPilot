@@ -11,6 +11,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\src\PixelPilot.Core\PixelPilot.Core.csproj" />
+      <ProjectReference Include="..\src\PixelPilot.Structures\PixelPilot.Structures.csproj" />
     </ItemGroup>
 
     <ItemGroup>

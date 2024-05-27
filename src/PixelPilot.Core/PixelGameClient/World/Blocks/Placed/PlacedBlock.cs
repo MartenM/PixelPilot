@@ -27,4 +27,14 @@ public class PlacedBlock : IPlacedBlock
     {
         return Block.AsPacketOut(X, Y, Layer);
     }
+
+    public byte[] AsWorldBuffer()
+    {
+        return Block.AsWorldBuffer(X, Y, Layer);
+    }
+
+    public byte[] AsWorldBuffer(int customId)
+    {
+        return Block.AsWorldBuffer(X, Y, Layer, customId);
+    }
 }

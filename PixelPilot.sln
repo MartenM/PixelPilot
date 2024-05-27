@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelPilot.Tests", "src\Pix
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelPilot.DebugTools", "src\PixelPilot.DebugTools\PixelPilot.DebugTools.csproj", "{3BE19C01-DA43-4D7B-9387-42DC457FAFF3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelPilot.Structures", "src\PixelPilot.Structures\PixelPilot.Structures.csproj", "{8E6F02BD-3E14-4130-B1F2-0F325C689896}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{3BE19C01-DA43-4D7B-9387-42DC457FAFF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BE19C01-DA43-4D7B-9387-42DC457FAFF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BE19C01-DA43-4D7B-9387-42DC457FAFF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E6F02BD-3E14-4130-B1F2-0F325C689896}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E6F02BD-3E14-4130-B1F2-0F325C689896}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E6F02BD-3E14-4130-B1F2-0F325C689896}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E6F02BD-3E14-4130-B1F2-0F325C689896}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -15,4 +15,7 @@ public interface IPixelBlock
 
     public IPixelGamePacketOut AsPacketOut(int x, int y, int layer);
     public IPlacedBlock AsPlacedBlock(int x, int y, int layer);
+
+    public byte[] AsWorldBuffer(int x, int y, int layer);
+    public byte[] AsWorldBuffer(int x, int y, int layer, int customId);
 }

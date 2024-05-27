@@ -21,5 +21,17 @@ public class MorphableBlock : BasicBlock
         return new WorldBlockPlacedOutPacket(x, y, layer, BlockId, Morph);
     }
 
-    
+    public override byte[] AsWorldBuffer(int x, int y, int layer, int customId)
+    {
+        using MemoryStream memoryStream = new MemoryStream();
+        using BinaryWriter writer = new BinaryWriter(memoryStream);
+        
+        writer.Write(x);
+        writer.Write(y);
+        writer.Write(layer);
+        writer.Write(customId);
+        writer.Write(Morph);
+
+        return memoryStream.ToArray();
+    }
 }
