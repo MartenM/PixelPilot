@@ -160,17 +160,53 @@ public class PixelApiClient : IDisposable
     /// <param name="perPage">Entries per page</param>
     /// <returns>The page requested</returns>
     /// <exception cref="PixelApiException">When the rooms worlds could not be fetched</exception>
-    public async Task<CollectionResponse<WorldEntry>> GetOwnedWorlds(int page, int perPage)
+    public async Task<CollectionResponse<WorldEntry>> GetOwnedWorlds(int page, int perPage, QueryArgumentBuilder? qb = null)
     {
         if (page == 0)
             throw new PixelApiException("Pages start at 1. Not 0!");
         
-        var apiUrl = $"{EndPoints.ApiEndpoint}/api/collections/worlds/records?page={page}&perPage={perPage}";
+        var apiUrl = $"{EndPoints.ApiEndpoint}/api/collections/worlds/records?page={page}&perPage={perPage}{qb?.Build() ?? ""}";
         _logger.LogInformation($"API Request: {apiUrl}");
 
         var worldCollection =
             await JsonSerializer.DeserializeAsync<CollectionResponse<WorldEntry>>(await _client.GetStreamAsync(apiUrl), _jsonOptions);
         return worldCollection ?? throw new PixelApiException("An unknown exception occured while attempting to fetch the worlds");
+    }
+    
+    /// <summary>
+    /// Asynchronously retrieves a paginated collection of player entries with optional filters.
+    /// </summary>
+    /// <param name="page">The page number to retrieve. Must be greater than 0.</param>
+    /// <param name="perPage">The number of player entries to retrieve per page.</param>
+    /// <param name="filters">An optional list of tuple filters where each tuple contains a filter key and value.</param>
+    /// <returns>A task representing the asynchronous operation, with a result of <see cref="CollectionResponse{PlayerEntry}"/> containing the player entries.</returns>
+    /// <exception cref="PixelApiException">Thrown when the page number is less than 1 or when an unknown error occurs during the fetch operation.</exception>
+    public async Task<CollectionResponse<PlayerEntry>> GetPlayers(int page, int perPage, QueryArgumentBuilder? qb = null)
+    {
+        if (page == 0)
+            throw new PixelApiException("Pages start at 1. Not 0!");
+        
+        var apiUrl = $"{EndPoints.ApiEndpoint}/api/collections/public_profiles/records?page={page}&perPage={perPage}{qb?.Build() ?? ""}";
+        _logger.LogInformation($"API Request: {apiUrl}");
+
+        var worldCollection =
+            await JsonSerializer.DeserializeAsync<CollectionResponse<PlayerEntry>>(await _client.GetStreamAsync(apiUrl), _jsonOptions);
+        return worldCollection ?? throw new PixelApiException("An unknown exception occured while attempting to fetch the worlds");
+    }
+
+    /// <summary>
+    /// Asynchronously retrieves a player entry by username.
+    /// </summary>
+    /// <param name="username">The username of the player to retrieve.</param>
+    /// <returns>
+    /// A task representing the asynchronous operation, with a result of <see cref="PlayerEntry"/> containing the player entry,
+    /// or <c>null</c> if no player with the specified username is found.
+    /// </returns>
+    public async Task<PlayerEntry?> GetPlayer(string username)
+    {
+        var players = await GetPlayers(1, 1, new QueryArgumentBuilder().AddFilter("username", username));
+        if (players.TotalItems == 0) return null;
+        return players.Items[0];
     }
     
     /// <summary>
@@ -187,6 +223,8 @@ public class PixelApiClient : IDisposable
             await JsonSerializer.DeserializeAsync<PixelWalkerWorldsResponse>(await _client.GetStreamAsync(apiUrl), _jsonOptions);
         return worldCollection ?? throw new PixelApiException("An unknown exception occured while attempting to fetch the worlds");
     }
+
+    
     public void Dispose()
     {
         _client.Dispose();

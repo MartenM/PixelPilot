@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Text.Json;
+using Microsoft.Extensions.Configuration;
 using PixelPilot.Common.Logging;
 using PixelPilot.PixelGameClient;
 using PixelPilot.PixelGameClient.Messages.Received;
@@ -6,6 +7,7 @@ using PixelPilot.PixelGameClient.Messages.Send;
 using PixelPilot.PixelGameClient.Players.Basic;
 using PixelPilot.PixelGameClient.World;
 using PixelPilot.PixelHttpClient;
+using PixelPilot.PixelHttpClient.Responses.Collections;
 using PixelPilotExample;
 
 // Load the configuration. Don't store your account token in the code :)
