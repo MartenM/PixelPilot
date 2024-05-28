@@ -19,7 +19,7 @@ public class PixelPilotClient : IDisposable
     public static readonly int SecondsBeforeGatewayTimeout = 3;
     
     private readonly ILogger _logger = LogManager.GetLogger("Client");
-    private readonly PixelApiClient _apiClient;
+    public readonly PixelApiClient ApiClient;
     private WebsocketClient? _socketClient;
     private PacketConverter _packetConverter = new();
     public string? RoomType { get; private set; }
@@ -81,7 +81,7 @@ public class PixelPilotClient : IDisposable
     /// <param name="automaticReconnect">If the bot should reconnect</param>
     public PixelPilotClient(string accountToken, bool automaticReconnect)
     {
-        _apiClient = new PixelApiClient(accountToken);
+        ApiClient = new PixelApiClient(accountToken);
         AutomaticReconnect = automaticReconnect;
     }
     
@@ -102,7 +102,7 @@ public class PixelPilotClient : IDisposable
     /// <param name="automaticReconnect">If the bot should reconnect</param>
     public PixelPilotClient(string email, string password, bool automaticReconnect)
     {
-        _apiClient = new PixelApiClient(email, password);
+        ApiClient = new PixelApiClient(email, password);
         AutomaticReconnect = automaticReconnect;
     }
 
@@ -114,9 +114,9 @@ public class PixelPilotClient : IDisposable
     /// <returns>A task representing the asynchronous operation.</returns>
     public async Task Connect(string roomId)
     {
-        var roomType = (await _apiClient.GetRoomTypes())![0];
+        var roomType = (await ApiClient.GetRoomTypes())![0];
         
-        var joinRequest = await _apiClient.GetJoinKey(roomType, roomId);
+        var joinRequest = await ApiClient.GetJoinKey(roomType, roomId);
         if (joinRequest?.Token == null)
         {
             throw new Exception("Failed to get the join key. Are you sure that the account token is still valid?");
@@ -272,7 +272,7 @@ public class PixelPilotClient : IDisposable
     
     public void Dispose()
     {
-        _apiClient.Dispose();
+        ApiClient.Dispose();
         _socketClient?.Dispose();
         GC.SuppressFinalize(this);
     }

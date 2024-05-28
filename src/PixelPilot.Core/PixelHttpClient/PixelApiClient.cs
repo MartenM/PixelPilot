@@ -8,6 +8,8 @@ using PixelPilot.Common;
 using PixelPilot.Common.Logging;
 using PixelPilot.PixelHttpClient.Responses;
 using PixelPilot.PixelHttpClient.Responses.Auth;
+using PixelPilot.PixelHttpClient.Responses.Collections;
+using PixelPilot.PixelHttpClient.Responses.visible;
 
 namespace PixelPilot.PixelHttpClient;
 
@@ -19,6 +21,11 @@ public class PixelApiClient : IDisposable
 {
     private readonly ILogger _logger = LogManager.GetLogger("API");
     private readonly HttpClient _client;
+
+    private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
 
     private string _version = "0.0.0";
     
@@ -145,6 +152,78 @@ public class PixelApiClient : IDisposable
         }
         return JsonSerializer.Deserialize<AuthSuccessResponse>(await response.Content.ReadAsStringAsync(), new JsonSerializerOptions()) ?? throw new InvalidOperationException();
     }
+
+    /// <summary>
+    /// Fetches the worlds of the current authenticated player.
+    /// </summary>
+    /// <param name="page">Page to be fetched</param>
+    /// <param name="perPage">Entries per page</param>
+    /// <returns>The page requested</returns>
+    /// <exception cref="PixelApiException">When the rooms worlds could not be fetched</exception>
+    public async Task<CollectionResponse<WorldEntry>> GetOwnedWorlds(int page, int perPage, QueryArgumentBuilder? qb = null)
+    {
+        if (page == 0)
+            throw new PixelApiException("Pages start at 1. Not 0!");
+        
+        var apiUrl = $"{EndPoints.ApiEndpoint}/api/collections/worlds/records?page={page}&perPage={perPage}{qb?.Build() ?? ""}";
+        _logger.LogInformation($"API Request: {apiUrl}");
+
+        var worldCollection =
+            await JsonSerializer.DeserializeAsync<CollectionResponse<WorldEntry>>(await _client.GetStreamAsync(apiUrl), _jsonOptions);
+        return worldCollection ?? throw new PixelApiException("An unknown exception occured while attempting to fetch the worlds");
+    }
+    
+    /// <summary>
+    /// Asynchronously retrieves a paginated collection of player entries with optional filters.
+    /// </summary>
+    /// <param name="page">The page number to retrieve. Must be greater than 0.</param>
+    /// <param name="perPage">The number of player entries to retrieve per page.</param>
+    /// <param name="filters">An optional list of tuple filters where each tuple contains a filter key and value.</param>
+    /// <returns>A task representing the asynchronous operation, with a result of <see cref="CollectionResponse{PlayerEntry}"/> containing the player entries.</returns>
+    /// <exception cref="PixelApiException">Thrown when the page number is less than 1 or when an unknown error occurs during the fetch operation.</exception>
+    public async Task<CollectionResponse<PlayerEntry>> GetPlayers(int page, int perPage, QueryArgumentBuilder? qb = null)
+    {
+        if (page == 0)
+            throw new PixelApiException("Pages start at 1. Not 0!");
+        
+        var apiUrl = $"{EndPoints.ApiEndpoint}/api/collections/public_profiles/records?page={page}&perPage={perPage}{qb?.Build() ?? ""}";
+        _logger.LogInformation($"API Request: {apiUrl}");
+
+        var worldCollection =
+            await JsonSerializer.DeserializeAsync<CollectionResponse<PlayerEntry>>(await _client.GetStreamAsync(apiUrl), _jsonOptions);
+        return worldCollection ?? throw new PixelApiException("An unknown exception occured while attempting to fetch the worlds");
+    }
+
+    /// <summary>
+    /// Asynchronously retrieves a player entry by username.
+    /// </summary>
+    /// <param name="username">The username of the player to retrieve.</param>
+    /// <returns>
+    /// A task representing the asynchronous operation, with a result of <see cref="PlayerEntry"/> containing the player entry,
+    /// or <c>null</c> if no player with the specified username is found.
+    /// </returns>
+    public async Task<PlayerEntry?> GetPlayer(string username)
+    {
+        var players = await GetPlayers(1, 1, new QueryArgumentBuilder().AddFilter("username", username));
+        if (players.TotalItems == 0) return null;
+        return players.Items[0];
+    }
+    
+    /// <summary>
+    /// Fetch the visible worlds in the browser found in the lobby.
+    /// </summary>
+    /// <returns>The visible rooms</returns>
+    /// <exception cref="PixelApiException">When the worlds could not be fetched.</exception>
+    public async Task<PixelWalkerWorldsResponse> GetVisibleWorlds()
+    {
+        var apiUrl = $"{EndPoints.GameHttpEndpoint}/room/list/pixelwalker_2024_05_18";
+        _logger.LogInformation($"API Request: {apiUrl}");
+        
+        var worldCollection =
+            await JsonSerializer.DeserializeAsync<PixelWalkerWorldsResponse>(await _client.GetStreamAsync(apiUrl), _jsonOptions);
+        return worldCollection ?? throw new PixelApiException("An unknown exception occured while attempting to fetch the worlds");
+    }
+
     
     public void Dispose()
     {
