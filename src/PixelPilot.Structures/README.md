@@ -37,5 +37,5 @@ This is an example. This example has been shortened to fit here so it might not 
 
 
 ## Example bot
-An example bot can be found in the examples folder. 
+An example bot can be found in [here](https://github.com/MartenM/PixelPilot/tree/main/examples/Example.StructuresBot).
 ```
