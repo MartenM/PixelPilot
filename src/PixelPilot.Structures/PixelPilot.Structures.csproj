@@ -4,6 +4,12 @@
         <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <Title>PixelPilot.Structures</Title>
+        <Authors>MartenM</Authors>
+        <Description>Save and load structures. Easily paste them into your world.</Description>
+        <PackageIcon>package_logo.png</PackageIcon>
+        <RepositoryUrl>https://github.com/MartenM/PixelPilot</RepositoryUrl>
+        <PackageTags>PixelWalker, Bot, Structures</PackageTags>
     </PropertyGroup>
 
     <ItemGroup>
@@ -11,7 +17,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Converters\Binary\" />
+      <None Update="package_logo.png">
+        <Pack>true</Pack>
+        <PackagePath></PackagePath>
+      </None>
     </ItemGroup>
 
 </Project>

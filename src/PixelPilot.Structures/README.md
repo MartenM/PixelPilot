@@ -1,37 +1,36 @@
-﻿# Structures
-Structures are used to load and save blocks.
+﻿# PixelPilot.Structures
+Structures are used to load and save blocks. This is an optional package.
 
-### Saved format
-The saved format tries to be as compatible as possible with the original game. However, the names of blocks are subject to change.
-This means that to remain compatible a version tag was included.
+## 📄 Documentation
+- [https://martenm.github.io/PixelPilotDocs](https://martenm.github.io/PixelPilotDocs/guides/introduction.html)
 
-
-#### Binary array format
-```
-version: int
-width: int
-height: int
-meta-tag-count: int
-meta-tags: Array<(string, string)>
-meta-contains-air: bool
-mapping-count: int
-mappings: Array<string>
-data-compression: int
-data: like block packet out, but changed ID to mapping
-```
-
-#### JSON Format
+### JSON Format
+This is an example. This example has been shortened to fit here so it might not actually be a valid and working save file.
 ```json
 {
-  "version": 0,
-  "width": 0,
-  "height": 0,
-  "meta-tags": {
+  // Version of this save
+  "Version": 1,
+  // Width & Height of this structure
+  "Width": 1,
+  "Height": 1,
+  // Meta tags to be defined by the user
+  "Meta": {
     "key": "value"
   },
-  "contains-air": false,
-  "mapping": ["empty", "air"],
-  "data-format": "naive",
-  "data": "<DATA>"
+  // If this structure has saved empty blocks
+  "ContainsEmpty": false,
+  "Blocks": {
+    // Mapping of blocks. ID's in blockdata are replaced by temporary IDs.
+    // BricksGrass: 0, Coin: 1
+    "Mapping": [
+      "BricksGrass",
+      "Coin"
+    ],
+    // Blockdata as found in the world buffer in INIT.
+    "BlockData": [
+      "AQAAAAsAAAABAAAAAAAAAA==",
+      "AgAAAAgAAAABAAAAAQAAAA=="
+    ]
+  }
 }
 ```
