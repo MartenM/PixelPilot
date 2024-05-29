@@ -13,14 +13,14 @@ namespace PixelPilot.PixelGameClient.Messages;
 /// </summary>
 public class PacketConverter
 {
-    private readonly ILogger _logger = LogManager.GetLogger("PacketConverter");
+    private static readonly ILogger _logger = LogManager.GetLogger("PacketConverter");
     
     /// <summary>
     /// Constructs a pixel game packet from the given binary data.
     /// </summary>
     /// <param name="binary">The binary data representing the packet.</param>
     /// <returns>The constructed pixel game packet.</returns>
-    public IPixelGamePacket ConstructPacket(byte[] binary)
+    public static IPixelGamePacket ConstructPacket(byte[] binary)
     {
         using var memoryStream = new MemoryStream(binary);
         using var reader = new BinaryReader(memoryStream);
@@ -136,7 +136,7 @@ public class PacketConverter
     /// </summary>
     /// <param name="receivedFields">The list of fields received.</param>
     /// <param name="packetType">The type of the packet.</param>
-    private void LogPacketTypeConversionError(IReadOnlyCollection<dynamic> receivedFields, Type packetType)
+    private static void LogPacketTypeConversionError(IReadOnlyCollection<dynamic> receivedFields, Type packetType)
     {
         var builder = new StringBuilder();
         builder.AppendLine($"The packet type ({packetType.Name}) was found, but no constructor matching the message could be found.");
@@ -155,8 +155,76 @@ public class PacketConverter
     /// </summary>
     /// <param name="fields"></param>
     /// <returns></returns>
-    private string FieldTypes(List<dynamic> fields)
+    private static string FieldTypes(List<dynamic> fields)
     {
         return string.Join(", ", fields.Select(f => f + " " + ((Type)f.GetType()).Name));
+    }
+
+    private static Dictionary<Type, int> _typeDict = new()
+    {
+        {typeof(string), 0},
+        {typeof(bool), 1},
+        {typeof(byte), 2},
+        {typeof(short), 3},
+        {typeof(int), 4},
+        {typeof(long), 5},
+        {typeof(byte[]), 6},
+        {typeof(double), 7},
+    };
+
+    public static void WriteTypeBe(BinaryWriter writer, dynamic fieldValue)
+    {
+        var fieldType = fieldValue.GetType();
+
+        byte[] bytes;
+        switch (_typeDict[fieldType])
+        {
+            case 0: // string
+                bytes = Encoding.UTF8.GetBytes((string)fieldValue);
+                writer.Write7BitEncodedInt((int)PacketFieldType.String);
+                writer.Write7BitEncodedInt(bytes.Length);
+                writer.Write(bytes);
+                break;
+            case 1: // bool
+                writer.Write7BitEncodedInt((int)PacketFieldType.Boolean);
+                writer.Write(Convert.ToByte(fieldValue));
+                break;
+            case 2: // byte
+                writer.Write7BitEncodedInt((int)PacketFieldType.Byte);
+                writer.Write(Convert.ToByte(fieldValue));
+                break;
+            case 3: // int16
+                writer.Write7BitEncodedInt((int)PacketFieldType.Int16);
+                bytes = BitConverter.GetBytes(fieldValue);
+                Array.Reverse(bytes);
+                writer.Write(bytes);
+                break;
+            case 4: // int32
+                writer.Write7BitEncodedInt((int)PacketFieldType.Int32);
+                bytes = BitConverter.GetBytes(fieldValue);
+                Array.Reverse(bytes);
+                writer.Write(bytes);
+                break;
+            case 5: // int64
+                writer.Write7BitEncodedInt((int)PacketFieldType.Int64);
+                bytes = BitConverter.GetBytes(fieldValue);
+                Array.Reverse(bytes);
+                writer.Write(bytes);
+                break;
+            case 7: // double
+                writer.Write7BitEncodedInt((int)PacketFieldType.Double);
+                bytes = BitConverter.GetBytes(fieldValue);
+                Array.Reverse(bytes);
+                writer.Write(bytes);
+                break;
+            case 6: // byte[]
+                var input = (byte[])fieldValue;
+                writer.Write7BitEncodedInt((int)PacketFieldType.ByteArray);
+                writer.Write7BitEncodedInt(input.Length);
+                writer.Write(input);
+                break;
+            default:
+                throw new Exception($"Could not deserialize type: {fieldType}");
+        }
     }
 }

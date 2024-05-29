@@ -129,6 +129,12 @@ public class PixelWorld
             Init(reload.WorldData);
             return;
         }
+        
+        if (packet is WorldClearedPacket clear)
+        {
+            _worldData = new IPixelBlock[2, Width, Height];
+            return;
+        }
 
         if (packet is WorldBlockPlacedPacket place)
         {
@@ -165,11 +171,14 @@ public class PixelWorld
     public static IPixelBlock DeserializeBlock(BinaryReader reader)
     {
         var block = (PixelBlock) reader.ReadInt32();
-        
+        return DeserializeBlock(reader, block);
+    }
+    
+    public static IPixelBlock DeserializeBlock(BinaryReader reader, PixelBlock block)
+    {
         // We want to construct a PixelBlock.
         // First we need to know what type it is.
         // Then we can fill in the rest.
-
         var blockType = block.GetBlockType();
         var extraFields = blockType.GetPacketFieldTypes();
 
@@ -193,6 +202,7 @@ public class PixelWorld
                 throw new ArgumentOutOfRangeException();
         }
     }
+
     
     /// <summary>
     /// Deserializes a WorldBlockPlacedPacket into an IPixelBlock object.

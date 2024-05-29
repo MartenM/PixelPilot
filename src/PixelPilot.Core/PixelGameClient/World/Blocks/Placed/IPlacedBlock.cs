@@ -14,4 +14,7 @@ public interface IPlacedBlock
     public IPixelBlock Block { get; }
 
     public IPixelGamePacketOut AsPacketOut();
+
+    public byte[] AsWorldBuffer();
+    public byte[] AsWorldBuffer(int customId);
 }

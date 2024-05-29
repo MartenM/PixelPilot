@@ -203,7 +203,7 @@ public class PixelPilotClient : IDisposable
         IPixelGamePacket packet;
         try
         {
-            packet = _packetConverter.ConstructPacket(message.Binary);
+            packet = PacketConverter.ConstructPacket(message.Binary);
         }
         catch (PixelException)
         {

@@ -21,4 +21,38 @@ public class PortalBlock : BasicBlock
     {
         return new WorldBlockPlacedOutPacket(x, y, layer, BlockId, Direction, PortalId, TargetId, null);
     }
+
+    public override byte[] AsWorldBuffer(int x, int y, int layer, int customId)
+    {
+        using MemoryStream memoryStream = new MemoryStream();
+        using BinaryWriter writer = new BinaryWriter(memoryStream);
+        
+        writer.Write(x);
+        writer.Write(y);
+        writer.Write(layer);
+        writer.Write(customId);
+        writer.Write(Direction);
+        writer.Write(PortalId);
+        writer.Write(TargetId);
+
+        return memoryStream.ToArray();
+    }
+
+    protected bool Equals(PortalBlock other)
+    {
+        return base.Equals(other) && PortalId == other.PortalId && TargetId == other.TargetId && Direction == other.Direction;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+        return Equals((PortalBlock)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(base.GetHashCode(), PortalId, TargetId, Direction);
+    }
 }
