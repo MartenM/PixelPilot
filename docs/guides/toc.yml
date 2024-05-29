@@ -12,3 +12,8 @@
       topicUid: Guides.GettingStarted.PlayerManagement
     - name: Logging / Configuration
       topicUid: Guides.GettingStarted.ExtraTopics
+- name: Extra packages
+  topicUid: Guides.ExtraPackages.Introduction
+  items: 
+    - name: PixelPilot.Structures
+      topicUid: Guides.ExtraPackages.PixelPilot.Structures
