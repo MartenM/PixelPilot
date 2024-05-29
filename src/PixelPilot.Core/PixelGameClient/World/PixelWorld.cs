@@ -129,6 +129,12 @@ public class PixelWorld
             Init(reload.WorldData);
             return;
         }
+        
+        if (packet is WorldClearedPacket clear)
+        {
+            _worldData = new IPixelBlock[2, Width, Height];
+            return;
+        }
 
         if (packet is WorldBlockPlacedPacket place)
         {
