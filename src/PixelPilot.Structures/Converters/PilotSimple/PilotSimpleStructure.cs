@@ -8,8 +8,8 @@ namespace PixelPilot.Structures.Converters.PilotSimple;
 public class PilotSimpleStructure
 {
     public int Version { get; set; }
-    public int Width { get; }
-    public int Height { get; }
+    public int Width { get; set; }
+    public int Height { get; set; }
     public Dictionary<string, string> Meta { get; set; }
     public bool ContainsEmpty { get; set; }
     public List<IPlacedBlock> Blocks { get; set; }
