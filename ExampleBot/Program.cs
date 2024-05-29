@@ -1,14 +1,11 @@
-﻿using System.Drawing;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using PixelPilot.Common.Logging;
 using PixelPilot.PixelGameClient;
-using PixelPilot.PixelGameClient.Messages;
 using PixelPilot.PixelGameClient.Messages.Received;
 using PixelPilot.PixelGameClient.Messages.Send;
 using PixelPilot.PixelGameClient.Players.Basic;
 using PixelPilot.PixelGameClient.World;
-using PixelPilot.Structures.Converters.PilotSimple;
-using PixelPilot.Structures.Extensions;
+using PixelPilot.PixelHttpClient;
 using PixelPilotExample;
 
 // Load the configuration. Don't store your account token in the code :)
@@ -39,21 +36,14 @@ var world = new PixelWorld();
 client.OnPacketReceived += world.HandlePacket;
 world.OnBlockPlaced += (_, playerId, oldBlock, _) =>
 {
-    
+    if (client.BotId == playerId) return;
+    client.Send(oldBlock.AsPacketOut());
 };
 
 
 // Executed when the client receives a packet!
-var p1 = new Point(8, 8);
-var p2 = new Point(16, 19);
-client.OnPacketReceived += async (_, packet) =>
+client.OnPacketReceived += (_, packet) =>
 {
-    var playerPacket = packet as IPixelGamePlayerPacket;
-    if (playerPacket == null) return;
-
-    var player = playerManager.GetPlayer(playerPacket.PlayerId);
-    if (player == null) return;
-    
     // Make use of strongly typed packets!
     switch (packet)
     {
@@ -61,37 +51,12 @@ client.OnPacketReceived += async (_, packet) =>
             client.Disconnect();
             Environment.Exit(0);
             return;
-        case PlayerChatPacket { Message: ".p1" } chat:
+        case PlayerChatPacket { Message: ".ping" } chat:
         {
-            p1 = new Point((int)(player.X / 16), (int)(player.Y / 16));
-            client.Send(new PlayerChatOutPacket(p1.ToString()));
-            break;
-        }
-        case PlayerChatPacket { Message: ".p2" } chat:
-        {
-            p2 = new Point((int)(player.X / 16), (int)(player.Y / 16));
-            client.Send(new PlayerChatOutPacket(p2.ToString()));
-            break;
-        }
-        case PlayerChatPacket { Message: ".save" } chat:
-        {
-            var structure = world.GetStructure(p1, p2, copyEmpty: false);
-            
-            // Save
-            var json = PilotSaveSerializer.Serialize(structure);
-            File.WriteAllText("test-struct.json", json);
-            client.Send(new PlayerChatOutPacket("Struct saved!"));
-            break;
-        }
-        case PlayerChatPacket { Message: ".load" } chat:
-        {
-            string json = File.ReadAllText("test-struct.json");
-            var structure = PilotSaveSerializer.Deserialize(json);
+            var player = playerManager.GetPlayer(chat.PlayerId);
+            if (player == null) return;
 
-            if (structure == null) return;
-            client.Send(new PlayerChatOutPacket("Struct pasting..."));
-            structure.PasteInOrder(client, new Point((int)(player.X / 16), (int)(player.Y / 16)), 5);
-            
+            client.Send(new PlayerChatOutPacket($"Pong! ({player.Username}, {player.X}, {player.Y})"));
             break;
         }
         case PlayerJoinPacket join:
@@ -105,6 +70,9 @@ client.OnPacketReceived += async (_, packet) =>
 client.OnClientConnected += (_) =>
 {
     client.Send(new PlayerChatOutPacket("Hello world using the PixelPilot API."));
+    Thread.Sleep(250);
+    PlatformUtil.GetThread(client).Start();
+    client.Send(new PlayerMoveOutPacket(592, 1056, 0, 0, 0, 0, 0, 0, false, false, 100)); 
 };
 
 // Connect to a room.

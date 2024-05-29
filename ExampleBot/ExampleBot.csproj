@@ -7,12 +7,10 @@
         <Nullable>enable</Nullable>
         <AssemblyName>ExampleBot</AssemblyName>
         <RootNamespace>ExampleBot</RootNamespace>
-        <IsPackable>false</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\src\PixelPilot.Core\PixelPilot.Core.csproj" />
-      <ProjectReference Include="..\src\PixelPilot.Structures\PixelPilot.Structures.csproj" />
     </ItemGroup>
 
     <ItemGroup>
