@@ -15,6 +15,7 @@ public abstract class PixelPlayerManager<T> where T : IPixelPlayer
     private ILogger _logger = LogManager.GetLogger("WorldPlayers");
     
     private Dictionary<int, T> _players = new();
+    public IEnumerable<T> Players => _players.Values;
     public int CrownedPlayerId
     {
         get;
