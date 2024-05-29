@@ -37,4 +37,22 @@ public class PlacedBlock : IPlacedBlock
     {
         return Block.AsWorldBuffer(X, Y, Layer, customId);
     }
+
+    protected bool Equals(PlacedBlock other)
+    {
+        return X == other.X && Y == other.Y && Layer == other.Layer && Block.Equals(other.Block);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+        return Equals((PlacedBlock)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(X, Y, Layer, Block);
+    }
 }

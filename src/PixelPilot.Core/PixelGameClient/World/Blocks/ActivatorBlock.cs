@@ -32,4 +32,22 @@ public class ActivatorBlock : BasicBlock
 
         return memoryStream.ToArray();
     }
+
+    protected bool Equals(ActivatorBlock other)
+    {
+        return base.Equals(other) && SwitchId == other.SwitchId && Status == other.Status;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+        return Equals((ActivatorBlock)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(base.GetHashCode(), SwitchId, Status);
+    }
 }

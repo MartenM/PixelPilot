@@ -34,4 +34,22 @@ public class MorphableBlock : BasicBlock
 
         return memoryStream.ToArray();
     }
+
+    protected bool Equals(MorphableBlock other)
+    {
+        return base.Equals(other) && Morph == other.Morph;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+        return Equals((MorphableBlock)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(base.GetHashCode(), Morph);
+    }
 }
