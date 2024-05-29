@@ -1,4 +1,4 @@
-﻿namespace PixelPilotExample;
+﻿namespace Example.BasicBot;
 
 public class BasicConfig
 {

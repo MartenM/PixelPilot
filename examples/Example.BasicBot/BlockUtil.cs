@@ -3,7 +3,7 @@ using PixelPilot.PixelGameClient;
 using PixelPilot.PixelGameClient.Messages.Send;
 using PixelPilot.PixelGameClient.World.Constants;
 
-namespace PixelPilotExample;
+namespace Example.BasicBot;
 
 public static class PlatformUtil
 {

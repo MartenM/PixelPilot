@@ -1,7 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleBot", "ExampleBot\ExampleBot.csproj", "{173C3E46-B7EE-4480-AFC4-33E15A847BE3}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelPilot.Core", "src\PixelPilot.Core\PixelPilot.Core.csproj", "{7E6259D6-5561-48C5-9603-44105859EBE4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelPilot.Tests", "src\PixelPilot.Tests\PixelPilot.Tests.csproj", "{02E83426-163D-4791-8340-32611FA41EAF}"
@@ -10,16 +8,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelPilot.DebugTools", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelPilot.Structures", "src\PixelPilot.Structures\PixelPilot.Structures.csproj", "{8E6F02BD-3E14-4130-B1F2-0F325C689896}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.BasicBot", "examples\Example.BasicBot\Example.BasicBot.csproj", "{026A3FEA-57D9-40A4-9151-662DB7D28DE7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.StructuresBot", "examples\Example.StructuresBot\Example.StructuresBot.csproj", "{50FA4BCF-ED12-4933-8F5D-05DBB30AD23B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{173C3E46-B7EE-4480-AFC4-33E15A847BE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{173C3E46-B7EE-4480-AFC4-33E15A847BE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{173C3E46-B7EE-4480-AFC4-33E15A847BE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{173C3E46-B7EE-4480-AFC4-33E15A847BE3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7E6259D6-5561-48C5-9603-44105859EBE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7E6259D6-5561-48C5-9603-44105859EBE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E6259D6-5561-48C5-9603-44105859EBE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -36,5 +34,13 @@ Global
 		{8E6F02BD-3E14-4130-B1F2-0F325C689896}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E6F02BD-3E14-4130-B1F2-0F325C689896}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E6F02BD-3E14-4130-B1F2-0F325C689896}.Release|Any CPU.Build.0 = Release|Any CPU
+		{026A3FEA-57D9-40A4-9151-662DB7D28DE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{026A3FEA-57D9-40A4-9151-662DB7D28DE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{026A3FEA-57D9-40A4-9151-662DB7D28DE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{026A3FEA-57D9-40A4-9151-662DB7D28DE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50FA4BCF-ED12-4933-8F5D-05DBB30AD23B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50FA4BCF-ED12-4933-8F5D-05DBB30AD23B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50FA4BCF-ED12-4933-8F5D-05DBB30AD23B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50FA4BCF-ED12-4933-8F5D-05DBB30AD23B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

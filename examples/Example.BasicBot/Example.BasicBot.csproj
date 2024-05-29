@@ -5,12 +5,13 @@
         <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AssemblyName>ExampleBot</AssemblyName>
-        <RootNamespace>ExampleBot</RootNamespace>
+        <AssemblyName>Example.BasicBot</AssemblyName>
+        <RootNamespace>Example.BasicBot</RootNamespace>
+        <IsPackable>false</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\src\PixelPilot.Core\PixelPilot.Core.csproj" />
+      <ProjectReference Include="..\..\src\PixelPilot.Core\PixelPilot.Core.csproj" />
     </ItemGroup>
 
     <ItemGroup>
