@@ -10,6 +10,12 @@
         <PackageIcon>package_logo.png</PackageIcon>
         <RepositoryUrl>https://github.com/MartenM/PixelPilot</RepositoryUrl>
         <PackageTags>PixelWalker, Bot, Structures</PackageTags>
+
+        <PackageId>PixelPilot.Structures</PackageId>
+        <PackageIcon>package_logo.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <AssemblyName>PixelPilot.Structures</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,10 +23,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="package_logo.png">
-        <Pack>true</Pack>
-        <PackagePath></PackagePath>
-      </None>
+        <None Include="package_logo.png" Pack="true" PackagePath=""/>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
 </Project>

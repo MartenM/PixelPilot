@@ -16,6 +16,6 @@ public class MappedBlockData
     }
     
     public int Version { get; set; }
-    public List<string> Mapping { get; set; }
-    public List<string> BlockData { get; set; } 
+    public List<string> Mapping { get; set; } = new();
+    public List<string> BlockData { get; set; } = new();
 }

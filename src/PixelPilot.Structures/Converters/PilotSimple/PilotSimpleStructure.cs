@@ -10,9 +10,9 @@ public class PilotSimpleStructure
     public int Version { get; set; }
     public int Width { get; set; }
     public int Height { get; set; }
-    public Dictionary<string, string> Meta { get; set; }
+    public Dictionary<string, string> Meta { get; set; } = null!;
     public bool ContainsEmpty { get; set; }
-    public List<IPlacedBlock> Blocks { get; set; }
+    public List<IPlacedBlock> Blocks { get; set; } = new();
 
     public PilotSimpleStructure() {}
     private PilotSimpleStructure(int width, int height, Dictionary<string, string> meta, bool containsEmpty, List<IPlacedBlock> blocks)
