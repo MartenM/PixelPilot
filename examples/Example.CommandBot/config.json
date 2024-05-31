@@ -1,0 +1,16 @@
+﻿{
+  "AccountToken": "Secret key value if you want to use the token login",
+  "LoginEmail": "Email",
+  "LoginPassword": "Password",
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "PixelPilot.API": "Information",
+      "PixelPilot.Client": "Information",
+      "PixelPilot.World": "Information",
+      "PixelPilot.PacketConverter": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  }
+}

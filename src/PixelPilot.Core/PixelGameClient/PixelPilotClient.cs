@@ -5,6 +5,7 @@ using PixelPilot.Common.Logging;
 using PixelPilot.PixelGameClient.Messages;
 using PixelPilot.PixelGameClient.Messages.Exceptions;
 using PixelPilot.PixelGameClient.Messages.Received;
+using PixelPilot.PixelGameClient.Messages.Send;
 using PixelPilot.PixelHttpClient;
 using Websocket.Client;
 
@@ -190,6 +191,45 @@ public class PixelPilotClient : IDisposable
     {
         OnPacketSend?.Invoke(this, packet);
         _send(packet.ToBinaryPacket());
+    }
+    
+    /// <summary>
+    /// Sends a chat message while ensuring that the message doesn't become too long.
+    /// </summary>
+    /// <param name="msg">The message</param>
+    public void SendChat(string msg)
+    {
+        var maxLineLength = 120;
+        var charCount = 0;
+        
+        var lines = msg.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            .GroupBy(w => (charCount += w.Length + 1) / maxLineLength)
+            .Select(g => string.Join(" ", g));
+
+        foreach (var line in lines)
+        {
+            Send(new PlayerChatOutPacket(line));
+        }
+    }
+
+    /// <summary>
+    /// Same as SendChat but as PM.
+    /// </summary>
+    /// <param name="username">Player username</param>
+    /// <param name="msg">The message</param>
+    public void SendPm(string username, string msg)
+    {
+        var maxLineLength = 100;
+        var charCount = 0;
+        
+        var lines = msg.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            .GroupBy(w => (charCount += w.Length + 1) / maxLineLength)
+            .Select(g => string.Join(" ", g));
+
+        foreach (var line in lines)
+        {
+            Send(new PlayerChatOutPacket($"/pm {username} {line}"));
+        }
     }
     
     /// <summary>
