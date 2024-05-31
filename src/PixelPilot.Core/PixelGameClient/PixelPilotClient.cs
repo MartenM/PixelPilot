@@ -25,6 +25,8 @@ public class PixelPilotClient : IDisposable
     private PacketConverter _packetConverter = new();
     public string? RoomType { get; private set; }
 
+    public string BotPrefix { get; set; } = "[Bot] ";
+
     /// <summary>
     /// Indicates if the client will try to automatically reconnect if the
     /// connection gets somehow lost.
@@ -199,7 +201,7 @@ public class PixelPilotClient : IDisposable
     /// <param name="msg">The message</param>
     public void SendChat(string msg)
     {
-        var maxLineLength = 120;
+        var maxLineLength = 120 - BotPrefix.Length;
         var charCount = 0;
         
         var lines = msg.Split(' ', StringSplitOptions.RemoveEmptyEntries)
@@ -208,7 +210,7 @@ public class PixelPilotClient : IDisposable
 
         foreach (var line in lines)
         {
-            Send(new PlayerChatOutPacket(line));
+            Send(new PlayerChatOutPacket(BotPrefix + line));
         }
     }
 
@@ -219,7 +221,7 @@ public class PixelPilotClient : IDisposable
     /// <param name="msg">The message</param>
     public void SendPm(string username, string msg)
     {
-        var maxLineLength = 100;
+        var maxLineLength = 100 - BotPrefix.Length;;
         var charCount = 0;
         
         var lines = msg.Split(' ', StringSplitOptions.RemoveEmptyEntries)
@@ -228,7 +230,7 @@ public class PixelPilotClient : IDisposable
 
         foreach (var line in lines)
         {
-            Send(new PlayerChatOutPacket($"/pm {username} {line}"));
+            Send(new PlayerChatOutPacket($"/pm {username} {BotPrefix}{line}"));
         }
     }
     
