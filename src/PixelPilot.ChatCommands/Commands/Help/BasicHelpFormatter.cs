@@ -6,7 +6,7 @@ public class BasicHelpFormatter : IHelpFormatter
 {
     public string Prefix = ".";
     
-    public void SendHelp(CommandSender sender, List<ChatCommand> subCommands)
+    public void SendHelp(ICommandSender sender, List<ChatCommand> subCommands)
     {
         if (subCommands.First().HasParent())
         {

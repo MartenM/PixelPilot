@@ -30,7 +30,9 @@ var client = new PixelPilotClient(config.AccountToken, false);
 var playerManager = new PlayerManager();
 client.OnPacketReceived += playerManager.HandlePacket;
 
-var commandManager = new CommandManager(client, playerManager);
+// A custom command manager that implements our permissions.
+// This is not required, but very useful!
+var commandManager = new CustomCommandManager(client, playerManager);
 commandManager.AddHelpCommand();
 commandManager.AddCommand(new BotActionsRoot(client));
 commandManager.AddCommand(new TestCommand());

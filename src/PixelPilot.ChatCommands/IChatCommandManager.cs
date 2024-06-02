@@ -6,5 +6,5 @@ namespace PixelPilot.ChatCommands;
 public interface IChatCommandManager
 {
     public IHelpFormatter HelpFormatter { get; }
-    public List<ChatCommand> GetAvailableCommands(CommandSender sender);
+    public List<ChatCommand> GetAvailableCommands(ICommandSender sender);
 }

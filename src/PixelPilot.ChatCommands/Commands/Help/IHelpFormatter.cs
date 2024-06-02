@@ -2,5 +2,5 @@
 
 public interface IHelpFormatter
 {
-    void SendHelp(CommandSender sender, List<ChatCommand> subCommands);
+    void SendHelp(ICommandSender sender, List<ChatCommand> subCommands);
 }

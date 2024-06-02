@@ -14,9 +14,9 @@ public class BroadcastCommand : ChatCommand
         _client = client;
     }
 
-    public override Task ExecuteCommand(CommandSender sender, string fullCommand, string[] args)
+    public override Task ExecuteCommand(ICommandSender sender, string fullCommand, string[] args)
     {
-        _client.SendChat($"[Bot] Broadcast: {string.Join(' ', args)}");
+        _client.SendChat($"{string.Join(' ', args)}");
         return Task.CompletedTask;
     }
 }

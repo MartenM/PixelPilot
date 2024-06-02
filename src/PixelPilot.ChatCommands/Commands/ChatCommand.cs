@@ -38,7 +38,7 @@ public abstract class ChatCommand : ICommandExecutor
      * @param sender The command sender
      * @return True if allowed
      */
-    public virtual bool CheckPermission(CommandSender sender) {
+    public virtual bool CheckPermission(ICommandSender sender) {
         if(GetFullPermission() == null) return true;
         return sender.HasPermission(GetFullPermission());
     }
@@ -122,5 +122,5 @@ public abstract class ChatCommand : ICommandExecutor
         return HelpFormatter;
     }
 
-    public abstract Task ExecuteCommand(CommandSender sender, string fullCommand, string[] args);
+    public abstract Task ExecuteCommand(ICommandSender sender, string fullCommand, string[] args);
 }

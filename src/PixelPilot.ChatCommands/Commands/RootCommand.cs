@@ -12,7 +12,7 @@ public class RootCommand : ChatCommand
         
     }
 
-    public override Task ExecuteCommand(CommandSender sender, string fullCommand, string[] args)
+    public override Task ExecuteCommand(ICommandSender sender, string fullCommand, string[] args)
     {
         if (_subCommands.Count == 0)
         {
@@ -44,12 +44,13 @@ public class RootCommand : ChatCommand
         // Do the permission check for the child.
         if(!sc.CheckPermission(sender)) {
             sender.SendMessage(CommandMessages.NoPermission);
+            return Task.CompletedTask;
         }
 
         return sc.ExecuteCommand(sender, fullCommand, args.Skip(1).ToArray());
     }
     
-    public List<ChatCommand> GetSubCommands(CommandSender sender)
+    public List<ChatCommand> GetSubCommands(ICommandSender sender)
     {
         return _subCommands.Where(cmd => cmd.CheckPermission(sender)).ToList();
     }
@@ -58,5 +59,11 @@ public class RootCommand : ChatCommand
     {
         _subCommands.Add(command);
         command.Parent = this;
+    }
+
+    public override bool CheckPermission(ICommandSender sender)
+    {
+        if (GetSubCommands(sender).Count != 0) return true;
+        return base.CheckPermission(sender);
     }
 }

@@ -10,7 +10,7 @@ public class TestCommand : ChatCommand
         
     }
 
-    public override Task ExecuteCommand(CommandSender sender, string fullCommand, string[] args)
+    public override Task ExecuteCommand(ICommandSender sender, string fullCommand, string[] args)
     {
         sender.SendMessage("This is a test command!");
         return Task.CompletedTask;

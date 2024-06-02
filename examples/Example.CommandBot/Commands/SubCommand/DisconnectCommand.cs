@@ -13,7 +13,7 @@ public class DisconnectCommand : ChatCommand
         _client = client;
     }
 
-    public override Task ExecuteCommand(CommandSender sender, string fullCommand, string[] args)
+    public override Task ExecuteCommand(ICommandSender sender, string fullCommand, string[] args)
     {
         sender.SendMessage("Goodbye");
         _client.Disconnect();

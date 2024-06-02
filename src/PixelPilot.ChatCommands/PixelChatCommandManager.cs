@@ -17,7 +17,7 @@ public class PixelChatCommandManager<T> : IChatCommandManager where T : IPixelPl
     public List<ChatCommand> ChatCommands { get; set; } = new();
 
     public IHelpFormatter HelpFormatter { get; set; } = new BasicHelpFormatter();
-    public List<ChatCommand> GetAvailableCommands(CommandSender sender)
+    public List<ChatCommand> GetAvailableCommands(ICommandSender sender)
     {
         return ChatCommands.Where(cmd => cmd.CheckPermission(sender)).ToList();
     }
@@ -54,13 +54,14 @@ public class PixelChatCommandManager<T> : IChatCommandManager where T : IPixelPl
         // Command found check permissions
         if(!command.CheckPermission(sender)) {
             sender.SendMessage(CommandMessages.NoPermission);
+            return;
         }
         
         var result = command.ExecuteCommand(sender, commandText, args.Skip(1).ToArray());
         result.Wait();
     }
 
-    protected virtual CommandSender CreateSender(T player)
+    protected virtual ICommandSender CreateSender(T player)
     {
         return new CommandSender(player, _client);
     }

@@ -1,10 +1,9 @@
 ﻿using PixelPilot.PixelGameClient;
-using PixelPilot.PixelGameClient.Messages.Send;
 using PixelPilot.PixelGameClient.Players;
 
 namespace PixelPilot.ChatCommands;
 
-public class CommandSender
+public class CommandSender : ICommandSender
 {
     private PixelPilotClient _client;
     

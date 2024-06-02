@@ -2,5 +2,5 @@
 
 public interface ICommandExecutor
 {
-    public Task ExecuteCommand(CommandSender sender, string fullCommand, string[] args);
+    public Task ExecuteCommand(ICommandSender sender, string fullCommand, string[] args);
 }

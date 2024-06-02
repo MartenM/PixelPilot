@@ -9,7 +9,7 @@ public class BasicHelpCommand : ChatCommand
         _chatCommandManager = chatCommandManager;
     }
 
-    public override Task ExecuteCommand(CommandSender sender, string fullCommand, string[] args)
+    public override Task ExecuteCommand(ICommandSender sender, string fullCommand, string[] args)
     {
         var cmds = _chatCommandManager.GetAvailableCommands(sender);
         _chatCommandManager.HelpFormatter.SendHelp(sender, cmds);
