@@ -48,4 +48,5 @@ client.OnClientConnected += (_) =>
 await client.Connect("mknckr7oqxq24xa");
 
 // Don't terminate.
-Thread.Sleep(-1);
+await client.WaitForDisconnect();
+Console.WriteLine("End of program reached.");

@@ -154,7 +154,8 @@ public class PixelPilotClient : IDisposable
             }
         });
 
-        // Start the websocket.
+        // Start the websocket. Set connected to True.
+        IsConnected = true;
         await _socketClient.Start();
     }
 
@@ -275,7 +276,6 @@ public class PixelPilotClient : IDisposable
             _send(InitPacket.AsSendingBytes());
 
             _logger.LogInformation("Connected to the room successfully");
-            IsConnected = true;
             BotId = init.PlayerId;
             
             InvokeWithTimings("ClientConnected", () =>
@@ -310,6 +310,17 @@ public class PixelPilotClient : IDisposable
         {
             _logger.LogError(ex,$"A {name} handler has thrown an unexpected error.");
         }
+    }
+
+    public async Task WaitForDisconnect(CancellationToken ct = new())
+    {
+        await Task.Run(async () =>
+        {
+            while (IsConnected)
+            {
+                await Task.Delay(1000);
+            }
+        }, ct).ConfigureAwait(true);
     }
     
     public void Dispose()
