@@ -4,6 +4,7 @@ using PixelPilot.Common;
 using PixelPilot.Common.Logging;
 using PixelPilot.PixelGameClient.Messages;
 using PixelPilot.PixelGameClient.Messages.Exceptions;
+using PixelPilot.PixelGameClient.Messages.Queue;
 using PixelPilot.PixelGameClient.Messages.Received;
 using PixelPilot.PixelGameClient.Messages.Send;
 using PixelPilot.PixelHttpClient;
@@ -24,8 +25,9 @@ public class PixelPilotClient : IDisposable
     private WebsocketClient? _socketClient;
     private PacketConverter _packetConverter = new();
     public string? RoomType { get; private set; }
-
+    
     public string BotPrefix { get; set; } = "[Bot] ";
+    private IPixelPacketQueue _packetOutQueue;
 
     /// <summary>
     /// Indicates if the client will try to automatically reconnect if the
@@ -68,46 +70,15 @@ public class PixelPilotClient : IDisposable
     /// </summary>
     public event ClientConnected? OnClientConnected;
     public delegate void ClientConnected(object sender);
+    
+    public PixelPilotClient(PixelApiClient apiClient, bool automaticReconnect)
+    {
+        ApiClient = apiClient;
+        AutomaticReconnect = automaticReconnect;
+        _packetOutQueue = new TokenBucketPacketOutQueue(this);
+    }
 
-    /// <summary>
-    /// Create a PixelPilot client using an account token.
-    /// Automatically reconnects.
-    /// </summary>
-    /// <param name="accountToken">A valid account token</param>
-    public PixelPilotClient(string accountToken) : this(accountToken, true)
-    { }
-    
-    /// <summary>
-    /// Create a PixelPilot client using an account token.
-    /// </summary>
-    /// <param name="accountToken">A valid account token</param>
-    /// <param name="automaticReconnect">If the bot should reconnect</param>
-    public PixelPilotClient(string accountToken, bool automaticReconnect)
-    {
-        ApiClient = new PixelApiClient(accountToken);
-        AutomaticReconnect = automaticReconnect;
-    }
-    
-    /// <summary>
-    /// Create a PixelPilotClient using the email and password login method.
-    /// Automatically reconnects.
-    /// </summary>
-    /// <param name="email">Valid email</param>
-    /// <param name="password">Valid password</param>
-    public PixelPilotClient(string email, string password) : this(email, password, true)
-    { }
-    
-    /// <summary>
-    /// Create a PixelPilotClient using the email and password login method.
-    /// </summary>
-    /// <param name="email">Valid email</param>
-    /// <param name="password">Valid password</param>
-    /// <param name="automaticReconnect">If the bot should reconnect</param>
-    public PixelPilotClient(string email, string password, bool automaticReconnect)
-    {
-        ApiClient = new PixelApiClient(email, password);
-        AutomaticReconnect = automaticReconnect;
-    }
+    public static PixelGameClientBuilder Builder() => new();
 
     /// <summary>
     /// Connects to a game room using the specified room type and room ID.
@@ -139,6 +110,7 @@ public class PixelPilotClient : IDisposable
         _socketClient.DisconnectionHappened.Subscribe(info =>
         {
             IsConnected = false;
+            _packetOutQueue?.Stop();
             _logger.LogWarning($"Client got disconnected. ({info.CloseStatusDescription})");
         });
         _socketClient.MessageReceived.Subscribe(msg =>
@@ -188,14 +160,25 @@ public class PixelPilotClient : IDisposable
     
     /// <summary>
     /// Sends a pixel game packet.
+    /// Bypasses the internal rate limiter
     /// </summary>
     /// <param name="packet">The pixel game packet to send.</param>
-    public void Send(IPixelGamePacketOut packet)
+    public void SendDirect(IPixelGamePacketOut packet)
     {
         OnPacketSend?.Invoke(this, packet);
         _send(packet.ToBinaryPacket());
     }
-    
+
+    /// <summary>
+    /// Sends a pixel game packet.
+    /// Uses an internal rate limiter to limit packets.
+    /// </summary>
+    /// <param name="packet">The pixel game packet to send.</param>
+    public void Send(IPixelGamePacketOut packet)
+    {
+        _packetOutQueue?.EnqueuePacket(packet);
+    }
+
     /// <summary>
     /// Sends a chat message while ensuring that the message doesn't become too long.
     /// </summary>
@@ -280,6 +263,7 @@ public class PixelPilotClient : IDisposable
             
             InvokeWithTimings("ClientConnected", () =>
             {
+                _packetOutQueue.Start();
                 return Task.Run(() => OnClientConnected?.Invoke(this));
             }).Wait();
         }
@@ -325,8 +309,9 @@ public class PixelPilotClient : IDisposable
     
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
+        _packetOutQueue.Dispose();
         ApiClient.Dispose();
         _socketClient?.Dispose();
-        GC.SuppressFinalize(this);
     }
 }

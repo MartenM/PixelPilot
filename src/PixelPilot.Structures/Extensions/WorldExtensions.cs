@@ -57,23 +57,23 @@ public static class WorldExtensions
 
         return difference;
     }
-    public static async Task PasteInOrder(this List<IPlacedBlock> blocks, PixelPilotClient client, Point origin, int delay)
+    public static async Task PasteInOrder(this List<IPlacedBlock> blocks, PixelPilotClient client, Point origin, int delay = 0)
     {
         foreach (var block in blocks)
         {
             client.Send(block.Block.AsPacketOut(block.X + origin.X, block.Y + origin.Y, block.Layer));
-            await Task.Delay(delay);
+            if (delay > 0) await Task.Delay(delay);
         }
     }
     
-    public static async Task PasteShuffled(this List<IPlacedBlock> blocks, PixelPilotClient client, Point origin, int delay)
+    public static async Task PasteShuffled(this List<IPlacedBlock> blocks, PixelPilotClient client, Point origin, int delay = 0)
     {
         var shuffeled = new List<IPlacedBlock>(blocks);
         Shuffle(shuffeled);
         foreach (var block in shuffeled)
         {
             client.Send(block.Block.AsPacketOut(block.X + origin.X, block.Y + origin.Y, block.Layer));
-            await Task.Delay(delay);
+            if (delay > 0) await Task.Delay(delay);
         }
     }
     
@@ -85,9 +85,7 @@ public static class WorldExtensions
         for (int i = n - 1; i > 0; i--)
         {
             int j = rng.Next(i + 1);
-            T temp = list[i];
-            list[i] = list[j];
-            list[j] = temp;
+            (list[i], list[j]) = (list[j], list[i]);
         }
     }
 }

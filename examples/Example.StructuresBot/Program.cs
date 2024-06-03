@@ -27,7 +27,10 @@ if (config == null)
 }
 
 // Create a client.
-var client = new PixelPilotClient(config.AccountToken, false);
+var client = PixelPilotClient.Builder()
+    .SetToken(config.AccountToken)
+    .SetAutomaticReconnect(false)
+    .Build();
 
 // Player manager allows you to easily keep track of player stats.
 // For advanced users, it can be extended to include relevant information for you.
@@ -107,7 +110,8 @@ client.OnPacketReceived += async (_, packet) =>
             var structure = PilotSaveSerializer.Deserialize(json);
             
             client.Send(new PlayerChatOutPacket("Struct pasting..."));
-            world.GetDifference(structure, (int) player.X / 16,  (int) player.Y / 16).PasteShuffled(client, new Point((int)(player.X / 16), (int)(player.Y / 16)), 5);
+            for (int i = 0; i < 100; i++) client.Send(new PlayerChatOutPacket("Chat message... " + i));
+            await world.GetDifference(structure, (int) player.X / 16,  (int) player.Y / 16).PasteInOrder(client, new Point((int)(player.X / 16), (int)(player.Y / 16)));
             
             break;
         }
