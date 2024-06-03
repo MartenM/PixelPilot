@@ -12,7 +12,7 @@ namespace PixelPilot.PixelGameClient.Players;
 /// </summary>
 public abstract class PixelPlayerManager<T> where T : IPixelPlayer
 {
-    private ILogger _logger = LogManager.GetLogger("WorldPlayers");
+    protected ILogger _logger = LogManager.GetLogger("WorldPlayers");
     
     private Dictionary<int, T> _players = new();
     public IEnumerable<T> Players => _players.Values;
@@ -34,6 +34,12 @@ public abstract class PixelPlayerManager<T> where T : IPixelPlayer
     /// </summary>
     public event PlayerStatusChanged? OnPlayerStatusChanged;
     public delegate void PlayerStatusChanged(object sender, T player);
+    
+    /// <summary>
+    /// Fired when a player leaves the world.
+    /// </summary>
+    public event PlayerJoined? OnPlayerJoined;
+    public delegate void PlayerJoined(object sender, T player);
     
     /// <summary>
     /// Fired when a player leaves the world.

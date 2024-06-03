@@ -134,7 +134,6 @@ public class TokenBucketPacketOutQueue : IPixelPacketQueue, IDisposable
         GC.SuppressFinalize(this);
         _cancellationToken.Dispose();
         _processingTask?.Dispose();
-        _client.Dispose();
         _totalRateLimiter.Dispose();
         _chatRateLimiter.Dispose();
         _packetQueue.Dispose();

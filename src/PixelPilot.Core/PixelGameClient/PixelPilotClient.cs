@@ -29,6 +29,8 @@ public class PixelPilotClient : IDisposable
     public string BotPrefix { get; set; } = "[Bot] ";
     private IPixelPacketQueue _packetOutQueue;
 
+    public bool DisposeApi { get; set; } = true;
+
     /// <summary>
     /// Indicates if the client will try to automatically reconnect if the
     /// connection gets somehow lost.
@@ -52,6 +54,11 @@ public class PixelPilotClient : IDisposable
     /// The player ID of the client.
     /// </summary>
     public int? BotId { get; private set; }
+    
+    /// <summary>
+    /// The username of this bot.
+    /// </summary>
+    public string? Username { get; private set; }
     
     /// <summary>
     /// Event that occurs when a packet is received.
@@ -111,7 +118,7 @@ public class PixelPilotClient : IDisposable
         {
             IsConnected = false;
             _packetOutQueue?.Stop();
-            _logger.LogWarning($"Client got disconnected. ({info.CloseStatusDescription})");
+            _logger.LogWarning($"Client got disconnected. ({info.CloseStatusDescription} {(Username != null ? $"Bot: {Username}": null)})");
         });
         _socketClient.MessageReceived.Subscribe(msg =>
         {
@@ -122,7 +129,7 @@ public class PixelPilotClient : IDisposable
             catch (Exception ex)
             {
                 // Sometimes things go wrong. Don't crash the socket in that case.
-                _logger.LogError(ex, "Something went wrong while processing a socket message.");
+                _logger.LogError(ex, $"Something went wrong while processing a socket message. {(Username != null ? $"(Bot: {Username})": null)}");
             }
         });
 
@@ -137,6 +144,7 @@ public class PixelPilotClient : IDisposable
     /// <returns>A task representing the asynchronous operation.</returns>
     public Task Disconnect()
     {
+        _packetOutQueue.Stop();
         _socketClient?.Stop(WebSocketCloseStatus.NormalClosure, "Socket closed by the client.");
         IsConnected = false;
         return Task.CompletedTask;
@@ -260,6 +268,7 @@ public class PixelPilotClient : IDisposable
 
             _logger.LogInformation("Connected to the room successfully");
             BotId = init.PlayerId;
+            Username = init.Username;
             
             InvokeWithTimings("ClientConnected", () =>
             {
@@ -285,7 +294,7 @@ public class PixelPilotClient : IDisposable
             // Run both, check which one finishes first.
             if (await Task.WhenAny(timerTask, handlerTask).ConfigureAwait(false) == timerTask)
             {
-                _logger.LogWarning($"A {name} handler is blocking the GateWay task. This might result in your bot disconnecting! Consider offloading heavy-work to a different thread.");
+                _logger.LogWarning($"A {name} handler is blocking the GateWay task. This might result in your bot disconnecting! Consider offloading heavy-work to a different thread. {(Username != null ? $"(Bot: {Username})": null)}");
             }
 
             await handlerTask.ConfigureAwait(false);
@@ -297,6 +306,15 @@ public class PixelPilotClient : IDisposable
     }
 
     public int PacketQueueSize => _packetOutQueue.QueueSize;
+
+    public Task WaitForEmptyQueue(int checkTime = 1000)
+    {
+        return Task.Run(async () =>
+        {
+            while (PacketQueueSize > 0)
+                await Task.Delay(checkTime);
+        });
+    }
 
     public async Task WaitForDisconnect(CancellationToken ct = new())
     {
@@ -313,7 +331,7 @@ public class PixelPilotClient : IDisposable
     {
         GC.SuppressFinalize(this);
         _packetOutQueue.Dispose();
-        ApiClient.Dispose();
+        if(DisposeApi) ApiClient.Dispose();
         _socketClient?.Dispose();
     }
 }

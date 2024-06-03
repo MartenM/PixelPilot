@@ -108,16 +108,21 @@ public class PixelApiClient : IDisposable
             throw;
         }
     }
-    
+
+    private static List<string>? _roomTypesCache = null;
     /// <summary>
     /// Request the available room types from the game server.
     /// </summary>
     /// <returns>A list of room types</returns>
     public async Task<List<string>?> GetRoomTypes()
     {
+        if (_roomTypesCache != null) return new List<string>(_roomTypesCache);
+        
         var apiUrl = $"{EndPoints.GameHttpEndpoint}/listroomtypes";
         _logger.LogInformation($"API Request: {apiUrl}");
-        return await JsonSerializer.DeserializeAsync<List<string>>(await _client.GetStreamAsync(apiUrl));
+
+        _roomTypesCache = await JsonSerializer.DeserializeAsync<List<string>>(await _client.GetStreamAsync(apiUrl));
+        return _roomTypesCache;
     }
     
     /// <summary>
