@@ -257,8 +257,9 @@ public class PixelPilotClient : IDisposable
     
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
+        _packetOutQueue.Dispose();
         ApiClient.Dispose();
         _socketClient?.Dispose();
-        GC.SuppressFinalize(this);
     }
 }

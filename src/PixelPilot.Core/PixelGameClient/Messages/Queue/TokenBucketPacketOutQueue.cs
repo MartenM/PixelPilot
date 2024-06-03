@@ -9,7 +9,7 @@ namespace PixelPilot.PixelGameClient.Messages.Queue;
 /// <summary>
 /// Rate limits outgoing messages by consuming tokens.
 /// </summary>
-public class TokenBucketPacketOutQueue : IPixelPacketQueue
+public class TokenBucketPacketOutQueue : IPixelPacketQueue, IDisposable
 {
     private readonly ILogger _logger = LogManager.GetLogger("PacketOutQueue");
     
@@ -125,5 +125,16 @@ public class TokenBucketPacketOutQueue : IPixelPacketQueue
             await _totalRateLimiter.AcquireAsync(1, _cancellationToken.Token);
             _client.SendDirect(packet);
         }
+    }
+
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        _cancellationToken.Dispose();
+        _processingTask?.Dispose();
+        _client.Dispose();
+        _totalRateLimiter.Dispose();
+        _chatRateLimiter.Dispose();
+        _packetQueue.Dispose();
     }
 }

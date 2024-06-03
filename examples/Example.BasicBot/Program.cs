@@ -22,7 +22,10 @@ if (config == null)
 }
 
 // Create a client.
-var client = new PixelPilotClient(config.AccountToken, false);
+var client = PixelPilotClient.Builder()
+    .SetToken(config.AccountToken)
+    .SetAutomaticReconnect(false)
+    .Build();
 
 // Player manager allows you to easily keep track of player stats.
 // For advanced users, it can be extended to include relevant information for you.

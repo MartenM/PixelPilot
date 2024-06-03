@@ -133,6 +133,16 @@ public class PixelWorld
         if (packet is WorldClearedPacket clear)
         {
             _worldData = new IPixelBlock[2, Width, Height];
+            for (int l = 0; l < 2; l++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    for (int y = 0; y < Height; y++)
+                    {
+                        _worldData[l, x, y] = new BasicBlock(PixelBlock.Empty);
+                    }
+                }
+            }
             return;
         }
 
