@@ -88,6 +88,7 @@ public abstract class PixelPlayerManager<T> where T : IPixelPlayer
         {
             _players[join.PlayerId] = CreatePlayer(join);
             _logger.LogDebug($"'{join.Username}' joined the world.");
+            OnPlayerJoined?.Invoke(this, _players[join.PlayerId]);
             return;
         }
 
