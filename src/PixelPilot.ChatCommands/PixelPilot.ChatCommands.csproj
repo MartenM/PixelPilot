@@ -4,10 +4,24 @@
         <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+
+        <PackageId>PixelPilot.ChatCommands</PackageId>
+        <PackageIcon>package_logo.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <AssemblyName>PixelPilot.ChatCommands</AssemblyName>
+        <Description>Chat commands for PixelPilot</Description>
+        <RepositoryUrl>https://github.com/MartenM/PixelPilot</RepositoryUrl>
+        <PackageTags>PixelPilot, Chat, Commands</PackageTags>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\PixelPilot.Core\PixelPilot.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="package_logo.png" Pack="true" PackagePath=""/>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
 </Project>
