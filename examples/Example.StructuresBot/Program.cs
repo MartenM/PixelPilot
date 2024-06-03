@@ -48,8 +48,8 @@ world.OnBlockPlaced += (_, playerId, oldBlock, _) =>
 
 
 // Executed when the client receives a packet!
-var p1 = new Point(8, 8);
-var p2 = new Point(16, 19);
+var p1 = new Point(0, 0);
+var p2 = new Point(99, 99);
 client.OnPacketReceived += async (_, packet) =>
 {
     var playerPacket = packet as IPixelGamePlayerPacket;
@@ -110,7 +110,6 @@ client.OnPacketReceived += async (_, packet) =>
             var structure = PilotSaveSerializer.Deserialize(json);
             
             client.Send(new PlayerChatOutPacket("Struct pasting..."));
-            for (int i = 0; i < 100; i++) client.Send(new PlayerChatOutPacket("Chat message... " + i));
             await world.GetDifference(structure, (int) player.X / 16,  (int) player.Y / 16).PasteInOrder(client, new Point((int)(player.X / 16), (int)(player.Y / 16)));
             
             break;
@@ -124,9 +123,6 @@ client.OnPacketReceived += async (_, packet) =>
             world.GetDifference(structure, (int) player.X / 16,  (int) player.Y / 16).ForEach(b => Console.WriteLine(JsonSerializer.Serialize(b)));
             break;
         }
-        case PlayerJoinPacket join:
-            client.Send(new PlayerChatOutPacket($"/giveedit {join.Username}"));
-            break;
     }
 };
 
