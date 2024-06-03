@@ -12,6 +12,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.BasicBot", "example
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.StructuresBot", "examples\Example.StructuresBot\Example.StructuresBot.csproj", "{50FA4BCF-ED12-4933-8F5D-05DBB30AD23B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelPilot.ChatCommands", "src\PixelPilot.ChatCommands\PixelPilot.ChatCommands.csproj", "{DAF8DB11-87E5-4303-8631-01EC5355C71F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.CommandBot", "examples\Example.CommandBot\Example.CommandBot.csproj", "{F9BD0108-1125-45D3-956B-ABFF9552A9C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +46,13 @@ Global
 		{50FA4BCF-ED12-4933-8F5D-05DBB30AD23B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50FA4BCF-ED12-4933-8F5D-05DBB30AD23B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50FA4BCF-ED12-4933-8F5D-05DBB30AD23B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAF8DB11-87E5-4303-8631-01EC5355C71F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAF8DB11-87E5-4303-8631-01EC5355C71F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAF8DB11-87E5-4303-8631-01EC5355C71F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAF8DB11-87E5-4303-8631-01EC5355C71F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9BD0108-1125-45D3-956B-ABFF9552A9C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9BD0108-1125-45D3-956B-ABFF9552A9C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9BD0108-1125-45D3-956B-ABFF9552A9C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9BD0108-1125-45D3-956B-ABFF9552A9C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

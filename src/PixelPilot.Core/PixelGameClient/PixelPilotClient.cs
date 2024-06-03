@@ -6,6 +6,7 @@ using PixelPilot.PixelGameClient.Messages;
 using PixelPilot.PixelGameClient.Messages.Exceptions;
 using PixelPilot.PixelGameClient.Messages.Queue;
 using PixelPilot.PixelGameClient.Messages.Received;
+using PixelPilot.PixelGameClient.Messages.Send;
 using PixelPilot.PixelHttpClient;
 using Websocket.Client;
 
@@ -24,7 +25,8 @@ public class PixelPilotClient : IDisposable
     private WebsocketClient? _socketClient;
     private PacketConverter _packetConverter = new();
     public string? RoomType { get; private set; }
-
+    
+    public string BotPrefix { get; set; } = "[Bot] ";
     private IPixelPacketQueue _packetOutQueue;
 
     /// <summary>
@@ -124,7 +126,8 @@ public class PixelPilotClient : IDisposable
             }
         });
 
-        // Start the websocket.
+        // Start the websocket. Set connected to True.
+        IsConnected = true;
         await _socketClient.Start();
     }
 
@@ -177,6 +180,45 @@ public class PixelPilotClient : IDisposable
     }
 
     /// <summary>
+    /// Sends a chat message while ensuring that the message doesn't become too long.
+    /// </summary>
+    /// <param name="msg">The message</param>
+    public void SendChat(string msg)
+    {
+        var maxLineLength = 120 - BotPrefix.Length;
+        var charCount = 0;
+        
+        var lines = msg.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            .GroupBy(w => (charCount += w.Length + 1) / maxLineLength)
+            .Select(g => string.Join(" ", g));
+
+        foreach (var line in lines)
+        {
+            Send(new PlayerChatOutPacket(BotPrefix + line));
+        }
+    }
+
+    /// <summary>
+    /// Same as SendChat but as PM.
+    /// </summary>
+    /// <param name="username">Player username</param>
+    /// <param name="msg">The message</param>
+    public void SendPm(string username, string msg)
+    {
+        var maxLineLength = 100 - BotPrefix.Length;;
+        var charCount = 0;
+        
+        var lines = msg.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            .GroupBy(w => (charCount += w.Length + 1) / maxLineLength)
+            .Select(g => string.Join(" ", g));
+
+        foreach (var line in lines)
+        {
+            Send(new PlayerChatOutPacket($"/pm {username} {BotPrefix}{line}"));
+        }
+    }
+    
+    /// <summary>
     /// Handles the received response message, parsing it into a pixel game packet and triggering relevant events.
     /// </summary>
     /// <param name="message">The response message to handle.</param>
@@ -217,7 +259,6 @@ public class PixelPilotClient : IDisposable
             _send(InitPacket.AsSendingBytes());
 
             _logger.LogInformation("Connected to the room successfully");
-            IsConnected = true;
             BotId = init.PlayerId;
             
             InvokeWithTimings("ClientConnected", () =>
@@ -253,6 +294,17 @@ public class PixelPilotClient : IDisposable
         {
             _logger.LogError(ex,$"A {name} handler has thrown an unexpected error.");
         }
+    }
+
+    public async Task WaitForDisconnect(CancellationToken ct = new())
+    {
+        await Task.Run(async () =>
+        {
+            while (IsConnected)
+            {
+                await Task.Delay(1000);
+            }
+        }, ct).ConfigureAwait(true);
     }
     
     public void Dispose()

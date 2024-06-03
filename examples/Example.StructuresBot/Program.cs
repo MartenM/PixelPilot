@@ -62,7 +62,7 @@ client.OnPacketReceived += async (_, packet) =>
     switch (packet)
     {
         case PlayerChatPacket { Message: ".stop" }:
-            client.Disconnect();
+            await client.Disconnect();
             Environment.Exit(0);
             return;
         case PlayerChatPacket { Message: ".test" }:
@@ -120,7 +120,6 @@ client.OnPacketReceived += async (_, packet) =>
             string json = File.ReadAllText("test-struct.json");
             var structure = PilotSaveSerializer.Deserialize(json);
 
-            if (structure == null) return;
             client.Send(new PlayerChatOutPacket("Struct pasting..."));
             world.GetDifference(structure, (int) player.X / 16,  (int) player.Y / 16).ForEach(b => Console.WriteLine(JsonSerializer.Serialize(b)));
             break;
