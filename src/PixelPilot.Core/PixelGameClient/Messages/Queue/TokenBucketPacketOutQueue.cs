@@ -75,7 +75,9 @@ public class TokenBucketPacketOutQueue : IPixelPacketQueue, IDisposable
     {
         _packetQueue.Add(packet);
     }
-    
+
+    public int QueueSize => _packetQueue.Count + _delayedChatMessageQueue.Count;
+
     public Task Start()
     {
         if (IsProcessing) return Task.CompletedTask;

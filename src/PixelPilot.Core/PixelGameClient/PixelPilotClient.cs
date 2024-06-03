@@ -296,6 +296,8 @@ public class PixelPilotClient : IDisposable
         }
     }
 
+    public int PacketQueueSize => _packetOutQueue.QueueSize;
+
     public async Task WaitForDisconnect(CancellationToken ct = new())
     {
         await Task.Run(async () =>
