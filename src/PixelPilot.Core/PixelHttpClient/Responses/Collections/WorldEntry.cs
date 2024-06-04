@@ -8,6 +8,7 @@ public class WorldEntry : ICollectionEntry
     public string Data { get; set; } = null!;
     public int Height { get; set; }
     public int Width { get; set; }
+    public string Owner { get; set; } = null!;
     public string Id { get; set; } = null!;
     public int Plays { get; set; }
     public string Title { get; set; } = null!;

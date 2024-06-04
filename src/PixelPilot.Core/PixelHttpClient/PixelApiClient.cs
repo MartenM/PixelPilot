@@ -198,6 +198,19 @@ public class PixelApiClient : IDisposable
             await JsonSerializer.DeserializeAsync<CollectionResponse<PlayerEntry>>(await _client.GetStreamAsync(apiUrl), _jsonOptions);
         return worldCollection ?? throw new PixelApiException("An unknown exception occured while attempting to fetch the worlds");
     }
+    
+    public async Task<CollectionResponse<WorldEntry>> GetPublicWorlds(int page, int perPage, QueryArgumentBuilder? qb = null)
+    {
+        if (page == 0)
+            throw new PixelApiException("Pages start at 1. Not 0!");
+        
+        var apiUrl = $"{EndPoints.ApiEndpoint}/api/collections/public_worlds/records?page={page}&perPage={perPage}{qb?.Build() ?? ""}";
+        _logger.LogInformation($"API Request: {apiUrl}");
+
+        var worldCollection =
+            await JsonSerializer.DeserializeAsync<CollectionResponse<WorldEntry>>(await _client.GetStreamAsync(apiUrl), _jsonOptions);
+        return worldCollection ?? throw new PixelApiException("An unknown exception occured while attempting to fetch the worlds");
+    }
 
     /// <summary>
     /// Asynchronously retrieves a player entry by username.

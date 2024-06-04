@@ -20,6 +20,9 @@ public class PixelWorld
     public int Height { get; private set; }
     public int Width { get; private set; }
 
+    public string OwnerUsername { get; private set; } = "";
+    public string WorldName { get; private set; } = "";
+
     private IPixelBlock[,,] _worldData;
     
     /// <summary>
@@ -119,9 +122,16 @@ public class PixelWorld
         {
             Height = init.Height;
             Width = init.Width;
+            OwnerUsername = init.Owner;
+            WorldName = init.RoomTitle;
             _worldData = new IPixelBlock[2, Width, Height];
             Init(init.WorldData);
             return;
+        }
+
+        if (packet is WorldMetaPacket meta)
+        {
+            WorldName = meta.Name;
         }
 
         if (packet is WorldReloadedPacket reload)
