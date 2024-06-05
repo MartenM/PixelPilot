@@ -15,6 +15,8 @@ public abstract class ChatCommand : ICommandExecutor
     
     protected string? FullPermission { get; set; }
     public ChatCommand? Parent { get; set; }
+
+    public bool IsAsync { get; set; } = false;
     
     public ChatCommand(string name, string description, string? permission)
     {

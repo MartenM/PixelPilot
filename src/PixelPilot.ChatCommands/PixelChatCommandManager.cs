@@ -56,9 +56,19 @@ public class PixelChatCommandManager<T> : IChatCommandManager where T : IPixelPl
             sender.SendMessage(CommandMessages.NoPermission);
             return;
         }
-        
+
         var result = command.ExecuteCommand(sender, commandText, args.Skip(1).ToArray());
-        result.Wait();
+        if (command.IsAsync)
+        {
+            Task.Run(async () =>
+            {
+                await result.WaitAsync(new CancellationToken());
+            });
+        }
+        else
+        {
+            result.Wait();
+        }
     }
 
     protected virtual ICommandSender CreateSender(T player)
