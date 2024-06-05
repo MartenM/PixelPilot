@@ -149,7 +149,14 @@ public class PixelWorld
                 {
                     for (int y = 0; y < Height; y++)
                     {
-                        _worldData[l, x, y] = new BasicBlock(PixelBlock.Empty);
+                        if (l == 1 && x == 0 || x == Width - 1 || y == 0 || y == Height - 1)
+                        {
+                            _worldData[l, x, y] = new BasicBlock(PixelBlock.BasicGray);
+                        }
+                        else
+                        {
+                            _worldData[l, x, y] = new BasicBlock(PixelBlock.Empty);
+                        }
                     }
                 }
             }
