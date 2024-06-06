@@ -94,6 +94,16 @@ client.OnPacketReceived += async (_, packet) =>
             client.Send(new PlayerChatOutPacket(p2.ToString()));
             break;
         }
+        case PlayerChatPacket { Message: ".world" } chat:
+        {
+            var structure = world.GetStructure(0, 0, width: world.Width, height: world.Height, copyEmpty: false);
+            
+            // Save
+            var json = PilotSaveSerializer.Serialize(structure);
+            File.WriteAllText("test-struct.json", json);
+            client.Send(new PlayerChatOutPacket("Struct saved!"));
+            break;
+        }
         case PlayerChatPacket { Message: ".save" } chat:
         {
             var structure = world.GetStructure(p1, p2, copyEmpty: false);
