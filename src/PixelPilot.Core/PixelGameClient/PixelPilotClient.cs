@@ -78,6 +78,13 @@ public class PixelPilotClient : IDisposable
     public event ClientConnected? OnClientConnected;
     public delegate void ClientConnected(object sender);
     
+    /// <summary>
+    /// Fired when the client has been disconnected.
+    /// Optional reason is available when present on the socket connection.
+    /// </summary>
+    public event ClientDisconnected? OnClientDisconnected;
+    public delegate void ClientDisconnected(object sender, string? reason);
+    
     public PixelPilotClient(PixelApiClient apiClient, bool automaticReconnect)
     {
         ApiClient = apiClient;
@@ -119,6 +126,7 @@ public class PixelPilotClient : IDisposable
             IsConnected = false;
             _packetOutQueue?.Stop();
             _logger.LogWarning($"Client got disconnected. ({info.CloseStatusDescription} {(Username != null ? $"Bot: {Username}": null)})");
+            OnClientDisconnected?.Invoke(this, info.CloseStatusDescription);
         });
         _socketClient.MessageReceived.Subscribe(msg =>
         {
@@ -142,12 +150,11 @@ public class PixelPilotClient : IDisposable
     /// Disconnects the socket client gracefully by stopping it with a normal closure status.
     /// </summary>
     /// <returns>A task representing the asynchronous operation.</returns>
-    public Task Disconnect()
+    public async Task Disconnect()
     {
-        _packetOutQueue.Stop();
+        await _packetOutQueue.Stop();
         _socketClient?.Stop(WebSocketCloseStatus.NormalClosure, "Socket closed by the client.");
         IsConnected = false;
-        return Task.CompletedTask;
     }
     
     /// <summary>
