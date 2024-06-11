@@ -50,8 +50,7 @@ client.OnPacketReceived += (_, packet) =>
     switch (packet)
     {
         case PlayerChatPacket { Message: ".stop" }:
-            client.Disconnect();
-            Environment.Exit(0);
+            client.Disconnect().Wait();
             return;
         case PlayerChatPacket { Message: ".ping" } chat:
         {
@@ -77,8 +76,13 @@ client.OnClientConnected += (_) =>
     client.Send(new PlayerMoveOutPacket(592, 1056, 0, 0, 0, 0, 0, 0, false, false, 100)); 
 };
 
+client.OnClientDisconnected += (_, reason) =>
+{
+    Console.WriteLine($"Disconnected with reason: {reason}");
+};
+
 // Connect to a room.
 await client.Connect("r082b210d67df52");
 
 // Don't terminate.
-Thread.Sleep(-1);
+await client.WaitForDisconnect();
