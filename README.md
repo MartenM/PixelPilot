@@ -29,48 +29,9 @@ A C# library for interacting with the game [PixelWalker](https://pixelwalker.net
 
 
 ## Example
-```csharp
-// Load the configuration. Don't store your account token in the code :)
-var config = new ConfigurationBuilder()
-    .AddJsonFile("config.json")
-    .AddEnvironmentVariables()
-    .Build().Get<BasicConfig>();
+[Example bot source code](https://github.com/MartenM/PixelPilot/blob/main/examples/Example.BasicBot/Program.cs)
 
-if (config == null)
-{
-    Console.WriteLine("The configuration file could not be loaded.");
-    return;
-}
 
-// Create a client.
-var client = new PixelPilotClient(config.AccountToken, false);
-
-// Executed when the client receives a packet!
-client.OnPacketReceived += (_, packet) =>
-{
-    switch (packet)
-    {
-        // Use strongly typed packets!
-        case PlayerChatPacket { Message: ".stop" }:
-            client.Disconnect();
-            Environment.Exit(0);
-            return;
-    }
-};
-
-// Executed once the client receives INIT
-// Make a platform and do some silly loops.
-client.OnClientConnected += (_) =>
-{
-    client.Send(new PlayerChatOutPacket("Hello world using the PixelPilot API."));
-};
-
-// Connect to a room.
-await client.Connect("r082b210d67df52");
-
-// Don't terminate.
-Thread.Sleep(-1);
-```
 
 
 Enjoy the library? Leave a ⭐

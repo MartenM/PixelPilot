@@ -1,5 +1,5 @@
 ﻿---
-uid: Guides.ExtraPackages.PixelPilot.Structures
+uid: Guides.ExtraPackages.PixelPilot.ChatCommands
 title: PixelPilot.ChatCommands
 ---
 # Introduction
