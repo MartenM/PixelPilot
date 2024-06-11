@@ -91,7 +91,7 @@ public class TokenBucketPacketOutQueue : IPixelPacketQueue, IDisposable
             }
             catch (OperationCanceledException)
             {
-                _logger.LogInformation("TokenBucketPacketOutQueue has Task has been cancelled.");
+                _logger.LogDebug("TokenBucketPacketOutQueue has Task has been cancelled.");
             }
             catch (Exception ex)
             {
