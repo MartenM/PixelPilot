@@ -83,15 +83,29 @@ public class TokenBucketPacketOutQueue : IPixelPacketQueue, IDisposable
         if (IsProcessing) return Task.CompletedTask;
 
         IsProcessing = true;
-        _processingTask = Task.Run(ProcessQueue);
+        _processingTask = Task.Run(async () =>
+        {
+            try
+            {
+                await ProcessQueue();
+            }
+            catch (OperationCanceledException)
+            {
+                _logger.LogInformation("TokenBucketPacketOutQueue has Task has been cancelled.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occured.");
+            } 
+        });
         return Task.CompletedTask;
     }
 
     public async Task Stop()
     {
         if (!IsProcessing) return;
-        _cancellationToken.Cancel();
-        await _processingTask!.WaitAsync(TimeSpan.FromSeconds(5));
+        await _cancellationToken.CancelAsync();
+        await _processingTask?.WaitAsync(TimeSpan.FromSeconds(5))!;
         IsProcessing = false;
     }
 
@@ -133,7 +147,6 @@ public class TokenBucketPacketOutQueue : IPixelPacketQueue, IDisposable
     {
         GC.SuppressFinalize(this);
         _cancellationToken.Dispose();
-        _processingTask?.Dispose();
         _totalRateLimiter.Dispose();
         _chatRateLimiter.Dispose();
         _packetQueue.Dispose();
