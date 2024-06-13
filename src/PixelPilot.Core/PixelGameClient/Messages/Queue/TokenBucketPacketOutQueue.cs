@@ -9,7 +9,7 @@ namespace PixelPilot.PixelGameClient.Messages.Queue;
 /// <summary>
 /// Rate limits outgoing messages by consuming tokens.
 /// </summary>
-public class TokenBucketPacketOutQueue : IPixelPacketQueue, IDisposable
+public class TokenBucketPacketOutQueue : IPixelPacketQueue
 {
     private readonly ILogger _logger = LogManager.GetLogger("PacketOutQueue");
     
