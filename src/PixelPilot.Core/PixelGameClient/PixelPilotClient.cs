@@ -26,8 +26,8 @@ public class PixelPilotClient : IDisposable
     private PacketConverter _packetConverter = new();
     public string? RoomType { get; private set; }
     
-    public string BotPrefix { get; set; } = "[Bot] ";
-    private IPixelPacketQueue _packetOutQueue;
+    public string? BotPrefix { get; set; } = null;
+    private IPixelPacketQueue? _packetOutQueue;
 
     public bool DisposeApi { get; set; } = true;
 
@@ -85,11 +85,13 @@ public class PixelPilotClient : IDisposable
     public event ClientDisconnected? OnClientDisconnected;
     public delegate void ClientDisconnected(object sender, string? reason);
     
-    public PixelPilotClient(PixelApiClient apiClient, bool automaticReconnect)
+    public PixelPilotClient(PixelApiClient apiClient, bool automaticReconnect, string? botPrefix, Func<PixelPilotClient, IPixelPacketQueue?> configurePacketQueue)
     {
         ApiClient = apiClient;
         AutomaticReconnect = automaticReconnect;
-        _packetOutQueue = new TokenBucketPacketOutQueue(this);
+        BotPrefix = botPrefix;
+
+        _packetOutQueue = configurePacketQueue.Invoke(this);
     }
 
     public static PixelGameClientBuilder Builder() => new();
@@ -97,7 +99,6 @@ public class PixelPilotClient : IDisposable
     /// <summary>
     /// Connects to a game room using the specified room type and room ID.
     /// </summary>
-    /// <param name="roomType">The type of the room.</param>
     /// <param name="roomId">The ID of the room.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
     public async Task Connect(string roomId)
@@ -152,7 +153,7 @@ public class PixelPilotClient : IDisposable
     /// <returns>A task representing the asynchronous operation.</returns>
     public async Task Disconnect()
     {
-        await _packetOutQueue.Stop();
+        if (_packetOutQueue != null) await _packetOutQueue.Stop();
         _socketClient?.Stop(WebSocketCloseStatus.NormalClosure, "Socket closed by the client.");
         IsConnected = false;
     }
@@ -191,16 +192,18 @@ public class PixelPilotClient : IDisposable
     /// <param name="packet">The pixel game packet to send.</param>
     public void Send(IPixelGamePacketOut packet)
     {
-        _packetOutQueue?.EnqueuePacket(packet);
+        if (_packetOutQueue == null) SendDirect(packet);
+        else _packetOutQueue?.EnqueuePacket(packet);
     }
 
     /// <summary>
     /// Sends a chat message while ensuring that the message doesn't become too long.
     /// </summary>
     /// <param name="msg">The message</param>
-    public void SendChat(string msg)
+    /// <param name="prefix">If the message should be prefixed</param>
+    public void SendChat(string msg, bool prefix = true)
     {
-        var maxLineLength = 120 - BotPrefix.Length;
+        var maxLineLength = 120 - (prefix && BotPrefix != null ? BotPrefix.Length : 0);
         var charCount = 0;
         
         var lines = msg.Split(' ', StringSplitOptions.RemoveEmptyEntries)
@@ -209,7 +212,8 @@ public class PixelPilotClient : IDisposable
 
         foreach (var line in lines)
         {
-            Send(new PlayerChatOutPacket(BotPrefix + line));
+            if (prefix && BotPrefix != null) Send(new PlayerChatOutPacket(BotPrefix + line));
+            else Send(new PlayerChatOutPacket(line));
         }
     }
 
@@ -220,7 +224,7 @@ public class PixelPilotClient : IDisposable
     /// <param name="msg">The message</param>
     public void SendPm(string username, string msg)
     {
-        var maxLineLength = 100 - BotPrefix.Length;;
+        var maxLineLength = 100 - (BotPrefix?.Length ?? 0);
         var charCount = 0;
         
         var lines = msg.Split(' ', StringSplitOptions.RemoveEmptyEntries)
@@ -229,7 +233,7 @@ public class PixelPilotClient : IDisposable
 
         foreach (var line in lines)
         {
-            Send(new PlayerChatOutPacket($"/pm {username} {BotPrefix}{line}"));
+            Send(new PlayerChatOutPacket($"/pm {username} {BotPrefix ?? ""}{line}"));
         }
     }
     
@@ -279,7 +283,7 @@ public class PixelPilotClient : IDisposable
             
             InvokeWithTimings("ClientConnected", () =>
             {
-                _packetOutQueue.Start();
+                _packetOutQueue?.Start();
                 return Task.Run(() => OnClientConnected?.Invoke(this));
             }).Wait();
         }
@@ -312,7 +316,7 @@ public class PixelPilotClient : IDisposable
         }
     }
 
-    public int PacketQueueSize => _packetOutQueue.QueueSize;
+    public int PacketQueueSize => _packetOutQueue?.QueueSize ?? 0;
 
     public Task WaitForEmptyQueue(int checkTime = 1000)
     {
@@ -337,7 +341,7 @@ public class PixelPilotClient : IDisposable
     public void Dispose()
     {
         GC.SuppressFinalize(this);
-        _packetOutQueue.Dispose();
+        _packetOutQueue?.Dispose();
         if(DisposeApi) ApiClient.Dispose();
         _socketClient?.Dispose();
     }
