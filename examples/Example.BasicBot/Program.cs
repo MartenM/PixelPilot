@@ -25,6 +25,7 @@ if (config == null)
 var client = PixelPilotClient.Builder()
     .SetToken(config.AccountToken)
     .SetAutomaticReconnect(false)
+    .SetPrefix("[Bot] ")
     .Build();
 
 // Player manager allows you to easily keep track of player stats.
