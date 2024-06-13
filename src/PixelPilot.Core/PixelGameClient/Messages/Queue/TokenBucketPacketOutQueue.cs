@@ -133,6 +133,7 @@ public class TokenBucketPacketOutQueue : IPixelPacketQueue, IDisposable
                 // Otherwise schedule for later.
                 if (!_chatRateLimiter.AttemptAcquire().IsAcquired)
                 {
+                    // TODO: Switch out with delayed packet if available.
                     _delayedChatMessageQueue.Enqueue(chatPacket);
                     continue;
                 }
