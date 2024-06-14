@@ -1,6 +1,8 @@
-﻿namespace PixelPilot.PixelGameClient.Messages.Received;
+﻿using PixelPilot.PixelGameClient.Messages.Send;
 
-public class PlayerChatPacket : IPixelGamePlayerPacket
+namespace PixelPilot.PixelGameClient.Messages.Received;
+
+public class PlayerChatPacket : IPixelGamePlayerPacket, IPacketOutConvertible
 {
     public PlayerChatPacket(int id, string message)
     {
@@ -10,4 +12,8 @@ public class PlayerChatPacket : IPixelGamePlayerPacket
 
     public int PlayerId { get; }
     public string Message { get; }
+    public IPixelGamePacketOut AsPacketOut()
+    {
+        return new PlayerChatOutPacket(Message);
+    }
 }
