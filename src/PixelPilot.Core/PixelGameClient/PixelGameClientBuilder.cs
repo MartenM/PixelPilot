@@ -9,6 +9,7 @@ public class PixelGameClientBuilder
     public string? Email { get; set; }
     public string? Password { get; set; }
 
+    public PixelApiClient? ApiClient;
     public bool AutomaticReconnect { get; set; } = false;
 
     public string? Prefix { get; set; }
@@ -61,22 +62,36 @@ public class PixelGameClientBuilder
         return this;
     }
 
+    /// <summary>
+    /// Use a custom PixelApiClient
+    /// </summary>
+    /// <param name="client">The custom client</param>
+    /// <returns></returns>
+    public PixelGameClientBuilder SetPixelApi(PixelApiClient? client)
+    {
+        ApiClient = client;
+        return this;
+    }
+
     public PixelPilotClient Build()
     {
-        PixelApiClient api;
-        if (Token != null)
+        if (ApiClient == null)
         {
-            api = new PixelApiClient(Token);
+            // API client needs to be created
+            if (Token != null)
+            {
+                ApiClient = new PixelApiClient(Token);
+            }
+            else if (Email != null && Password != null)
+            {
+                ApiClient = new PixelApiClient(Email, Password);
+            }
+            else
+            {
+                throw new PixelGameException("To create a client a Token or (Email & Password) should be supplied.");
+            }
         }
-        else if (Email != null && Password != null)
-        {
-            api = new PixelApiClient(Email, Password);
-        }
-        else
-        {
-            throw new PixelGameException("To create a client a Token or (Email & Password) should be supplied.");
-        }
-
-        return new PixelPilotClient(api, AutomaticReconnect, Prefix, ConfigurePacketQueue);
+        
+        return new PixelPilotClient(ApiClient, AutomaticReconnect, Prefix, ConfigurePacketQueue);
     }
 }
