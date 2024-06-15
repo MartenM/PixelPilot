@@ -2,7 +2,7 @@
 using PixelPilot.PixelGameClient.Messages;
 using PixelPilot.PixelGameClient.Messages.Constants;
 
-namespace PixelPilot.DebugTools.Tools;
+namespace PixelPilot.DebugTools.Tools.Implementation;
 
 /// <summary>
 /// Decode outgoing packets.

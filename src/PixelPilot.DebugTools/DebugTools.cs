@@ -1,5 +1,6 @@
 ﻿using CommandLine;
 using PixelPilot.DebugTools.Tools;
+using PixelPilot.DebugTools.Tools.Implementation;
 
 namespace PixelPilot.DebugTools;
 
@@ -25,7 +26,8 @@ public class DebugTools
     {
         Dictionary<string, IDebugTool> tools = new Dictionary<string, IDebugTool>()
         {
-            {"packet-out", new OutgoingPacketDecoder()}
+            {"packet-out", new OutgoingPacketDecoder()},
+            {"mappings", new MappingGenerator()}
         };
 
         if (!tools.TryGetValue(options.Tool, out var tool))
