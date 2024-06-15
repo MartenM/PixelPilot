@@ -46,8 +46,17 @@ public class PacketConverter
         }
 
         // Find constructor based on length and type.
+        var dynamicConstructor = typeof(IDynamicConstructedPacket).IsAssignableFrom(packetType);
         var constructorInfo = packetType.GetConstructors().FirstOrDefault(con =>
         {
+            // If a dynamic constructor should be present. Accept that instead.
+            if (dynamicConstructor)
+            {
+                // Just check length, don't check type. We hopefully don't house idiots that violate the contract.
+                if (con.GetParameters().Length != 1) return false;
+                return true;
+            }
+            
             if (con.GetParameters().Length != fields.Count) return false;
             if (con.GetParameters().Where((info, i) => info.ParameterType != fields[i].GetType()).Any()) return false;
             return con.GetParameters().Length == fields.Count;
@@ -55,12 +64,12 @@ public class PacketConverter
         
         if (constructorInfo == null)
         {
-            LogPacketTypeConversionError(fields, packetType);
+            LogPacketTypeConversionError(fields, packetType, dynamicConstructor);
             throw new PacketConstructorException(fields, packetType);
         }
             
         // Construct the packet and return it.
-        IPixelGamePacket packet = (IPixelGamePacket) constructorInfo.Invoke(fields.ToArray());
+        IPixelGamePacket packet = (IPixelGamePacket) (dynamicConstructor ? constructorInfo.Invoke([fields]) : constructorInfo.Invoke(fields.ToArray()));
         return packet;
     }
 
@@ -136,10 +145,11 @@ public class PacketConverter
     /// </summary>
     /// <param name="receivedFields">The list of fields received.</param>
     /// <param name="packetType">The type of the packet.</param>
-    private static void LogPacketTypeConversionError(IReadOnlyCollection<dynamic> receivedFields, Type packetType)
+    /// <param name="dynamicConstructor">If the constructor needed to be dynamic</param>
+    private static void LogPacketTypeConversionError(IReadOnlyCollection<dynamic> receivedFields, Type packetType, bool dynamicConstructor)
     {
         var builder = new StringBuilder();
-        builder.AppendLine($"The packet type ({packetType.Name}) was found, but no constructor matching the message could be found.");
+        builder.AppendLine($"The packet type ({packetType.Name}) was found, but no {(dynamicConstructor ? "dynamic" : "")} constructor matching the message could be found.");
         builder.AppendLine($"Received packet: \t {String.Join(", ", receivedFields.Select(f => f.GetType().ToString()))}");
         foreach (var constructor in packetType.GetConstructors())
         {
