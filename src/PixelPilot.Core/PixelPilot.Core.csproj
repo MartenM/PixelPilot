@@ -15,8 +15,8 @@
         <PackageIcon>package_logo.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <Version>1.6.1</Version>
-        <PackageReleaseNotes>Included first iteration player management.</PackageReleaseNotes>
+        <Version>1.6.2</Version>
+        <PackageReleaseNotes>Compatible with PixelWalker 0.9.1-alpha</PackageReleaseNotes>
         <AssemblyName>PixelPilot.Core</AssemblyName>
     </PropertyGroup>
 
