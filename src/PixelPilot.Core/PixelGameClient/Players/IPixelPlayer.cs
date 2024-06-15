@@ -1,4 +1,6 @@
-﻿namespace PixelPilot.PixelGameClient.Players;
+﻿using System.Drawing;
+
+namespace PixelPilot.PixelGameClient.Players;
 
 public interface IPixelPlayer
 {
@@ -19,6 +21,8 @@ public interface IPixelPlayer
     public string Username { get;  }
     public int Face { get; set; }
     public bool IsAdmin { get; }
+    
+    public Color ChatColor { get; set; }
     public double X { get; set; }
     public double Y { get; set; }
     public int GoldCoins { get; set; }

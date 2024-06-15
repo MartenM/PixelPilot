@@ -1,4 +1,5 @@
-﻿using PixelPilot.PixelGameClient.Messages.Received;
+﻿using System.Drawing;
+using PixelPilot.PixelGameClient.Messages.Received;
 
 namespace PixelPilot.PixelGameClient.Players.Basic;
 
@@ -17,6 +18,7 @@ public class Player : IPixelPlayer
         IsAdmin = packet.IsAdmin;
         Godmode = packet.HasGod;
         CanEdit = packet.HasEdit;
+        ChatColor = packet.ChatColor;
         X = packet.X;
         Y = packet.Y;
         GoldCoins = packet.Coins;
@@ -30,13 +32,14 @@ public class Player : IPixelPlayer
         CanEdit = false;
     }
 
-    public Player(int id, string accountId, string username, int face, bool isAdmin, double x, double y, int coins, int blueCoins, int deaths, bool godmode, bool modmode, bool hasCrown, bool canGod, bool canEdit)
+    public Player(int id, string accountId, string username, int face, bool isAdmin, Color chatColor, double x, double y, int coins, int blueCoins, int deaths, bool godmode, bool modmode, bool hasCrown, bool canGod, bool canEdit)
     {
         Id = id;
         AccountId = accountId;
         Username = username;
         Face = face;
         IsAdmin = isAdmin;
+        ChatColor = chatColor;
         X = x;
         Y = y;
         GoldCoins = coins;
@@ -54,6 +57,7 @@ public class Player : IPixelPlayer
     public string Username { get;  }
     public int Face { get; set; }
     public bool IsAdmin { get; }
+    public Color ChatColor { get; set; }
     public double X { get; set; }
     public double Y { get; set; }
     public int GoldCoins { get; set; }

@@ -1,8 +1,10 @@
-﻿namespace PixelPilot.PixelGameClient.Messages.Received;
+﻿using System.Drawing;
+
+namespace PixelPilot.PixelGameClient.Messages.Received;
 
 public class PlayerJoinPacket : IPixelGamePlayerPacket
 {
-    public PlayerJoinPacket(int id, string cuid, string username, int face, bool isAdmin, bool hasGod, bool hasEdit, double x, double y, int coins, int blueCoins, int deaths, bool godmode, bool modmode, bool hasCrown, bool hasCompletedWorld, byte[] switchBuffer)
+    public PlayerJoinPacket(int id, string cuid, string username, int face, bool isAdmin, bool hasGod, bool hasEdit, double x, double y, int chatColour, int coins, int blueCoins, int deaths, bool godmode, bool modmode, bool hasCrown, bool hasCompletedWorld, byte[] switchBuffer)
     {
         PlayerId = id;
         Cuid = cuid;
@@ -13,6 +15,7 @@ public class PlayerJoinPacket : IPixelGamePlayerPacket
         HasEdit = hasEdit;
         X = x;
         Y = y;
+        ChatColor = Color.FromArgb(chatColour);
         Coins = coins;
         BlueCoins = blueCoins;
         Deaths = deaths;
@@ -28,6 +31,8 @@ public class PlayerJoinPacket : IPixelGamePlayerPacket
     public string Username { get; }
     public int Face { get; }
     public bool IsAdmin { get; }
+    
+    public Color ChatColor { get; set; }
     public bool HasGod { get; }
     public bool HasEdit { get; }
     public double X { get; }

@@ -9,6 +9,7 @@ public enum WorldMessageType : int
     WorldReloaded,
     WorldBlockPlaced,
     ChatMessage,
+    OldChatMessages,
     SystemMessage,
     PlayerJoined,
     PlayerLeft,

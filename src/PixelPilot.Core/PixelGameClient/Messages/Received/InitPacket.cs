@@ -1,4 +1,6 @@
-﻿namespace PixelPilot.PixelGameClient.Messages.Received;
+﻿using System.Drawing;
+
+namespace PixelPilot.PixelGameClient.Messages.Received;
 
 public class InitPacket : IPixelGamePacket
 {
@@ -6,6 +8,8 @@ public class InitPacket : IPixelGamePacket
     public string AccountId { get; set; }
     public string Username { get; set; }
     public int Face { get; set; }
+    
+    public Color ChatColor { get; set; }
     public bool IsAdmin { get; set; }
     public double X { get; set; }
     public double Y { get; set; }
@@ -19,7 +23,7 @@ public class InitPacket : IPixelGamePacket
     public int Height { get; set; }
     public byte[] WorldData { get; set; }
     
-    public InitPacket(int id, string cId, string username, int face, bool isAdmin, double x, double y, bool canEdit, bool canGod, string roomTitle, int players, string owner, byte[] globalSwitchStates, int width, int height, byte[] worldData)
+    public InitPacket(int id, string cId, string username, int face, bool isAdmin, double x, double y, int chatColour, bool canEdit, bool canGod, string roomTitle, int players, string owner, byte[] globalSwitchStates, int width, int height, byte[] worldData)
     {
         PlayerId = id;
         AccountId = cId;
@@ -27,6 +31,7 @@ public class InitPacket : IPixelGamePacket
         Face = face;
         X = x;
         Y = y;
+        ChatColor = Color.FromArgb(chatColour);
         CanEdit = canEdit;
         CanGod = canGod;
         RoomTitle = roomTitle;

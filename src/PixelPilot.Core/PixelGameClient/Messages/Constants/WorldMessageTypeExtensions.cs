@@ -32,6 +32,7 @@ static class WorldMessageTypeExtensions
             WorldMessageType.WorldCleared => typeof(WorldClearedPacket),
             WorldMessageType.WorldMetadata => typeof(WorldMetaPacket),
             WorldMessageType.SystemMessage => typeof(SystemMessagePacket),
+            WorldMessageType.OldChatMessages => typeof(OldChatMessagesPacket),
             _ => null
         };
     }
