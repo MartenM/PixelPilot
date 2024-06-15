@@ -19,7 +19,7 @@ public class PortalBlock : BasicBlock
 
     public override IPixelGamePacketOut AsPacketOut(int x, int y, int layer)
     {
-        return new WorldBlockPlacedOutPacket(x, y, layer, BlockId, Direction, PortalId, TargetId, null);
+        return new WorldBlockPlacedOutPacket(x, y, layer, BlockId, [Direction, PortalId, TargetId]);
     }
 
     public override byte[] AsWorldBuffer(int x, int y, int layer, int customId)

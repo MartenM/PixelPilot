@@ -38,6 +38,17 @@ public class ReflectivePixelOutPacket : IPixelGamePacketOut
                 if (!allowNull) throw new InvalidOperationException("Packet fields cannot be NULL!");
                 continue;
             }
+
+            // Handle dynamic extra field values.
+            if (property.PropertyType == typeof(dynamic[]))
+            {
+                var extraFields = (dynamic[]) value;
+                foreach(var extraField in extraFields)
+                {
+                    fieldValues.Add(extraField);
+                }
+                continue;
+            }
             
             fieldValues.Add(value);
         }

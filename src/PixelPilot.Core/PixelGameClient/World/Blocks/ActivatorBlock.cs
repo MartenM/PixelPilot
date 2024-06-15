@@ -15,7 +15,7 @@ public class ActivatorBlock : BasicBlock
 
     public override IPixelGamePacketOut AsPacketOut(int x, int y, int layer)
     {
-        return new WorldBlockPlacedOutPacket(x, y, layer, BlockId, SwitchId, null, null, Convert.ToByte(Status));
+        return new WorldBlockPlacedOutPacket(x, y, layer, BlockId, [SwitchId, Convert.ToByte(Status)]);
     }
 
     public override byte[] AsWorldBuffer(int x, int y, int layer, int customId)

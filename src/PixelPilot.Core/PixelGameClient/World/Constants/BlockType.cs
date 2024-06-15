@@ -10,4 +10,5 @@ public enum BlockType
     Portal,
     SwitchActivator,
     SwitchResetter,
+    WorldPortal,
 }

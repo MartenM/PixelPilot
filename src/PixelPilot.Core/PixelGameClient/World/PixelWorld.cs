@@ -225,6 +225,8 @@ public class PixelWorld
                 return new ActivatorBlock((int) block, extra[0], extra[1]);
             case BlockType.SwitchResetter:
                 return new ResetterBlock((int)block, extra[0]);
+            case BlockType.WorldPortal:
+                return new WorldPortalBlock(extra[0]);
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -253,13 +255,15 @@ public class PixelWorld
             case BlockType.Normal:
                 return new BasicBlock((int) pixelBlock);
             case BlockType.Morphable:
-                return new MorphableBlock((int) pixelBlock, packet.ExtraInt1!.Value);
+                return new MorphableBlock((int) pixelBlock, packet.ExtraFields[0]);
             case BlockType.Portal:
-                return new PortalBlock((int) pixelBlock, packet.ExtraInt2!.Value, packet.ExtraInt3!.Value, packet.ExtraInt1!.Value);
+                return new PortalBlock((int) pixelBlock, packet.ExtraFields[1], packet.ExtraFields[2], packet.ExtraFields[0]);
             case BlockType.SwitchActivator:
-                return new ActivatorBlock((int) pixelBlock, packet.ExtraInt1!.Value, packet.ExtraByte!.Value == 1);
+                return new ActivatorBlock((int) pixelBlock, packet.ExtraFields[0], packet.ExtraFields[1] == 1);
             case BlockType.SwitchResetter:
-                return new ResetterBlock((int)pixelBlock, packet.ExtraByte!.Value == 1);
+                return new ResetterBlock((int)pixelBlock, packet.ExtraFields[0] == 1);
+            case BlockType.WorldPortal:
+                return new WorldPortalBlock(packet.ExtraFields[0]);
             default:
                 throw new NotImplementedException("Missing implementation of new BlockType!");
         }
@@ -271,38 +275,38 @@ public class PixelWorld
     /// <param name="packet">The WorldBlockPlacedPacket to deserialize.</param>
     /// <exception cref="NotImplementedException">If the type has not been implemented yet.</exception>
     /// <returns>An IPlacedBlock object representing the deserialized packet.</returns>
-    public static IPlacedBlock DeserializePlacedBlock(WorldBlockPlacedPacket packet)
-    {
-        var pixelBlock = (PixelBlock) packet.BlockId;
-        
-        // We want to construct a PixelBlock.
-        // First we need to know what type it is.
-        // Then we can fill in the rest.
-        var blockType = pixelBlock.GetBlockType();
-        
-        // Construct the block and return it. Hooray.
-        IPixelBlock block;
-        switch (blockType)
-        {
-            case BlockType.Normal:
-                block = new BasicBlock((int) pixelBlock);
-                break;
-            case BlockType.Morphable:
-                block = new MorphableBlock((int) pixelBlock, packet.ExtraInt1!.Value);
-                break;
-            case BlockType.Portal:
-                block = new PortalBlock((int) pixelBlock, packet.ExtraInt2!.Value, packet.ExtraInt3!.Value, packet.ExtraInt1!.Value);
-                break;
-            case BlockType.SwitchActivator:
-                block = new ActivatorBlock((int) pixelBlock, packet.ExtraInt1!.Value, packet.ExtraByte!.Value == 1);
-                break;
-            case BlockType.SwitchResetter:
-                block = new ResetterBlock((int)pixelBlock, packet.ExtraByte!.Value == 1);
-                break;
-            default:
-                throw new NotImplementedException("Missing implementation of new BlockType!");
-        }
-
-        return new PlacedBlock(packet.X, packet.Y, packet.Layer, block);
-    }
+    // public static IPlacedBlock DeserializePlacedBlock(WorldBlockPlacedPacket packet)
+    // {
+    //     var pixelBlock = (PixelBlock) packet.BlockId;
+    //     
+    //     // We want to construct a PixelBlock.
+    //     // First we need to know what type it is.
+    //     // Then we can fill in the rest.
+    //     var blockType = pixelBlock.GetBlockType();
+    //     
+    //     // Construct the block and return it. Hooray.
+    //     IPixelBlock block;
+    //     switch (blockType)
+    //     {
+    //         case BlockType.Normal:
+    //             block = new BasicBlock((int) pixelBlock);
+    //             break;
+    //         case BlockType.Morphable:
+    //             block = new MorphableBlock((int) pixelBlock, packet.ExtraInt1!.Value);
+    //             break;
+    //         case BlockType.Portal:
+    //             block = new PortalBlock((int) pixelBlock, packet.ExtraInt2!.Value, packet.ExtraInt3!.Value, packet.ExtraInt1!.Value);
+    //             break;
+    //         case BlockType.SwitchActivator:
+    //             block = new ActivatorBlock((int) pixelBlock, packet.ExtraInt1!.Value, packet.ExtraByte!.Value == 1);
+    //             break;
+    //         case BlockType.SwitchResetter:
+    //             block = new ResetterBlock((int)pixelBlock, packet.ExtraByte!.Value == 1);
+    //             break;
+    //         default:
+    //             throw new NotImplementedException("Missing implementation of new BlockType!");
+    //     }
+    //
+    //     return new PlacedBlock(packet.X, packet.Y, packet.Layer, block);
+    // }
 }

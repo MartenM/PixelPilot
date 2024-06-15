@@ -16,6 +16,8 @@ public static class PixelBlockExtensions
                 return new[] { PacketFieldType.Int32, PacketFieldType.Boolean };
             case BlockType.Portal:
                 return new[] { PacketFieldType.Int32, PacketFieldType.Int32, PacketFieldType.Int32 };
+            case BlockType.WorldPortal:
+                return new[] { PacketFieldType.String };
             case BlockType.Normal:
                 return Array.Empty<PacketFieldType>();
             default:
@@ -50,6 +52,8 @@ public static class PixelBlockExtensions
             case PixelBlock.Portal:
             case PixelBlock.PortalInvisible:
                 return BlockType.Portal;
+            case PixelBlock.WorldPortal:
+                return BlockType.WorldPortal;
             default:
                 return BlockType.Normal;
         }

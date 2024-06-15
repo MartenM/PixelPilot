@@ -14,7 +14,7 @@ public class ResetterBlock : BasicBlock
 
     public override IPixelGamePacketOut AsPacketOut(int x, int y, int layer)
     {
-        return new WorldBlockPlacedOutPacket(x, y, layer, BlockId, null, null, null, Convert.ToByte(Status));
+        return new WorldBlockPlacedOutPacket(x, y, layer, BlockId, [Convert.ToByte(Status)]);
     }
 
     public override byte[] AsWorldBuffer(int x, int y, int layer, int customId)
