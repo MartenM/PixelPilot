@@ -1,13 +1,19 @@
-﻿namespace PixelPilot.PixelGameClient.Messages.Received;
+﻿using PixelPilot.PixelGameClient.Messages.Send;
 
-public class GlobalSwitchResetPacket : IPixelGamePacket
+namespace PixelPilot.PixelGameClient.Messages.Received;
+
+public class GlobalSwitchResetPacket : IPixelGamePlayerPacket, IPacketOutConvertible
 {
-    public GlobalSwitchResetPacket(int switchId, byte enabled)
+    public GlobalSwitchResetPacket(int playerId, byte enabled)
     {
-        SwitchId = switchId;
+        PlayerId = playerId;
         Enabled = enabled == 1;
     }
 
-    public int SwitchId { get; }
+    public int PlayerId { get; }
     public bool Enabled { get; }
+    public IPixelGamePacketOut AsPacketOut()
+    {
+        return new GlobalSwitchResetOutPacket(Enabled);
+    }
 }

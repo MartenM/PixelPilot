@@ -1,6 +1,8 @@
-﻿namespace PixelPilot.PixelGameClient.Messages.Received;
+﻿using PixelPilot.PixelGameClient.Messages.Send;
 
-public class PlayerMovePacket : IPixelGamePlayerPacket
+namespace PixelPilot.PixelGameClient.Messages.Received;
+
+public class PlayerMovePacket : IPixelGamePlayerPacket, IPacketOutConvertible
 {
     public PlayerMovePacket(int id, double x, double y, double velocityX, double velocityY, double modX, double modY, int horizontal, int vertical, bool spacedown, bool spaceJustDown, int tickId)
     {
@@ -30,4 +32,9 @@ public class PlayerMovePacket : IPixelGamePlayerPacket
     public bool Spacedown { get; }
     public bool SpaceJustDown { get; }
     public int TickId { get; }
+    public IPixelGamePacketOut AsPacketOut()
+    {
+        return new PlayerMoveOutPacket(X, Y, VelocityX, VelocityY, ModX, ModY, Horizontal, Vertical, Spacedown,
+            SpaceJustDown, TickId);
+    }
 }

@@ -1,6 +1,8 @@
-﻿namespace PixelPilot.PixelGameClient.Messages.Received;
+﻿using PixelPilot.PixelGameClient.Messages.Send;
 
-public class GlobalSwitchChangedPacket : IPixelGamePacket
+namespace PixelPilot.PixelGameClient.Messages.Received;
+
+public class GlobalSwitchChangedPacket : IPixelGamePlayerPacket, IPacketOutConvertible
 {
     public GlobalSwitchChangedPacket(int playerId, int switchId, byte enabled)
     {
@@ -12,4 +14,8 @@ public class GlobalSwitchChangedPacket : IPixelGamePacket
     public int PlayerId { get; }
     public int SwitchId { get; }
     public bool Enabled { get; }
+    public IPixelGamePacketOut AsPacketOut()
+    {
+        return new GlobalSwitchChangeOutPacket(SwitchId, Enabled);
+    }
 }

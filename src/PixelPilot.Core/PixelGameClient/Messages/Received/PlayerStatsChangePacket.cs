@@ -1,6 +1,8 @@
-﻿namespace PixelPilot.PixelGameClient.Messages.Received;
+﻿using PixelPilot.PixelGameClient.Messages.Send;
 
-public class PlayerStatsChangePacket : IPixelGamePlayerPacket
+namespace PixelPilot.PixelGameClient.Messages.Received;
+
+public class PlayerStatsChangePacket : IPixelGamePlayerPacket, IPacketOutConvertible
 {
     public PlayerStatsChangePacket(int id, int goldCoins, int blueCoins, int deathCount)
     {
@@ -14,4 +16,8 @@ public class PlayerStatsChangePacket : IPixelGamePlayerPacket
     public int GoldCoins { get; }
     public int BlueCoins { get; }
     public int DeathCount { get; }
+    public IPixelGamePacketOut AsPacketOut()
+    {
+        return new PlayerStatsChangedOutPacket(GoldCoins, BlueCoins, DeathCount);
+    }
 }

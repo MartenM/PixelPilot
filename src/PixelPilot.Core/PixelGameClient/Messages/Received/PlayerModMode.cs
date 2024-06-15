@@ -1,6 +1,8 @@
-﻿namespace PixelPilot.PixelGameClient.Messages.Received;
+﻿using PixelPilot.PixelGameClient.Messages.Send;
 
-public class PlayerModMode : IPixelGamePlayerPacket
+namespace PixelPilot.PixelGameClient.Messages.Received;
+
+public class PlayerModMode : IPixelGamePlayerPacket, IPacketOutConvertible
 {
     public PlayerModMode(int id, bool isEnabled)
     {
@@ -10,4 +12,8 @@ public class PlayerModMode : IPixelGamePlayerPacket
 
     public int PlayerId { get; }
     public bool IsEnabled { get; }
+    public IPixelGamePacketOut AsPacketOut()
+    {
+        return new PlayerGodmodeOutPacket(IsEnabled);
+    }
 }

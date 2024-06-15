@@ -8,5 +8,10 @@ public class PlayerTouchBlockOutPacket : ReflectivePixelOutPacket
     public int Y { get; set; }
     public int BlockId { get; set; }
     
-    public PlayerTouchBlockOutPacket() : base(WorldMessageType.PlayerTouchBlock) {}
+    public PlayerTouchBlockOutPacket(int x, int y, int blockId) : base(WorldMessageType.PlayerTouchBlock)
+    {
+        X = x;
+        Y = y;
+        BlockId = blockId;
+    }
 }
