@@ -49,7 +49,7 @@ public static class WorldExtensions
         
         foreach (var block in structure.BlocksWithEmpty)
         {
-            var worldBlock = world.BlockAt(block.Layer, block.X + x, block.Y + x);
+            var worldBlock = world.BlockAt(block.Layer, block.X + x, block.Y + y);
             if (block.Block.Equals(worldBlock)) continue;
 
             difference.Add(block);
