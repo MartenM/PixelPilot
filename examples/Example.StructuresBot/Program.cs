@@ -114,13 +114,39 @@ client.OnPacketReceived += async (_, packet) =>
             client.Send(new PlayerChatOutPacket("Struct saved!"));
             break;
         }
-        case PlayerChatPacket { Message: ".load" } chat:
+        case PlayerChatPacket { Message: ".load tl" } chat:
         {
             string json = File.ReadAllText("test-struct.json");
             var structure = PilotSaveSerializer.Deserialize(json);
             
             client.Send(new PlayerChatOutPacket("Struct pasting..."));
             await world.GetDifference(structure, (int) player.X / 16,  (int) player.Y / 16).PasteInOrder(client, new Point((int)(player.X / 16), (int)(player.Y / 16)));
+            
+            break;
+        }
+        case PlayerChatPacket { Message: ".load br" } chat:
+        {
+            string json = File.ReadAllText("test-struct.json");
+            var structure = PilotSaveSerializer.Deserialize(json);
+            
+            client.Send(new PlayerChatOutPacket("Struct pasting..."));
+            try
+            {
+                await world.GetDifference(structure, 
+                        (int)player.X / 16 - structure.Width,
+                        (int)player.Y / 16 - structure.Height
+                        )
+                    .PasteInOrder(client, new Point(
+                            (int)player.X / 16 - structure.Width,
+                            (int)player.Y / 16 - structure.Height
+                        )
+                    );
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("BAD!");
+            }
             
             break;
         }
