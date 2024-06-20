@@ -66,7 +66,6 @@ public class PixelApiClient : IDisposable
         {
             throw new PixelApiException("Failed to retrieve login token using the given information.");
         }
-            
         
         // Success
         if (result is AuthSuccessResponse successResponse)
@@ -109,19 +108,19 @@ public class PixelApiClient : IDisposable
         }
     }
 
-    private static List<string>? _roomTypesCache = null;
+    private static List<string> _roomTypesCache = new();
     /// <summary>
     /// Request the available room types from the game server.
     /// </summary>
     /// <returns>A list of room types</returns>
     public async Task<List<string>?> GetRoomTypes()
     {
-        if (_roomTypesCache != null) return new List<string>(_roomTypesCache);
+        if (_roomTypesCache.Count != 0) return new List<string>(_roomTypesCache);
         
         var apiUrl = $"{EndPoints.GameHttpEndpoint}/listroomtypes";
         _logger.LogInformation($"API Request: {apiUrl}");
 
-        _roomTypesCache = await JsonSerializer.DeserializeAsync<List<string>>(await _client.GetStreamAsync(apiUrl));
+        _roomTypesCache = (await JsonSerializer.DeserializeAsync<List<string>>(await _client.GetStreamAsync(apiUrl)))!;
         return _roomTypesCache;
     }
     
@@ -146,7 +145,7 @@ public class PixelApiClient : IDisposable
         var data = new
         {
             identity = email,
-            password = password
+            password
         };
         var content = new StringContent(JsonSerializer.Serialize(data), Encoding.UTF8, "application/json");
         var response = await _client.PostAsync(apiUrl, content);
@@ -163,6 +162,7 @@ public class PixelApiClient : IDisposable
     /// </summary>
     /// <param name="page">Page to be fetched</param>
     /// <param name="perPage">Entries per page</param>
+    /// <param name="qb">Query builder</param>
     /// <returns>The page requested</returns>
     /// <exception cref="PixelApiException">When the rooms worlds could not be fetched</exception>
     public async Task<CollectionResponse<WorldEntry>> GetOwnedWorlds(int page, int perPage, QueryArgumentBuilder? qb = null)
@@ -177,13 +177,13 @@ public class PixelApiClient : IDisposable
             await JsonSerializer.DeserializeAsync<CollectionResponse<WorldEntry>>(await _client.GetStreamAsync(apiUrl), _jsonOptions);
         return worldCollection ?? throw new PixelApiException("An unknown exception occured while attempting to fetch the worlds");
     }
-    
+
     /// <summary>
     /// Asynchronously retrieves a paginated collection of player entries with optional filters.
     /// </summary>
     /// <param name="page">The page number to retrieve. Must be greater than 0.</param>
     /// <param name="perPage">The number of player entries to retrieve per page.</param>
-    /// <param name="filters">An optional list of tuple filters where each tuple contains a filter key and value.</param>
+    /// <param name="qb">Query builder</param>
     /// <returns>A task representing the asynchronous operation, with a result of <see cref="CollectionResponse{PlayerEntry}"/> containing the player entries.</returns>
     /// <exception cref="PixelApiException">Thrown when the page number is less than 1 or when an unknown error occurs during the fetch operation.</exception>
     public async Task<CollectionResponse<PlayerEntry>> GetPlayers(int page, int perPage, QueryArgumentBuilder? qb = null)
@@ -212,6 +212,15 @@ public class PixelApiClient : IDisposable
         return worldCollection ?? throw new PixelApiException("An unknown exception occured while attempting to fetch the worlds");
     }
 
+    public async Task<WorldEntry?> GetPublicWorld(string id)
+    {
+        var query = new QueryArgumentBuilder()
+            .AddFilter("id", id);
+
+        var worlds = await GetPublicWorlds(1, 1, query);
+        return worlds.TotalItems == 0 ? null : worlds.Items.First();
+    }
+    
     /// <summary>
     /// Asynchronously retrieves a player entry by username.
     /// </summary>
@@ -234,7 +243,7 @@ public class PixelApiClient : IDisposable
     /// <exception cref="PixelApiException">When the worlds could not be fetched.</exception>
     public async Task<PixelWalkerWorldsResponse> GetVisibleWorlds()
     {
-        var apiUrl = $"{EndPoints.GameHttpEndpoint}/room/list/pixelwalker_2024_05_18";
+        var apiUrl = $"{EndPoints.GameHttpEndpoint}/room/list/{_roomTypesCache.First()}";
         _logger.LogInformation($"API Request: {apiUrl}");
         
         var worldCollection =
@@ -242,6 +251,32 @@ public class PixelApiClient : IDisposable
         return worldCollection ?? throw new PixelApiException("An unknown exception occured while attempting to fetch the worlds");
     }
 
+    /// <summary>
+    /// Get the raw bytes of the minimap.
+    /// The format is PNG
+    /// </summary>
+    /// <param name="world"></param>
+    /// <returns>PNG Byte[]</returns>
+    public async Task<byte[]> GetMinimap(WorldEntry world)
+    {
+        var collectionId = "rhrbt6wqhc4s0cp";
+        var apiUrl = $"{EndPoints.ApiEndpoint}/api/files/{collectionId}/{world.Id}/{world.Minimap}";
+
+        byte[] bytes = await _client.GetByteArrayAsync(apiUrl);
+        return bytes;
+    }
+
+    /// <summary>
+    /// Get the raw bytes of the minimap.
+    /// The format is PNG.
+    /// </summary>
+    /// <param name="worldId">World ID</param>
+    /// <returns>Byte[] or null if world could not be found.</returns>
+    public async Task<byte[]?> GetMinimap(string worldId)
+    {
+        var world = await GetPublicWorld(worldId);
+        return world == null ? null : await GetMinimap(world);
+    }
     
     public void Dispose()
     {
