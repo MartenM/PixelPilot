@@ -41,9 +41,28 @@ client.OnPacketReceived += playerManager.HandlePacket;
 // Allow it to listen to client updates. Not required!
 var world = new PixelWorld();
 client.OnPacketReceived += world.HandlePacket;
-world.OnBlockPlaced += (_, playerId, oldBlock, _) =>
+world.OnBlockPlaced += (_, playerId, oldBlock, block) =>
 {
+    if (playerId == client.BotId) return;
     
+    int Z = 4;
+    // Loop through a square area of size (2*Z+1) around the placed block
+    for (int dx = -Z; dx <= Z; dx++)
+    {
+        for (int dy = -Z; dy <= Z; dy++)
+        {
+            // Calculate the coordinates of the new block
+            int newX = block.X + dx;
+            int newY = block.Y + dy;
+
+            // Optionally, check if the new coordinates are within the world bounds
+            // if (newX < 0 || newX >= worldWidth || newY < 0 || newY >= worldHeight) continue;
+            
+            // Send the block placement packet to the client
+            if (world.BlockAt(block.Layer, newX, newY).Block == block.Block.Block) continue;
+            client.Send(block.Block.AsPacketOut(newX, newY, block.Layer));
+        }
+    }
 };
 
 
@@ -145,7 +164,7 @@ client.OnPacketReceived += async (_, packet) =>
             }
             catch (Exception ex)
             {
-                Console.WriteLine("BAD!");
+                Console.WriteLine(ex);
             }
             
             break;
@@ -170,7 +189,7 @@ client.OnClientConnected += (_) =>
 };
 
 // Connect to a room.
-await client.Connect("mknckr7oqxq24xa");
+await client.Connect("r082b210d67df52");
 
 // Don't terminate.
 Thread.Sleep(-1);
