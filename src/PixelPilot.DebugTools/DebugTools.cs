@@ -27,7 +27,8 @@ public class DebugTools
         Dictionary<string, IDebugTool> tools = new Dictionary<string, IDebugTool>()
         {
             {"packet-out", new OutgoingPacketDecoder()},
-            {"mappings", new MappingGenerator()}
+            {"mappings", new MappingGenerator()},
+            {"json-packet-out", new JsonToPacket()}
         };
 
         if (!tools.TryGetValue(options.Tool, out var tool))
