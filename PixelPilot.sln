@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelPilot.ChatCommands", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.CommandBot", "examples\Example.CommandBot\Example.CommandBot.csproj", "{F9BD0108-1125-45D3-956B-ABFF9552A9C6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.Sandbox", "examples\Example.Sandbox\Example.Sandbox.csproj", "{7450D863-27B2-4887-A957-12F13638B06F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,5 +56,9 @@ Global
 		{F9BD0108-1125-45D3-956B-ABFF9552A9C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9BD0108-1125-45D3-956B-ABFF9552A9C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9BD0108-1125-45D3-956B-ABFF9552A9C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7450D863-27B2-4887-A957-12F13638B06F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7450D863-27B2-4887-A957-12F13638B06F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7450D863-27B2-4887-A957-12F13638B06F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7450D863-27B2-4887-A957-12F13638B06F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
