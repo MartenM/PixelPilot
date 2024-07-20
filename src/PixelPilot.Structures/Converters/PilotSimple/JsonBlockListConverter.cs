@@ -5,6 +5,7 @@ using PixelPilot.Common.Logging;
 using PixelPilot.PixelGameClient.World;
 using PixelPilot.PixelGameClient.World.Blocks.Placed;
 using PixelPilot.PixelGameClient.World.Constants;
+using PixelPilot.Structures.Converters.Migrations;
 
 namespace PixelPilot.Structures.Converters.PilotSimple;
 
@@ -15,14 +16,15 @@ namespace PixelPilot.Structures.Converters.PilotSimple;
 public class JsonBlockListConverter : JsonConverter<List<IPlacedBlock>>
 {
     private static ILogger _logger = LogManager.GetLogger("JsonBlockListConverter");
-
-    public int MappingsVersion;
-
+    private static VersionManager _versionManager = new();
     public override List<IPlacedBlock>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         using JsonDocument document = JsonDocument.ParseValue(ref reader);
         var mappedBlockData = document.Deserialize<MappedBlockData>();
         if (mappedBlockData == null) return null;
+        
+        // Apply changes if required.
+        _versionManager.ApplyMigrations(mappedBlockData);
         
         // Setup dict for easy access
         Dictionary<int, PixelBlock> blockMapping = new();

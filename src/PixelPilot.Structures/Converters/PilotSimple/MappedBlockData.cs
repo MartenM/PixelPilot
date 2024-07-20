@@ -10,7 +10,7 @@ public class MappedBlockData
     }
     public MappedBlockData(List<PixelBlock> mapping, List<string> blockData)
     {
-        Version = 1;
+        Version = 2;
         Mapping = mapping.Select(p => p.ToString()).ToList();
         BlockData = blockData;
     }
