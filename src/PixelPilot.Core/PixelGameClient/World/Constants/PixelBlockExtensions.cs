@@ -29,30 +29,30 @@ public static class PixelBlockExtensions
     {
         switch (pixelBlock)
         {
-            case PixelBlock.CoinDoor:
-            case PixelBlock.CoinGate:
-            case PixelBlock.BlueCoinDoor:
-            case PixelBlock.BlueCoinGate:
-            case PixelBlock.DeathDoor:
-            case PixelBlock.DeathGate:
+            case PixelBlock.CoinGoldDoor:
+            case PixelBlock.CoinGoldGate:
+            case PixelBlock.CoinBlueDoor:
+            case PixelBlock.CoinBlueGate:
+            case PixelBlock.HazardDeathDoor:
+            case PixelBlock.HazardDeathGate:
             case PixelBlock.Spikes:
-            case PixelBlock.LocalSwitch:
-            case PixelBlock.LocalSwitchDoor:
-            case PixelBlock.LocalSwitchGate:
-            case PixelBlock.GlobalSwitch:
-            case PixelBlock.GlobalSwitchDoor:
-            case PixelBlock.GlobalSwitchGate:
+            case PixelBlock.SwitchLocalToggle:
+            case PixelBlock.SwitchLocalGate:
+            case PixelBlock.SwitchLocalDoor:
+            case PixelBlock.SwitchGlobalToggle:
+            case PixelBlock.SwitchGlobalGate:
+            case PixelBlock.SwitchGlobalDoor:
                 return BlockType.Morphable;
-            case PixelBlock.LocalSwitchResetter:
-            case PixelBlock.GlobalSwitchResetter:
+            case PixelBlock.SwitchLocalResetter:
+            case PixelBlock.SwitchGlobalResetter:
                 return BlockType.SwitchResetter;
-            case PixelBlock.LocalSwitchActivator:
-            case PixelBlock.GlobalSwitchActivator:
+            case PixelBlock.SwitchLocalActivator:
+            case PixelBlock.SwitchGlobalActivator:
                 return BlockType.SwitchActivator;
             case PixelBlock.Portal:
             case PixelBlock.PortalInvisible:
                 return BlockType.Portal;
-            case PixelBlock.WorldPortal:
+            case PixelBlock.PortalWorld:
                 return BlockType.WorldPortal;
             default:
                 return BlockType.Normal;

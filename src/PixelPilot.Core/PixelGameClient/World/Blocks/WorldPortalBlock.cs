@@ -8,7 +8,7 @@ public class WorldPortalBlock : BasicBlock
 {
     public string WorldId { get; set; }
 
-    public WorldPortalBlock(string worldId) : base(PixelBlock.WorldPortal)
+    public WorldPortalBlock(string worldId) : base(PixelBlock.PortalWorld)
     {
         WorldId = worldId;
     }

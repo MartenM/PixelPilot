@@ -21,10 +21,15 @@ public enum WorldMessageType : int
     PlayerRespawn,
     PlayerReset,
     PlayerTouchBlock,
+    PlayerTouchPlayer,
+    PlayerEffect,
+    PlayerRemoveEffect,
+    PlayerResetEffects,
+    PlayerTeam,
     PlayerCounters,
     PlayerLocalSwitchChanged,
     PlayerLocalSwitchReset,
     GlobalSwitchChanged,
     GlobalSwitchReset,
-    PlayerPrivateMessage,
+    PlayerPrivateMessage
 }

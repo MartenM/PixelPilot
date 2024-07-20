@@ -138,19 +138,19 @@ public abstract class PixelPlayerManager<T> where T : IPixelPlayer
                 player.SpaceJustDown = move.SpaceJustDown;
                 player.TickId = move.TickId;
                 break;
-            case PlayerTouchBlockPacket {BlockId: (int) PixelBlock.Crown}:
+            case PlayerTouchBlockPacket {BlockId: (int) PixelBlock.CrownGold}:
                 // Remove crown from other player.
                 if (CrownedPlayerId != -1 && _players.TryGetValue(CrownedPlayerId, out var otherPlayer)) otherPlayer.HasCrown = false;
                 CrownedPlayerId = player.Id;
                 player.HasCrown = true;
                 break;
-            case PlayerTouchBlockPacket {BlockId: (int) PixelBlock.Trophy}:
+            case PlayerTouchBlockPacket {BlockId: (int) PixelBlock.CrownSilver}:
                 player.HasCompletedWorld = true;
                 break;
-            case PlayerTouchBlockPacket {BlockId: (int) PixelBlock.ResetPoint} block:
+            case PlayerTouchBlockPacket {BlockId: (int) PixelBlock.ToolReset} block:
                 ResetPlayer(player, block.X, block.Y);
                 break;
-            case PlayerTouchBlockPacket {BlockId: (int) PixelBlock.GodModeActivator}:
+            case PlayerTouchBlockPacket {BlockId: (int) PixelBlock.ToolGodModeActivator}:
                 player.CanGod = true;
                 break;
             case PlayerResetPacket reset:

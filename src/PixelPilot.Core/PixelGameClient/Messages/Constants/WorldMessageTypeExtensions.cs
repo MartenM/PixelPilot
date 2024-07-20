@@ -33,6 +33,11 @@ static class WorldMessageTypeExtensions
             WorldMessageType.WorldMetadata => typeof(WorldMetaPacket),
             WorldMessageType.SystemMessage => typeof(SystemMessagePacket),
             WorldMessageType.OldChatMessages => typeof(OldChatMessagesPacket),
+            WorldMessageType.PlayerEffect => typeof(PlayerEffectPacket),
+            WorldMessageType.PlayerTeam => typeof(PlayerTeamPacket),
+            WorldMessageType.PlayerTouchPlayer => typeof(PlayerTouchPlayerPacket),
+            WorldMessageType.PlayerResetEffects => typeof(PlayerResetEffectsPacket),
+            WorldMessageType.PlayerRemoveEffect => typeof(PlayerRemoveEffectPacket),
             _ => null
         };
     }
