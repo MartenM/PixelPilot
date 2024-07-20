@@ -6,7 +6,7 @@ namespace PixelPilot.DebugTools.Tools.Implementation;
 public class JsonToPacket : CommandLineTool
 {
     
-    protected override void ExecuteCommand(string[] args)
+    protected override void ExecuteCommand(string[] args, string fullText)
     {
         var fullString = String.Join(" ", args);
 

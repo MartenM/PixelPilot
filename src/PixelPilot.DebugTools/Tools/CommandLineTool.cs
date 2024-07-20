@@ -19,9 +19,9 @@ public abstract class CommandLineTool : IDebugTool
                 break;
             }
             
-            ExecuteCommand(split);
+            ExecuteCommand(split, line);
         }
     }
 
-    protected abstract void ExecuteCommand(string[] args);
+    protected abstract void ExecuteCommand(string[] args, string fullText);
 }

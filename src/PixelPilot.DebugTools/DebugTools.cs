@@ -28,7 +28,8 @@ public class DebugTools
         {
             {"packet-out", new OutgoingPacketDecoder()},
             {"mappings", new MappingGenerator()},
-            {"json-packet-out", new JsonToPacket()}
+            {"json-packet-out", new JsonToPacket()},
+            {"struct-migration", new StructureMigrationGenerator()}
         };
 
         if (options.Tool == null)

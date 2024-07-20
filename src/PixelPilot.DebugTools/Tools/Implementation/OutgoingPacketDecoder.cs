@@ -11,10 +11,10 @@ public class OutgoingPacketDecoder : CommandLineTool
 {
     public override string BeforeEach { get; } = "Packet HEX: ";
 
-    protected override void ExecuteCommand(string[] args)
+    protected override void ExecuteCommand(string[] args, string fullText)
     {
         // Parse the incoming to a binary[]
-        var hexInput = args[0];
+        var hexInput = string.Join("", args);
         byte[] data = new byte[hexInput.Length / 2];
         for (int i = 0; i < hexInput.Length; i += 2)
         {
