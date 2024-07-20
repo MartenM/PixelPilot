@@ -11,4 +11,18 @@ public enum BlockType
     SwitchActivator,
     SwitchResetter,
     WorldPortal,
+    Sign,
+    
+    // EffectJumpHeight,
+    // EffectFly,
+    // EffectSpeed,
+    // EffectInvulnerability,
+    // EffectCurse,
+    // EffectZombie,
+    // EffectGravityForce,
+    // EffectMultiJump,
+    
+    EffectTimed,
+    EffectTogglable,
+    EffectLeveled,
 }

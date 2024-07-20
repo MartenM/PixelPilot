@@ -4,6 +4,7 @@ using PixelPilot.Common.Logging;
 using PixelPilot.PixelGameClient.Messages;
 using PixelPilot.PixelGameClient.Messages.Received;
 using PixelPilot.PixelGameClient.World.Blocks;
+using PixelPilot.PixelGameClient.World.Blocks.Effects;
 using PixelPilot.PixelGameClient.World.Blocks.Placed;
 using PixelPilot.PixelGameClient.World.Constants;
 
@@ -227,6 +228,12 @@ public class PixelWorld
                 return new ResetterBlock((int)block, extra[0]);
             case BlockType.WorldPortal:
                 return new WorldPortalBlock(extra[0]);
+            case BlockType.EffectLeveled:
+                return new LeveledEffectBlock((int)block, extra[0]);
+            case BlockType.EffectTimed:
+                return new TimedEffectBlock((int)block, extra[0]);
+            case BlockType.EffectTogglable:
+                return new ToggleEffectBlock((int)block, extra[0]);
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -264,6 +271,12 @@ public class PixelWorld
                 return new ResetterBlock((int)pixelBlock, packet.ExtraFields[0] == 1);
             case BlockType.WorldPortal:
                 return new WorldPortalBlock(packet.ExtraFields[0]);
+            case BlockType.EffectLeveled:
+                return new LeveledEffectBlock((int)pixelBlock, packet.ExtraFields[0]);
+            case BlockType.EffectTimed:
+                return new TimedEffectBlock((int)pixelBlock, packet.ExtraFields[0]);
+            case BlockType.EffectTogglable:
+                return new ToggleEffectBlock((int)pixelBlock, packet.ExtraFields[0]);
             default:
                 throw new NotImplementedException("Missing implementation of new BlockType!");
         }

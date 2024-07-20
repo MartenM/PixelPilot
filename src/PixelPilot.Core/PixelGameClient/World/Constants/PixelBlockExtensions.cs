@@ -18,6 +18,21 @@ public static class PixelBlockExtensions
                 return new[] { PacketFieldType.Int32, PacketFieldType.Int32, PacketFieldType.Int32 };
             case BlockType.WorldPortal:
                 return new[] { PacketFieldType.String };
+            case BlockType.Sign:
+                return new[] { PacketFieldType.String };
+            case BlockType.EffectTimed:
+            case BlockType.EffectLeveled:
+            // case BlockType.EffectSpeed:
+            // case BlockType.EffectJumpHeight:
+            // case BlockType.EffectGravityForce:
+            // case BlockType.EffectMultiJump:
+            // case BlockType.EffectCurse:
+            // case BlockType.EffectZombie:
+                return new[] { PacketFieldType.Int32 };
+            case BlockType.EffectTogglable:
+            // case BlockType.EffectFly:
+            // case BlockType.EffectInvulnerability:
+                return new[] { PacketFieldType.Boolean };
             case BlockType.Normal:
                 return Array.Empty<PacketFieldType>();
             default:
@@ -54,6 +69,28 @@ public static class PixelBlockExtensions
                 return BlockType.Portal;
             case PixelBlock.PortalWorld:
                 return BlockType.WorldPortal;
+            case PixelBlock.SignBlue:
+            case PixelBlock.SignGold:
+            case PixelBlock.SignGreen:
+            case PixelBlock.SignNormal:
+            case PixelBlock.SignRed:
+                return BlockType.Sign;
+            case PixelBlock.EffectsJumpHeight:
+                return BlockType.EffectLeveled;
+            case PixelBlock.EffectsFly:
+                return BlockType.EffectTogglable;
+            case PixelBlock.EffectsSpeed:
+                return BlockType.EffectLeveled;
+            case PixelBlock.EffectsInvulnerability:
+                return BlockType.EffectTogglable;
+            case PixelBlock.EffectsCurse:
+                return BlockType.EffectTimed;
+            case PixelBlock.EffectsZombie:
+                return BlockType.EffectTimed;
+            case PixelBlock.EffectsGravityforce:
+                return BlockType.EffectLeveled;
+            case PixelBlock.EffectsMultiJump:
+                return BlockType.EffectLeveled;
             default:
                 return BlockType.Normal;
         }
