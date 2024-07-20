@@ -27,4 +27,12 @@ public class MappingsResponse
 
         return list;
     }
+
+    public static String ToCName(string pwName)
+    {
+        var textInfo = new CultureInfo("en-US", false).TextInfo;
+        
+        var words = pwName.Split("_");
+        return $"{String.Join(null, words.Select(w => textInfo.ToTitleCase(w)))}";
+    }
 }
