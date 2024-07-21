@@ -227,6 +227,23 @@ public class PixelWorld
         }
     }
 
+    public IEnumerable<PlacedBlock> GetBlocks(bool includeEmpty = true)
+    {
+        for (int layer = 0; layer < 2; layer++)
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                for (int y = 0; y < Height; y++)
+                {
+                    var block = BlockAt(layer, x, y);
+                    if (!includeEmpty && block.Block == PixelBlock.Empty) continue;
+                    
+                    yield return new PlacedBlock(x, y, layer, block);
+                }
+            }
+        }
+    }
+    
     /// <summary>
     /// Desterialize a blok
     /// </summary>
@@ -322,7 +339,7 @@ public class PixelWorld
                 throw new NotImplementedException("Missing implementation of new BlockType!");
         }
     }
-
+    
     /// <summary>
     /// Deserializes a WorldBlockPlacedPacket into an IPlacedBlock object.
     /// </summary>
