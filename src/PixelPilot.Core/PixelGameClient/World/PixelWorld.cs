@@ -40,6 +40,39 @@ public class PixelWorld
     /// <param name="oldBlock">The previous state of the block.</param>
     /// <param name="newBlock">The new state of the block after being placed. Includes X, Y, Layer.</param>
     public delegate void BlockPlaced(object sender, int userId, IPlacedBlock oldBlock, IPlacedBlock newBlock);
+    
+    /// <summary>
+    /// Fired after the world is initialized.
+    /// </summary>
+    public event WorldInit? OnWorldInit;
+    
+    /// <summary>
+    /// Represents a delegate for the WorldInit event.
+    /// </summary>
+    /// <param name="sender">The object that triggered the event.</param>
+    public delegate void WorldInit(object sender);
+    
+    /// <summary>
+    /// Fired after the world is reloaded
+    /// </summary>
+    public event WorldReloaded? OnWorldReloaded;
+    
+    /// <summary>
+    /// Represents a delegate for the WorldReloaded event.
+    /// </summary>
+    /// <param name="sender">The object that triggered the event.</param>
+    public delegate void WorldReloaded(object sender);
+    
+    /// <summary>
+    /// Fired after the world is initialized.
+    /// </summary>
+    public event WorldCleared? OnWorldCleared;
+    
+    /// <summary>
+    /// Represents a delegate for the WorldCleared event.
+    /// </summary>
+    /// <param name="sender">The object that triggered the event.</param>
+    public delegate void WorldCleared(object sender);
    
     public PixelWorld()
     {
@@ -127,6 +160,8 @@ public class PixelWorld
             WorldName = init.RoomTitle;
             _worldData = new IPixelBlock[2, Width, Height];
             Init(init.WorldData);
+            
+            OnWorldInit?.Invoke(this);
             return;
         }
 
@@ -138,6 +173,7 @@ public class PixelWorld
         if (packet is WorldReloadedPacket reload)
         {
             Init(reload.WorldData);
+            OnWorldReloaded?.Invoke(this);
             return;
         }
         
@@ -161,6 +197,7 @@ public class PixelWorld
                     }
                 }
             }
+            OnWorldCleared?.Invoke(this);
             return;
         }
 
