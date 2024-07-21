@@ -234,6 +234,8 @@ public class PixelWorld
                 return new TimedEffectBlock((int)block, extra[0]);
             case BlockType.EffectTogglable:
                 return new ToggleEffectBlock((int)block, extra[0]);
+            case BlockType.Sign:
+                return new SignBlock((int)block, extra[0]);
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -277,6 +279,8 @@ public class PixelWorld
                 return new TimedEffectBlock((int)pixelBlock, packet.ExtraFields[0]);
             case BlockType.EffectTogglable:
                 return new ToggleEffectBlock((int)pixelBlock, packet.ExtraFields[0]);
+            case BlockType.Sign:
+                return new SignBlock((int)pixelBlock, packet.ExtraFields[0]);
             default:
                 throw new NotImplementedException("Missing implementation of new BlockType!");
         }
