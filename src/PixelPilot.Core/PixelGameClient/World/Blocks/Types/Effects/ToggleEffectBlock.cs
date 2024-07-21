@@ -47,7 +47,7 @@ public class ToggleEffectBlock : BasicBlock
         if (ReferenceEquals(null, obj)) return false;
         if (ReferenceEquals(this, obj)) return true;
         if (obj.GetType() != this.GetType()) return false;
-        return Equals((MorphableBlock)obj);
+        return Equals( (ToggleEffectBlock) obj);
     }
 
     public override int GetHashCode()
