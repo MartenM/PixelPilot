@@ -2,14 +2,14 @@
 
 public class SystemMessagePacket : IPixelGamePacket
 {
-    public SystemMessagePacket(string prefix, string message, bool magic)
+    public SystemMessagePacket(string prefix, string message, bool kicked)
     {
         Prefix = prefix;
         Message = message;
-        Magic = magic;
+        Kicked = kicked;
     }
 
     public string Prefix { get; }
     public string Message { get; }
-    public bool Magic { get; }
+    public bool Kicked { get; }
 }
