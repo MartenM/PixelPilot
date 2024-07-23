@@ -61,4 +61,4 @@ client.OnClientConnected += (_) =>
 await client.Connect("r735212a9ff7a3f");
 
 // Don't terminate.
-Thread.Sleep(-1);
+await client.WaitForDisconnect();

@@ -6,7 +6,7 @@
     "LogLevel": {
       "Default": "Information",
       "PixelPilot.API": "Information",
-      "PixelPilot.Client": "Debug",
+      "PixelPilot.Client": "Information",
       "PixelPilot.World": "Information",
       "PixelPilot.PacketConverter": "Information",
       "Microsoft": "Warning",
