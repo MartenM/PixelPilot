@@ -20,6 +20,8 @@ public class PixelPilotClient : IDisposable
     // Constants
     public static readonly int SecondsBeforeGatewayTimeout = 3;
     
+    private readonly TaskCompletionSource<bool> _connectCompletion = new();
+    
     private readonly ILogger _logger = LogManager.GetLogger("Client");
     public readonly PixelApiClient ApiClient;
     private WebsocketClient? _socketClient;
@@ -111,7 +113,7 @@ public class PixelPilotClient : IDisposable
             throw new Exception("Failed to get the join key. Are you sure that the account token is still valid?");
         }
         
-        _logger.LogInformation("Successfully acquired the room token. Connecting now.");
+        _logger.LogInformation("Successfully acquired the room token");
         var gameRoomUrl = $"{EndPoints.GameWebsocketEndpoint}/room/{joinRequest.Token}";
         
         _socketClient = new WebsocketClient(new Uri(gameRoomUrl));
@@ -143,8 +145,21 @@ public class PixelPilotClient : IDisposable
         });
 
         // Start the websocket. Set connected to True.
-        IsConnected = true;
+        
         await _socketClient.Start();
+
+        var timeout = Task.Delay(TimeSpan.FromSeconds(5));
+        var completedTask = await Task.WhenAny(_connectCompletion.Task, timeout);
+        
+        if (completedTask == _connectCompletion.Task)
+        {
+            _logger.LogInformation("Connected to the room successfully");
+            IsConnected = true;
+        }
+        else
+        {
+            _logger.LogWarning("Client failed to connect. Timeout was exceeded.");
+        }
     }
 
     /// <summary>
@@ -276,8 +291,8 @@ public class PixelPilotClient : IDisposable
         if (packet is InitPacket init)
         {
             _send(InitPacket.AsSendingBytes());
-
-            _logger.LogInformation("Connected to the room successfully");
+            _connectCompletion.TrySetResult(true);
+            
             BotId = init.PlayerId;
             Username = init.Username;
             
