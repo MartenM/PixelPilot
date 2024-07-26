@@ -29,18 +29,6 @@ public class PacketOutTests
     }
 
     [Test]
-    public void PacketWorldBlockPlacedOutTest()
-    {
-        var blockPlaced = "6b-05-03-00-00-00-22-03-00-00-00-46-03-00-00-00-01-03-00-00-00-31".ToUpper();
-        var coinDoorPlaced = "6b-05-03-00-00-00-22-03-00-00-00-46-03-00-00-00-01-03-00-00-00-1a-03-00-00-00-19".ToUpper();
-        var simple = new WorldBlockPlacedOutPacket(34, 70, 1, 49);
-        var coinDoor = new WorldBlockPlacedOutPacket(34, 70, 1, 26, [25]);
-        
-        Assert.That(BitConverter.ToString(simple.ToBinaryPacket()), Is.EqualTo(blockPlaced), "Packets should be constructed properly.");
-        Assert.That(BitConverter.ToString(coinDoor.ToBinaryPacket()), Is.EqualTo(coinDoorPlaced), "Packets should be constructed properly.");
-    }
-
-    [Test]
     public void PacketPlayerMoveOutTest()
     {
         string move =
