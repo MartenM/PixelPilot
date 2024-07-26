@@ -38,7 +38,11 @@ var world = new PixelWorld();
 client.OnPacketReceived += world.HandlePacket;
 world.OnBlockPlaced += (_, playerId, oldBlock, block) =>
 {
-   
+    if (playerId == client.BotId) return;
+    
+    client.Send(oldBlock.AsPacketOut());
+    Thread.Sleep(100);
+    client.Send(block.AsPacketOut());
 };
 
 

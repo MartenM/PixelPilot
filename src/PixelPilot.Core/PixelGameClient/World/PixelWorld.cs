@@ -203,11 +203,17 @@ public class PixelWorld
 
         if (packet is WorldBlockPlacedPacket place)
         {
-            var block = DeserializeBlock(place);
-            var oldBlock = _worldData[place.Layer, place.X, place.Y];
             
-            _worldData[place.Layer, place.X, place.Y] = block;
-            OnBlockPlaced?.Invoke(this, place.PlayerId, new PlacedBlock(place.X, place.Y, place.Layer, oldBlock), new PlacedBlock(place.X, place.Y, place.Layer, block));
+            foreach (var point in place.Positions)
+            {
+                // Rather make a copy of this, BUT that's currently not possible.
+                // TODO: Implement a cloning method.
+                var block = DeserializeBlock(place);
+                var oldBlock = _worldData[place.Layer, point.X, point.Y];
+            
+                _worldData[place.Layer, point.X, point.Y] = block;
+                OnBlockPlaced?.Invoke(this, place.PlayerId, new PlacedBlock(point.X, point.Y, place.Layer, oldBlock), new PlacedBlock(point.X, point.Y, place.Layer, block));
+            }
         }
     }
     

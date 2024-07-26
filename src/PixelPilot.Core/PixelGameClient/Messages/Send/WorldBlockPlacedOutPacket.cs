@@ -5,8 +5,7 @@ namespace PixelPilot.PixelGameClient.Messages.Send;
 public class WorldBlockPlacedOutPacket : ReflectivePixelOutPacket
 {
     // Basic information that every block placement has.
-    public int X { get; }
-    public int Y { get; }
+    public byte[] RawPositions { get; }
     public int Layer { get; }
     public int BlockId { get; }
     
@@ -15,17 +14,27 @@ public class WorldBlockPlacedOutPacket : ReflectivePixelOutPacket
     
     public WorldBlockPlacedOutPacket(int x, int y, int layer, int blockId) : base(WorldMessageType.WorldBlockPlaced)
     {
-        X = x;
-        Y = y;
+        RawPositions = new byte[4];
+        RawPositions[0] = (byte) (x & 0xFF);
+        RawPositions[1] = (byte) ((x >> 8) & 0xFF);
+        RawPositions[2] = (byte) (y & 0xFF);
+        RawPositions[3] = (byte) ((y >> 8) & 0xFF);
+        
         Layer = layer;
         BlockId = blockId;
     }
     
     public WorldBlockPlacedOutPacket(int x, int y, int layer, int blockId, dynamic[] extraData) : base(WorldMessageType.WorldBlockPlaced)
     {
-        X = x;
-        Y = y;
+        RawPositions = new byte[4];
+        RawPositions[0] = (byte) (x & 0xFF);
+        RawPositions[1] = (byte) ((x >> 8) & 0xFF);
+        RawPositions[2] = (byte) (y & 0xFF);
+        RawPositions[3] = (byte) ((y >> 8) & 0xFF);
+        
+        
         Layer = layer;
+        
         BlockId = blockId;
         ExtraData = extraData;
     }
