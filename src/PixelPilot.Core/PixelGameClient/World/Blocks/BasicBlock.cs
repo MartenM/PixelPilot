@@ -1,4 +1,5 @@
-﻿using PixelPilot.PixelGameClient.Messages;
+﻿using System.Drawing;
+using PixelPilot.PixelGameClient.Messages;
 using PixelPilot.PixelGameClient.Messages.Send;
 using PixelPilot.PixelGameClient.World.Blocks.Placed;
 using PixelPilot.PixelGameClient.World.Constants;
@@ -26,6 +27,11 @@ public class BasicBlock : IPixelBlock
     public virtual IPixelGamePacketOut AsPacketOut(int x, int y, int layer)
     {
         return new WorldBlockPlacedOutPacket(x,y, layer, BlockId);
+    }
+
+    public virtual IPixelGamePacketOut AsPacketOut(List<Point> positions, int layer)
+    {
+        return new WorldBlockPlacedOutPacket(positions, layer, BlockId);
     }
 
     public IPlacedBlock AsPlacedBlock(int x, int y, int layer)

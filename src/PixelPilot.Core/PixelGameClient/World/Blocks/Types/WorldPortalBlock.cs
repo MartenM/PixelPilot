@@ -1,4 +1,5 @@
-﻿using PixelPilot.PixelGameClient.Messages;
+﻿using System.Drawing;
+using PixelPilot.PixelGameClient.Messages;
 using PixelPilot.PixelGameClient.Messages.Send;
 using PixelPilot.PixelGameClient.World.Constants;
 
@@ -16,5 +17,10 @@ public class WorldPortalBlock : BasicBlock
     public override IPixelGamePacketOut AsPacketOut(int x, int y, int layer)
     {
         return new WorldBlockPlacedOutPacket(x, y, layer, BlockId, [WorldId]);
+    }
+    
+    public override IPixelGamePacketOut AsPacketOut(List<Point> positions, int layer)
+    {
+        return new WorldBlockPlacedOutPacket(positions, layer, BlockId, [WorldId]);
     }
 }

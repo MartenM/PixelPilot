@@ -1,4 +1,5 @@
-﻿using PixelPilot.PixelGameClient.Messages;
+﻿using System.Drawing;
+using PixelPilot.PixelGameClient.Messages;
 using PixelPilot.PixelGameClient.Messages.Send;
 using PixelPilot.PixelGameClient.World.Blocks.Placed;
 using PixelPilot.PixelGameClient.World.Constants;
@@ -14,6 +15,7 @@ public interface IPixelBlock
     public PixelBlock Block => (PixelBlock) BlockId;
 
     public IPixelGamePacketOut AsPacketOut(int x, int y, int layer);
+    public IPixelGamePacketOut AsPacketOut(List<Point> positions, int layer);
     public IPlacedBlock AsPlacedBlock(int x, int y, int layer);
 
     public byte[] AsWorldBuffer(int x, int y, int layer);
