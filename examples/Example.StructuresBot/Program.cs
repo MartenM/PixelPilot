@@ -133,6 +133,23 @@ client.OnPacketReceived += async (_, packet) =>
             client.Send(new PlayerChatOutPacket("Struct saved!"));
             break;
         }
+        case PlayerChatPacket { Message: ".load" } chat:
+        {
+            string json = File.ReadAllText("test-struct.json");
+            var structure = PilotSaveSerializer.Deserialize(json);
+            
+            client.Send(new PlayerChatOutPacket("Struct pasting..."));
+
+            var packets = world.GetDifference(structure).ToChunkedPackets();
+            foreach (var chunkyPacket in packets)
+            {
+                client.Send(chunkyPacket);
+            }
+            
+            //await world.GetDifference(structure).PasteInOrder(client, new Point(0, 0));
+            
+            break;
+        }
         case PlayerChatPacket { Message: ".load tl" } chat:
         {
             string json = File.ReadAllText("test-struct.json");
