@@ -1,13 +1,18 @@
 ﻿using System.Drawing;
 using PixelPilot.PixelGameClient;
+using PixelPilot.PixelGameClient.Messages;
+using PixelPilot.PixelGameClient.Messages.Send;
 using PixelPilot.PixelGameClient.World;
 using PixelPilot.PixelGameClient.World.Blocks.Placed;
 using PixelPilot.PixelGameClient.World.Constants;
+using PixelPilot.PixelHttpClient;
 
 namespace PixelPilot.Structures.Extensions;
 
 public static class WorldExtensions
 {
+    public const int MaxChunkBlockCount = 250;
+    
     public static Structure GetStructure(this PixelWorld world, int x, int y, int width, int height, bool copyEmpty = true)
     {
         List<IPlacedBlock> blocks = new();
@@ -57,6 +62,54 @@ public static class WorldExtensions
 
         return difference;
     }
+
+    /// <summary>
+    /// Group blocks that are the same into a single packet that can be send.
+    /// </summary>
+    /// <param name="blocks">The blocks</param>
+    /// <returns>Packets to be send by the client.</returns>
+    public static List<IPixelGamePacketOut> ToChunkedPackets(this IEnumerable<IPlacedBlock> blocks)
+    {
+        var result = new List<IPixelGamePacketOut>();
+        
+        // Group the blocks per type/id
+        var groupedBlocks = blocks.GroupBy(block => block.Block);
+        
+        // Now create the chunks of 250 blocks.
+        foreach (var rawGroup in groupedBlocks)
+        {
+            var typeBlocks = rawGroup.ToList();
+            for (int i = 0; i < typeBlocks.Count; i += MaxChunkBlockCount)
+            {
+                var chunk = typeBlocks.Skip(i).Take(MaxChunkBlockCount).ToList();
+                result.Add(chunk.ToChunkedPacket());
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Creates a packet out of a blocks that are all the same.
+    /// </summary>
+    /// <param name="blocks">The blocks</param>
+    /// <returns>A packet</returns>
+    /// <exception cref="PixelApiException">When the requirements are not met</exception>
+    public static IPixelGamePacketOut ToChunkedPacket(this List<IPlacedBlock> blocks)
+    {
+        var blockData = blocks.First().Block;
+        var layer = blocks.First().Layer;
+        
+        if (blocks.Count > MaxChunkBlockCount)
+            throw new PixelApiException("Cannot convert more than 250 blocks into a chunk.");
+
+        if (!blocks.All(block => block.Block.Equals(blockData)))
+            throw new PixelApiException("All blocks need to be the same for them to be chunked together.");
+
+        var positions = blocks.Select(b => new Point(b.X, b.Y)).ToList();
+        return blockData.AsPacketOut(positions, layer);
+    }
+    
     public static async Task PasteInOrder(this List<IPlacedBlock> blocks, PixelPilotClient client, Point origin, int delay = 0)
     {
         foreach (var block in blocks)
