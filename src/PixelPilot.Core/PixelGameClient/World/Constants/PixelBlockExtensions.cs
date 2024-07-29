@@ -50,7 +50,6 @@ public static class PixelBlockExtensions
             case PixelBlock.CoinBlueGate:
             case PixelBlock.HazardDeathDoor:
             case PixelBlock.HazardDeathGate:
-            case PixelBlock.Spikes:
             case PixelBlock.SwitchLocalToggle:
             case PixelBlock.SwitchLocalGate:
             case PixelBlock.SwitchLocalDoor:
