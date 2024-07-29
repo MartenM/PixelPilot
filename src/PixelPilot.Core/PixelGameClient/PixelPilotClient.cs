@@ -129,6 +129,7 @@ public class PixelPilotClient : IDisposable
             IsConnected = false;
             _packetOutQueue?.Stop();
             _logger.LogWarning($"Client got disconnected. ({info.CloseStatusDescription} {(Username != null ? $"Bot: {Username}": null)})");
+            _connectCompletion.TrySetResult(true);
             OnClientDisconnected?.Invoke(this, info.CloseStatusDescription);
         });
         _socketClient.MessageReceived.Subscribe(msg =>
@@ -151,14 +152,13 @@ public class PixelPilotClient : IDisposable
         var timeout = Task.Delay(TimeSpan.FromSeconds(5));
         var completedTask = await Task.WhenAny(_connectCompletion.Task, timeout);
         
-        if (completedTask == _connectCompletion.Task)
+        if (completedTask == _connectCompletion.Task && IsConnected)
         {
             _logger.LogInformation("Connected to the room successfully");
-            IsConnected = true;
         }
         else
         {
-            _logger.LogWarning("Client failed to connect. Timeout was exceeded.");
+            _logger.LogWarning("Could not join the room.");
         }
     }
 
@@ -169,7 +169,7 @@ public class PixelPilotClient : IDisposable
     public async Task Disconnect()
     {
         if (_packetOutQueue != null) await _packetOutQueue.Stop();
-        _socketClient?.Stop(WebSocketCloseStatus.NormalClosure, "Socket closed by the client.");
+        if (_socketClient?.IsRunning ?? false) _socketClient?.Stop(WebSocketCloseStatus.NormalClosure, "Socket closed by the client.");
         IsConnected = false;
     }
     
@@ -291,10 +291,13 @@ public class PixelPilotClient : IDisposable
         if (packet is InitPacket init)
         {
             _send(InitPacket.AsSendingBytes());
-            _connectCompletion.TrySetResult(true);
             
             BotId = init.PlayerId;
             Username = init.Username;
+            
+            // We connected!
+            IsConnected = true;
+            _connectCompletion.TrySetResult(true);
             
             InvokeWithTimings("ClientConnected", () =>
             {
