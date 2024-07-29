@@ -62,7 +62,9 @@ client.OnClientConnected += (_) =>
 };
 
 // Connect to a room.
-await client.Connect("r735212a9ff7a3f");
+await client.Connect("ozkju7mpvrofgwd");
+client.Send(new PlayerChatOutPacket("I'm alive!"));
+
 
 // Don't terminate.
 await client.WaitForDisconnect();
