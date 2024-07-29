@@ -9,14 +9,14 @@ public class PlayerEffectPacket : IPixelGamePlayerPacket, IDynamicConstructedPac
     public int EffectId { get; }
     public EffectType EffectType => (EffectType) EffectId;
     
-    public bool Magic { get; }
+    public bool ActivatedByPlayer { get; }
     
     public dynamic[] ExtraFields { get; }
     
     public PlayerEffectPacket(List<dynamic> fields)
     {
         PlayerId = fields[0];
-        Magic = fields[1];
+        ActivatedByPlayer = fields[1];
         EffectId = fields[2];
 
         ExtraFields = fields.Skip(3).ToArray();
