@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using PixelPilot.Common.Logging;
 using PixelPilot.PixelGameClient.Messages;
 using PixelPilot.PixelGameClient.Messages.Received;
@@ -18,6 +17,13 @@ namespace PixelPilot.PixelGameClient.World;
 public class PixelWorld
 {
     private static ILogger _logger = LogManager.GetLogger("PixelPilot.World");
+    private readonly TaskCompletionSource<bool> _initializationTaskSource = new(); 
+    
+    /// <summary>
+    /// A task that can be used to await world init completion.
+    /// This ensures the world has been properly populated before using it.
+    /// </summary>
+    public Task InitTask => _initializationTaskSource.Task;
     public int Height { get; private set; }
     public int Width { get; private set; }
 
@@ -162,6 +168,7 @@ public class PixelWorld
             Init(init.WorldData);
             
             OnWorldInit?.Invoke(this);
+            _initializationTaskSource.TrySetResult(true);
             return;
         }
 
@@ -345,45 +352,4 @@ public class PixelWorld
                 throw new NotImplementedException("Missing implementation of new BlockType!");
         }
     }
-    
-    /// <summary>
-    /// Deserializes a WorldBlockPlacedPacket into an IPlacedBlock object.
-    /// </summary>
-    /// <param name="packet">The WorldBlockPlacedPacket to deserialize.</param>
-    /// <exception cref="NotImplementedException">If the type has not been implemented yet.</exception>
-    /// <returns>An IPlacedBlock object representing the deserialized packet.</returns>
-    // public static IPlacedBlock DeserializePlacedBlock(WorldBlockPlacedPacket packet)
-    // {
-    //     var pixelBlock = (PixelBlock) packet.BlockId;
-    //     
-    //     // We want to construct a PixelBlock.
-    //     // First we need to know what type it is.
-    //     // Then we can fill in the rest.
-    //     var blockType = pixelBlock.GetBlockType();
-    //     
-    //     // Construct the block and return it. Hooray.
-    //     IPixelBlock block;
-    //     switch (blockType)
-    //     {
-    //         case BlockType.Normal:
-    //             block = new BasicBlock((int) pixelBlock);
-    //             break;
-    //         case BlockType.Morphable:
-    //             block = new MorphableBlock((int) pixelBlock, packet.ExtraInt1!.Value);
-    //             break;
-    //         case BlockType.Portal:
-    //             block = new PortalBlock((int) pixelBlock, packet.ExtraInt2!.Value, packet.ExtraInt3!.Value, packet.ExtraInt1!.Value);
-    //             break;
-    //         case BlockType.SwitchActivator:
-    //             block = new ActivatorBlock((int) pixelBlock, packet.ExtraInt1!.Value, packet.ExtraByte!.Value == 1);
-    //             break;
-    //         case BlockType.SwitchResetter:
-    //             block = new ResetterBlock((int)pixelBlock, packet.ExtraByte!.Value == 1);
-    //             break;
-    //         default:
-    //             throw new NotImplementedException("Missing implementation of new BlockType!");
-    //     }
-    //
-    //     return new PlacedBlock(packet.X, packet.Y, packet.Layer, block);
-    // }
 }
