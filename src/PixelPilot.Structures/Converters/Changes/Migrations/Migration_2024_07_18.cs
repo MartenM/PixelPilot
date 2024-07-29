@@ -2,7 +2,7 @@
 
 namespace PixelPilot.Structures.Converters.Migrations.Migrations;
 
-public class Migration_2024_18_07() : VersionMigration(1)
+public class Migration_2024_07_18() : VersionMigration(1)
 {
 	protected override void DoUpdate(MappedBlockData mappedBlockData)
     {

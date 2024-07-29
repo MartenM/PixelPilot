@@ -9,7 +9,8 @@ public class VersionManager
 
     public VersionManager()
     {
-        AddMigration(new Migration_2024_18_07());
+        AddMigration(new Migration_2024_07_18());
+        AddMigration(new Migration_2024_07_29());
     }
 
     private void AddMigration(VersionMigration migration)
