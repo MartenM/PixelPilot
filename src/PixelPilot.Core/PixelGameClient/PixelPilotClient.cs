@@ -25,8 +25,6 @@ public class PixelPilotClient : IDisposable
     private readonly ILogger _logger = LogManager.GetLogger("Client");
     public readonly PixelApiClient ApiClient;
     private WebsocketClient? _socketClient;
-    private PacketConverter _packetConverter = new();
-    public string? RoomType { get; private set; }
     
     public string? BotPrefix { get; set; } = null;
     private IPixelPacketQueue? _packetOutQueue;
