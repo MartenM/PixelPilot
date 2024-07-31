@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Drawing;
+using Microsoft.Extensions.Logging;
 using PixelPilot.Common.Logging;
 using PixelPilot.PixelGameClient.Messages;
 using PixelPilot.PixelGameClient.Messages.Received;
@@ -148,13 +149,13 @@ public abstract class PixelPlayerManager<T> where T : IPixelPlayer
                 player.HasCompletedWorld = true;
                 break;
             case PlayerTouchBlockPacket {BlockId: (int) PixelBlock.ToolReset} block:
-                ResetPlayer(player, block.X, block.Y);
+                ResetPlayer(player, new Point(block.X, block.Y));
                 break;
             case PlayerTouchBlockPacket {BlockId: (int) PixelBlock.ToolGodModeActivator}:
                 player.CanGod = true;
                 break;
             case PlayerResetPacket reset:
-                ResetPlayer(player, reset.X, reset.Y);
+                ResetPlayer(player, reset.Position);
                 break;
             case PlayerRespawnPacket respawn:
                 player.X = respawn.X;
@@ -177,13 +178,17 @@ public abstract class PixelPlayerManager<T> where T : IPixelPlayer
         OnPlayerStatusChanged?.Invoke(sender, player);
     }
 
-    private void ResetPlayer(T player, int x, int y)
+    private void ResetPlayer(T player, Point? position)
     {
         if (CrownedPlayerId == player.Id) CrownedPlayerId = -1;
         
         player.HasCompletedWorld = false;
         player.HasCrown = false;
-        player.X = x;
-        player.Y = y;
+        if (position != null)
+        {
+            player.X = position.Value.X;
+            player.Y = position.Value.Y;
+        }
+        
     }
 }
