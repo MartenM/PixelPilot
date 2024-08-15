@@ -29,11 +29,13 @@ public class DebugTools
             {"packet-out", new OutgoingPacketDecoder()},
             {"mappings", new MappingGenerator()},
             {"json-packet-out", new JsonToPacket()},
-            {"struct-migration", new StructureMigrationGenerator()}
+            {"struct-migration", new StructureMigrationGenerator()},
+            {"event-types", new WorldEventGenerator()}
         };
 
         if (options.Tool == null)
         {
+            Console.WriteLine($"Available tools: {String.Join(", ", tools.Select(t => t.Key))}");
             Console.Write("Please pick a tool: ");
             options.Tool = Console.ReadLine();
         }
