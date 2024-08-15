@@ -4,7 +4,7 @@ namespace PixelPilot.PixelGameClient.Messages.Received;
 
 public class PlayerJoinPacket : IPixelGamePlayerPacket
 {
-    public PlayerJoinPacket(int id, string cuid, string username, int face, bool isAdmin, bool hasGod, bool hasEdit, double x, double y, int chatColour, int coins, int blueCoins, int deaths, byte[] collectedItems, bool godmode, bool modmode, bool hasCrown, bool hasCompletedWorld, int team, byte[] switchBuffer)
+    public PlayerJoinPacket(int id, string cuid, string username, int face, bool isAdmin, bool isOwner, bool hasGod, bool hasEdit, double x, double y, int chatColour, int coins, int blueCoins, int deaths, byte[] collectedItems, bool godmode, bool modmode, bool hasCrown, bool hasCompletedWorld, int team, byte[] switchBuffer)
     {
         PlayerId = id;
         Cuid = cuid;
@@ -19,6 +19,7 @@ public class PlayerJoinPacket : IPixelGamePlayerPacket
         Coins = coins;
         BlueCoins = blueCoins;
         Deaths = deaths;
+        IsOwner = isOwner;
         Godmode = godmode;
         Modmode = modmode;
         HasCrown = hasCrown;
@@ -52,6 +53,8 @@ public class PlayerJoinPacket : IPixelGamePlayerPacket
     public int Coins { get; }
     public int BlueCoins { get; }
     public int Deaths { get; }
+    
+    public bool IsOwner { get; }
     public bool Godmode { get; }
     public bool Modmode { get; }
     public bool HasCrown { get; }

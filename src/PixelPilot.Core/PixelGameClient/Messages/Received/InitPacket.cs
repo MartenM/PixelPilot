@@ -16,14 +16,19 @@ public class InitPacket : IPixelGamePacket
     public bool CanEdit { get; set; }
     public bool CanGod { get; set; }
     public string RoomTitle { get; set; }
-    public int Players { get; set; }
+    public int Plays { get; set; }
     public string Owner { get; set; }
+    public bool IsWorldOwner { get; set; }
+    public string Description { get; set; }
+    public string Visibility { get; set; }
+    public bool IsUnsaved { get; set; }
+    public bool HasUnsavedChanged { get; set; }
     public byte[] GlobalSwitchStates { get; set; }
     public int Width { get; set; }
     public int Height { get; set; }
     public byte[] WorldData { get; set; }
     
-    public InitPacket(int id, string cId, string username, int face, bool isAdmin, double x, double y, int chatColour, bool canEdit, bool canGod, string roomTitle, int players, string owner, byte[] globalSwitchStates, int width, int height, byte[] worldData)
+    public InitPacket(int id, string cId, string username, int face, bool isAdmin, double x, double y, int chatColour, bool isWorldOwner, bool canEdit, bool canGod, string roomTitle, int plays, string owner, string description, string visibility, bool isUnsaved, bool hasUnsavedChanges, byte[] globalSwitchStates, int width, int height, byte[] worldData)
     {
         PlayerId = id;
         AccountId = cId;
@@ -32,17 +37,24 @@ public class InitPacket : IPixelGamePacket
         X = x;
         Y = y;
         ChatColor = Color.FromArgb(chatColour);
+        IsWorldOwner = isWorldOwner;
         CanEdit = canEdit;
         CanGod = canGod;
         RoomTitle = roomTitle;
-        Players = players;
+        Plays = plays;
         Owner = owner;
         GlobalSwitchStates = globalSwitchStates;
         Width = width;
         Height = height;
         WorldData = worldData;
         IsAdmin = isAdmin;
+        Description = description;
+        IsUnsaved = isUnsaved;
+        Visibility = visibility;
+        HasUnsavedChanged = hasUnsavedChanges;
     }
+
+
 
     public static byte[] AsSendingBytes() => new byte[] { 0x6b, 0x00 };
 }

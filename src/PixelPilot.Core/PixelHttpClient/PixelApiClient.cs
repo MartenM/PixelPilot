@@ -277,6 +277,24 @@ public class PixelApiClient : IDisposable
         var world = await GetPublicWorld(worldId);
         return world == null ? null : await GetMinimap(world);
     }
+
+    /// <summary>
+    /// Gets the world message types used by the server.
+    /// </summary>
+    /// <returns>The list of event types</returns>
+    /// <exception cref="PixelApiException"></exception>
+    public async Task<string[]> GetMessageTypes()
+    {
+        var apiUrl = $"{EndPoints.GameHttpEndpoint}/message_types";
+        _logger.LogInformation($"API Request: {apiUrl}");
+        // https://game.pixelwalker.net/
+        
+        var eventTypes =
+            await JsonSerializer.DeserializeAsync<string[]>(await _client.GetStreamAsync(apiUrl), _jsonOptions);
+        return eventTypes ?? throw new PixelApiException("An unknown exception occured while attempting to fetch the worlds");
+        
+        return [];
+    }
     
     public void Dispose()
     {

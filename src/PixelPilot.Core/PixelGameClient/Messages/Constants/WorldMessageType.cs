@@ -4,7 +4,8 @@ public enum WorldMessageType : int
 {
     PlayerInit,
     UpdateRights,
-    WorldMetadata,
+    UpdateWorldMetadata,
+    PerformWorldAction,
     WorldCleared,
     WorldReloaded,
     WorldBlockPlaced,
@@ -22,7 +23,7 @@ public enum WorldMessageType : int
     PlayerReset,
     PlayerTouchBlock,
     PlayerTouchPlayer,
-    PlayerEffect,
+    PlayerAddEffect,
     PlayerRemoveEffect,
     PlayerResetEffects,
     PlayerTeam,
@@ -31,5 +32,5 @@ public enum WorldMessageType : int
     PlayerLocalSwitchReset,
     GlobalSwitchChanged,
     GlobalSwitchReset,
-    PlayerPrivateMessage
+    PlayerDirectMessage,
 }
