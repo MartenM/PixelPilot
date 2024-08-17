@@ -1,4 +1,6 @@
 ﻿using System.Net.WebSockets;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.Extensions.Logging;
 using PixelPilot.Common;
 using PixelPilot.Common.Logging;
@@ -100,8 +102,9 @@ public class PixelPilotClient : IDisposable
     /// Connects to a game room using the specified room type and room ID.
     /// </summary>
     /// <param name="roomId">The ID of the room.</param>
+    /// <param name="joinData">Join data, required for creating unsaved worlds.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
-    public async Task Connect(string roomId)
+    public async Task Connect(string roomId, JoinData? joinData = null)
     {
         var roomType = (await ApiClient.GetRoomTypes())![0];
         
@@ -113,8 +116,21 @@ public class PixelPilotClient : IDisposable
         
         _logger.LogInformation("Successfully acquired the room token");
         var gameRoomUrl = $"{EndPoints.GameWebsocketEndpoint}/room/{joinRequest.Token}";
+
+        if (joinData != null)
+        {
+            var binaryJoinData = System.Text.Encoding.UTF8.GetBytes(JsonSerializer.Serialize(joinData, new JsonSerializerOptions
+            {
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            }));
+            var connectUrl = new Uri($"{gameRoomUrl}?joinData={Convert.ToBase64String(binaryJoinData)}");
+            _socketClient = new WebsocketClient(connectUrl);
+        }
+        else
+        {
+            _socketClient = new WebsocketClient(new Uri(gameRoomUrl));
+        }
         
-        _socketClient = new WebsocketClient(new Uri(gameRoomUrl));
         _socketClient.ReconnectTimeout = TimeSpan.FromSeconds(5000);
         _socketClient.IsReconnectionEnabled = AutomaticReconnect;
         _socketClient.ReconnectionHappened.Subscribe(info =>
