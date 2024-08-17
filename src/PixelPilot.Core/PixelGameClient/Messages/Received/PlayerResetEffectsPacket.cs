@@ -2,13 +2,13 @@
 
 public class PlayerResetEffectsPacket : IPixelGamePlayerPacket
 {
-    public PlayerResetEffectsPacket(int id, bool byServer)
+    public PlayerResetEffectsPacket(int id, bool magic)
     {
         PlayerId = id;
-        ByServer = byServer;
+        Magic = magic;
     }
 
     public int PlayerId { get; }
     
-    public bool ByServer { get; }
+    public bool Magic { get; }
 }
