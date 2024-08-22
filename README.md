@@ -9,7 +9,7 @@ A C# library for interacting with the game [PixelWalker](https://pixelwalker.net
 
 ![Example bot](https://i.imgur.com/47bDpAc.gif)
 
-## 📄 Documentation
+## 📄 Documentation / Tutorials
 
 - [https://martenm.github.io/PixelPilotDocs](https://martenm.github.io/PixelPilotDocs/guides/introduction.html)
 
