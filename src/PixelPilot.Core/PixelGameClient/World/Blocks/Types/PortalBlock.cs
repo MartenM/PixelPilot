@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using PixelPilot.PixelGameClient.Messages;
 using PixelPilot.PixelGameClient.Messages.Send;
+using PixelPilot.PixelGameClient.World.Constants;
 
 namespace PixelPilot.PixelGameClient.World.Blocks;
 
@@ -16,6 +17,11 @@ public class PortalBlock : BasicBlock
         PortalId = portalId;
         TargetId = targetId;
         Direction = direction;
+    }
+
+    public PortalBlock(PixelBlock block, int portalId, int targetId, int direction) : this((int)block, portalId, targetId, direction)
+    {
+        
     }
 
     public override IPixelGamePacketOut AsPacketOut(int x, int y, int layer)

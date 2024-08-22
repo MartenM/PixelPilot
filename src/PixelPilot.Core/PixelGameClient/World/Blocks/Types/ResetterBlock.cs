@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using PixelPilot.PixelGameClient.Messages;
 using PixelPilot.PixelGameClient.Messages.Send;
+using PixelPilot.PixelGameClient.World.Constants;
 
 namespace PixelPilot.PixelGameClient.World.Blocks;
 
@@ -11,6 +12,11 @@ public class ResetterBlock : BasicBlock
     public ResetterBlock(int blockId, bool activated) : base(blockId)
     {
         Status = activated;
+    }
+    
+    public ResetterBlock(PixelBlock block, bool activated) : this((int) block, activated)
+    {
+        
     }
 
     public override IPixelGamePacketOut AsPacketOut(int x, int y, int layer)

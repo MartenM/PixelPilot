@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using PixelPilot.PixelGameClient.Messages;
 using PixelPilot.PixelGameClient.Messages.Send;
+using PixelPilot.PixelGameClient.World.Constants;
 
 namespace PixelPilot.PixelGameClient.World.Blocks;
 
@@ -12,6 +13,11 @@ public class ActivatorBlock : BasicBlock
     {
         SwitchId = switchId;
         Status = status;
+    }
+    
+    public ActivatorBlock(PixelBlock block, int switchId, bool status) : this((int) block, switchId, status)
+    {
+
     }
 
     public override IPixelGamePacketOut AsPacketOut(int x, int y, int layer)

@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using PixelPilot.PixelGameClient.Messages;
 using PixelPilot.PixelGameClient.Messages.Send;
+using PixelPilot.PixelGameClient.World.Constants;
 
 namespace PixelPilot.PixelGameClient.World.Blocks;
 
@@ -13,6 +14,11 @@ public class MorphableBlock : BasicBlock
     public int Morph { get; set; }
     
     public MorphableBlock(int blockId, int morph) : base(blockId)
+    {
+        Morph = morph;
+    }
+    
+    public MorphableBlock(PixelBlock block, int morph) : base(block)
     {
         Morph = morph;
     }
