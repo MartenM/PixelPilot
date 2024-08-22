@@ -56,7 +56,7 @@ else
 In order to send your own blocks you can simply create an instance of the class.
 A block placement also needs a location, so we wrap the block with the `PlacedBlock` class.
 ```csharp
-BasicBlock block = new BasicBlock((int) PixelBlock.Crown);
+BasicBlock block = new BasicBlock(PixelBlock.CrownGold);
 PlacedBlock placedBlock = new PlacedBlock(x, y, WorldLayer.Foreground, block);
 client.Send(placedBlock.AsPacketOut());
 ```
