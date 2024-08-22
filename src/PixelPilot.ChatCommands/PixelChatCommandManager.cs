@@ -1,6 +1,8 @@
-﻿using PixelPilot.ChatCommands.Commands;
+﻿using Microsoft.Extensions.Logging;
+using PixelPilot.ChatCommands.Commands;
 using PixelPilot.ChatCommands.Commands.Help;
 using PixelPilot.ChatCommands.Messages;
+using PixelPilot.Common.Logging;
 using PixelPilot.PixelGameClient;
 using PixelPilot.PixelGameClient.Messages;
 using PixelPilot.PixelGameClient.Messages.Received;
@@ -12,7 +14,8 @@ public class PixelChatCommandManager<T> : IChatCommandManager where T : IPixelPl
 {
     private PixelPilotClient _client;
     private PixelPlayerManager<T> _pixelPlayerManager;
-
+    private readonly ILogger _logger = LogManager.GetLogger("CommandManager");
+    
     public List<string> CommandPrefixes { get; set; } = new() {"!", "."};
     public List<ChatCommand> ChatCommands { get; set; } = new();
 
@@ -62,12 +65,26 @@ public class PixelChatCommandManager<T> : IChatCommandManager where T : IPixelPl
         {
             Task.Run(async () =>
             {
-                await result.WaitAsync(new CancellationToken());
+                try
+                {
+                    await result.WaitAsync(new CancellationToken());
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "An exception was caught while executing the command {CommandText}", commandText);
+                }
             });
         }
         else
         {
-            result.Wait();
+            try
+            {
+                result.Wait();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An exception was caught while executing the command {CommandText}", commandText);
+            }
         }
     }
 
