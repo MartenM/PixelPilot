@@ -62,6 +62,17 @@ public abstract class PixelPlayerManager<T> where T : IPixelPlayer
     }
 
     /// <summary>
+    /// Gets the player by username (case invariant). Returns NULL if no player was found.
+    /// </summary>
+    /// <param name="username">The username</param>
+    /// <returns></returns>
+    public T? GetPlayerByUsername(string username)
+    {
+        return _players.Values.FirstOrDefault(p =>
+            string.Equals(p.Username, username, StringComparison.OrdinalIgnoreCase));
+    }
+
+    /// <summary>
     /// Used to create a new instance of IPixelPlayer
     /// </summary>
     /// <param name="join">The join packet</param>
