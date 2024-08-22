@@ -1,4 +1,5 @@
 ﻿using PixelPilot.PixelGameClient.Messages;
+using PixelPilot.PixelGameClient.World.Constants;
 
 namespace PixelPilot.PixelGameClient.World.Blocks.Placed;
 
@@ -20,6 +21,14 @@ public class PlacedBlock : IPlacedBlock
         X = x;
         Y = y;
         Layer = layer;
+        Block = block;
+    }
+    
+    public PlacedBlock(int x, int y, WorldLayer layer, IPixelBlock block)
+    {
+        X = x;
+        Y = y;
+        Layer = (int) layer;
         Block = block;
     }
     
