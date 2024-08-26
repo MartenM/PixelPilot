@@ -4,7 +4,7 @@ namespace PixelPilot.PixelGameClient.Messages.Received;
 
 public class PlayerMovePacket : IPixelGamePlayerPacket, IPacketOutConvertible
 {
-    public PlayerMovePacket(int id, double x, double y, double velocityX, double velocityY, double modX, double modY, int horizontal, int vertical, bool spacedown, bool spaceJustDown, int tickId)
+    public PlayerMovePacket(int id, double x, double y, double velocityX, double velocityY, double modX, double modY, int horizontal, int vertical, bool spacedown, bool spaceJustDown, bool justTeleported, int tickId)
     {
         PlayerId = id;
         X = x;
@@ -17,6 +17,7 @@ public class PlayerMovePacket : IPixelGamePlayerPacket, IPacketOutConvertible
         Vertical = vertical;
         Spacedown = spacedown;
         SpaceJustDown = spaceJustDown;
+        JustTeleported = justTeleported;
         TickId = tickId;
     }
 
@@ -31,10 +32,11 @@ public class PlayerMovePacket : IPixelGamePlayerPacket, IPacketOutConvertible
     public int Vertical { get; }
     public bool Spacedown { get; }
     public bool SpaceJustDown { get; }
+    public bool JustTeleported { get; }
     public int TickId { get; }
     public IPixelGamePacketOut AsPacketOut()
     {
         return new PlayerMoveOutPacket(X, Y, VelocityX, VelocityY, ModX, ModY, Horizontal, Vertical, Spacedown,
-            SpaceJustDown, TickId);
+            SpaceJustDown, JustTeleported, TickId);
     }
 }

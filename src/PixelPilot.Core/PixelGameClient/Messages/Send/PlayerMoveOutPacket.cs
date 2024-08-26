@@ -4,7 +4,7 @@ namespace PixelPilot.PixelGameClient.Messages.Send;
 
 public class PlayerMoveOutPacket : ReflectivePixelOutPacket
 {
-    public PlayerMoveOutPacket(double x, double y, double velocityX, double velocityY, double modX, double modY, int horizontal, int vertical, bool spacedown, bool spaceJustDown, int tick) : base(WorldMessageType.PlayerMoved)
+    public PlayerMoveOutPacket(double x, double y, double velocityX, double velocityY, double modX, double modY, int horizontal, int vertical, bool spacedown, bool spaceJustDown, bool justTeleported, int tick) : base(WorldMessageType.PlayerMoved)
     {
         X = x;
         Y = y;
@@ -16,6 +16,7 @@ public class PlayerMoveOutPacket : ReflectivePixelOutPacket
         Vertical = vertical;
         Spacedown = spacedown;
         SpaceJustDown = spaceJustDown;
+        justTeleported = justTeleported;
         Tick = tick;
     }
     public double X { get; set; }
@@ -28,6 +29,6 @@ public class PlayerMoveOutPacket : ReflectivePixelOutPacket
     public int Vertical { get; set; }
     public bool Spacedown { get; set; }
     public bool SpaceJustDown { get; set; }
-    
+    public bool JustTeleported { get; set; }
     public int Tick { get; set; }
 }

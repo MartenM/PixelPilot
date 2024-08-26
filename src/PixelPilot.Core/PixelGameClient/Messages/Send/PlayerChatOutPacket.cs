@@ -6,7 +6,7 @@ public class PlayerChatOutPacket : ReflectivePixelOutPacket
 {
     public string Message { get; set; }
     
-    public PlayerChatOutPacket(string message) : base(WorldMessageType.ChatMessage)
+    public PlayerChatOutPacket(string message) : base(WorldMessageType.PlayerChatMessage)
     {
         Message = message;
     }
