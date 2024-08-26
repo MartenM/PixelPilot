@@ -74,7 +74,7 @@ client.OnClientConnected += (_) =>
     client.Send(new PlayerChatOutPacket("Hello world using the PixelPilot API."));
     Thread.Sleep(250);
     PlatformUtil.GetThread(client).Start();
-    client.Send(new PlayerMoveOutPacket(592, 1056, 0, 0, 0, 0, 0, 0, false, false, 100)); 
+    client.Send(new PlayerMoveOutPacket(592, 1056, 0, 0, 0, 0, 0, 0, false, false, false, 100)); 
 };
 
 client.OnClientDisconnected += (_, reason) =>
