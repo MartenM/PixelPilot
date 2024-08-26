@@ -30,7 +30,9 @@ public class DebugTools
             {"mappings", new MappingGenerator()},
             {"json-packet-out", new JsonToPacket()},
             {"struct-migration", new StructureMigrationGenerator()},
-            {"event-types", new WorldEventGenerator()}
+            {"event-types", new WorldEventGenerator()},
+            {"update-pixelblock", new PixelBlockUpdater()},
+            {"update-packets", new WorldPacketTypesUpdater()}
         };
 
         if (options.Tool == null)
