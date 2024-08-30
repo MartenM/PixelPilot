@@ -7,4 +7,5 @@ public interface IPixelPacketQueue : IDisposable
     public int QueueSize { get; }
     public Task Start();
     public Task Stop();
+    public bool IsOwner { get; set; }
 }

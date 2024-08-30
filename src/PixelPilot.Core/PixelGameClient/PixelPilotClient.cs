@@ -309,6 +309,12 @@ public class PixelPilotClient : IDisposable
             BotId = init.PlayerId;
             Username = init.Username;
             
+            // Update rate limit if required
+            if (_packetOutQueue != null)
+            {
+                _packetOutQueue.IsOwner = init.IsWorldOwner;
+            }
+            
             // We connected!
             IsConnected = true;
             _connectCompletion.TrySetResult(true);

@@ -1,6 +1,8 @@
-﻿namespace PixelPilot.PixelGameClient.Messages.Received;
+﻿using PixelPilot.PixelGameClient.Messages.Send;
 
-public class PlayerRemoveEffectPacket : IPixelGamePlayerPacket
+namespace PixelPilot.PixelGameClient.Messages.Received;
+
+public class PlayerRemoveEffectPacket : IPixelGamePlayerPacket, IPacketOutConvertible
 {
     public PlayerRemoveEffectPacket(int id, int effectId)
     {
@@ -10,4 +12,8 @@ public class PlayerRemoveEffectPacket : IPixelGamePlayerPacket
 
     public int PlayerId { get; }
     public int EffectId { get; }
+    public IPixelGamePacketOut AsPacketOut()
+    {
+        return new PlayerEffectRemovedOutPacket(EffectId);
+    }
 }

@@ -22,8 +22,11 @@ public class OutgoingPacketDecoder : CommandLineTool
         }
         
         Console.WriteLine($"Input: \t\t{FormatHex(hexInput)}");
-        Console.WriteLine($"Output: \t{BitConverter.ToString(data)}");
-
+        if (FormatHex(hexInput) != BitConverter.ToString(data))
+        {
+            throw new Exception("Something went horribly wrong man.");
+        }
+        
         var converter = new PacketConverter();
         var stream = new MemoryStream(data);
         var reader = new BinaryReader(stream);

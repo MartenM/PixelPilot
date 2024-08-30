@@ -12,10 +12,16 @@ namespace PixelPilot.PixelGameClient.Messages.Queue;
 public class TokenBucketPacketOutQueue : IPixelPacketQueue
 {
     private readonly ILogger _logger = LogManager.GetLogger("PacketOutQueue");
-    
-    private const int TotalRateLimit = 250;
-    private const int ChatRateLimit = 15;
 
+    private int _totalRateLimit = OwnerTotalRateLimit;
+    private int _chatRateLimit = OwnerChatRateLimit;
+
+    public const int OwnerTotalRateLimit = 250;
+    public const int OwnerChatRateLimit = 15;
+
+    public const int GuestTotalRateLimit = 100;
+    public const int GuestChatRateLimit = 15;
+    
     private const int MaxBurst = 50;
     private const int BurstTotal = 20;
 
@@ -25,23 +31,39 @@ public class TokenBucketPacketOutQueue : IPixelPacketQueue
 
     private PixelPilotClient _client;
 
-    private readonly TokenBucketRateLimiter _totalRateLimiter = new(new TokenBucketRateLimiterOptions()
-    {
-        QueueLimit = 1,
-        TokenLimit = MaxBurst,
-        ReplenishmentPeriod = TimeSpan.FromMilliseconds((1000D /  TotalRateLimit) * BurstTotal),
-        TokensPerPeriod = BurstTotal
-    });
-    
-    private readonly TokenBucketRateLimiter _chatRateLimiter = new(new TokenBucketRateLimiterOptions()
-    {
-        QueueLimit = 1,
-        TokenLimit = 1,
-        ReplenishmentPeriod = TimeSpan.FromMilliseconds(1000D /  ChatRateLimit),
-        TokensPerPeriod = 1
-    });
+    private TokenBucketRateLimiter _totalRateLimiter;
+
+    private TokenBucketRateLimiter _chatRateLimiter;
 
     private int _chatReplenishTime;
+    
+    private bool _isOwner = true;
+
+    public bool IsOwner
+    {
+        get => _isOwner;
+        set
+        {
+            if (_isOwner == value) return;
+            _isOwner = value;
+
+            if (_isOwner)
+            {
+                _totalRateLimit = GuestTotalRateLimit;
+                _chatRateLimit = GuestChatRateLimit;
+            }
+            else
+            {
+                _totalRateLimit = OwnerTotalRateLimit;
+                _chatRateLimit = OwnerChatRateLimit;
+            }
+            
+            // Set property, recreate the rate limiters.
+            _logger.LogDebug("Recreating rate limiters. Limits have been changed.");
+            
+            CreateRateLimiters();
+        }
+    }
     
     /// <summary>
     /// Initial queue
@@ -59,7 +81,39 @@ public class TokenBucketPacketOutQueue : IPixelPacketQueue
         _client = client;
         _cancellationToken = new CancellationTokenSource();
         IsProcessing = false;
+        
+        _totalRateLimiter = new TokenBucketRateLimiter(new TokenBucketRateLimiterOptions()
+        {
+            QueueLimit = 1,
+            TokenLimit = MaxBurst,
+            ReplenishmentPeriod = TimeSpan.FromMilliseconds((1000D /  _totalRateLimit) * BurstTotal),
+            TokensPerPeriod = BurstTotal
+        });
+        
+        CreateRateLimiters();
+    }
 
+    /// <summary>
+    /// Creates the rate limiters based on the properties.
+    /// </summary>
+    private void CreateRateLimiters()
+    {
+        _totalRateLimiter = new TokenBucketRateLimiter(new TokenBucketRateLimiterOptions()
+        {
+            QueueLimit = 1,
+            TokenLimit = MaxBurst,
+            ReplenishmentPeriod = TimeSpan.FromMilliseconds((1000D /  _totalRateLimit) * BurstTotal),
+            TokensPerPeriod = BurstTotal
+        });
+        
+        _chatRateLimiter = new TokenBucketRateLimiter(new TokenBucketRateLimiterOptions()
+        {
+            QueueLimit = 1,
+            TokenLimit = 1,
+            ReplenishmentPeriod = TimeSpan.FromMilliseconds(1000D / _chatRateLimit),
+            TokensPerPeriod = 1
+        });
+        
         var totalTime = (int) _totalRateLimiter.ReplenishmentPeriod.TotalMilliseconds;
         _chatReplenishTime = (int) _chatRateLimiter.ReplenishmentPeriod.TotalMilliseconds;
         

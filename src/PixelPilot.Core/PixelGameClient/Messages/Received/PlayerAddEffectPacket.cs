@@ -1,8 +1,9 @@
 ﻿using PixelPilot.PixelGameClient.Messages.Constants;
+using PixelPilot.PixelGameClient.Messages.Send;
 
 namespace PixelPilot.PixelGameClient.Messages.Received;
 
-public class PlayerEffectPacket : IPixelGamePlayerPacket, IDynamicConstructedPacket
+public class PlayerAddEffectPacket : IPixelGamePlayerPacket, IDynamicConstructedPacket, IPacketOutConvertible
 {
     public int PlayerId { get; }
     
@@ -13,12 +14,17 @@ public class PlayerEffectPacket : IPixelGamePlayerPacket, IDynamicConstructedPac
     
     public dynamic[] ExtraFields { get; }
     
-    public PlayerEffectPacket(List<dynamic> fields)
+    public PlayerAddEffectPacket(List<dynamic> fields)
     {
         PlayerId = fields[0];
         ActivatedByPlayer = fields[1];
         EffectId = fields[2];
 
         ExtraFields = fields.Skip(3).ToArray();
+    }
+
+    public IPixelGamePacketOut AsPacketOut()
+    {
+        return new PlayerAddEffectOutPacket(EffectId, ExtraFields);
     }
 }

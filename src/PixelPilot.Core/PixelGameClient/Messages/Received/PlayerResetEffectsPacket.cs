@@ -1,6 +1,8 @@
-﻿namespace PixelPilot.PixelGameClient.Messages.Received;
+﻿using PixelPilot.PixelGameClient.Messages.Send;
 
-public class PlayerResetEffectsPacket : IPixelGamePlayerPacket
+namespace PixelPilot.PixelGameClient.Messages.Received;
+
+public class PlayerResetEffectsPacket : IPixelGamePlayerPacket, IPacketOutConvertible
 {
     public PlayerResetEffectsPacket(int id, bool magic)
     {
@@ -11,4 +13,9 @@ public class PlayerResetEffectsPacket : IPixelGamePlayerPacket
     public int PlayerId { get; }
     
     public bool Magic { get; }
+    
+    public IPixelGamePacketOut AsPacketOut()
+    {
+        return new PlayerResetEffects();
+    }
 }
