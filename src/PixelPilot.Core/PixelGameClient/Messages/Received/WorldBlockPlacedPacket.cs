@@ -7,6 +7,8 @@ public class WorldBlockPlacedPacket : IDynamicConstructedPacket
 {
     // Basic information that every block placement has.
     public int PlayerId { get; }
+    
+    public bool IsFillOperation { get; set; }
 
     public Point[] Positions { get; }
     public int Layer { get; }
@@ -18,8 +20,9 @@ public class WorldBlockPlacedPacket : IDynamicConstructedPacket
     public WorldBlockPlacedPacket(List<dynamic> fields)
     {
         PlayerId = fields[0];
+        IsFillOperation = fields[1];
 
-        var rawPositions = (byte[]) fields[1];
+        var rawPositions = (byte[]) fields[2];
         Positions = new Point[rawPositions.Length / 4];
         for (int i = 0; i < Positions.Length; i++)
         {
@@ -29,9 +32,9 @@ public class WorldBlockPlacedPacket : IDynamicConstructedPacket
             Positions[i] = new Point(x, y);
         }
         
-        Layer = fields[2];
-        BlockId = fields[3];
+        Layer = fields[3];
+        BlockId = fields[4];
 
-        ExtraFields = fields.Skip(4).ToArray();
+        ExtraFields = fields.Skip(5).ToArray();
     }
 }
