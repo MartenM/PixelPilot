@@ -18,8 +18,16 @@ public abstract class CommandLineTool : IDebugTool
             {
                 break;
             }
-            
-            ExecuteCommand(split, line);
+
+            try
+            {
+                ExecuteCommand(split, line);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error executing the CL Tool");
+                Console.WriteLine(ex);
+            }
         }
     }
 
