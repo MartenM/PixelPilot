@@ -32,7 +32,8 @@ public class DebugTools
             {"struct-migration", new StructureMigrationGenerator()},
             {"event-types", new WorldEventGenerator()},
             {"update-pixelblock", new PixelBlockUpdater()},
-            {"update-packets", new WorldPacketTypesUpdater()}
+            {"update-packets", new WorldPacketTypesUpdater()},
+            {"struct-load", new StructureLoader()}
         };
 
         if (options.Tool == null)
