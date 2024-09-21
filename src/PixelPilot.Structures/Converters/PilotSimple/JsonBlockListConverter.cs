@@ -38,24 +38,31 @@ public class JsonBlockListConverter : JsonConverter<List<IPlacedBlock>>
         List<IPlacedBlock> blocks = new();
         foreach (var baseString in mappedBlockData.BlockData)
         {
+            int x = -1;
+            int y = -1;
+            int layer = -1;
+            int tempId = -1;
+            PixelBlock block = PixelBlock.Empty;
+            
             try
             {
                 var bytes = new MemoryStream(Convert.FromBase64String(baseString));
                 var binReader = new BinaryReader(bytes);
 
-                var x = binReader.ReadInt32();
-                var y = binReader.ReadInt32();
-                var layer = binReader.ReadInt32();
+                x = binReader.ReadInt32();
+                y = binReader.ReadInt32();
+                layer = binReader.ReadInt32();
                 
                 // Mapping code
-                var tempId = binReader.ReadInt32();
-                var block = blockMapping[tempId];
+                tempId = binReader.ReadInt32();
+                block = blockMapping[tempId];
 
                 blocks.Add(new PlacedBlock(x, y, layer, PixelWorld.DeserializeBlock(binReader, block)));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Something went wrong while serializing the entry: {baseString}");
+                _logger.LogError(ex, "Something went wrong while serializing the entry: {BASE_STRING} (X: {X} Y: {Y} LAYER: {LAYER} TEMPID: {TEMP} BLOCK: {PIXEL_BLOCK})", baseString, x, y, layer, tempId, block);
+                throw;
             }
         }
 
