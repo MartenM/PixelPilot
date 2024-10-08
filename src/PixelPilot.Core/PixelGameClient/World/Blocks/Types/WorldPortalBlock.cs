@@ -23,4 +23,18 @@ public class WorldPortalBlock : BasicBlock
     {
         return new WorldBlockPlacedOutPacket(positions, layer, BlockId, [WorldId]);
     }
+    
+    public override byte[] AsWorldBuffer(int x, int y, int layer, int customId)
+    {
+        using MemoryStream memoryStream = new MemoryStream();
+        using BinaryWriter writer = new BinaryWriter(memoryStream);
+        
+        writer.Write(x);
+        writer.Write(y);
+        writer.Write(layer);
+        writer.Write(customId);
+        writer.Write(WorldId);
+
+        return memoryStream.ToArray();
+    }
 }
