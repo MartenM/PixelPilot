@@ -46,4 +46,8 @@ public interface IPixelPlayer
     public bool Spacedown { get; set; }
     public bool SpaceJustDown { get; set; }
     public int TickId { get; set; }
+    
+    // Computed properties
+    public int BlockX => (int)(X / 16 + 0.5);
+    public int BlockY => (int)(Y / 16 + 0.5);
 }

@@ -34,6 +34,9 @@ public class PlayerMovePacket : IPixelGamePlayerPacket, IPacketOutConvertible
     public bool SpaceJustDown { get; }
     public bool JustTeleported { get; }
     public int TickId { get; }
+    
+    public int BlockX => (int)(X / 16 + 0.5);
+    public int BlockY => (int)(Y / 16 + 0.5);
     public IPixelGamePacketOut AsPacketOut()
     {
         return new PlayerMoveOutPacket(X, Y, VelocityX, VelocityY, ModX, ModY, Horizontal, Vertical, Spacedown,
