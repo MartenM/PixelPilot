@@ -74,4 +74,9 @@ public class BasicBlock : IPixelBlock
     {
         return BlockId;
     }
+
+    public virtual object Clone()
+    {
+        return MemberwiseClone();
+    }
 }

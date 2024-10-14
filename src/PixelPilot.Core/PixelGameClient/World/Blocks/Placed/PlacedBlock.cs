@@ -64,4 +64,9 @@ public class PlacedBlock : IPlacedBlock
     {
         return HashCode.Combine(X, Y, Layer, Block);
     }
+
+    public object Clone()
+    {
+        return new PlacedBlock(X, Y, Layer, (IPixelBlock) Block.Clone());
+    }
 }
