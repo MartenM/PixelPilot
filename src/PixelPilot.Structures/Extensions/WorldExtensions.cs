@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
 using PixelPilot.PixelGameClient;
 using PixelPilot.PixelGameClient.Messages;
-using PixelPilot.PixelGameClient.Messages.Send;
 using PixelPilot.PixelGameClient.World;
+using PixelPilot.PixelGameClient.World.Blocks;
 using PixelPilot.PixelGameClient.World.Blocks.Placed;
 using PixelPilot.PixelGameClient.World.Constants;
 using PixelPilot.PixelHttpClient;
@@ -45,7 +45,19 @@ public static class WorldExtensions
         return GetStructure(world, topleft.X, topleft.Y, width + 1, height + 1, copyEmpty);
     }
 
-    public static List<IPlacedBlock> GetDifference(this PixelWorld world, Structure structure, int x = 0, int y = 0)
+    /// <summary>
+    /// Get the difference between the world and structure at a specified place in the world.
+    /// The returned list will be translated towards the origin point (unless disabled using the parameters) by copying the original blocks.
+    /// If not translated the original references will be kept.
+    /// </summary>
+    /// <param name="world">The from which to check if blocks are already placed</param>
+    /// <param name="structure">The structure to be placed.</param>
+    /// <param name="x">The X location (Top Left)</param>
+    /// <param name="y">The Y location (Top Left)</param>
+    /// <param name="translate">If the output should be translated to the differences in the world.</param>
+    /// <returns></returns>
+    /// <exception cref="PixelGameException"></exception>
+    public static List<IPlacedBlock> GetDifference(this PixelWorld world, Structure structure, int x = 0, int y = 0, bool translate = true)
     {
         List<IPlacedBlock> difference = new();
         if (structure.Width + x > world.Width || structure.Height + y > world.Height)
@@ -60,7 +72,12 @@ public static class WorldExtensions
             difference.Add(block);
         }
 
-        return difference;
+        // If not translated, just return the stucture differences.
+        if (!translate) return difference;
+        
+        // Deep copy the blocks and translate them.
+        var translated = difference.Select(pb => new PlacedBlock(pb.X + x, pb.Y + y, pb.Layer, (IPixelBlock) pb.Block.Clone())).ToList();
+        return translated.Cast<IPlacedBlock>().ToList();
     }
 
     /// <summary>
