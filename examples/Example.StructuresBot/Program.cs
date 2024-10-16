@@ -1,18 +1,20 @@
-﻿using System.Drawing;
-using System.Text.Json;
+﻿// See https://aka.ms/new-console-template for more information
+
+// Load the configuration. Don't store your account token in the code :)
+using System.Drawing;
 using Example.BasicBot;
 using Microsoft.Extensions.Configuration;
 using PixelPilot.Common.Logging;
 using PixelPilot.PixelGameClient;
 using PixelPilot.PixelGameClient.Messages;
 using PixelPilot.PixelGameClient.Messages.Received;
-using PixelPilot.PixelGameClient.Messages.Send;
+using PixelPilot.PixelGameClient.Players;
 using PixelPilot.PixelGameClient.Players.Basic;
 using PixelPilot.PixelGameClient.World;
+using PixelPilot.Structures;
 using PixelPilot.Structures.Converters.PilotSimple;
 using PixelPilot.Structures.Extensions;
 
-// Load the configuration. Don't store your account token in the code :)
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("config.json")
     .AddEnvironmentVariables()
@@ -26,187 +28,112 @@ if (config == null)
     return;
 }
 
-// Create a client.
+// Basic things and vars
+Structure? currentStructure = null;
+var point1 = new Point(0, 0);
+var point2 = new Point(0, 0);
+
 var client = PixelPilotClient.Builder()
     .SetToken(config.AccountToken)
+    // .SetEmail(config.AccountEmail)
+    // .SetPassword(config.AccountPassword)
+    .SetPrefix("[StructBot] ")
     .SetAutomaticReconnect(false)
     .Build();
 
-// Player manager allows you to easily keep track of player stats.
-// For advanced users, it can be extended to include relevant information for you.
+var world = new PixelWorld();
+client.OnPacketReceived += world.HandlePacket;
+
 var playerManager = new PlayerManager();
 client.OnPacketReceived += playerManager.HandlePacket;
 
-// Create a PixelWorld class and attach the client to it.
-// Allow it to listen to client updates. Not required!
-var world = new PixelWorld();
-client.OnPacketReceived += world.HandlePacket;
-world.OnBlockPlaced += (_, playerId, oldBlock, block) =>
-{
-    if (playerId == client.BotId) return;
-    
-    int Z = 4;
-    // Loop through a square area of size (2*Z+1) around the placed block
-    for (int dx = -Z; dx <= Z; dx++)
-    {
-        for (int dy = -Z; dy <= Z; dy++)
-        {
-            // Calculate the coordinates of the new block
-            int newX = block.X + dx;
-            int newY = block.Y + dy;
-
-            // Optionally, check if the new coordinates are within the world bounds
-            // if (newX < 0 || newX >= worldWidth || newY < 0 || newY >= worldHeight) continue;
-            
-            // Send the block placement packet to the client
-            if (world.BlockAt(block.Layer, newX, newY).Block == block.Block.Block) continue;
-            client.Send(block.Block.AsPacketOut(newX, newY, block.Layer));
-        }
-    }
-};
-
-
-// Executed when the client receives a packet!
-var p1 = new Point(0, 0);
-var p2 = new Point(99, 99);
-client.OnPacketReceived += async (_, packet) =>
+// Setup some basic commands. Only allow me to execute them.
+client.OnPacketReceived += (_, packet) =>
 {
     var playerPacket = packet as IPixelGamePlayerPacket;
     if (playerPacket == null) return;
-
-    var player = playerManager.GetPlayer(playerPacket.PlayerId);
-    if (player == null) return;
     
-    // Make use of strongly typed packets!
-    switch (packet)
+    IPixelPlayer? player = playerManager.GetPlayer(playerPacket.PlayerId);
+    if (player == null) return;
+
+    // Simple command structures.
+    if (playerPacket is PlayerChatPacket chat)
     {
-        case PlayerChatPacket { Message: ".stop" }:
-            await client.Disconnect();
-            Environment.Exit(0);
-            return;
-        case PlayerChatPacket { Message: ".test" }:
-            playerManager.Players
-                .Where(p => p.Deaths > 2)
-                .ToList()
-                .ForEach(p =>
+        if (!chat.Message.StartsWith(".") || player.Username != "MARTEN") return;
+
+        var fullText = chat.Message.Substring(1);
+        var args = fullText.Split(' ');
+
+        switch (args[0])
+        {
+            case "p1":
+                point1 = new Point(player.BlockX, player.BlockY);
+                client.SendChat($"Point 1 has been set. {point1}");
+                break;
+            case "p2":
+                point2 = new Point(player.BlockX, player.BlockY);
+                client.SendChat($"Point 2 has been set. {point2}");
+                break;
+            case "copy":
+                currentStructure = world.GetStructure(point1, point2, false);
+                client.SendChat("Current structure has been set.");
+                break;
+            case "save":
+                if (currentStructure == null)
                 {
-                    Task.Run(async () =>
-                    {
-                        client.Send(new PlayerChatOutPacket($"/pm {p.Username} Man you should die less often!"));
-                        await Task.Delay(1000);
-                        client.Send(new PlayerChatOutPacket($"/reset {p.Username}"));
-                        client.Send(new PlayerChatOutPacket($"/pm {p.Username} Or maybe..."));
-                        await Task.Delay(1000);
-                        client.Send(new PlayerChatOutPacket($"/kick {p.Username}"));
-                    });
-                });
-            return;
-        case PlayerChatPacket { Message: ".p1" } chat:
-        {
-            p1 = new Point((int)(player.X / 16), (int)(player.Y / 16));
-            client.Send(new PlayerChatOutPacket(p1.ToString()));
-            break;
-        }
-        case PlayerChatPacket { Message: ".p2" } chat:
-        {
-            p2 = new Point((int)(player.X / 16), (int)(player.Y / 16));
-            client.Send(new PlayerChatOutPacket(p2.ToString()));
-            break;
-        }
-        case PlayerChatPacket { Message: ".world" } chat:
-        {
-            var structure = world.GetStructure(0, 0, width: world.Width, height: world.Height, copyEmpty: false);
-            
-            // Save
-            var json = PilotSaveSerializer.Serialize(structure);
-            File.WriteAllText("test-struct.json", json);
-            client.Send(new PlayerChatOutPacket("Struct saved!"));
-            break;
-        }
-        case PlayerChatPacket { Message: ".save" } chat:
-        {
-            var structure = world.GetStructure(p1, p2, copyEmpty: false);
-            
-            // Save
-            var json = PilotSaveSerializer.Serialize(structure);
-            File.WriteAllText("test-struct.json", json);
-            client.Send(new PlayerChatOutPacket("Struct saved!"));
-            break;
-        }
-        case PlayerChatPacket { Message: ".load" } chat:
-        {
-            string json = File.ReadAllText("test-struct.json");
-            var structure = PilotSaveSerializer.Deserialize(json);
-            
-            client.Send(new PlayerChatOutPacket("Struct pasting..."));
+                    client.SendChat("Please copy a structure using .copy");
+                    return;
+                }
+                
+                if (args.Length < 2 || currentStructure == null)
+                {
+                    client.SendChat("Please provide a file name.");
+                    return;
+                }
+                
+                var rawSave = PilotSaveSerializer.Serialize(currentStructure);
+                File.WriteAllText($"./{args[1]}.json", rawSave);
+                
+                client.SendChat("Structure saved to file.");
+                break;
+            case "load":
+                if (args.Length < 2)
+                {
+                    client.SendChat("Please provide a file name.");
+                    return;
+                }
 
-            var packets = world.GetDifference(structure).ToChunkedPackets();
-            foreach (var chunkyPacket in packets)
+                var rawLoad = File.ReadAllText($"./{args[1]}.json");
+                currentStructure = PilotSaveSerializer.Deserialize(rawLoad);
+                
+                client.SendChat("Structure loaded from file.");
+                break;
+            case "paste":
             {
-                client.Send(chunkyPacket);
-            }
-            
-            //await world.GetDifference(structure).PasteInOrder(client, new Point(0, 0));
-            
-            break;
-        }
-        case PlayerChatPacket { Message: ".load tl" } chat:
-        {
-            string json = File.ReadAllText("test-struct.json");
-            var structure = PilotSaveSerializer.Deserialize(json);
-            
-            client.Send(new PlayerChatOutPacket("Struct pasting..."));
-            await world.GetDifference(structure, (int) player.X / 16,  (int) player.Y / 16).PasteInOrder(client, new Point((int)(player.X / 16), (int)(player.Y / 16)));
-            
-            break;
-        }
-        case PlayerChatPacket { Message: ".load br" } chat:
-        {
-            string json = File.ReadAllText("test-struct.json");
-            var structure = PilotSaveSerializer.Deserialize(json);
-            
-            client.Send(new PlayerChatOutPacket("Struct pasting..."));
-            try
-            {
-                await world.GetDifference(structure, 
-                        (int)player.X / 16 - structure.Width,
-                        (int)player.Y / 16 - structure.Height
-                        )
-                    .PasteInOrder(client, new Point(
-                            (int)player.X / 16 - structure.Width,
-                            (int)player.Y / 16 - structure.Height
-                        )
-                    );
+                if (currentStructure == null) return;
+                
+                var pasteX = player.BlockX;
+                var pasteY = player.BlockY;
 
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-            
-            break;
-        }
-        case PlayerChatPacket { Message: ".diff" } chat:
-        {
-            string json = File.ReadAllText("test-struct.json");
-            var structure = PilotSaveSerializer.Deserialize(json);
+                
+                
+                // Get the difference in packets. Then chunk the result together and send the packets.
+                // world.GetDifference(currentStructure, pasteX, pasteY).PasteInOrder(client, new Point(0, 0));
 
-            client.Send(new PlayerChatOutPacket("Struct pasting..."));
-            world.GetDifference(structure, (int) player.X / 16,  (int) player.Y / 16).ForEach(b => Console.WriteLine(JsonSerializer.Serialize(b)));
-            break;
+                var packets = world.GetDifference(currentStructure, pasteX, pasteY).ToChunkedPackets();
+                
+                client.SendChat($"Pasting structure... {packets.Count}");
+                client.SendRange(packets);
+                
+                break;
+            }
         }
+        return;
     }
 };
 
-// Executed once the client receives INIT
-// Make a platform and do some silly loops.
-client.OnClientConnected += (_) =>
-{
-    client.Send(new PlayerChatOutPacket("Hello world using the PixelPilot API."));
-};
+await client.Connect("tr51rwdec7sh27u");
+await world.InitTask;
 
-// Connect to a room.
-await client.Connect("r082b210d67df52");
-
-// Don't terminate.
-Thread.Sleep(-1);
+client.SendChat("Connected!");
+await client.WaitForDisconnect();
