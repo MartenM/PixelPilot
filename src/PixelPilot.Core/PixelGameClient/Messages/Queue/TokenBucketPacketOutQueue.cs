@@ -86,7 +86,7 @@ public class TokenBucketPacketOutQueue : IPixelPacketQueue
         {
             QueueLimit = 1,
             TokenLimit = MaxBurst,
-            ReplenishmentPeriod = TimeSpan.FromMilliseconds((1000D /  _totalRateLimit) * BurstTotal),
+            ReplenishmentPeriod = TimeSpan.FromMilliseconds((1000.00 /  _totalRateLimit) * BurstTotal),
             TokensPerPeriod = BurstTotal
         });
         
