@@ -226,6 +226,20 @@ public class PixelPilotClient : IDisposable
     }
 
     /// <summary>
+    /// Sends multiple pixel game packets.
+    /// Uses an internal rate limiter to limit packets.
+    /// </summary>
+    /// <param name="packets">The packets to be send</param>
+    public void SendRange(IEnumerable<IPixelGamePacketOut> packets)
+    {
+        foreach (var packet in packets)
+        {
+            if (_packetOutQueue == null) SendDirect(packet);
+            else _packetOutQueue?.EnqueuePacket(packet);
+        }
+    }
+
+    /// <summary>
     /// Sends a chat message while ensuring that the message doesn't become too long.
     /// </summary>
     /// <param name="msg">The message</param>
@@ -313,6 +327,11 @@ public class PixelPilotClient : IDisposable
             if (_packetOutQueue != null)
             {
                 _packetOutQueue.IsOwner = init.IsWorldOwner;
+
+                if (!init.IsWorldOwner)
+                {
+                    _logger.LogInformation("You are not the world owner. Rate limiting is being applied.");
+                }
             }
             
             // We connected!
