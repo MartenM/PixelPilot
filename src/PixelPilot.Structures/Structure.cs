@@ -17,8 +17,8 @@ public class Structure
     public int Width { get; }
     public int Height { get; }
     public Dictionary<string, string> Meta { get; set; }
-    public bool ContainsEmpty { get; set; }
-    public List<IPlacedBlock> Blocks { get; }
+    public bool ContainsEmpty { get; private set; }
+    public List<IPlacedBlock> Blocks { get; private set; }
 
     /// <summary>
     /// Returns a computed list of the structure which includes empty blocks.
@@ -55,7 +55,22 @@ public class Structure
             }
             
             emptyList.AddRange(Blocks);
+
+            if (emptyList.Count != 2 * Width * Height)
+                throw new Exception(
+                    $"Missing or extra blocks. Expected: {Width} * {Height} * 2 = {Width * Height * 2} but got {emptyList.Count} instead.");
+            
             return emptyList;
         }
+    }
+
+    /// <summary>
+    /// Adds empty blocks where no blocks are in this structure.
+    /// This action will modify the original struct.
+    /// </summary>
+    public void AddEmptyBlocks()
+    {
+        Blocks = BlocksWithEmpty.ToList();
+        ContainsEmpty = true;
     }
 }
