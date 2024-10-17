@@ -66,6 +66,9 @@ client.OnPacketReceived += (_, packet) =>
 
         switch (args[0])
         {
+            case "exec":
+                client.SendChat($"/{string.Join(" ", args.Skip(1))}", prefix: false);
+                break;
             case "p1":
                 point1 = new Point(player.BlockX, player.BlockY);
                 client.SendChat($"Point 1 has been set. {point1}");
