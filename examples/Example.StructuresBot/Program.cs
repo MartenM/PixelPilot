@@ -77,6 +77,7 @@ client.OnPacketReceived += (_, packet) =>
                 point2 = new Point(player.BlockX, player.BlockY);
                 client.SendChat($"Point 2 has been set. {point2}");
                 break;
+            case "select":
             case "copy":
                 currentStructure = world.GetStructure(point1, point2, false);
                 client.SendChat("Current structure has been set.");
