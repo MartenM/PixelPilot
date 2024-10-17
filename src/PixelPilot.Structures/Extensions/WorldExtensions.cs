@@ -99,12 +99,16 @@ public static class WorldExtensions
         int attempts = 0;
         while (attempts < maxAttempts)
         {
-            var diff = world.GetDifference(structure, pasteLocation.X, pasteLocation.Y, true);
-            if (diff.Count == 0) return;
+            var diffPackets = world
+                .GetDifference(structure, pasteLocation.X, pasteLocation.Y, true)
+                .ToChunkedPackets();
+            
+            // If no diff, return.
+            if (diffPackets.Count == 0) return;
             
             // Send packets. Assumes max ping 250.
-            client.SendRange(diff.ToChunkedPackets());
-            await Task.Delay(250 + diff.Count * 5);
+            client.SendRange(diffPackets);
+            await Task.Delay(250 + diffPackets.Count * 5);
             
             attempts++;
         }
