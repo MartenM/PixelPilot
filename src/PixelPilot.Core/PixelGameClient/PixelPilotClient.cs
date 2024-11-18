@@ -265,9 +265,10 @@ public class PixelPilotClient : IDisposable
     /// </summary>
     /// <param name="username">Player username</param>
     /// <param name="msg">The message</param>
-    public void SendPm(string username, string msg)
+    /// <param name="prefix">If the message should contain the prefix</param>
+    public void SendPm(string username, string msg, bool prefix = true)
     {
-        var maxLineLength = 100 - (BotPrefix?.Length ?? 0);
+        var maxLineLength = 100 - (prefix ? (BotPrefix?.Length ?? 0) : 0);
         var charCount = 0;
         
         var lines = msg.Split(' ', StringSplitOptions.RemoveEmptyEntries)
