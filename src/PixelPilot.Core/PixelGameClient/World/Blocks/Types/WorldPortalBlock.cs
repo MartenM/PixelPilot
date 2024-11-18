@@ -8,10 +8,12 @@ namespace PixelPilot.PixelGameClient.World.Blocks;
 public class WorldPortalBlock : BasicBlock
 {
     public string WorldId { get; set; }
-
-    public WorldPortalBlock(string worldId) : base(PixelBlock.PortalWorld)
+    private int SpawnId { get; set; }
+    
+    public WorldPortalBlock(string worldId, int spawnId) : base(PixelBlock.PortalWorld)
     {
         WorldId = worldId;
+        SpawnId = spawnId;
     }
 
     public override IPixelGamePacketOut AsPacketOut(int x, int y, int layer)
@@ -21,7 +23,7 @@ public class WorldPortalBlock : BasicBlock
     
     public override IPixelGamePacketOut AsPacketOut(List<Point> positions, int layer)
     {
-        return new WorldBlockPlacedOutPacket(positions, layer, BlockId, [WorldId]);
+        return new WorldBlockPlacedOutPacket(positions, layer, BlockId, [WorldId, SpawnId]);
     }
     
     public override byte[] AsWorldBuffer(int x, int y, int layer, int customId)
@@ -34,6 +36,7 @@ public class WorldPortalBlock : BasicBlock
         writer.Write(layer);
         writer.Write(customId);
         writer.Write(WorldId);
+        writer.Write(SpawnId);
 
         return memoryStream.ToArray();
     }

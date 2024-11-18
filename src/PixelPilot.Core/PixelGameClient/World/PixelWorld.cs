@@ -294,7 +294,7 @@ public class PixelWorld
             case BlockType.SwitchResetter:
                 return new ResetterBlock((int)block, extra[0]);
             case BlockType.WorldPortal:
-                return new WorldPortalBlock(extra[0]);
+                return new WorldPortalBlock(extra[0], extra[1]);
             case BlockType.EffectLeveled:
                 return new LeveledEffectBlock((int)block, extra[0]);
             case BlockType.EffectTimed:
@@ -339,7 +339,7 @@ public class PixelWorld
             case BlockType.SwitchResetter:
                 return new ResetterBlock((int)pixelBlock, packet.ExtraFields[0] == 1);
             case BlockType.WorldPortal:
-                return new WorldPortalBlock(packet.ExtraFields[0]);
+                return new WorldPortalBlock(packet.ExtraFields[0], packet.ExtraFields[1]);
             case BlockType.EffectLeveled:
                 return new LeveledEffectBlock((int)pixelBlock, packet.ExtraFields[0]);
             case BlockType.EffectTimed:

@@ -17,7 +17,7 @@ public static class PixelBlockExtensions
             case BlockType.Portal:
                 return new[] { PacketFieldType.Int32, PacketFieldType.Int32, PacketFieldType.Int32 };
             case BlockType.WorldPortal:
-                return new[] { PacketFieldType.String };
+                return new[] { PacketFieldType.String, PacketFieldType.Int32 };
             case BlockType.Sign:
                 return new[] { PacketFieldType.String };
             case BlockType.EffectTimed:
