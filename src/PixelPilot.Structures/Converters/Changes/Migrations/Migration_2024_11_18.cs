@@ -1,4 +1,5 @@
-﻿using PixelPilot.Structures.Converters.PilotSimple;
+﻿using PixelPilot.Structures.Converters.Changes;
+using PixelPilot.Structures.Converters.PilotSimple;
 
 namespace PixelPilot.Structures.Converters.Migrations.Migrations;
 

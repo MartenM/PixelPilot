@@ -5,6 +5,7 @@ using PixelPilot.Common.Logging;
 using PixelPilot.PixelGameClient.World;
 using PixelPilot.PixelGameClient.World.Blocks.Placed;
 using PixelPilot.PixelGameClient.World.Constants;
+using PixelPilot.Structures.Converters.Changes;
 using PixelPilot.Structures.Converters.Migrations;
 
 namespace PixelPilot.Structures.Converters.PilotSimple;

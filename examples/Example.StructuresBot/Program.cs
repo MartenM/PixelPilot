@@ -118,8 +118,6 @@ client.OnPacketReceived += (_, packet) =>
                 
                 var pasteX = player.BlockX;
                 var pasteY = player.BlockY;
-
-                
                 
                 // Get the difference in packets. Then chunk the result together and send the packets.
                 // world.GetDifference(currentStructure, pasteX, pasteY).PasteInOrder(client, new Point(0, 0));

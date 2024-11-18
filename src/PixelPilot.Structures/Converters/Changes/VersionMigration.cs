@@ -1,6 +1,6 @@
 ﻿using PixelPilot.Structures.Converters.PilotSimple;
 
-namespace PixelPilot.Structures.Converters.Migrations;
+namespace PixelPilot.Structures.Converters.Changes;
 
 public abstract class VersionMigration(int fromVersion)
 {

@@ -1,7 +1,7 @@
 ﻿using PixelPilot.Structures.Converters.Migrations.Migrations;
 using PixelPilot.Structures.Converters.PilotSimple;
 
-namespace PixelPilot.Structures.Converters.Migrations;
+namespace PixelPilot.Structures.Converters.Changes;
 
 public class VersionManager
 {
