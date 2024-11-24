@@ -27,7 +27,7 @@ public class Migration_2024_11_18() : VersionMigration(3)
             var tempId = binReader.ReadInt32();
             if (tempId != mappedWorldPortal) continue;
 
-            string worldId = binReader.ReadString();
+            string worldId = bytes.Position != bytes.Length ? binReader.ReadString() : "";
             
             // Now it's missing the spawn ID
             
