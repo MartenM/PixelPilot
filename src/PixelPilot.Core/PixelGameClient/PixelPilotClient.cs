@@ -277,7 +277,7 @@ public class PixelPilotClient : IDisposable
 
         foreach (var line in lines)
         {
-            Send(new PlayerChatOutPacket($"/pm {username} {BotPrefix ?? ""}{line}"));
+            Send(new PlayerChatOutPacket($"/pm {username} {(prefix && BotPrefix != null ? BotPrefix : "")}{line}"));
         }
     }
     
