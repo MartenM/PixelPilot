@@ -1,0 +1,358 @@
+﻿syntax = "proto3";
+package WorldPackets;
+
+option csharp_namespace = "PixelWalker.Networking.Protobuf.WorldPackets";
+
+
+message WorldPacket {
+  oneof packet {
+    /* Ping packet */
+    Ping ping = 1;
+
+    /* On join */
+    PlayerInitPacket player_init_packet = 2;
+    PlayerInitReceivedPacket player_init_received = 3;
+
+    /* Player packets - Send/received while playing */
+    PlayerJoinedPacket player_joined_packet = 4;
+    PlayerLeftPacket player_left_packet = 5;
+    PlayerChatPacket player_chat_packet = 6;
+    PlayerUpdateRightsPacket player_update_rights_packet = 7;
+    PlayerMovedPacket player_moved_packet = 8;
+    PlayerFacePacket player_face_packet = 9;
+    PlayerGodModePacket player_god_mode_packet = 10;
+    PlayerModModePacket player_mod_mode_packet = 11;
+    PlayerRespawnPacket player_respawn_packet = 12;
+    PlayerResetPacket player_reset_packet = 13;
+    PlayerTouchBlockPacket player_touch_block_packet = 14;
+    PlayerAddEffectPacket player_add_effect_packet = 15;
+    PlayerRemoveEffectPacket player_remove_effect_packet = 16;
+    PlayerResetEffectsPacket player_reset_effects_packet = 17;
+    PlayerTeamUpdatePacket player_team_update_packet = 18;
+    PlayerCountersUpdatePacket player_counters_update_packet = 19;
+    PlayerLocalSwitchChangedPacket player_local_switch_changed_packet = 20;
+    PlayerLocalSwitchResetPacket player_local_switch_reset_packet = 21;
+    PlayerDirectMessagePacket player_direct_message_packet = 22;
+    PlayerTouchPlayerPacket player_touch_player_packet = 23;
+    PlayerTeleportedPacket player_teleported_packet = 24;
+
+    /* World packets - Mostly send out by the server */
+    WorldReloadedPacket world_reloaded_packet = 25;
+    WorldClearedPacket world_cleared_packet = 26;
+    WorldMetaUpdatePacket world_meta_update_packet = 27;
+    WorldBlockPlacedPacket world_block_placed_packet = 28;
+    WorldBlockFilledPacket world_block_filled_packet = 29;
+
+    /* MISC */
+    OldChatMessagesPacket old_chat_messages_packet = 30;
+    SystemMessagePacket system_message_packet = 31;
+
+    GlobalSwitchChangedPacket global_switch_changed_packet = 32;
+    GlobalSwitchResetPacket global_switch_reset_packet = 33;
+
+    PerformWorldActionPacket perform_world_action_packet = 34;
+  }
+}
+
+message Ping {
+  /* Empty */
+}
+
+/*
+ * Misc PACKETS
+ */
+message GlobalSwitchChangedPacket {
+  int32 player_id = 1;
+  int32 switch_id = 2;
+  bool enabled = 3;
+}
+
+message GlobalSwitchResetPacket {
+  int32 player_id = 1;
+  bool enabled = 2;
+}
+
+message SystemMessagePacket {
+  string title = 1;
+  string message = 2;
+  bool is_dialog = 3;
+}
+
+message OldChatMessagesPacket {
+  repeated OldChatMessage old_chat_messages = 1;
+}
+
+message PerformWorldActionPacket {
+  enum Action {
+    SAVE_WORLD = 0;
+    RELOAD_WORLD = 1;
+    CLEAR_WORLD = 3;
+  }
+
+  Action action = 1;
+}
+
+/*
+ * World PACKETS
+ */
+message WorldReloadedPacket {
+  bytes world_data = 1;
+}
+
+message WorldClearedPacket {
+  /* Empty */
+}
+
+message WorldBlockPlacedPacket {
+  optional int32 player_id = 1;
+
+  bool is_fill_operation = 3;
+
+  // Repeated for use in fill operations
+  repeated PointInteger positions = 4;
+  int32 layer = 5;
+  int32 block_id = 6;
+
+  // Legacy? Holds a byte[] that can hold extra information
+  bytes extra_fields = 7;
+}
+
+message WorldBlockFilledPacket {
+  PointInteger position = 1;
+  bool ignoreLayers = 2;
+  int32 layer = 3;
+  int32 block_id = 4;
+
+  // Legacy? Holds a byte[] that can hold extra information
+  bytes extra_fields = 5;
+}
+
+message WorldMetaUpdatePacket {
+  WorldMeta meta = 1;
+}
+
+
+/*
+ * PLAYER PACKETS
+ */
+message PlayerInitPacket {
+  /* player_id located in PlayerProperties */
+  PlayerProperties player_properties = 1;
+  WorldMeta world_meta = 2;
+
+  /* Static world information */
+  int32 world_width = 3;
+  int32 world_height = 4;
+
+  /* Very specific world state */
+  bytes global_switch_state = 6;
+  bytes world_data = 7;
+}
+
+message PlayerInitReceivedPacket {
+  /* Pong back to the server that init has been done. */
+}
+
+message PlayerJoinedPacket {
+  PlayerProperties properties = 1;
+  PlayerWorldState world_state = 2;
+}
+
+message PlayerLeftPacket {
+  /* No content required */
+  int32 player_id = 1;
+}
+
+message PlayerChatPacket {
+  int32 player_id = 1;
+  string message = 2;
+}
+
+message PlayerUpdateRightsPacket {
+  optional int32 player_id = 1;
+  bool can_edit = 2;
+  bool can_god = 3;
+}
+
+message PlayerMovedPacket {
+  optional int32 player_id = 1;
+
+  PointDouble position = 2;
+  double velocity_x = 3;
+  double velocity_y = 4;
+  double modifier_x = 5;
+  double modifier_y = 6;
+  int32 horizontal = 7;
+  int32 vertical = 8;
+
+  bool space_down = 9;
+  bool space_just_down = 10;
+  bool just_teleported = 11;
+
+  int32 tick_id = 12;
+}
+
+message PlayerTeleportedPacket {
+  optional int32 player_id = 1;
+  PointDouble position = 2;
+}
+
+message PlayerFacePacket {
+  optional int32 player_id = 1;
+  int32 face_id = 2;
+}
+
+message PlayerGodModePacket {
+  optional int32 player_id = 1;
+  bool enabled = 2;
+}
+
+message PlayerModModePacket {
+  optional int32 player_id = 1;
+  bool enabled = 3;
+}
+
+message PlayerRespawnPacket {
+  optional int32 player_id = 1;
+  PointInteger position = 2;
+}
+
+message PlayerResetPacket {
+  optional int32 player_id = 1;
+  optional PointInteger position = 2;
+}
+
+message PlayerTouchBlockPacket {
+  optional int32 player_id = 1;
+  optional PointInteger position = 2;
+  int32 block_id = 3;
+}
+
+message PlayerTouchPlayerPacket {
+  optional int32 player_id = 1;
+  int32 touched_player = 2;
+  TouchType touch_type = 3;
+
+  enum TouchType {
+    START = 0;
+    END = 1;
+  }
+}
+
+message PlayerAddEffectPacket {
+  optional int32 player_id = 1;
+  bool from_server = 2;
+
+  /* Effect data */
+  int32 effect_id = 3;
+
+  optional int32 duration = 4;
+  optional int32 strength = 5;
+}
+
+message PlayerRemoveEffectPacket {
+  optional int32 player_id = 1;
+
+  int32 effect_id = 4; // Todo: Make this an enum.
+}
+
+message PlayerResetEffectsPacket {
+  optional int32 player_id = 1;
+  bool from_server = 2;
+}
+
+message PlayerTeamUpdatePacket {
+  optional int32 player_id = 1;
+  int32 team_id = 2;
+}
+
+message PlayerCountersUpdatePacket {
+  optional int32 player_id = 1;
+
+  int32 coins = 2;
+  int32 blue_coins = 3;
+  int32 deaths = 4;
+}
+
+message PlayerLocalSwitchChangedPacket {
+  optional int32 player_id = 1;
+  int32 switch_id = 2;
+  bool switch_enabled = 3;
+}
+
+message PlayerLocalSwitchResetPacket {
+  optional int32 player_id = 1;
+  int32 switch_id = 2;
+  bool switch_enabled = 3;
+}
+
+message PlayerDirectMessagePacket {
+  int32 from_player_id = 1;
+  int32 target_player_id = 2;
+
+  string message = 3;
+}
+
+/*
+     ============================================
+            PARTS, not messages themselves.
+     ============================================
+ */
+message PlayerWorldState {
+  int32 coins_gold = 1;
+  int32 coins_blue = 2;
+  int32 deaths = 3;
+  repeated PointInteger collected_items = 4;
+  bool has_gold_crown = 5;
+  bool has_silver_crown = 6;
+  bytes switches = 7;
+  bool godmode = 8;
+  bool modmode = 9;
+  int32 team_id = 10;
+}
+
+message PlayerProperties {
+  int32 player_id = 1;
+  string account_id = 2;
+  string username = 3;
+  int32 face = 4;
+  bool is_admin = 5;
+  bool is_friend = 6;
+  PointDouble position = 7;
+  int32 username_color = 8;
+  bool is_world_owner = 9;
+  bool can_edit = 10;
+  bool can_god = 11;
+}
+
+message WorldMeta {
+  string title = 1;
+  int32 plays = 2;
+  string owner = 3;
+  string description = 4;
+  string visibility = 5;
+  bool is_unsaved = 6;
+  bool has_unsaved_changes = 7;
+}
+
+message OldChatMessage {
+  string player_name = 1;
+  int32 player_color = 2;
+  string message = 3;
+}
+
+/*
+ * Represents an integer position.
+ */
+message PointInteger {
+  int32 x = 1;
+  int32 y = 2;
+}
+
+/*
+ * Represents a double position.
+ */
+message PointDouble {
+  double x = 1;
+  double y = 2;
+}
