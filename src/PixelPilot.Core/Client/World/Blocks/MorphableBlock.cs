@@ -1,7 +1,8 @@
 ﻿using System.Drawing;
 using PixelPilot.Client.Messages;
-using PixelPilot.Client.Messages.Send;
+using PixelPilot.Client.Messages.Packets.Extensions;
 using PixelPilot.Client.World.Constants;
+using PixelWalker.Networking.Protobuf.WorldPackets;
 
 namespace PixelPilot.Client.World.Blocks;
 
@@ -23,14 +24,14 @@ public class MorphableBlock : BasicBlock
         Morph = morph;
     }
 
-    public override IPixelGamePacketOut AsPacketOut(int x, int y, int layer)
+    public override WorldBlockPlacedPacket AsPacketOut(int x, int y, int layer)
     {
-        return new WorldBlockPlacedOutPacket(x, y, layer, BlockId, [Morph]);
+        return WorldBlockPacketBuilder.CreatePacket(x, y, layer, BlockId, [Morph]);
     }
 
-    public override IPixelGamePacketOut AsPacketOut(List<Point> positions, int layer)
+    public override WorldBlockPlacedPacket AsPacketOut(List<Point> positions, int layer)
     {
-        return new WorldBlockPlacedOutPacket(positions, layer, BlockId, [Morph]);
+        return WorldBlockPacketBuilder.CreatePacket(positions, layer, BlockId, [Morph]);
     }
 
     public override byte[] AsWorldBuffer(int x, int y, int layer, int customId)

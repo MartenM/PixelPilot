@@ -1,8 +1,9 @@
 ﻿using System.Drawing;
 using PixelPilot.Client.Messages;
-using PixelPilot.Client.Messages.Send;
+using PixelPilot.Client.Messages.Packets.Extensions;
 using PixelPilot.Client.World.Blocks.Placed;
 using PixelPilot.Client.World.Constants;
+using PixelWalker.Networking.Protobuf.WorldPackets;
 
 namespace PixelPilot.Client.World.Blocks;
 
@@ -24,14 +25,14 @@ public class BasicBlock : IPixelBlock
     
     public int BlockId { get; set; }
     
-    public virtual IPixelGamePacketOut AsPacketOut(int x, int y, int layer)
+    public virtual WorldBlockPlacedPacket AsPacketOut(int x, int y, int layer)
     {
-        return new WorldBlockPlacedOutPacket(x,y, layer, BlockId);
+        return WorldBlockPacketBuilder.CreatePacket(x,y, layer, BlockId);
     }
 
-    public virtual IPixelGamePacketOut AsPacketOut(List<Point> positions, int layer)
+    public virtual WorldBlockPlacedPacket AsPacketOut(List<Point> positions, int layer)
     {
-        return new WorldBlockPlacedOutPacket(positions, layer, BlockId);
+        return WorldBlockPacketBuilder.CreatePacket(positions, layer, BlockId);
     }
 
     public IPlacedBlock AsPlacedBlock(int x, int y, int layer)

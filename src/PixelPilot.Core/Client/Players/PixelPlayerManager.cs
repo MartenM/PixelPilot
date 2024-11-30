@@ -1,9 +1,10 @@
 ﻿using System.Drawing;
+using Google.Protobuf;
 using Microsoft.Extensions.Logging;
-using PixelPilot.Client.Messages;
-using PixelPilot.Client.Messages.Received;
+using PixelPilot.Client.Messages.Packets.Extensions;
 using PixelPilot.Client.World.Constants;
 using PixelPilot.Common.Logging;
+using PixelWalker.Networking.Protobuf.WorldPackets;
 
 namespace PixelPilot.Client.Players;
 
@@ -28,7 +29,7 @@ public abstract class PixelPlayerManager<T> where T : IPixelPlayer
     /// Fired before the player properties are changed.
     /// </summary>
     public event PrePlayerStatusChange? OnPrePlayerStatusChange;
-    public delegate void PrePlayerStatusChange(object sender, T player, IPixelGamePlayerPacket packet);
+    public delegate void PrePlayerStatusChange(object sender, T player, IMessage packet);
 
     /// <summary>
     /// Fired once the players properties have been updated.
@@ -77,7 +78,7 @@ public abstract class PixelPlayerManager<T> where T : IPixelPlayer
     /// </summary>
     /// <param name="join">The join packet</param>
     /// <returns>A new IPixelPlayer instance</returns>
-    protected abstract T CreatePlayer(PlayerJoinPacket join);
+    protected abstract T CreatePlayer(PlayerJoinedPacket join);
     
     /// <summary>
     /// Method that can receive packets and handle them accordingly.
@@ -85,27 +86,26 @@ public abstract class PixelPlayerManager<T> where T : IPixelPlayer
     /// </summary>
     /// <param name="sender">The packet sender</param>
     /// <param name="packet">The packet</param>
-    public void HandlePacket(object sender, IPixelGamePacket packet)
+    public void HandlePacket(object sender, IMessage packet)
     {
-        if (packet is InitPacket init)
+        if (packet is PlayerInitPacket init)
         {
-            ClientId = init.PlayerId;
+            ClientId = init.PlayerProperties.PlayerId;
             return;
         }
-        if (packet is not IPixelGamePlayerPacket playerPacket) return;
 
         // Join check should always be done first.
         // Seperated out for clarity.
-        if (playerPacket is PlayerJoinPacket join)
+        if (packet is PlayerJoinedPacket joinedPacket)
         {
-            _players[join.PlayerId] = CreatePlayer(join);
-            _logger.LogDebug($"'{join.Username}' joined the world.");
-            OnPlayerJoined?.Invoke(this, _players[join.PlayerId]);
+            _players[joinedPacket.Properties.PlayerId] = CreatePlayer(joinedPacket);
+            _logger.LogDebug($"'{joinedPacket.Properties.Username}' joined the world.");
+            OnPlayerJoined?.Invoke(this, _players[joinedPacket.Properties.PlayerId]);
             return;
         }
 
         // Player left the world.
-        if (playerPacket is PlayerLeftPacket left)
+        if (packet is PlayerLeftPacket left)
         {
             var playerFound = _players.Remove(left.PlayerId, out var leftPlayer);
             if (!playerFound) return;
@@ -116,37 +116,40 @@ public abstract class PixelPlayerManager<T> where T : IPixelPlayer
         }
 
         // Don't track the for now.
-        if (playerPacket.PlayerId == ClientId) return;
+        var optionalPlayerId = packet.GetPlayerId();
+        if (optionalPlayerId == null || optionalPlayerId == ClientId) return;
+        
+        var playerId = optionalPlayerId.Value;
 
-        if (!_players.ContainsKey(playerPacket.PlayerId))
+        if (!_players.ContainsKey(playerId))
         {
-            _logger.LogDebug($"{packet.GetType().Name} received but player {playerPacket.PlayerId} does not exist.");
+            _logger.LogDebug($"{packet.GetType().Name} received but player {playerId} does not exist.");
             return;
         }
         
         // Player is always present now.
-        var player = _players[playerPacket.PlayerId];
-        OnPrePlayerStatusChange?.Invoke(this, player, playerPacket);
+        var player = _players[playerId];
+        OnPrePlayerStatusChange?.Invoke(this, player, packet);
         
         // Update player state based on the received message.
         switch (packet)
         {
-            case PlayerModMode mod:
-                player.Modmode = mod.IsEnabled;
+            case PlayerModModePacket mod:
+                player.Modmode = mod.Enabled;
                 break;
-            case PlayerGodmodePacket god:
-                player.Godmode = god.IsEnabled;
+            case PlayerGodModePacket god:
+                player.Godmode = god.Enabled;
                 break;
-            case PlayerMovePacket move:
-                player.X = move.X;
-                player.Y = move.Y;
-                player.ModX = move.ModX;
-                player.ModY = move.ModY;
+            case PlayerMovedPacket move:
+                player.X = move.Position.X;
+                player.Y = move.Position.Y;
+                player.ModX = move.ModifierX;
+                player.ModY = move.ModifierY;
                 player.VelocityX = move.VelocityX;
                 player.VelocityY = move.VelocityY;
                 player.Horizontal = move.Horizontal;
                 player.Vertical = move.Vertical;
-                player.Spacedown = move.Spacedown;
+                player.Spacedown = move.SpaceDown;
                 player.SpaceJustDown = move.SpaceJustDown;
                 player.TickId = move.TickId;
                 break;
@@ -160,29 +163,29 @@ public abstract class PixelPlayerManager<T> where T : IPixelPlayer
                 player.HasCompletedWorld = true;
                 break;
             case PlayerTouchBlockPacket {BlockId: (int) PixelBlock.ToolReset} block:
-                ResetPlayer(player, new Point(block.X, block.Y));
+                ResetPlayer(player, block.Position.ToPoint());
                 break;
             case PlayerTouchBlockPacket {BlockId: (int) PixelBlock.ToolGodModeActivator}:
                 player.CanGod = true;
                 break;
             case PlayerResetPacket reset:
-                ResetPlayer(player, reset.Position);
+                ResetPlayer(player, reset.Position.ToPoint());
                 break;
             case PlayerRespawnPacket respawn:
-                player.X = respawn.X;
-                player.Y = respawn.Y;
+                player.X = respawn.Position.X;
+                player.Y = respawn.Position.Y;
                 break;
-            case PlayerStatsChangePacket stats:
-                player.GoldCoins = stats.GoldCoins;
-                player.BlueCoins = stats.BlueCoins;
-                player.Deaths = stats.DeathCount;
+            case PlayerCountersUpdatePacket counters:
+                player.GoldCoins = counters.Coins;
+                player.BlueCoins = counters.BlueCoins;
+                player.Deaths = counters.Deaths;
                 break;
             case PlayerUpdateRightsPacket rights:
-                player.CanEdit = rights.EditRights;
-                player.CanGod = rights.Godmode;
+                player.CanEdit = rights.CanEdit;
+                player.CanGod = rights.CanGod;
                 break;
             default:
-                _logger.LogDebug($"Unhandled PlayerPacket {playerPacket.GetType().Namespace}");
+                _logger.LogDebug($"Unhandled PlayerPacket {packet.GetType().Namespace}");
                 break;
         }
         

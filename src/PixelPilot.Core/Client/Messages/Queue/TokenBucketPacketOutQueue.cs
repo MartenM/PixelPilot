@@ -1,8 +1,9 @@
 ﻿using System.Collections.Concurrent;
 using System.Threading.RateLimiting;
+using Google.Protobuf;
 using Microsoft.Extensions.Logging;
-using PixelPilot.Client.Messages.Send;
 using PixelPilot.Common.Logging;
+using PixelWalker.Networking.Protobuf.WorldPackets;
 
 namespace PixelPilot.Client.Messages.Queue;
 
@@ -68,13 +69,13 @@ public class TokenBucketPacketOutQueue : IPixelPacketQueue
     /// <summary>
     /// Initial queue
     /// </summary>
-    private readonly BlockingCollection<IPixelGamePacketOut> _packetQueue = new();
+    private readonly BlockingCollection<IMessage> _packetQueue = new();
     
     /// <summary>
     /// Queue for chat messages that got delayed.
     /// Should be send as soon as space becomes available again.
     /// </summary>
-    private readonly Queue<PlayerChatOutPacket> _delayedChatMessageQueue = new();
+    private readonly Queue<IMessage> _delayedChatMessageQueue = new();
 
     public TokenBucketPacketOutQueue(PixelPilotClient client)
     {
@@ -125,7 +126,7 @@ public class TokenBucketPacketOutQueue : IPixelPacketQueue
         }
     }
 
-    public void EnqueuePacket(IPixelGamePacketOut packet)
+    public void EnqueuePacket(IMessage packet)
     {
         _packetQueue.Add(packet);
     }
@@ -181,7 +182,7 @@ public class TokenBucketPacketOutQueue : IPixelPacketQueue
             if (packet == null) continue;
             
             // Send the packet. Delay the treat yay.
-            if (packet is PlayerChatOutPacket chatPacket)
+            if (packet is PlayerChatPacket chatPacket)
             {
                 // Check if chat rate limit is fine.
                 // Otherwise schedule for later.

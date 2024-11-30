@@ -1,4 +1,5 @@
 ﻿using PixelPilot.Client.Messages;
+using PixelWalker.Networking.Protobuf.WorldPackets;
 
 namespace PixelPilot.Client.World.Blocks.Placed;
 
@@ -13,7 +14,7 @@ public interface IPlacedBlock : ICloneable
     public int Layer { get; }
     public IPixelBlock Block { get; }
 
-    public IPixelGamePacketOut AsPacketOut();
+    public WorldBlockPlacedPacket AsPacketOut();
 
     public byte[] AsWorldBuffer();
     public byte[] AsWorldBuffer(int customId);

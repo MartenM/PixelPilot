@@ -1,4 +1,5 @@
-﻿using PixelPilot.Client.Messages.Received;
+﻿
+using PixelWalker.Networking.Protobuf.WorldPackets;
 
 namespace PixelPilot.Client.Players.Basic;
 
@@ -7,7 +8,7 @@ namespace PixelPilot.Client.Players.Basic;
 /// </summary>
 public class PlayerManager : PixelPlayerManager<Player>
 {
-    protected override Player CreatePlayer(PlayerJoinPacket join)
+    protected override Player CreatePlayer(PlayerJoinedPacket join)
     {
         return new Player(join);
     }

@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
-using PixelPilot.Client.Messages;
-using PixelPilot.Client.Messages.Send;
+using PixelPilot.Client.Messages.Packets.Extensions;
 using PixelPilot.Client.World.Constants;
+using PixelWalker.Networking.Protobuf.WorldPackets;
 
 namespace PixelPilot.Client.World.Blocks.Types;
 
@@ -20,14 +20,14 @@ public class ActivatorBlock : BasicBlock
 
     }
 
-    public override IPixelGamePacketOut AsPacketOut(int x, int y, int layer)
+    public override WorldBlockPlacedPacket AsPacketOut(int x, int y, int layer)
     {
-        return new WorldBlockPlacedOutPacket(x, y, layer, BlockId, [SwitchId, Convert.ToByte(Status)]);
+        return WorldBlockPacketBuilder.CreatePacket(x, y, layer, BlockId, [SwitchId, Convert.ToByte(Status)]);
     }
 
-    public override IPixelGamePacketOut AsPacketOut(List<Point> positions, int layer)
+    public override WorldBlockPlacedPacket AsPacketOut(List<Point> positions, int layer)
     {
-        return new WorldBlockPlacedOutPacket(positions, layer, BlockId, [SwitchId, Convert.ToByte(Status)]);
+        return WorldBlockPacketBuilder.CreatePacket(positions, layer, BlockId, [SwitchId, Convert.ToByte(Status)]);
     }
 
     public override byte[] AsWorldBuffer(int x, int y, int layer, int customId)

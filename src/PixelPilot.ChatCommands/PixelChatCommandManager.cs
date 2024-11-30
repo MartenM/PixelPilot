@@ -4,7 +4,6 @@ using PixelPilot.ChatCommands.Commands.Help;
 using PixelPilot.ChatCommands.Messages;
 using PixelPilot.Client;
 using PixelPilot.Client.Messages;
-using PixelPilot.Client.Messages.Received;
 using PixelPilot.Client.Players;
 using PixelPilot.Common.Logging;
 

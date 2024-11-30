@@ -6,7 +6,6 @@ using Example.BasicBot;
 using Microsoft.Extensions.Configuration;
 using PixelPilot.Client;
 using PixelPilot.Client.Messages;
-using PixelPilot.Client.Messages.Received;
 using PixelPilot.Client.Players;
 using PixelPilot.Client.Players.Basic;
 using PixelPilot.Client.World;

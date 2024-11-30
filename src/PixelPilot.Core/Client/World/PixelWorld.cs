@@ -1,12 +1,13 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Google.Protobuf;
+using Microsoft.Extensions.Logging;
 using PixelPilot.Client.Messages;
-using PixelPilot.Client.Messages.Received;
 using PixelPilot.Client.World.Blocks;
 using PixelPilot.Client.World.Blocks.Placed;
 using PixelPilot.Client.World.Blocks.Types;
 using PixelPilot.Client.World.Blocks.Types.Effects;
 using PixelPilot.Client.World.Constants;
 using PixelPilot.Common.Logging;
+using PixelWalker.Networking.Protobuf.WorldPackets;
 
 namespace PixelPilot.Client.World;
 
@@ -28,8 +29,9 @@ public class PixelWorld
     public int Height { get; private set; }
     public int Width { get; private set; }
 
-    public string OwnerUsername { get; private set; } = "";
-    public string WorldName { get; private set; } = "";
+    private WorldMeta? _worldMeta { get; set; }
+    public string OwnerUsername => _worldMeta?.Owner ?? string.Empty;
+    public string WorldName => _worldMeta?.Title ?? string.Empty;
 
     private IPixelBlock[,,] _worldData;
     
@@ -92,9 +94,9 @@ public class PixelWorld
         _worldData = new IPixelBlock[2, width, height];
     }
 
-    public PixelWorld(InitPacket initPacket) : this(initPacket.Height, initPacket.Width)
+    public PixelWorld(PlayerInitPacket initPacket) : this(initPacket.WorldHeight, initPacket.WorldWidth)
     {
-        Init(initPacket.WorldData);
+        Init(initPacket.WorldData.ToByteArray());
     }
 
     /// <summary>
@@ -157,30 +159,29 @@ public class PixelWorld
     /// </summary>
     /// <param name="sender">The sender</param>
     /// <param name="packet">The incoming packet</param>
-    public void HandlePacket(Object sender, IPixelGamePacket packet)
+    public void HandlePacket(Object sender, IMessage packet)
     {
-        if (packet is InitPacket init)
+        if (packet is PlayerInitPacket init)
         {
-            Height = init.Height;
-            Width = init.Width;
-            OwnerUsername = init.Owner;
-            WorldName = init.RoomTitle;
+            Height = init.WorldHeight;
+            Width = init.WorldWidth;
+            _worldMeta = init.WorldMeta;
             _worldData = new IPixelBlock[2, Width, Height];
-            Init(init.WorldData);
+            Init(init.WorldData.ToByteArray());
             
             OnWorldInit?.Invoke(this);
             _initializationTaskSource.TrySetResult(true);
             return;
         }
 
-        if (packet is WorldMetaPacket meta)
+        if (packet is WorldMetaUpdatePacket meta)
         {
-            WorldName = meta.Name;
+            _worldMeta = meta.Meta;
         }
 
         if (packet is WorldReloadedPacket reload)
         {
-            Init(reload.WorldData);
+            Init(reload.WorldData.ToByteArray());
             OnWorldReloaded?.Invoke(this);
             return;
         }
@@ -279,7 +280,7 @@ public class PixelWorld
         var extraFields = blockType.GetPacketFieldTypes();
 
         // Read the extra fields
-        var extra = extraFields.Select(fieldT => PacketConverter.ReadTypeLe(reader, fieldT)).ToList();
+        var extra = extraFields.Select(fieldT => BinaryFieldConverter.ReadTypeLe(reader, fieldT)).ToList();
         
         // Construct the block and return it. Hooray.
         switch (blockType)
@@ -325,6 +326,7 @@ public class PixelWorld
         // First we need to know what type it is.
         // Then we can fill in the rest.
         var blockType = pixelBlock.GetBlockType();
+        var blockFields = BinaryDataList.FromByteArray(packet.ExtraFields.ToByteArray()).Items.ToArray();
         
         // Construct the block and return it. Hooray.
         switch (blockType)
@@ -332,23 +334,23 @@ public class PixelWorld
             case BlockType.Normal:
                 return new BasicBlock((int) pixelBlock);
             case BlockType.Morphable:
-                return new MorphableBlock((int) pixelBlock, packet.ExtraFields[0]);
+                return new MorphableBlock((int) pixelBlock, blockFields[0]);
             case BlockType.Portal:
-                return new PortalBlock((int) pixelBlock, packet.ExtraFields[1], packet.ExtraFields[2], packet.ExtraFields[0]);
+                return new PortalBlock((int) pixelBlock, blockFields[1], blockFields[2], blockFields[0]);
             case BlockType.SwitchActivator:
-                return new ActivatorBlock((int) pixelBlock, packet.ExtraFields[0], packet.ExtraFields[1] == 1);
+                return new ActivatorBlock((int) pixelBlock, blockFields[0], blockFields[1] == 1);
             case BlockType.SwitchResetter:
-                return new ResetterBlock((int)pixelBlock, packet.ExtraFields[0] == 1);
+                return new ResetterBlock((int)pixelBlock, blockFields[0] == 1);
             case BlockType.WorldPortal:
-                return new WorldPortalBlock(packet.ExtraFields[0], packet.ExtraFields[1]);
+                return new WorldPortalBlock(blockFields[0], blockFields[1]);
             case BlockType.EffectLeveled:
-                return new LeveledEffectBlock((int)pixelBlock, packet.ExtraFields[0]);
+                return new LeveledEffectBlock((int)pixelBlock, blockFields[0]);
             case BlockType.EffectTimed:
-                return new TimedEffectBlock((int)pixelBlock, packet.ExtraFields[0]);
+                return new TimedEffectBlock((int)pixelBlock, blockFields[0]);
             case BlockType.EffectTogglable:
-                return new ToggleEffectBlock((int)pixelBlock, packet.ExtraFields[0]);
+                return new ToggleEffectBlock((int)pixelBlock, blockFields[0]);
             case BlockType.Sign:
-                return new SignBlock((int)pixelBlock, packet.ExtraFields[0]);
+                return new SignBlock((int)pixelBlock, blockFields[0]);
             default:
                 throw new NotImplementedException("Missing implementation of new BlockType!");
         }

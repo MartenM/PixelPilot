@@ -1,5 +1,5 @@
 ﻿using System.Drawing;
-using PixelPilot.Client.Messages.Received;
+using PixelWalker.Networking.Protobuf.WorldPackets;
 
 namespace PixelPilot.Client.Players.Basic;
 
@@ -9,27 +9,25 @@ public class Player : IPixelPlayer
     /// Construct a new player from the incoming packet.
     /// </summary>
     /// <param name="packet"></param>
-    public Player(PlayerJoinPacket packet)
+    public Player(PlayerJoinedPacket packet)
     {
-        Id = packet.PlayerId;
-        AccountId = packet.Cuid;
-        Username = packet.Username;
-        Face = packet.Face;
-        IsAdmin = packet.IsAdmin;
-        Godmode = packet.HasGod;
-        CanEdit = packet.HasEdit;
-        ChatColor = packet.ChatColor;
-        X = packet.X;
-        Y = packet.Y;
-        GoldCoins = packet.Coins;
-        BlueCoins = packet.BlueCoins;
-        Deaths = packet.Deaths;
-        HasCrown = packet.HasCrown;
-        HasCompletedWorld = packet.HasCompletedWorld;
-        Godmode = packet.Godmode;
-        Modmode = packet.Modmode;
-        CanGod = false;
-        CanEdit = false;
+        Id = packet.Properties.PlayerId;
+        AccountId = packet.Properties.AccountId;
+        Username = packet.Properties.Username;
+        Face = packet.Properties.Face;
+        IsAdmin = packet.Properties.IsAdmin;
+        CanGod = packet.Properties.CanGod;
+        CanEdit = packet.Properties.CanEdit;
+        ChatColor = Color.FromArgb(packet.Properties.UsernameColor);
+        X = packet.Properties.Position.X;
+        Y = packet.Properties.Position.Y;
+        GoldCoins = packet.WorldState.CoinsGold;
+        BlueCoins = packet.WorldState.CoinsBlue;
+        Deaths = packet.WorldState.Deaths;
+        HasCrown = packet.WorldState.HasGoldCrown;
+        HasCompletedWorld = packet.WorldState.HasSilverCrown;
+        Godmode = packet.WorldState.Godmode;
+        Modmode = packet.WorldState.Modmode;
     }
 
     public Player(int id, string accountId, string username, int face, bool isAdmin, Color chatColor, double x, double y, int coins, int blueCoins, int deaths, bool godmode, bool modmode, bool hasCrown, bool canGod, bool canEdit)

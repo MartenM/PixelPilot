@@ -1,5 +1,6 @@
 ﻿using PixelPilot.Client.Messages;
 using PixelPilot.Client.World.Constants;
+using PixelWalker.Networking.Protobuf.WorldPackets;
 
 namespace PixelPilot.Client.World.Blocks.Placed;
 
@@ -32,7 +33,7 @@ public class PlacedBlock : IPlacedBlock
         Block = block;
     }
     
-    public IPixelGamePacketOut AsPacketOut()
+    public WorldBlockPlacedPacket AsPacketOut()
     {
         return Block.AsPacketOut(X, Y, Layer);
     }

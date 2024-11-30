@@ -1,4 +1,5 @@
-﻿using PixelPilot.Client.Messages.Packets.Exceptions;
+﻿using Google.Protobuf;
+using PixelPilot.Client.Messages.Packets.Exceptions;
 using PixelPilot.Client.Messages.Packets.Extensions;
 using PixelWalker.Networking.Protobuf.WorldPackets;
 
@@ -39,6 +40,11 @@ public class PacketExtensionTests
         var c = facePacket.ToWorldPacket();
         
         Assert.That(c.PacketCase, Is.EqualTo(WorldPacket.PacketOneofCase.PlayerFacePacket));
+        
+        var initReceivedPacket = new PlayerInitReceivedPacket();
+        var d = initReceivedPacket.ToWorldPacket();
+        
+        Assert.That(d.PacketCase, Is.EqualTo(WorldPacket.PacketOneofCase.PlayerInitReceived));
     }
 
     [Test]
@@ -46,5 +52,19 @@ public class PacketExtensionTests
     {
         var worldPacket = new WorldPacket();
         Assert.Throws<PacketWrapException>(() => worldPacket.ToWorldPacket());
+    }
+    
+    [Test]
+    public void TestPlayerIdExtractor()
+    {
+        var playerMovedPacket = (IMessage) new PlayerMovedPacket()
+        {
+            PlayerId = 10,
+        };
+        Assert.That(playerMovedPacket.GetPlayerId(), Is.EqualTo(10));
+
+        
+        var systemMessage = (IMessage) new SystemMessagePacket();
+        Assert.That(systemMessage.GetPlayerId(), Is.EqualTo(null));
     }
 }

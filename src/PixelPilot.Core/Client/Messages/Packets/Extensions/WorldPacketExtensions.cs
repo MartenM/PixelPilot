@@ -54,6 +54,43 @@ public static class WorldPacketExtensions
     }
 
     /// <summary>
+    /// If this packet can be replayed without much issue by the client.
+    /// </summary>
+    /// <param name="packet"></param>
+    /// <returns></returns>
+    public static bool IsReplayable(this IMessage packet)
+    {
+        switch (packet)
+        {
+            case PlayerMovedPacket:
+            case PlayerChatPacket:
+            case PlayerFacePacket:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public static int? GetPlayerId(this IMessage packet)
+    {
+        var fields = packet.Descriptor.Fields;
+        var playerIdField = fields.InDeclarationOrder().FirstOrDefault(field => field.Name == "player_id");
+
+        if (playerIdField == null) return null;
+        return (int) playerIdField.Accessor.GetValue(packet);
+    }
+
+    /// <summary>
+    /// Returns a clone of the packet with the PlayerId field unset.
+    /// </summary>
+    /// <param name="packet">A worldPacket oneof</param>
+    /// <returns>A clone of the packet.</returns>
+    public static IMessage RemovePlayerId(this IMessage packet)
+    {
+        return packet;
+    }
+
+    /// <summary>
     /// Populate the dict so that access is O(1) instead of a loop for each packet all the time.
     /// </summary>
     private static Dictionary<string, MethodInfo> CreateMethodInfoDict()
@@ -65,7 +102,7 @@ public static class WorldPacketExtensions
             var setMethod = prop.GetSetMethod();
             if (setMethod == null) continue;
             
-            dict.Add(prop.Name, setMethod);
+            dict.Add(prop.PropertyType.Name, setMethod);
         }
 
         return dict;

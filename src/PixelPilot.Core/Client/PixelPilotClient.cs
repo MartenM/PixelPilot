@@ -1,15 +1,16 @@
 ﻿using System.Net.WebSockets;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Google.Protobuf;
 using Microsoft.Extensions.Logging;
 using PixelPilot.Api;
 using PixelPilot.Client.Messages;
 using PixelPilot.Client.Messages.Exceptions;
+using PixelPilot.Client.Messages.Packets.Extensions;
 using PixelPilot.Client.Messages.Queue;
-using PixelPilot.Client.Messages.Received;
-using PixelPilot.Client.Messages.Send;
 using PixelPilot.Common;
 using PixelPilot.Common.Logging;
+using PixelWalker.Networking.Protobuf.WorldPackets;
 using Websocket.Client;
 
 namespace PixelPilot.Client;
@@ -53,26 +54,31 @@ public class PixelPilotClient : IDisposable
     }
     
     /// <summary>
-    /// The player ID of the client.
+    /// The PlayerProperties of the bot account.
     /// </summary>
-    public int? BotId { get; private set; }
-    
+    public PlayerProperties? BotPlayerProperties { get; private set; }
+
+    /// <summary>
+    /// The ID used for the bot in the world.
+    /// </summary>
+    public int? BotId => BotPlayerProperties?.PlayerId;
+
     /// <summary>
     /// The username of this bot.
     /// </summary>
-    public string? Username { get; private set; }
+    public string? Username => BotPlayerProperties?.Username;
     
     /// <summary>
     /// Event that occurs when a packet is received.
     /// </summary>
     public event PacketReceived? OnPacketReceived;
-    public delegate void PacketReceived(object sender, IPixelGamePacket packet);
+    public delegate void PacketReceived(object sender, IMessage packet);
     
     /// <summary>
-    /// Event that occurs when a packet is send.
+    /// Event that occurs when a packet is send. The packet is the oneof WorldPacket (so not the WorldPacket).
     /// </summary>
     public event PacketSend? OnPacketSend;
-    public delegate void PacketSend(object sender, IPixelGamePacketOut packet);
+    public delegate void PacketSend(object sender, IMessage packet);
     
     /// <summary>
     /// Fired once init has been received by the client.
@@ -142,7 +148,7 @@ public class PixelPilotClient : IDisposable
         {
             IsConnected = false;
             _packetOutQueue?.Stop();
-            _logger.LogWarning($"Client got disconnected. ({info.CloseStatusDescription} {(Username != null ? $"Bot: {Username}": null)})");
+            _logger.LogWarning($"Websocket was closed. ({info.CloseStatusDescription} {(Username != null ? $"Bot: {Username}": null)})");
             _connectCompletion.TrySetResult(true);
             OnClientDisconnected?.Invoke(this, info.CloseStatusDescription);
         });
@@ -204,14 +210,22 @@ public class PixelPilotClient : IDisposable
     }
     
     /// <summary>
-    /// Sends a pixel game packet.
-    /// Bypasses the internal rate limiter
+    /// Send the packet. Wraps it into a WorldPacket and converts it to binary and calls _Send(byte[] raw);
+    /// </summary>
+    /// <param name="packet">The packet to send.</param>
+    private void _send(IMessage packet)
+    {
+        _send(packet.ToWorldPacket().ToByteArray());
+    }
+    
+    /// <summary>
+    /// Sends a pixel game packet. Wraps it into a WorldPacket.
     /// </summary>
     /// <param name="packet">The pixel game packet to send.</param>
-    public void SendDirect(IPixelGamePacketOut packet)
+    public void SendDirect(IMessage packet)
     {
         OnPacketSend?.Invoke(this, packet);
-        _send(packet.ToBinaryPacket());
+        _send(packet);
     }
 
     /// <summary>
@@ -219,7 +233,7 @@ public class PixelPilotClient : IDisposable
     /// Uses an internal rate limiter to limit packets.
     /// </summary>
     /// <param name="packet">The pixel game packet to send.</param>
-    public void Send(IPixelGamePacketOut packet)
+    public void Send(IMessage packet)
     {
         if (_packetOutQueue == null) SendDirect(packet);
         else _packetOutQueue?.EnqueuePacket(packet);
@@ -230,7 +244,7 @@ public class PixelPilotClient : IDisposable
     /// Uses an internal rate limiter to limit packets.
     /// </summary>
     /// <param name="packets">The packets to be send</param>
-    public void SendRange(IEnumerable<IPixelGamePacketOut> packets)
+    public void SendRange(IEnumerable<IMessage> packets)
     {
         foreach (var packet in packets)
         {
@@ -248,15 +262,17 @@ public class PixelPilotClient : IDisposable
     {
         var maxLineLength = 120 - (prefix && BotPrefix != null ? BotPrefix.Length : 0);
         var charCount = 0;
-        
+
         var lines = msg.Split(' ', StringSplitOptions.RemoveEmptyEntries)
             .GroupBy(w => (charCount += w.Length + 1) / maxLineLength)
             .Select(g => string.Join(" ", g));
 
         foreach (var line in lines)
         {
-            if (prefix && BotPrefix != null) Send(new PlayerChatOutPacket(BotPrefix + line));
-            else Send(new PlayerChatOutPacket(line));
+            Send(new PlayerChatPacket()
+            {
+                Message = $"{(prefix && BotPrefix != null ? BotPrefix : "")}{line}"
+            });
         }
     }
 
@@ -277,7 +293,10 @@ public class PixelPilotClient : IDisposable
 
         foreach (var line in lines)
         {
-            Send(new PlayerChatOutPacket($"/pm {username} {(prefix && BotPrefix != null ? BotPrefix : "")}{line}"));
+            Send(new PlayerChatPacket()
+            {
+                Message = $"/pm {username} {(prefix && BotPrefix != null ? BotPrefix : "")}{line}"
+            });
         }
     }
     
@@ -289,10 +308,11 @@ public class PixelPilotClient : IDisposable
     {
         if (message.Binary == null) return;
         
-        IPixelGamePacket packet;
+        IMessage packet;
         try
         {
-            packet = PacketConverter.ConstructPacket(message.Binary);
+            var worldPacket = WorldPacket.Parser.ParseFrom(message.Binary);
+            packet = worldPacket.GetPacket();
         }
         catch (PixelException)
         {
@@ -310,26 +330,26 @@ public class PixelPilotClient : IDisposable
 
         // Ping packet needs to be returned.
         // Doesn't require any additional handling.
-        if (packet is PingPacket)
+        if (packet is Ping)
         {
-            _send(new byte[] {0x3F});
+            _send(new Ping());
             return;
         }
 
         // Init packet needs to return the first 2 bytes.
-        if (packet is InitPacket init)
+        if (packet is PlayerInitPacket init)
         {
-            _send(InitPacket.AsSendingBytes());
-            
-            BotId = init.PlayerId;
-            Username = init.Username;
+            _send(new PlayerInitReceivedPacket());
+
+            BotPlayerProperties = init.PlayerProperties;
             
             // Update rate limit if required
             if (_packetOutQueue != null)
             {
-                _packetOutQueue.IsOwner = init.IsWorldOwner;
+                var isWorldOwner = init.PlayerProperties.IsWorldOwner;
+                _packetOutQueue.IsOwner = isWorldOwner;
 
-                if (!init.IsWorldOwner)
+                if (!isWorldOwner)
                 {
                     _logger.LogInformation("You are not the world owner. Rate limiting is being applied.");
                 }

@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using PixelPilot.Client.Messages.Constants;
 using PixelPilot.Client.Messages.Exceptions;
 using PixelPilot.Client.Messages.Misc;
-using PixelPilot.Client.Messages.Received;
 using PixelPilot.Common.Logging;
 
 namespace PixelPilot.Client.Messages;
@@ -11,23 +10,19 @@ namespace PixelPilot.Client.Messages;
 /// <summary>
 /// Converts binary data into pixel game packets.
 /// </summary>
-public class PacketConverter
+public class BinaryFieldConverter
 {
     private static readonly ILogger _logger = LogManager.GetLogger("PacketConverter");
     
     /// <summary>
-    /// Constructs a pixel game packet from the given binary data.
+    /// Read from a binary stream and output the correct objects.
     /// </summary>
     /// <param name="binary">The binary data representing the packet.</param>
-    /// <returns>The constructed pixel game packet.</returns>
-    public static IPixelGamePacket ConstructPacket(byte[] binary)
+    /// <returns>The constructed array</returns>
+    public static dynamic[] ConstructBinaryDataList(byte[] binary)
     {
         using var memoryStream = new MemoryStream(binary);
         using var reader = new BinaryReader(memoryStream);
-        var type = (MessageType) reader.ReadByte();
-        if (type == MessageType.Ping) return new PingPacket();
-
-        var worldMessageType = (WorldMessageType) reader.Read7BitEncodedInt();
             
         // Now parse all fields.
         var fields = new List<dynamic>();
@@ -36,41 +31,8 @@ public class PacketConverter
             var fieldType = (PacketFieldType) reader.ReadByte();
             fields.Add(ReadType(reader, fieldType));
         }
-            
-        // Get the correct type
-        var packetType = worldMessageType.AsPacketType();
-        if (packetType == null)
-        {
-            _logger.LogError($"Failed to construct the ({worldMessageType}) packet. Are you sure the API is up-to-date? ({FieldTypes(fields)})");
-            throw new PacketTypeNotFoundException(worldMessageType);
-        }
 
-        // Find constructor based on length and type.
-        var dynamicConstructor = typeof(IDynamicConstructedPacket).IsAssignableFrom(packetType);
-        var constructorInfo = packetType.GetConstructors().FirstOrDefault(con =>
-        {
-            // If a dynamic constructor should be present. Accept that instead.
-            if (dynamicConstructor)
-            {
-                // Just check length, don't check type. We hopefully don't house idiots that violate the contract.
-                if (con.GetParameters().Length != 1) return false;
-                return true;
-            }
-            
-            if (con.GetParameters().Length != fields.Count) return false;
-            if (con.GetParameters().Where((info, i) => info.ParameterType != fields[i].GetType()).Any()) return false;
-            return con.GetParameters().Length == fields.Count;
-        });
-        
-        if (constructorInfo == null)
-        {
-            LogPacketTypeConversionError(fields, packetType, dynamicConstructor);
-            throw new PacketConstructorException(fields, packetType);
-        }
-            
-        // Construct the packet and return it.
-        IPixelGamePacket packet = (IPixelGamePacket) (dynamicConstructor ? constructorInfo.Invoke([fields]) : constructorInfo.Invoke(fields.ToArray()));
-        return packet;
+        return fields.ToArray();
     }
 
     /// <summary>
