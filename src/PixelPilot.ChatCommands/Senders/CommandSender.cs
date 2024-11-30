@@ -1,5 +1,5 @@
-﻿using PixelPilot.PixelGameClient;
-using PixelPilot.PixelGameClient.Players;
+﻿using PixelPilot.Client;
+using PixelPilot.Client.Players;
 
 namespace PixelPilot.ChatCommands;
 

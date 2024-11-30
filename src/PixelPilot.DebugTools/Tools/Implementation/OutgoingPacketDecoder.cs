@@ -1,6 +1,6 @@
 ﻿using System.Text;
-using PixelPilot.PixelGameClient.Messages;
-using PixelPilot.PixelGameClient.Messages.Constants;
+using PixelPilot.Client.Messages;
+using PixelPilot.Client.Messages.Constants;
 
 namespace PixelPilot.DebugTools.Tools.Implementation;
 

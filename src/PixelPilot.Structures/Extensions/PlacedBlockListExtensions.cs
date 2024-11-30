@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
-using PixelPilot.PixelGameClient;
-using PixelPilot.PixelGameClient.Messages;
-using PixelPilot.PixelGameClient.World.Blocks.Placed;
-using PixelPilot.PixelHttpClient;
+using PixelPilot.Api;
+using PixelPilot.Client;
+using PixelPilot.Client.Messages;
+using PixelPilot.Client.World.Blocks.Placed;
 
 namespace PixelPilot.Structures.Extensions;
 

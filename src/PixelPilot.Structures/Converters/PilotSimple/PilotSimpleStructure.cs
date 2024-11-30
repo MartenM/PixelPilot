@@ -1,4 +1,4 @@
-﻿using PixelPilot.PixelGameClient.World.Blocks.Placed;
+﻿using PixelPilot.Client.World.Blocks.Placed;
 
 namespace PixelPilot.Structures.Converters.PilotSimple;
 

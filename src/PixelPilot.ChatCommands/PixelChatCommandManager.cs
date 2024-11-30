@@ -2,11 +2,11 @@
 using PixelPilot.ChatCommands.Commands;
 using PixelPilot.ChatCommands.Commands.Help;
 using PixelPilot.ChatCommands.Messages;
+using PixelPilot.Client;
+using PixelPilot.Client.Messages;
+using PixelPilot.Client.Messages.Received;
+using PixelPilot.Client.Players;
 using PixelPilot.Common.Logging;
-using PixelPilot.PixelGameClient;
-using PixelPilot.PixelGameClient.Messages;
-using PixelPilot.PixelGameClient.Messages.Received;
-using PixelPilot.PixelGameClient.Players;
 
 namespace PixelPilot.ChatCommands;
 

@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using PixelPilot.PixelHttpClient.Responses;
+using PixelPilot.Api.Responses;
 
 namespace PixelPilot.DebugTools.Tools.Implementation;
 

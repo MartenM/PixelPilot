@@ -1,6 +1,4 @@
-﻿using PixelPilot.PixelGameClient.Messages.Send;
-
-namespace PixelGameTests;
+﻿namespace PixelGameTests;
 
 /// <summary>
 /// Tests for outbound packets.

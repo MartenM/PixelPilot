@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using PixelPilot.PixelGameClient.Messages.Send;
+using PixelPilot.Client.Messages.Send;
 
 namespace PixelPilot.DebugTools.Tools.Implementation;
 

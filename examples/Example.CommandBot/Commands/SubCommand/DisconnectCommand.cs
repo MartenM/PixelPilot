@@ -1,6 +1,6 @@
 ﻿using PixelPilot.ChatCommands;
 using PixelPilot.ChatCommands.Commands;
-using PixelPilot.PixelGameClient;
+using PixelPilot.Client;
 
 namespace Example.CommandBot.Commands.SubCommand;
 

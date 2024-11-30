@@ -1,4 +1,4 @@
-﻿using PixelPilot.PixelGameClient.Players;
+﻿using PixelPilot.Client.Players;
 
 namespace PixelPilot.ChatCommands;
 

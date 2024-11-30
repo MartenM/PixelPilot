@@ -1,11 +1,11 @@
 ﻿using Example.BasicBot;
 using Microsoft.Extensions.Configuration;
+using PixelPilot.Client;
+using PixelPilot.Client.Messages.Received;
+using PixelPilot.Client.Messages.Send;
+using PixelPilot.Client.Players.Basic;
+using PixelPilot.Client.World;
 using PixelPilot.Common.Logging;
-using PixelPilot.PixelGameClient;
-using PixelPilot.PixelGameClient.Messages.Received;
-using PixelPilot.PixelGameClient.Messages.Send;
-using PixelPilot.PixelGameClient.Players.Basic;
-using PixelPilot.PixelGameClient.World;
 
 // Load the configuration. Don't store your account token in the code :)
 var configuration = new ConfigurationBuilder()

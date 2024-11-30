@@ -1,7 +1,6 @@
-﻿
-using PixelPilot.PixelGameClient;
-using PixelPilot.PixelGameClient.Messages.Send;
-using PixelPilot.PixelGameClient.World.Constants;
+﻿using PixelPilot.Client;
+using PixelPilot.Client.Messages.Send;
+using PixelPilot.Client.World.Constants;
 
 namespace Example.BasicBot;
 
