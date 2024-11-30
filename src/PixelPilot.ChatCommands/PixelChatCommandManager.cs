@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Google.Protobuf;
+using Microsoft.Extensions.Logging;
 using PixelPilot.ChatCommands.Commands;
 using PixelPilot.ChatCommands.Commands.Help;
 using PixelPilot.ChatCommands.Messages;
@@ -6,6 +7,7 @@ using PixelPilot.Client;
 using PixelPilot.Client.Messages;
 using PixelPilot.Client.Players;
 using PixelPilot.Common.Logging;
+using PixelWalker.Networking.Protobuf.WorldPackets;
 
 namespace PixelPilot.ChatCommands;
 
@@ -32,7 +34,7 @@ public class PixelChatCommandManager<T> : IChatCommandManager where T : IPixelPl
         _client.OnPacketReceived += OnPlayerPacket;
     }
 
-    public void OnPlayerPacket(object _, IPixelGamePacket packet)
+    public void OnPlayerPacket(object _, IMessage packet)
     {
         var chatPacket = packet as PlayerChatPacket;
         if (chatPacket == null) return;
