@@ -1,8 +1,9 @@
 ﻿using System.Drawing;
-using PixelPilot.PixelGameClient;
-using PixelPilot.PixelGameClient.Messages;
-using PixelPilot.PixelGameClient.World.Blocks.Placed;
-using PixelPilot.PixelHttpClient;
+using Google.Protobuf;
+using PixelPilot.Api;
+using PixelPilot.Client;
+using PixelPilot.Client.Messages;
+using PixelPilot.Client.World.Blocks.Placed;
 
 namespace PixelPilot.Structures.Extensions;
 
@@ -15,9 +16,9 @@ public static class PlacedBlockListExtensions
     /// </summary>
     /// <param name="blocks">The blocks</param>
     /// <returns>Packets to be send by the client.</returns>
-    public static List<IPixelGamePacketOut> ToChunkedPackets(this IEnumerable<IPlacedBlock> blocks)
+    public static List<IMessage> ToChunkedPackets(this IEnumerable<IPlacedBlock> blocks)
     {
-        var result = new List<IPixelGamePacketOut>();
+        var result = new List<IMessage>();
         
         // Group the blocks per type/id
         var groupedBlocks = blocks.GroupBy(block => new {Block = block.Block, Layer = block.Layer});
@@ -42,7 +43,7 @@ public static class PlacedBlockListExtensions
     /// <param name="blocks">The blocks</param>
     /// <returns>A packet</returns>
     /// <exception cref="PixelApiException">When the requirements are not met</exception>
-    public static IPixelGamePacketOut ToChunkedPacket(this List<IPlacedBlock> blocks)
+    public static IMessage ToChunkedPacket(this List<IPlacedBlock> blocks)
     {
         var blockData = blocks.First().Block;
         var layer = blocks.First().Layer;

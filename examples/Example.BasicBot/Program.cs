@@ -1,11 +1,10 @@
 ﻿using Example.BasicBot;
 using Microsoft.Extensions.Configuration;
+using PixelPilot.Client;
+using PixelPilot.Client.Players.Basic;
+using PixelPilot.Client.World;
 using PixelPilot.Common.Logging;
-using PixelPilot.PixelGameClient;
-using PixelPilot.PixelGameClient.Messages.Received;
-using PixelPilot.PixelGameClient.Messages.Send;
-using PixelPilot.PixelGameClient.Players.Basic;
-using PixelPilot.PixelGameClient.World;
+using PixelWalker.Networking.Protobuf.WorldPackets;
 
 // Load the configuration. Don't store your account token in the code :)
 var configuration = new ConfigurationBuilder()
@@ -58,11 +57,14 @@ client.OnPacketReceived += (_, packet) =>
             var player = playerManager.GetPlayer(chat.PlayerId);
             if (player == null) return;
 
-            client.Send(new PlayerChatOutPacket($"Pong! ({player.Username}, {player.X}, {player.Y})"));
+            client.SendChat("Pong!");
             break;
         }
-        case PlayerJoinPacket join:
-            client.Send(new PlayerChatOutPacket($"/giveedit {join.Username}"));
+        case PlayerJoinedPacket join:
+            client.Send(new PlayerChatPacket()
+            {
+                Message = $"/giveedit {join.Properties.Username}"
+            });
             break;
     }
 };
@@ -71,10 +73,14 @@ client.OnPacketReceived += (_, packet) =>
 // Make a platform and do some silly loops.
 client.OnClientConnected += (_) =>
 {
-    client.Send(new PlayerChatOutPacket("Hello world using the PixelPilot API."));
+    client.SendChat("Hello world using the PixelPilot API.");
     Thread.Sleep(250);
     PlatformUtil.GetThread(client).Start();
-    client.Send(new PlayerMoveOutPacket(592, 1056, 0, 0, 0, 0, 0, 0, false, false, false, 100)); 
+    client.Send(new PlayerMovedPacket()
+    {
+        Position = new PointDouble() {X = 592, Y = 1056},
+        TickId = 100
+    });
 };
 
 client.OnClientDisconnected += (_, reason) =>
@@ -83,7 +89,7 @@ client.OnClientDisconnected += (_, reason) =>
 };
 
 // Connect to a room.
-await client.Connect("ps8of5j9rd6wdaw");
+await client.Connect("rc9916e8db59f8a");
 
 // Don't terminate.
 await client.WaitForDisconnect();

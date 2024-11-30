@@ -1,7 +1,6 @@
-﻿
-using PixelPilot.PixelGameClient;
-using PixelPilot.PixelGameClient.Messages.Send;
-using PixelPilot.PixelGameClient.World.Constants;
+﻿using PixelPilot.Client;
+using PixelPilot.Client.World.Blocks;
+using PixelPilot.Client.World.Constants;
 
 namespace Example.BasicBot;
 
@@ -18,7 +17,7 @@ public static class PlatformUtil
                 {
                     for (int x = 0; x < 7; x++)
                     {
-                        client.Send(new WorldBlockPlacedOutPacket(34 + x, 70, 1, betaBlocks[currentIndex]));
+                        client.Send(new BasicBlock(betaBlocks[currentIndex]).AsPacketOut(34 +x, 70, 1));
                         Thread.Sleep(25);
                     }
 

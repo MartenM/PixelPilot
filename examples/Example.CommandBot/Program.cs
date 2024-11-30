@@ -3,10 +3,9 @@ using Example.CommandBot.Commands;
 using Example.CommandBot.Commands.SubCommand;
 using Microsoft.Extensions.Configuration;
 using PixelPilot.ChatCommands;
+using PixelPilot.Client;
+using PixelPilot.Client.Players.Basic;
 using PixelPilot.Common.Logging;
-using PixelPilot.PixelGameClient;
-using PixelPilot.PixelGameClient.Messages.Send;
-using PixelPilot.PixelGameClient.Players.Basic;
 
 // Load the configuration. Don't store your account token in the code :)
 var configuration = new ConfigurationBuilder()

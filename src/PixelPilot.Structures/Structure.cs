@@ -1,6 +1,6 @@
-﻿using PixelPilot.PixelGameClient.World.Blocks;
-using PixelPilot.PixelGameClient.World.Blocks.Placed;
-using PixelPilot.PixelGameClient.World.Constants;
+﻿using PixelPilot.Client.World.Blocks;
+using PixelPilot.Client.World.Blocks.Placed;
+using PixelPilot.Client.World.Constants;
 
 namespace PixelPilot.Structures;
 

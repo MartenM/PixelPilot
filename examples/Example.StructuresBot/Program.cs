@@ -4,16 +4,17 @@
 using System.Drawing;
 using Example.BasicBot;
 using Microsoft.Extensions.Configuration;
+using PixelPilot.Client;
+using PixelPilot.Client.Messages;
+using PixelPilot.Client.Messages.Packets.Extensions;
+using PixelPilot.Client.Players;
+using PixelPilot.Client.Players.Basic;
+using PixelPilot.Client.World;
 using PixelPilot.Common.Logging;
-using PixelPilot.PixelGameClient;
-using PixelPilot.PixelGameClient.Messages;
-using PixelPilot.PixelGameClient.Messages.Received;
-using PixelPilot.PixelGameClient.Players;
-using PixelPilot.PixelGameClient.Players.Basic;
-using PixelPilot.PixelGameClient.World;
 using PixelPilot.Structures;
 using PixelPilot.Structures.Converters.PilotSimple;
 using PixelPilot.Structures.Extensions;
+using PixelWalker.Networking.Protobuf.WorldPackets;
 
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("config.json")
@@ -50,14 +51,14 @@ client.OnPacketReceived += playerManager.HandlePacket;
 // Setup some basic commands. Only allow me to execute them.
 client.OnPacketReceived += (_, packet) =>
 {
-    var playerPacket = packet as IPixelGamePlayerPacket;
-    if (playerPacket == null) return;
+    var playerId = packet.GetPlayerId();
+    if (playerId == null) return;
     
-    IPixelPlayer? player = playerManager.GetPlayer(playerPacket.PlayerId);
+    IPixelPlayer? player = playerManager.GetPlayer(playerId.Value);
     if (player == null) return;
 
     // Simple command structures.
-    if (playerPacket is PlayerChatPacket chat)
+    if (packet is PlayerChatPacket chat)
     {
         if (!chat.Message.StartsWith(".") || player.Username != "MARTEN") return;
 

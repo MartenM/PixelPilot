@@ -1,4 +1,4 @@
-﻿using PixelPilot.PixelGameClient.World.Constants;
+﻿using PixelPilot.Client.World.Constants;
 
 namespace PixelPilot.Structures.Converters.PilotSimple;
 

@@ -1,7 +1,7 @@
 ﻿using PixelPilot.ChatCommands;
-using PixelPilot.PixelGameClient;
-using PixelPilot.PixelGameClient.Players;
-using PixelPilot.PixelGameClient.Players.Basic;
+using PixelPilot.Client;
+using PixelPilot.Client.Players;
+using PixelPilot.Client.Players.Basic;
 
 namespace Example.CommandBot.Commands;
 

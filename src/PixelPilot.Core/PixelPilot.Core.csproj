@@ -15,12 +15,13 @@
         <PackageIcon>package_logo.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <Version>1.9.15</Version>
+        <Version>1.10.0-alpha</Version>
         <PackageReleaseNotes>Compatible with PixelWalker 0.12.0-alpha</PackageReleaseNotes>
         <AssemblyName>PixelPilot.Core</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Google.Protobuf" Version="3.29.0" />
       <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
       <PackageReference Include="System.Threading.RateLimiting" Version="8.0.0" />
       <PackageReference Include="Websocket.Client" Version="5.1.1" />

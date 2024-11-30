@@ -1,11 +1,10 @@
 ﻿using System.Drawing;
 using Example.BasicBot;
 using Microsoft.Extensions.Configuration;
+using PixelPilot.Client;
+using PixelPilot.Client.Players.Basic;
+using PixelPilot.Client.World;
 using PixelPilot.Common.Logging;
-using PixelPilot.PixelGameClient;
-using PixelPilot.PixelGameClient.Messages.Send;
-using PixelPilot.PixelGameClient.Players.Basic;
-using PixelPilot.PixelGameClient.World;
 
 // Load the configuration. Don't store your account token in the code :)
 var configuration = new ConfigurationBuilder()
@@ -58,12 +57,12 @@ client.OnPacketReceived += async (_, packet) =>
 // Make a platform and do some silly loops.
 client.OnClientConnected += (_) =>
 {
-    client.Send(new PlayerChatOutPacket("Hello world using the PixelPilot API."));
+    client.SendChat("Hello world using the PixelPilot API.");
 };
 
 // Connect to a room.
 await client.Connect("ozkju7mpvrofgwd");
-client.Send(new PlayerChatOutPacket("I'm alive!"));
+client.SendChat("I'm alive!");
 
 
 // Don't terminate.

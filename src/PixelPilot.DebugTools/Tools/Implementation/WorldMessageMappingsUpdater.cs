@@ -1,4 +1,4 @@
-﻿using PixelPilot.PixelHttpClient;
+﻿using PixelPilot.Api;
 
 namespace PixelPilot.DebugTools.Tools.Implementation;
 
