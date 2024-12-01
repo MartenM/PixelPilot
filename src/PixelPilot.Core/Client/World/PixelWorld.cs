@@ -5,6 +5,7 @@ using PixelPilot.Client.World.Blocks;
 using PixelPilot.Client.World.Blocks.Placed;
 using PixelPilot.Client.World.Blocks.Types;
 using PixelPilot.Client.World.Blocks.Types.Effects;
+using PixelPilot.Client.World.Blocks.Types.Music;
 using PixelPilot.Client.World.Constants;
 using PixelPilot.Common.Logging;
 using PixelWalker.Networking.Protobuf.WorldPackets;
@@ -305,6 +306,8 @@ public class PixelWorld
                 return new ToggleEffectBlock((int)block, extra[0]);
             case BlockType.Sign:
                 return new SignBlock((int)block, extra[0]);
+            case BlockType.NoteBlock:
+                return new NoteBlock(block, extra[0]);
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -351,6 +354,8 @@ public class PixelWorld
                 return new ToggleEffectBlock((int)pixelBlock, blockFields[0]);
             case BlockType.Sign:
                 return new SignBlock((int)pixelBlock, blockFields[0]);
+            case BlockType.NoteBlock:
+                return new NoteBlock(pixelBlock, blockFields[0]);
             default:
                 throw new NotImplementedException("Missing implementation of new BlockType!");
         }

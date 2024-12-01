@@ -22,17 +22,11 @@ public static class PixelBlockExtensions
                 return new[] { PacketFieldType.String };
             case BlockType.EffectTimed:
             case BlockType.EffectLeveled:
-            // case BlockType.EffectSpeed:
-            // case BlockType.EffectJumpHeight:
-            // case BlockType.EffectGravityForce:
-            // case BlockType.EffectMultiJump:
-            // case BlockType.EffectCurse:
-            // case BlockType.EffectZombie:
                 return new[] { PacketFieldType.Int32 };
             case BlockType.EffectTogglable:
-            // case BlockType.EffectFly:
-            // case BlockType.EffectInvulnerability:
                 return new[] { PacketFieldType.Boolean };
+            case BlockType.NoteBlock:
+                return new[] { PacketFieldType.ByteArray };
             case BlockType.Normal:
                 return Array.Empty<PacketFieldType>();
             default:
@@ -90,6 +84,10 @@ public static class PixelBlockExtensions
                 return BlockType.EffectLeveled;
             case PixelBlock.EffectsMultiJump:
                 return BlockType.EffectLeveled;
+            case PixelBlock.NoteDrum:
+            case PixelBlock.NoteGuitar:
+            case PixelBlock.NotePiano:
+                return BlockType.NoteBlock;
             default:
                 return BlockType.Normal;
         }
