@@ -65,6 +65,19 @@ public static class WorldPacketExtensions
             case PlayerMovedPacket:
             case PlayerChatPacket:
             case PlayerFacePacket:
+            case PlayerLocalSwitchChangedPacket:
+            case PlayerLocalSwitchResetPacket:
+            case GlobalSwitchChangedPacket:
+            case GlobalSwitchResetPacket:
+            case PlayerResetPacket:
+            case PlayerTeleportedPacket:
+            case PlayerRespawnPacket:
+            case PlayerAddEffectPacket:
+            case PlayerResetEffectsPacket:
+            case PlayerCountersUpdatePacket:
+            case PlayerTouchBlockPacket:
+            case PlayerGodModePacket:
+            case PlayerModModePacket:
                 return true;
             default:
                 return false;
