@@ -12,5 +12,7 @@ public class StructureLoader : CommandLineTool
         var structure = PilotSaveSerializer.Deserialize(fileData);
         
         Console.WriteLine("The struct was loaded successfully!");
+        Console.WriteLine($"Total blocks: \t{structure.Blocks.Count}");
+        Console.WriteLine($"Dimensions: \t{structure.Width}x{structure.Height}");
     }
 }
