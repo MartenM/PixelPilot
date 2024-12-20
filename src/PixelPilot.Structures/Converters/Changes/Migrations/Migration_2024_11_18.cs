@@ -15,7 +15,7 @@ public class Migration_2024_11_18() : VersionMigration(3)
         int mappedWorldPortal = mappedBlockData.Mapping.IndexOf(WorldPortalName);
         
         // Go over all blocks and modify entries where required.
-        for (int i = 0; i < mappedBlockData.BlockData.Count; i++)
+        for (int i = mappedBlockData.BlockData.Count - 1; i >= 0; i--)
         {
             using var bytes = new MemoryStream(Convert.FromBase64String(mappedBlockData.BlockData[i]));
             using var binReader = new BinaryReader(bytes);
@@ -27,7 +27,13 @@ public class Migration_2024_11_18() : VersionMigration(3)
             var tempId = binReader.ReadInt32();
             if (tempId != mappedWorldPortal) continue;
 
-            string worldId = bytes.Position != bytes.Length ? binReader.ReadString() : "";
+            string? worldId = bytes.Position != bytes.Length ? binReader.ReadString() : null;
+            if (worldId == null || worldId.Length == 0)
+            {
+                // Remove this portal as it's invalid.
+                mappedBlockData.BlockData.RemoveAt(i);
+                continue;
+            }
             
             // Now it's missing the spawn ID
             
