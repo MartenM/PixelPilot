@@ -21,6 +21,7 @@ public interface IPixelPlayer
     public string Username { get;  }
     public int Face { get; set; }
     public bool IsAdmin { get; }
+    public string Role { get; }
     
     public Color ChatColor { get; set; }
     public double X { get; set; }

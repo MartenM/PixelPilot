@@ -181,8 +181,8 @@ public abstract class PixelPlayerManager<T> where T : IPixelPlayer
                 player.Deaths = counters.Deaths;
                 break;
             case PlayerUpdateRightsPacket rights:
-                player.CanEdit = rights.CanEdit;
-                player.CanGod = rights.CanGod;
+                player.CanEdit = rights.Rights.CanEdit;
+                player.CanGod = rights.Rights.CanGod;
                 break;
             default:
                 _logger.LogDebug($"Unhandled PlayerPacket {packet.GetType().Namespace}");
