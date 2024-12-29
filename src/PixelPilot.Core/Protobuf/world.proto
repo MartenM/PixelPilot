@@ -51,6 +51,8 @@ message WorldPacket {
     GlobalSwitchResetPacket global_switch_reset_packet = 33;
 
     PerformWorldActionPacket perform_world_action_packet = 34;
+
+    PlayerSpectatePacket player_spectate_packet = 35;
   }
 }
 
@@ -170,8 +172,7 @@ message PlayerChatPacket {
 
 message PlayerUpdateRightsPacket {
   optional int32 player_id = 1;
-  bool can_edit = 2;
-  bool can_god = 3;
+  PlayerRights rights = 2;
 }
 
 message PlayerMovedPacket {
@@ -200,6 +201,11 @@ message PlayerTeleportedPacket {
 message PlayerFacePacket {
   optional int32 player_id = 1;
   int32 face_id = 2;
+}
+
+message PlayerSpectatePacket {
+  optional int32 player_id = 1;
+  int32 spectate_player = 2;
 }
 
 message PlayerGodModePacket {
@@ -244,7 +250,7 @@ message PlayerAddEffectPacket {
   bool from_server = 2;
 
   /* Effect data */
-  int32 effect_id = 3;
+  int32 effect_id = 3; // Todo: Make this an enum.
 
   optional int32 duration = 4;
   optional int32 strength = 5;
@@ -316,13 +322,20 @@ message PlayerProperties {
   string account_id = 2;
   string username = 3;
   int32 face = 4;
-  bool is_admin = 5;
+  string role = 5;
   bool is_friend = 6;
   PointDouble position = 7;
-  int32 username_color = 8;
-  bool is_world_owner = 9;
-  bool can_edit = 10;
-  bool can_god = 11;
+  bool is_world_owner = 8;
+  PlayerRights rights = 9;
+}
+
+message PlayerRights {
+  bool can_edit = 1;
+  bool can_god = 2;
+  bool can_toggle_minimap = 3;
+  bool can_change_world_settings = 4;
+
+  repeated string available_commands = 5;
 }
 
 message WorldMeta {
@@ -331,14 +344,24 @@ message WorldMeta {
   string owner = 3;
   string description = 4;
   string visibility = 5;
-  bool is_unsaved = 6;
+  WorldType world_Type = 6;
   bool has_unsaved_changes = 7;
+  int32 max_players = 8;
+  string owner_role = 9;
+  bool minimap_enabled = 10;
+
+  enum WorldType {
+    Saved = 0;
+    Unsaved = 1;
+    Legacy = 2;
+  }
 }
 
 message OldChatMessage {
   string player_name = 1;
-  int32 player_color = 2;
-  string message = 3;
+  string player_role = 2;
+  bool is_friend = 3;
+  string message = 4;
 }
 
 /*
