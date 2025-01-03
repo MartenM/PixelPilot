@@ -38,6 +38,8 @@ public class NoteBlock : BasicBlock
         writer.Write(y);
         writer.Write(layer);
         writer.Write(customId);
+        
+        writer.Write7BitEncodedInt(Notes.Length);
         writer.Write(Notes);
 
         return memoryStream.ToArray();
