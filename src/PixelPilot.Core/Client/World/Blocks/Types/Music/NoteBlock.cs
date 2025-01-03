@@ -47,7 +47,7 @@ public class NoteBlock : BasicBlock
 
     protected bool Equals(NoteBlock other)
     {
-        return base.Equals(other) && Notes == other.Notes;
+        return base.Equals(other) && Notes.SequenceEqual(other.Notes);
     }
 
     public override bool Equals(object? obj)
