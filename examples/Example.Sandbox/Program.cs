@@ -2,9 +2,17 @@
 using Example.BasicBot;
 using Microsoft.Extensions.Configuration;
 using PixelPilot.Client;
+using PixelPilot.Client.Messages.Packets.Extensions;
+using PixelPilot.Client.Players;
 using PixelPilot.Client.Players.Basic;
 using PixelPilot.Client.World;
+using PixelPilot.Client.World.Blocks;
+using PixelPilot.Client.World.Blocks.Placed;
+using PixelPilot.Client.World.Constants;
 using PixelPilot.Common.Logging;
+using PixelPilot.Structures.Converters.PilotSimple;
+using PixelPilot.Structures.Extensions;
+using PixelWalker.Networking.Protobuf.WorldPackets;
 
 // Load the configuration. Don't store your account token in the code :)
 var configuration = new ConfigurationBuilder()
@@ -35,22 +43,28 @@ client.OnPacketReceived += playerManager.HandlePacket;
 // Allow it to listen to client updates. Not required!
 var world = new PixelWorld();
 client.OnPacketReceived += world.HandlePacket;
-world.OnBlockPlaced += (_, playerId, oldBlock, block) =>
+world.OnBlockPlaced += (_, playerId, oldBlock, newBlock) =>
 {
     if (playerId == client.BotId) return;
     
-    client.Send(oldBlock.AsPacketOut());
-    Thread.Sleep(100);
-    client.Send(block.AsPacketOut());
+    Console.WriteLine(newBlock.Block.Block);
 };
 
 
 // Executed when the client receives a packet!
-var p1 = new Point(0, 0);
-var p2 = new Point(99, 99);
-client.OnPacketReceived += async (_, packet) =>
+client.OnPacketReceived += (_, packet) =>
 {
-    
+	var playerId = packet.GetPlayerId();
+	if (playerId == null) return;
+
+	IPixelPlayer? player = playerManager.GetPlayer(playerId.Value);
+	if (player == null) return;
+	switch (packet)
+	{
+		case PlayerChatPacket { Message: "place"}:
+            client.Send(new PlacedBlock(0, 0, WorldLayer.Foreground, new BasicBlock(PixelBlock.HazardSpikesBrownUp)).AsPacketOut());
+            break;
+	}
 };
 
 // Executed once the client receives INIT
@@ -61,7 +75,12 @@ client.OnClientConnected += (_) =>
 };
 
 // Connect to a room.
-await client.Connect("ozkju7mpvrofgwd");
+await client.Connect($"pixelpilot_testing", new JoinData()
+{
+    WorldHeight = 400,
+    WorldWidth = 636,
+    WorldTitle = "[Sandbox]"
+});
 client.SendChat("I'm alive!");
 
 
