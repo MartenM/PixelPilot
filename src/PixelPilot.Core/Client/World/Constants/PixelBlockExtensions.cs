@@ -50,6 +50,7 @@ public static class PixelBlockExtensions
             case PixelBlock.SwitchGlobalToggle:
             case PixelBlock.SwitchGlobalGate:
             case PixelBlock.SwitchGlobalDoor:
+            case PixelBlock.ToolPortalWorldSpawn:
                 return BlockType.Morphable;
             case PixelBlock.SwitchLocalResetter:
             case PixelBlock.SwitchGlobalResetter:

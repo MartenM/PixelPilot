@@ -151,7 +151,7 @@ public class PixelWorld
 
         if (stream.Position != stream.Length)
             throw new Exception(
-                $"Error while converting world buffer. Reader is at {stream.Position} while lenght is {stream.Length}");
+                $"Error while converting world buffer. Reader is at {stream.Position} while length is {stream.Length}");
     }
 
     /// <summary>
