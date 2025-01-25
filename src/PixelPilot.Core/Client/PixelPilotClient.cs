@@ -336,7 +336,8 @@ public class PixelPilotClient : IDisposable
             return;
         }
 
-        // Init packet needs to return the first 2 bytes.
+        // Handle init and store some properties.
+        // Sends back the PlayerInitReceivedPacket.
         if (packet is PlayerInitPacket init)
         {
             _send(new PlayerInitReceivedPacket());
