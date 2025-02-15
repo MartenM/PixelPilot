@@ -63,6 +63,8 @@ public class BinaryFieldConverter
                 return reader.ReadBytes(length);
             case PacketFieldType.Double:
                 return reader.ReadDoubleBE();
+            case PacketFieldType.UInt32:
+                return reader.ReadUInt32();
             default:
                 throw new Exception($"Could not deserialize type. {fieldType}");
         }
@@ -96,6 +98,8 @@ public class BinaryFieldConverter
                 return reader.ReadBytes(length);
             case PacketFieldType.Double:
                 return reader.ReadDoubleBE();
+            case PacketFieldType.UInt32:
+                return reader.ReadUInt32();
             default:
                 throw new Exception($"Could not deserialize type. {fieldType}");
         }
@@ -142,6 +146,7 @@ public class BinaryFieldConverter
         {typeof(long), 5},
         {typeof(byte[]), 6},
         {typeof(double), 7},
+        {typeof(uint), 8},
     };
 
     public static void WriteTypeBe(BinaryWriter writer, dynamic fieldValue)
@@ -194,6 +199,12 @@ public class BinaryFieldConverter
                 writer.Write7BitEncodedInt((int)PacketFieldType.ByteArray);
                 writer.Write7BitEncodedInt(input.Length);
                 writer.Write(input);
+                break;
+            case 8: // Uint32
+                writer.Write7BitEncodedInt((int)PacketFieldType.UInt32);
+                bytes = BitConverter.GetBytes(fieldValue);
+                Array.Reverse(bytes);
+                writer.Write(bytes);
                 break;
             default:
                 throw new Exception($"Could not deserialize type: {fieldType}");

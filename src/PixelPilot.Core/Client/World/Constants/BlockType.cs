@@ -17,4 +17,6 @@ public enum BlockType
     EffectTimed,
     EffectTogglable,
     EffectLeveled,
+    
+    ColorBlock,
 }

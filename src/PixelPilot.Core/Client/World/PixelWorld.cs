@@ -308,6 +308,8 @@ public class PixelWorld
                 return new SignBlock((int)block, extra[0]);
             case BlockType.NoteBlock:
                 return new NoteBlock(block, extra[0]);
+            case BlockType.ColorBlock:
+                return new ColoredBlock(block, extra[0]);
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -356,6 +358,8 @@ public class PixelWorld
                 return new SignBlock((int)pixelBlock, blockFields[0]);
             case BlockType.NoteBlock:
                 return new NoteBlock(pixelBlock, blockFields[0]);
+            case BlockType.ColorBlock:
+                return new ColoredBlock(pixelBlock, blockFields[0]);
             default:
                 throw new NotImplementedException("Missing implementation of new BlockType!");
         }

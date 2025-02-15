@@ -10,5 +10,6 @@ public enum PacketFieldType
     Float = 5,
     Double = 6,
     Boolean = 7,
-    ByteArray = 8
+    ByteArray = 8,
+    UInt32 = 9,
 }

@@ -27,6 +27,8 @@ public static class PixelBlockExtensions
                 return new[] { PacketFieldType.Boolean };
             case BlockType.NoteBlock:
                 return new[] { PacketFieldType.ByteArray };
+            case BlockType.ColorBlock:
+                return new[] { PacketFieldType.UInt32 };
             case BlockType.Normal:
                 return Array.Empty<PacketFieldType>();
             default:
@@ -89,6 +91,9 @@ public static class PixelBlockExtensions
             case PixelBlock.NoteGuitar:
             case PixelBlock.NotePiano:
                 return BlockType.NoteBlock;
+            case PixelBlock.CustomCheckerBg:
+            case PixelBlock.CustomSolidBg:
+                return BlockType.ColorBlock;
             default:
                 return BlockType.Normal;
         }
