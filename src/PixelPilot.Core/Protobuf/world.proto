@@ -53,6 +53,8 @@ message WorldPacket {
     PerformWorldActionPacket perform_world_action_packet = 34;
 
     PlayerSpectatePacket player_spectate_packet = 35;
+
+    CounterTransactionPacket counter_transaction_packet = 36;
   }
 }
 
@@ -92,6 +94,12 @@ message PerformWorldActionPacket {
   }
 
   Action action = 1;
+}
+
+message CounterTransactionPacket {
+  int32 player_id = 1;
+  int32 counter_id = 2;
+  int32 count = 3;
 }
 
 /*
@@ -278,6 +286,8 @@ message PlayerCountersUpdatePacket {
   int32 coins = 2;
   int32 blue_coins = 3;
   int32 deaths = 4;
+
+  bool from_server = 5;
 }
 
 message PlayerLocalSwitchChangedPacket {
@@ -315,6 +325,7 @@ message PlayerWorldState {
   bool godmode = 8;
   bool modmode = 9;
   int32 team_id = 10;
+  repeated int32 counters = 11;
 }
 
 message PlayerProperties {
