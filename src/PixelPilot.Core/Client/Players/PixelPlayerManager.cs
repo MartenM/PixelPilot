@@ -169,7 +169,7 @@ public abstract class PixelPlayerManager<T> where T : IPixelPlayer
                 player.CanGod = true;
                 break;
             case PlayerResetPacket reset:
-                ResetPlayer(player, reset.Position.ToPoint());
+                ResetPlayer(player, reset.Position?.ToPoint() ?? null);
                 break;
             case PlayerRespawnPacket respawn:
                 player.X = respawn.Position.X;
