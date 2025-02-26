@@ -5,11 +5,11 @@ using System.Drawing;
 using Example.BasicBot;
 using Microsoft.Extensions.Configuration;
 using PixelPilot.Client;
-using PixelPilot.Client.Messages;
 using PixelPilot.Client.Messages.Packets.Extensions;
 using PixelPilot.Client.Players;
 using PixelPilot.Client.Players.Basic;
 using PixelPilot.Client.World;
+using PixelPilot.Client.World.Blocks.Types;
 using PixelPilot.Common.Logging;
 using PixelPilot.Structures;
 using PixelPilot.Structures.Converters.PilotSimple;
@@ -35,9 +35,9 @@ var point1 = new Point(0, 0);
 var point2 = new Point(0, 0);
 
 var client = PixelPilotClient.Builder()
-    .SetToken(config.AccountToken)
-    // .SetEmail(config.AccountEmail)
-    // .SetPassword(config.AccountPassword)
+    // .SetToken(config.AccountToken)
+    .SetEmail(config.AccountEmail)
+    .SetPassword(config.AccountPassword)
     .SetPrefix("[StructBot] ")
     .SetAutomaticReconnect(false)
     .Build();
@@ -47,6 +47,14 @@ client.OnPacketReceived += world.HandlePacket;
 
 var playerManager = new PlayerManager();
 client.OnPacketReceived += playerManager.HandlePacket;
+
+world.OnBlockPlaced += (sender, id, block, newBlock) =>
+{
+    if (newBlock.Block is ColoredBlock coloredBlock)
+    {
+        Console.WriteLine(coloredBlock.BlockColor);
+    }
+};
 
 // Setup some basic commands. Only allow me to execute them.
 client.OnPacketReceived += (_, packet) =>

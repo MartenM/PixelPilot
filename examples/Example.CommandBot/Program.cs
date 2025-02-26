@@ -47,7 +47,7 @@ client.OnClientConnected += (_) =>
 };
 
 // Connect to a room.
-await client.Connect("mknckr7oqxq24xa");
+await client.Connect("r082b210d67df52");
 
 // Don't terminate.
 await client.WaitForDisconnect();

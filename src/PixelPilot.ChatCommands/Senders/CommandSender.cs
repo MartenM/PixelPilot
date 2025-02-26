@@ -7,13 +7,16 @@ public class CommandSender : ICommandSender
 {
     private PixelPilotClient _client;
     
-    public CommandSender(IPixelPlayer player, PixelPilotClient client)
+    public CommandSender(IPixelPlayer player, PixelPilotClient client, string prefixUsed)
     {
         Player = player;
         _client = client;
+        PrefixUsed = prefixUsed;
     }
 
     public IPixelPlayer Player { get; }
+    
+    public string PrefixUsed { get; set; }
 
     public virtual void SendMessage(string msg)
     {

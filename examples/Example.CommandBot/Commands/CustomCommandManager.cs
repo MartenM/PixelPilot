@@ -14,16 +14,16 @@ public class CustomCommandManager : PixelChatCommandManager<Player>
         _client = client;
     }
     
-    protected override ICommandSender CreateSender(Player player)
+    protected override ICommandSender CreateSender(Player player, string prefixUsed)
     {
         // Create a custom sender that executes the permission check.
-        return new CustomSender(player, _client);
+        return new CustomSender(player, _client, prefixUsed);
     }
 }
 
 class CustomSender : CommandSender
 {
-    public CustomSender(IPixelPlayer player, PixelPilotClient client) : base(player, client)
+    public CustomSender(IPixelPlayer player, PixelPilotClient client, string prefixUsed) : base(player, client, prefixUsed)
     {
         
     }

@@ -21,6 +21,11 @@ public class PixelChatCommandManager<T> : IChatCommandManager where T : IPixelPl
     public List<ChatCommand> ChatCommands { get; set; } = new();
 
     public IHelpFormatter HelpFormatter { get; set; } = new BasicHelpFormatter();
+    
+    public bool SendHelp { get; set; }
+    public bool RegisterCustomCommands { get; set; } = true;
+    public bool RegisterRestrictedCustomCommands { get; set; } = true;
+    
     public List<ChatCommand> GetAvailableCommands(ICommandSender sender)
     {
         return ChatCommands.Where(cmd => cmd.CheckPermission(sender)).ToList();
@@ -31,27 +36,71 @@ public class PixelChatCommandManager<T> : IChatCommandManager where T : IPixelPl
         _client = client;
         _pixelPlayerManager = pixelPlayerManager;
         
-        _client.OnPacketReceived += OnPlayerPacket;
+        _client.OnPacketReceived += HandlePacket;
     }
 
-    public void OnPlayerPacket(object _, IMessage packet)
+    private void HandlePacket(object sender, IMessage packet)
     {
-        var chatPacket = packet as PlayerChatPacket;
-        if (chatPacket == null) return;
+        if (packet is PlayerChatPacket chatPacket)
+        {
+            OnPlayerChat(chatPacket);
+            return;
+        }
 
-        if (!CommandPrefixes.Any(prefix => chatPacket.Message.StartsWith(prefix))) return;
+        if (packet is PlayerDirectMessagePacket directMessagePacket)
+        {
+            OnDirectMessage(directMessagePacket);
+            return;
+        }
+    }
+    
+    private void OnPlayerChat(PlayerChatPacket packet)
+    {
+        var prefix = CommandPrefixes.FirstOrDefault(prefix => packet.Message.StartsWith(prefix));
+        if (prefix == null) return;
         
-        var commandText = chatPacket.Message.Substring(1);
-        var player = _pixelPlayerManager.GetPlayer(chatPacket.PlayerId);
+        var commandText = packet.Message.Substring(prefix.Length);
+        
+        var player = _pixelPlayerManager.GetPlayer(packet.PlayerId);
         if (player == null) return;
+        
+        var sender = CreateSender(player, prefix);
+        
+        OnPlayerCommand(prefix, sender, commandText);
+    }
 
+    private void OnDirectMessage(PlayerDirectMessagePacket packet)
+    {
+        var prefix = "//";
+        if (!packet.Message.StartsWith(prefix)) return;
+        
+        var commandText = packet.Message.Substring(prefix.Length);
+        
+        var player = _pixelPlayerManager.GetPlayer(packet.FromPlayerId);
+        if (player == null) return;
+        
+        var sender = CreateSender(player, prefix);
+        
+        OnPlayerCommand(prefix, sender, commandText);
+    }
+
+    public void OnPlayerCommand(string prefix, ICommandSender sender, string commandText)
+    {
         var args = commandText.Split(" ");
         var command = ChatCommands.FirstOrDefault(cmd => cmd.CheckNameMatch(args[0]));
-        var sender = CreateSender(player);
         
         if (command == null)
         {
-            // Command not found. Don't do anything.
+            // Command not found.
+            if (CommandMessages.UnkownCommand != null)
+            {
+                sender.SendMessage(CommandMessages.UnkownCommand.Replace("%prefix%", prefix));
+            }
+
+            if (SendHelp)
+            {
+                HelpFormatter.SendHelp(sender, GetAvailableCommands(sender));
+            }
             return;
         }
         
@@ -68,7 +117,7 @@ public class PixelChatCommandManager<T> : IChatCommandManager where T : IPixelPl
             {
                 try
                 {
-                    await result.WaitAsync(new CancellationToken());
+                    await result;
                 }
                 catch (Exception ex)
                 {
@@ -89,18 +138,26 @@ public class PixelChatCommandManager<T> : IChatCommandManager where T : IPixelPl
         }
     }
 
-    protected virtual ICommandSender CreateSender(T player)
+    protected virtual ICommandSender CreateSender(T player, string prefixUsed)
     {
-        return new CommandSender(player, _client);
+        return new CommandSender(player, _client, prefixUsed);
     }
 
     public void AddCommand(ChatCommand command)
     {
         ChatCommands.Add(command);
+
+        if (RegisterCustomCommands)
+        {
+            if (command.GetFullPermission() == null || RegisterRestrictedCustomCommands)
+            {
+                _client.SendChat($"/custom register {command.Name}", prefix: false);
+            }
+        }
     }
 
     public void AddHelpCommand()
     {
-        ChatCommands.Add(new BasicHelpCommand(this));
+        AddCommand(new BasicHelpCommand(this));
     }
 }
