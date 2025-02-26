@@ -36,7 +36,7 @@ public class TestCommand : ChatCommand
 
 Now create a command manager and hook it to the client. Register the command and add the optional help command.
 ```csharp
-var commandManager = new CustomCommandManager(client, playerManager);
+var commandManager = new CommandManager(client, playerManager);
 commandManager.AddHelpCommand();
 commandManager.AddCommand(new TestCommand());
 ```
