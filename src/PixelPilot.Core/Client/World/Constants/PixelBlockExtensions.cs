@@ -54,43 +54,53 @@ public static class PixelBlockExtensions
             case PixelBlock.SwitchGlobalDoor:
             case PixelBlock.ToolPortalWorldSpawn:
             case PixelBlock.CounterBlackDoor:
+            case PixelBlock.CounterBlackReusableSet:
             case PixelBlock.CounterBlackGate:
             case PixelBlock.CounterBlackConsumable:
             case PixelBlock.CounterBlackReusable:
             case PixelBlock.CounterWhiteDoor:
+            case PixelBlock.CounterWhiteReusableSet:
             case PixelBlock.CounterWhiteGate:
             case PixelBlock.CounterWhiteConsumable:
             case PixelBlock.CounterWhiteReusable:
             case PixelBlock.CounterGrayDoor:
+            case PixelBlock.CounterGrayReusableSet:
             case PixelBlock.CounterGrayGate:
             case PixelBlock.CounterGrayConsumable:
             case PixelBlock.CounterGrayReusable:
             case PixelBlock.CounterRedDoor:
+            case PixelBlock.CounterRedReusableSet:
             case PixelBlock.CounterRedGate:
             case PixelBlock.CounterRedConsumable:
             case PixelBlock.CounterRedReusable:
             case PixelBlock.CounterOrangeDoor:
+            case PixelBlock.CounterOrangeReusableSet:
             case PixelBlock.CounterOrangeGate:
             case PixelBlock.CounterOrangeConsumable:
             case PixelBlock.CounterOrangeReusable:
             case PixelBlock.CounterYellowDoor:
+            case PixelBlock.CounterYellowReusableSet:
             case PixelBlock.CounterYellowGate:
             case PixelBlock.CounterYellowConsumable:
             case PixelBlock.CounterYellowReusable:
             case PixelBlock.CounterGreenDoor:
+            case PixelBlock.CounterGreenReusableSet:
             case PixelBlock.CounterGreenGate:
             case PixelBlock.CounterGreenConsumable:
             case PixelBlock.CounterGreenReusable:
             case PixelBlock.CounterCyanDoor:
+            case PixelBlock.CounterCyanReusableSet:
             case PixelBlock.CounterCyanGate:
             case PixelBlock.CounterCyanConsumable:
             case PixelBlock.CounterCyanReusable:
             case PixelBlock.CounterBlueDoor:
+            case PixelBlock.CounterBlueReusableSet:
             case PixelBlock.CounterBlueGate:
             case PixelBlock.CounterBlueConsumable:
             case PixelBlock.CounterBlueReusable:
             case PixelBlock.CounterMagentaGate:
             case PixelBlock.CounterMagentaDoor:
+            case PixelBlock.CounterMagentaReusableSet:
             case PixelBlock.CounterMagentaConsumable:
             case PixelBlock.CounterMagentaReusable:
                 return BlockType.Morphable;
