@@ -92,9 +92,9 @@ public class PixelChatCommandManager<T> : IChatCommandManager where T : IPixelPl
         if (command == null)
         {
             // Command not found.
-            if (CommandMessages.UnkownCommand != null)
+            if (CommandMessages.UnknownCommand != null)
             {
-                sender.SendMessage(CommandMessages.UnkownCommand.Replace("%prefix%", prefix));
+                sender.SendMessage(CommandMessages.UnknownCommand.Replace("%prefix%", prefix));
             }
 
             if (SendHelp)
