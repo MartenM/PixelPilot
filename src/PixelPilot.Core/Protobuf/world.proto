@@ -22,39 +22,41 @@ message WorldPacket {
     PlayerFacePacket player_face_packet = 9;
     PlayerGodModePacket player_god_mode_packet = 10;
     PlayerModModePacket player_mod_mode_packet = 11;
-    PlayerRespawnPacket player_respawn_packet = 12;
-    PlayerResetPacket player_reset_packet = 13;
-    PlayerTouchBlockPacket player_touch_block_packet = 14;
-    PlayerAddEffectPacket player_add_effect_packet = 15;
-    PlayerRemoveEffectPacket player_remove_effect_packet = 16;
-    PlayerResetEffectsPacket player_reset_effects_packet = 17;
-    PlayerTeamUpdatePacket player_team_update_packet = 18;
-    PlayerCountersUpdatePacket player_counters_update_packet = 19;
-    PlayerLocalSwitchChangedPacket player_local_switch_changed_packet = 20;
-    PlayerLocalSwitchResetPacket player_local_switch_reset_packet = 21;
-    PlayerDirectMessagePacket player_direct_message_packet = 22;
-    PlayerTouchPlayerPacket player_touch_player_packet = 23;
-    PlayerTeleportedPacket player_teleported_packet = 24;
+    PlayerEnterSecretEditKeyPacket player_enter_secret_edit_key_packet = 12;
+    PlayerRespawnPacket player_respawn_packet = 13;
+    PlayerResetPacket player_reset_packet = 14;
+    PlayerTouchBlockPacket player_touch_block_packet = 15;
+    PlayerAddEffectPacket player_add_effect_packet = 16;
+    PlayerRemoveEffectPacket player_remove_effect_packet = 17;
+    PlayerResetEffectsPacket player_reset_effects_packet = 18;
+    PlayerTeamUpdatePacket player_team_update_packet = 19;
+    PlayerCountersUpdatePacket player_counters_update_packet = 20;
+    PlayerLocalSwitchChangedPacket player_local_switch_changed_packet = 21;
+    PlayerLocalSwitchResetPacket player_local_switch_reset_packet = 22;
+    PlayerDirectMessagePacket player_direct_message_packet = 23;
+    PlayerTouchPlayerPacket player_touch_player_packet = 24;
+    PlayerTeleportedPacket player_teleported_packet = 25;
 
     /* World packets - Mostly send out by the server */
-    WorldReloadedPacket world_reloaded_packet = 25;
-    WorldClearedPacket world_cleared_packet = 26;
-    WorldMetaUpdatePacket world_meta_update_packet = 27;
-    WorldBlockPlacedPacket world_block_placed_packet = 28;
-    WorldBlockFilledPacket world_block_filled_packet = 29;
+    WorldReloadedPacket world_reloaded_packet = 26;
+    WorldClearedPacket world_cleared_packet = 27;
+    WorldMetaUpdatePacket world_meta_update_packet = 28;
+    WorldBlockPlacedPacket world_block_placed_packet = 29;
+    WorldBlockFilledPacket world_block_filled_packet = 30;
 
     /* MISC */
-    OldChatMessagesPacket old_chat_messages_packet = 30;
-    SystemMessagePacket system_message_packet = 31;
+    OldChatMessagesPacket old_chat_messages_packet = 31;
+    SystemMessagePacket system_message_packet = 32;
 
-    GlobalSwitchChangedPacket global_switch_changed_packet = 32;
-    GlobalSwitchResetPacket global_switch_reset_packet = 33;
+    GlobalSwitchChangedPacket global_switch_changed_packet = 33;
+    GlobalSwitchResetPacket global_switch_reset_packet = 34;
 
-    PerformWorldActionPacket perform_world_action_packet = 34;
+    PerformWorldActionPacket perform_world_action_packet = 35;
+    ChangeSecretEditKeyPacket change_secret_edit_key_packet = 36;
 
-    PlayerSpectatePacket player_spectate_packet = 35;
+    PlayerSpectatePacket player_spectate_packet = 37;
 
-    CounterTransactionPacket counter_transaction_packet = 36;
+    PlayerCounterTransactionPacket player_counter_transaction_packet = 38;
   }
 }
 
@@ -96,8 +98,12 @@ message PerformWorldActionPacket {
   Action action = 1;
 }
 
-message CounterTransactionPacket {
-  int32 player_id = 1;
+message ChangeSecretEditKeyPacket {
+  string new_edit_key = 1;
+}
+
+message PlayerCounterTransactionPacket {
+  optional int32 player_id = 1;
   int32 counter_id = 2;
   int32 count = 3;
 }
@@ -174,12 +180,12 @@ message PlayerLeftPacket {
 }
 
 message PlayerChatPacket {
-  int32 player_id = 1;
+  optional int32 player_id = 1;
   string message = 2;
 }
 
 message PlayerUpdateRightsPacket {
-  optional int32 player_id = 1;
+  int32 player_id = 1;
   PlayerRights rights = 2;
 }
 
@@ -223,7 +229,11 @@ message PlayerGodModePacket {
 
 message PlayerModModePacket {
   optional int32 player_id = 1;
-  bool enabled = 3;
+  bool enabled = 2;
+}
+
+message PlayerEnterSecretEditKeyPacket {
+  string secret_edit_key = 2;
 }
 
 message PlayerRespawnPacket {
@@ -355,11 +365,12 @@ message WorldMeta {
   string owner = 3;
   string description = 4;
   string visibility = 5;
-  WorldType world_Type = 6;
+  WorldType world_type = 6;
   bool has_unsaved_changes = 7;
   int32 max_players = 8;
   string owner_role = 9;
   bool minimap_enabled = 10;
+  bool has_secret_edit_key = 11;
 
   enum WorldType {
     Saved = 0;
