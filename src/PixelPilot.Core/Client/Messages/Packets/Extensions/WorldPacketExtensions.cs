@@ -78,7 +78,7 @@ public static class WorldPacketExtensions
             case PlayerTouchBlockPacket:
             case PlayerGodModePacket:
             case PlayerModModePacket:
-            case CounterTransactionPacket:
+            case PlayerCounterTransactionPacket:
                 return true;
             default:
                 return false;
