@@ -7,4 +7,5 @@ public enum WorldLayer
 {
     Background = 0,
     Foreground = 1,
+    Overlay = 2,
 }

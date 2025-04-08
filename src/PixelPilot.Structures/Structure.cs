@@ -30,7 +30,7 @@ public class Structure
             if (ContainsEmpty) return Blocks;
             
             // Fill with air blocks at the end.
-            var placed = new bool[2, Width, Height];
+            var placed = new bool[3, Width, Height];
             var emptyList = new List<IPlacedBlock>();
             
             foreach (var block in Blocks)
@@ -40,7 +40,7 @@ public class Structure
             
             // Iterate over this 3D array and add places that are still false.
             // Iterate through each dimension of the array
-            for (int l = 0; l < 2; l++) // First dimension
+            for (int l = 0; l < 3; l++) // First dimension
             {
                 for (int x = 0; x < Width; x++) // Second dimension (Width)
                 {
@@ -56,7 +56,7 @@ public class Structure
             
             emptyList.AddRange(Blocks);
 
-            if (emptyList.Count != 2 * Width * Height)
+            if (emptyList.Count != 3 * Width * Height)
                 throw new Exception(
                     $"Missing or extra blocks. Expected: {Width} * {Height} * 2 = {Width * Height * 2} but got {emptyList.Count} instead.");
             

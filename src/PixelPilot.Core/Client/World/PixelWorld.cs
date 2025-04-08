@@ -86,13 +86,13 @@ public class PixelWorld
    
     public PixelWorld()
     {
-        _worldData = new IPixelBlock[2, 0, 0];
+        _worldData = new IPixelBlock[3, 0, 0];
     }
     public PixelWorld(int height, int width)
     {
         Height = height;
         Width = width;
-        _worldData = new IPixelBlock[2, width, height];
+        _worldData = new IPixelBlock[3, width, height];
     }
 
     public PixelWorld(PlayerInitPacket initPacket) : this(initPacket.WorldHeight, initPacket.WorldWidth)
@@ -143,6 +143,9 @@ public class PixelWorld
 
             // Foreground
             DeserializeLayer(1, reader);
+            
+            // Overlay layer
+            DeserializeLayer(2, reader);
         }
         catch (EndOfStreamException ex)
         {
@@ -167,7 +170,7 @@ public class PixelWorld
             Height = init.WorldHeight;
             Width = init.WorldWidth;
             _worldMeta = init.WorldMeta;
-            _worldData = new IPixelBlock[2, Width, Height];
+            _worldData = new IPixelBlock[3, Width, Height];
             Init(init.WorldData.ToByteArray());
             
             OnWorldInit?.Invoke(this);
@@ -189,8 +192,8 @@ public class PixelWorld
         
         if (packet is WorldClearedPacket clear)
         {
-            _worldData = new IPixelBlock[2, Width, Height];
-            for (int l = 0; l < 2; l++)
+            _worldData = new IPixelBlock[3, Width, Height];
+            for (int l = 0; l < 3; l++)
             {
                 for (int x = 0; x < Width; x++)
                 {

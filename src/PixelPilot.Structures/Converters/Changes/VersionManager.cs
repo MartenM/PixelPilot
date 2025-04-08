@@ -13,6 +13,8 @@ public class VersionManager
         AddMigration(new Migration_2024_07_29());
         AddMigration(new Migration_2024_11_18());
         AddMigration(new Migration_2024_12_04());
+        AddMigration(new Migration_2025_08_04());
+        AddMigration(new Migration_2025_08_05());
     }
 
     private void AddMigration(VersionMigration migration)

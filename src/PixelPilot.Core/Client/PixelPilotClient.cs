@@ -121,7 +121,7 @@ public class PixelPilotClient : IDisposable
         }
         
         _logger.LogInformation("Successfully acquired the room token");
-        var gameRoomUrl = $"{EndPoints.GameWebsocketEndpoint}/room/{joinRequest.Token}";
+        var gameRoomUrl = $"{EndPoints.GameWebsocketEndpoint}/ws?joinkey={joinRequest.Token}";
 
         if (joinData != null)
         {
@@ -129,7 +129,7 @@ public class PixelPilotClient : IDisposable
             {
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             }));
-            var connectUrl = new Uri($"{gameRoomUrl}?joinData={Convert.ToBase64String(binaryJoinData)}");
+            var connectUrl = new Uri($"{gameRoomUrl}&joinData={Convert.ToBase64String(binaryJoinData)}");
             _socketClient = new WebsocketClient(connectUrl);
         }
         else

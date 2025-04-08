@@ -2,6 +2,7 @@
 
 // Load the configuration. Don't store your account token in the code :)
 using System.Drawing;
+using System.Text.Json;
 using Example.BasicBot;
 using Microsoft.Extensions.Configuration;
 using PixelPilot.Client;
@@ -35,9 +36,9 @@ var point1 = new Point(0, 0);
 var point2 = new Point(0, 0);
 
 var client = PixelPilotClient.Builder()
-    // .SetToken(config.AccountToken)
-    .SetEmail(config.AccountEmail)
-    .SetPassword(config.AccountPassword)
+    .SetToken(config.AccountToken)
+    // .SetEmail(config.AccountEmail)
+    // .SetPassword(config.AccountPassword)
     .SetPrefix("[StructBot] ")
     .SetAutomaticReconnect(false)
     .Build();
@@ -48,14 +49,6 @@ client.OnPacketReceived += world.HandlePacket;
 var playerManager = new PlayerManager();
 client.OnPacketReceived += playerManager.HandlePacket;
 
-world.OnBlockPlaced += (sender, id, block, newBlock) =>
-{
-    if (newBlock.Block is ColoredBlock coloredBlock)
-    {
-        Console.WriteLine(coloredBlock.BlockColor);
-    }
-};
-
 // Setup some basic commands. Only allow me to execute them.
 client.OnPacketReceived += (_, packet) =>
 {
@@ -64,6 +57,8 @@ client.OnPacketReceived += (_, packet) =>
     
     IPixelPlayer? player = playerManager.GetPlayer(playerId.Value);
     if (player == null) return;
+
+    
 
     // Simple command structures.
     if (packet is PlayerChatPacket chat)

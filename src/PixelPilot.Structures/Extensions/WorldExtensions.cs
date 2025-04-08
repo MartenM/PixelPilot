@@ -24,7 +24,7 @@ public static class WorldExtensions
         List<IPlacedBlock> blocks = new();
         
         // Copy the world based on X Y
-        for (int layer = 1; layer >= 0; layer--)
+        for (int layer = 2; layer >= 0; layer--)
         {
             for (int dx = 0; dx < width; dx++)
             {
