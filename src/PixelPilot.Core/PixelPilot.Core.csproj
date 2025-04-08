@@ -15,8 +15,8 @@
         <PackageIcon>package_logo.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <Version>1.11.12</Version>
-        <PackageReleaseNotes>Compatible with PixelWalker 0.16.0-alpha</PackageReleaseNotes>
+        <Version>1.11.13</Version>
+        <PackageReleaseNotes>Compatible with PixelWalker 0.20.0-alpha</PackageReleaseNotes>
         <AssemblyName>PixelPilot.Core</AssemblyName>
     </PropertyGroup>
 
