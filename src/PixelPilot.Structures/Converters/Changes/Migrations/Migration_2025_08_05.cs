@@ -15,11 +15,11 @@ public class Migration_2025_08_05() : VersionMigration(6)
 
     private static string UpdateName(string old)
     {
-        if (old.StartsWith("Gold"))
+        if (!old.StartsWith("Gold"))
         {
-            return old.Replace("Gold", "Gilded");
+            return old;
         }
 
-        return old;
+        return "Gilded" + old.Replace("Chisled", "Chiseled");
     }
 }
