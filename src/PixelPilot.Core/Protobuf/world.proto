@@ -34,7 +34,7 @@ message WorldPacket {
     PlayerLocalSwitchChangedPacket player_local_switch_changed_packet = 21;
     PlayerLocalSwitchResetPacket player_local_switch_reset_packet = 22;
     PlayerDirectMessagePacket player_direct_message_packet = 23;
-    PlayerTouchPlayerPacket player_touch_player_packet = 24;
+    PlayerExchangeEffectsPacket player_exchange_effects_packet = 24;
     PlayerTeleportedPacket player_teleported_packet = 25;
 
     /* World packets - Mostly send out by the server */
@@ -57,6 +57,7 @@ message WorldPacket {
     PlayerSpectatePacket player_spectate_packet = 37;
 
     PlayerCounterTransactionPacket player_counter_transaction_packet = 38;
+    PlayerSetCollectiblesPacket player_set_collectibles_packet = 39;
   }
 }
 
@@ -122,15 +123,13 @@ message WorldClearedPacket {
 message WorldBlockPlacedPacket {
   optional int32 player_id = 1;
 
-  bool is_fill_operation = 3;
-
   // Repeated for use in fill operations
-  repeated PointInteger positions = 4;
-  int32 layer = 5;
-  int32 block_id = 6;
+  repeated PointInteger positions = 2;
+  int32 layer = 3;
+  int32 block_id = 4;
 
   // Legacy? Holds a byte[] that can hold extra information
-  bytes extra_fields = 7;
+  bytes extra_fields = 5;
 }
 
 message WorldBlockFilledPacket {
@@ -161,8 +160,8 @@ message PlayerInitPacket {
   int32 world_height = 4;
 
   /* Very specific world state */
-  bytes global_switch_state = 6;
-  bytes world_data = 7;
+  bytes global_switch_state = 5;
+  bytes world_data = 6;
 }
 
 message PlayerInitReceivedPacket {
@@ -233,7 +232,7 @@ message PlayerModModePacket {
 }
 
 message PlayerEnterSecretEditKeyPacket {
-  string secret_edit_key = 2;
+  string secret_edit_key = 1;
 }
 
 message PlayerRespawnPacket {
@@ -249,40 +248,30 @@ message PlayerResetPacket {
 message PlayerTouchBlockPacket {
   optional int32 player_id = 1;
   optional PointInteger position = 2;
-  int32 block_id = 3;
-}
-
-message PlayerTouchPlayerPacket {
-  optional int32 player_id = 1;
-  int32 touched_player = 2;
-  TouchType touch_type = 3;
-
-  enum TouchType {
-    START = 0;
-    END = 1;
-  }
+  int32 layer = 3;
+  int32 block_id = 4;
 }
 
 message PlayerAddEffectPacket {
-  optional int32 player_id = 1;
-  bool from_server = 2;
-
-  /* Effect data */
-  int32 effect_id = 3; // Todo: Make this an enum.
-
-  optional int32 duration = 4;
-  optional int32 strength = 5;
+  int32 player_id = 1;
+  int32 effect_id = 2;
+  optional int32 duration = 3;
+  optional int32 strength = 4;
+  optional int32 from_player_id = 5;
 }
 
 message PlayerRemoveEffectPacket {
-  optional int32 player_id = 1;
-
-  int32 effect_id = 4; // Todo: Make this an enum.
+  int32 player_id = 1;
+  int32 effect_id = 2;
+  optional int32 to_player_id = 3;
 }
 
 message PlayerResetEffectsPacket {
-  optional int32 player_id = 1;
-  bool from_server = 2;
+  int32 player_id = 1;
+}
+
+message PlayerExchangeEffectsPacket {
+  int32 target_player_id = 1;
 }
 
 message PlayerTeamUpdatePacket {
@@ -317,6 +306,11 @@ message PlayerDirectMessagePacket {
   int32 target_player_id = 2;
 
   string message = 3;
+}
+
+message PlayerSetCollectiblesPacket {
+  optional int32 player_id = 1;
+  repeated PointInteger collected = 2;
 }
 
 /*
@@ -400,4 +394,13 @@ message PointInteger {
 message PointDouble {
   double x = 1;
   double y = 2;
+}
+
+/*
+ * Represents an effect.
+ */
+message PlayerEffect {
+  int32 type = 1;
+  optional int32 duration = 2;
+  optional int32 strength = 3;
 }
