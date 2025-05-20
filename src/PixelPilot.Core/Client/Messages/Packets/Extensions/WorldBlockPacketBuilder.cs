@@ -13,7 +13,6 @@ public static class WorldBlockPacketBuilder
         {
             Layer = layer,
             BlockId = blockId,
-            IsFillOperation = false,
             ExtraFields = ByteString.Empty
         };
         
@@ -30,7 +29,6 @@ public static class WorldBlockPacketBuilder
         {
             Layer = layer,
             BlockId = blockId,
-            IsFillOperation = false,
             ExtraFields = ByteString.CopyFrom(encodedExtra)
         };
         
@@ -45,7 +43,6 @@ public static class WorldBlockPacketBuilder
         {
             Layer = layer,
             BlockId = blockId,
-            IsFillOperation = false,
             ExtraFields = ByteString.Empty
         };
 
@@ -65,7 +62,6 @@ public static class WorldBlockPacketBuilder
         {
             Layer = layer,
             BlockId = blockId,
-            IsFillOperation = false,
             ExtraFields = ByteString.CopyFrom(encodedExtra)
         };
         
