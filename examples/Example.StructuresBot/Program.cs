@@ -49,6 +49,29 @@ client.OnPacketReceived += world.HandlePacket;
 var playerManager = new PlayerManager();
 client.OnPacketReceived += playerManager.HandlePacket;
 
+world.OnBlockPlaced += async (sender, id, block, newBlock) =>
+{
+    if (client.BotId == id) return;
+    
+    client.Send(block.AsPacketOut());
+
+    if (block.Block is ColoredBlock oldColorBlock)
+    {
+        client.SendChat($"Previous: R: {oldColorBlock.PrimaryColor.R} G: {oldColorBlock.PrimaryColor.G} B: {oldColorBlock.PrimaryColor.B}");
+    }
+    else
+    {
+        if (newBlock.Block is ColoredBlock newColoredBlock)
+        {
+            client.SendChat(
+                $"Placed: R: {newColoredBlock.PrimaryColor.R} G: {newColoredBlock.PrimaryColor.G} B: {newColoredBlock.PrimaryColor.B}");
+            client.Send(block.AsPacketOut());
+            await Task.Delay(500);
+            client.Send(newBlock.AsPacketOut());
+        }
+    }
+};
+
 // Setup some basic commands. Only allow me to execute them.
 client.OnPacketReceived += (_, packet) =>
 {
@@ -138,7 +161,7 @@ client.OnPacketReceived += (_, packet) =>
     }
 };
 
-await client.Connect("r735212a9ff7a3f");
+await client.Connect("8l04w8nv2ey451v");
 await world.InitTask;
 
 client.SendChat("Connected!");

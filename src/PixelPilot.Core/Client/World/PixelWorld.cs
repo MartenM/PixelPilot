@@ -1,4 +1,5 @@
-﻿using Google.Protobuf;
+﻿using System.Drawing;
+using Google.Protobuf;
 using Microsoft.Extensions.Logging;
 using PixelPilot.Client.Messages;
 using PixelPilot.Client.World.Blocks;
@@ -312,13 +313,21 @@ public class PixelWorld
             case BlockType.NoteBlock:
                 return new NoteBlock(block, extra[0]);
             case BlockType.ColorBlock:
-                return new ColoredBlock(block, extra[0]);
+            {
+                var color = Color.FromArgb(
+                    (int)((extra[0]) >> 24 & 0xFF), // Alpha
+                    (int)((extra[0] >> 16) & 0xFF), // Red
+                    (int)((extra[0] >> 8) & 0xFF), // Green
+                    (int)(extra[0] & 0xFF) // Blue
+                );
+                return new ColoredBlock(block, color);
+            }
             default:
                 throw new ArgumentOutOfRangeException();
         }
     }
 
-    
+
     /// <summary>
     /// Deserializes a WorldBlockPlacedPacket into an IPixelBlock object.
     /// This conversion loses information about where, or by who, a block was placed.
@@ -328,25 +337,25 @@ public class PixelWorld
     /// <returns>An IPlacedBlock object representing the deserialized packet but without location data.</returns>
     public static IPixelBlock DeserializeBlock(WorldBlockPlacedPacket packet)
     {
-        var pixelBlock = (PixelBlock) packet.BlockId;
-        
+        var pixelBlock = (PixelBlock)packet.BlockId;
+
         // We want to construct a PixelBlock.
         // First we need to know what type it is.
         // Then we can fill in the rest.
         var blockType = pixelBlock.GetBlockType();
         var blockFields = BinaryDataList.FromByteArray(packet.ExtraFields.ToByteArray()).Items.ToArray();
-        
+
         // Construct the block and return it. Hooray.
         switch (blockType)
         {
             case BlockType.Normal:
-                return new BasicBlock((int) pixelBlock);
+                return new BasicBlock((int)pixelBlock);
             case BlockType.Morphable:
-                return new MorphableBlock((int) pixelBlock, blockFields[0]);
+                return new MorphableBlock((int)pixelBlock, blockFields[0]);
             case BlockType.Portal:
-                return new PortalBlock((int) pixelBlock, blockFields[1], blockFields[2], blockFields[0]);
+                return new PortalBlock((int)pixelBlock, blockFields[1], blockFields[2], blockFields[0]);
             case BlockType.SwitchActivator:
-                return new ActivatorBlock((int) pixelBlock, blockFields[0], blockFields[1] == 1);
+                return new ActivatorBlock((int)pixelBlock, blockFields[0], blockFields[1] == 1);
             case BlockType.SwitchResetter:
                 return new ResetterBlock((int)pixelBlock, blockFields[0] == 1);
             case BlockType.WorldPortal:
@@ -362,7 +371,15 @@ public class PixelWorld
             case BlockType.NoteBlock:
                 return new NoteBlock(pixelBlock, blockFields[0]);
             case BlockType.ColorBlock:
-                return new ColoredBlock(pixelBlock, blockFields[0]);
+            {
+                var color = Color.FromArgb(
+                    (int)((blockFields[0]) & 0xFF), // Alpha
+                    (int)((blockFields[0] >> 8) & 0xFF), // Red
+                    (int)((blockFields[0] >> 16) & 0xFF), // Green
+                    (int)(blockFields[0] >> 24 & 0xFF) // Blue
+                );
+                return new ColoredBlock(pixelBlock,color);
+            }
             default:
                 throw new NotImplementedException("Missing implementation of new BlockType!");
         }

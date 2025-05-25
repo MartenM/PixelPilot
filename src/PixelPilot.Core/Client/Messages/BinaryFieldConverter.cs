@@ -1,7 +1,6 @@
 ﻿using System.Text;
 using Microsoft.Extensions.Logging;
 using PixelPilot.Client.Messages.Constants;
-using PixelPilot.Client.Messages.Exceptions;
 using PixelPilot.Client.Messages.Misc;
 using PixelPilot.Common.Logging;
 
