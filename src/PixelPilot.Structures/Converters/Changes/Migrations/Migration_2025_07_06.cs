@@ -1,4 +1,5 @@
-﻿using PixelPilot.Structures.Converters.Changes;
+﻿using PixelPilot.Client.World.Constants;
+using PixelPilot.Structures.Converters.Changes;
 using PixelPilot.Structures.Converters.PilotSimple;
 
 namespace PixelPilot.Structures.Converters.Migrations.Migrations;
@@ -7,14 +8,15 @@ public class Migration_2025_07_06() :  VersionMigration(7)
 {
     protected override void DoUpdate(MappedBlockData mappedBlockData)
     {
-        const string NormalPortalName = "Portal";
-        const string PortalInvisible = "PortalInvisible";
-
         List<string> oldPortalNames = new List<string>()
         {
             "Portal",
             "PortalInvisible",
         };
+
+        Dictionary<string, string> newPortalPalletName = new Dictionary<string, string>();
+        newPortalPalletName.Add("Portal", "PortalVisible");
+        newPortalPalletName.Add("PortalInvisible", "PortalInvisible");
         
         var portalTempIds = new Dictionary<int, string>();
         foreach (var oldPortalName in oldPortalNames)
@@ -58,7 +60,7 @@ public class Migration_2025_07_06() :  VersionMigration(7)
             string targetId = binReader.ReadInt32().ToString();
             
             // Get the new name.
-            var newName = $"{oldBlockName}{directions[direction]}";
+            var newName = $"{newPortalPalletName[oldBlockName]}{directions[direction]}";
             
             // Get or add the new name.
             var newId = mappedBlockData.Mapping.IndexOf(newName);
