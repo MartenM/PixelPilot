@@ -58,6 +58,8 @@ message WorldPacket {
 
     PlayerCounterTransactionPacket player_counter_transaction_packet = 38;
     PlayerSetCollectiblesPacket player_set_collectibles_packet = 39;
+
+    PlayerWoot player_woot = 40;
   }
 }
 
@@ -71,12 +73,12 @@ message Ping {
 message GlobalSwitchChangedPacket {
   int32 player_id = 1;
   int32 switch_id = 2;
-  bool enabled = 3;
+  bool switch_enabled = 3;
 }
 
 message GlobalSwitchResetPacket {
   int32 player_id = 1;
-  bool enabled = 2;
+  bool switch_enabled = 2;
 }
 
 message SystemMessagePacket {
@@ -162,6 +164,9 @@ message PlayerInitPacket {
   /* Very specific world state */
   bytes global_switch_state = 5;
   bytes world_data = 6;
+
+  // Did player woot?
+  PlayerWoot player_woot = 7;
 }
 
 message PlayerInitReceivedPacket {
@@ -296,9 +301,8 @@ message PlayerLocalSwitchChangedPacket {
 }
 
 message PlayerLocalSwitchResetPacket {
-  optional int32 player_id = 1;
-  int32 switch_id = 2;
-  bool switch_enabled = 3;
+  int32 player_id = 1;
+  bool switch_enabled = 2;
 }
 
 message PlayerDirectMessagePacket {
@@ -311,6 +315,11 @@ message PlayerDirectMessagePacket {
 message PlayerSetCollectiblesPacket {
   optional int32 player_id = 1;
   repeated PointInteger collected = 2;
+}
+
+message PlayerWoot {
+  optional int32 player_id = 1;
+  bool active = 2;
 }
 
 /*
@@ -365,6 +374,7 @@ message WorldMeta {
   string owner_role = 9;
   bool minimap_enabled = 10;
   bool has_secret_edit_key = 11;
+  int32 woots = 12;
 
   enum WorldType {
     Saved = 0;
