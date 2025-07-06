@@ -295,7 +295,7 @@ public class PixelWorld
             case BlockType.Morphable:
                 return new MorphableBlock((int)block, extra[0]);
             case BlockType.Portal:
-                return new PortalBlock( (int)block, extra[1], extra[2], extra[0]);
+                return new PortalBlock( (int)block, extra[0], extra[1]);
             case BlockType.SwitchActivator:
                 return new ActivatorBlock((int) block, extra[0], extra[1]);
             case BlockType.SwitchResetter:
@@ -353,7 +353,7 @@ public class PixelWorld
             case BlockType.Morphable:
                 return new MorphableBlock((int)pixelBlock, blockFields[0]);
             case BlockType.Portal:
-                return new PortalBlock((int)pixelBlock, blockFields[1], blockFields[2], blockFields[0]);
+                return new PortalBlock((int)pixelBlock, blockFields[0], blockFields[1]);
             case BlockType.SwitchActivator:
                 return new ActivatorBlock((int)pixelBlock, blockFields[0], blockFields[1] == 1);
             case BlockType.SwitchResetter:

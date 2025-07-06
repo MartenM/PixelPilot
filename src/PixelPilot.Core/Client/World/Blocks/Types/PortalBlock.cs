@@ -11,28 +11,25 @@ public class PortalBlock : BasicBlock
     public string PortalId { get; set; }
     public string TargetId { get; set; }
     
-    public int Direction { get; set; }
-    
-    public PortalBlock(int blockId, string portalId, string targetId, int direction) : base(blockId)
+    public PortalBlock(int blockId, string portalId, string targetId) : base(blockId)
     {
         PortalId = portalId;
         TargetId = targetId;
-        Direction = direction;
     }
 
-    public PortalBlock(PixelBlock block, string portalId, string targetId, int direction) : this((int)block, portalId, targetId, direction)
+    public PortalBlock(PixelBlock block, string portalId, string targetId) : this((int)block, portalId, targetId)
     {
         
     }
 
     public override WorldBlockPlacedPacket AsPacketOut(int x, int y, int layer)
     {
-        return WorldBlockPacketBuilder.CreatePacket(x, y, layer, BlockId, [Direction, PortalId, TargetId]);
+        return WorldBlockPacketBuilder.CreatePacket(x, y, layer, BlockId, [PortalId, TargetId]);
     }
 
     public override WorldBlockPlacedPacket AsPacketOut(List<Point> positions, int layer)
     {
-        return WorldBlockPacketBuilder.CreatePacket(positions, layer, BlockId, [Direction, PortalId, TargetId]);
+        return WorldBlockPacketBuilder.CreatePacket(positions, layer, BlockId, [PortalId, TargetId]);
     }
 
     public override byte[] AsWorldBuffer(int x, int y, int layer, int customId)
@@ -44,7 +41,6 @@ public class PortalBlock : BasicBlock
         writer.Write(y);
         writer.Write(layer);
         writer.Write(customId);
-        writer.Write(Direction);
         writer.Write(PortalId);
         writer.Write(TargetId);
 
@@ -53,7 +49,7 @@ public class PortalBlock : BasicBlock
 
     protected bool Equals(PortalBlock other)
     {
-        return base.Equals(other) && PortalId == other.PortalId && TargetId == other.TargetId && Direction == other.Direction;
+        return base.Equals(other) && PortalId == other.PortalId && TargetId == other.TargetId;
     }
 
     public override bool Equals(object? obj)
@@ -66,6 +62,6 @@ public class PortalBlock : BasicBlock
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(base.GetHashCode(), PortalId, TargetId, Direction);
+        return HashCode.Combine(base.GetHashCode(), PortalId, TargetId);
     }
 }

@@ -15,7 +15,7 @@ public static class PixelBlockExtensions
             case BlockType.SwitchActivator:
                 return new[] { PacketFieldType.Int32, PacketFieldType.Boolean };
             case BlockType.Portal:
-                return new[] { PacketFieldType.Int32, PacketFieldType.Int32, PacketFieldType.Int32 };
+                return new[] { PacketFieldType.String, PacketFieldType.String };
             case BlockType.WorldPortal:
                 return new[] { PacketFieldType.String, PacketFieldType.Int32 };
             case BlockType.Sign:
@@ -120,8 +120,14 @@ public static class PixelBlockExtensions
             case PixelBlock.SwitchLocalActivator:
             case PixelBlock.SwitchGlobalActivator:
                 return BlockType.SwitchActivator;
-            case PixelBlock.Portal:
-            case PixelBlock.PortalInvisible:
+            case PixelBlock.PortalVisibleDown:
+            case PixelBlock.PortalVisibleUp:
+            case PixelBlock.PortalVisibleLeft:
+            case PixelBlock.PortalVisibleRight:
+            case PixelBlock.PortalInvisibleDown:
+            case PixelBlock.PortalInvisibleUp:
+            case PixelBlock.PortalInvisibleLeft:
+            case PixelBlock.PortalInvisibleRight:
                 return BlockType.Portal;
             case PixelBlock.PortalWorld:
                 return BlockType.WorldPortal;
