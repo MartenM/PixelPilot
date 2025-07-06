@@ -8,19 +8,19 @@ namespace PixelPilot.Client.World.Blocks.Types;
 
 public class PortalBlock : BasicBlock
 {
-    public int PortalId { get; set; }
-    public int TargetId { get; set; }
+    public string PortalId { get; set; }
+    public string TargetId { get; set; }
     
     public int Direction { get; set; }
     
-    public PortalBlock(int blockId, int portalId, int targetId, int direction) : base(blockId)
+    public PortalBlock(int blockId, string portalId, string targetId, int direction) : base(blockId)
     {
         PortalId = portalId;
         TargetId = targetId;
         Direction = direction;
     }
 
-    public PortalBlock(PixelBlock block, int portalId, int targetId, int direction) : this((int)block, portalId, targetId, direction)
+    public PortalBlock(PixelBlock block, string portalId, string targetId, int direction) : this((int)block, portalId, targetId, direction)
     {
         
     }
