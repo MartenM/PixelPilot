@@ -191,7 +191,7 @@ public class PixelApiClient : IDisposable
         if (page == 0)
             throw new PixelApiException("Pages start at 1. Not 0!");
         
-        var apiUrl = $"{EndPoints.ApiEndpoint}/api/collections/public_profiles/records?page={page}&perPage={perPage}{qb?.Build() ?? ""}";
+        var apiUrl = $"{EndPoints.ApiEndpoint}/api/collections/users/records?page={page}&perPage={perPage}{qb?.Build() ?? ""}";
         _logger.LogInformation($"API Request: {apiUrl}");
 
         var worldCollection =
@@ -204,7 +204,7 @@ public class PixelApiClient : IDisposable
         if (page == 0)
             throw new PixelApiException("Pages start at 1. Not 0!");
         
-        var apiUrl = $"{EndPoints.ApiEndpoint}/api/collections/public_worlds/records?page={page}&perPage={perPage}{qb?.Build() ?? ""}";
+        var apiUrl = $"{EndPoints.ApiEndpoint}/api/collections/worlds/records?page={page}&perPage={perPage}{qb?.Build() ?? ""}";
         _logger.LogInformation($"API Request: {apiUrl}");
 
         var worldCollection =
