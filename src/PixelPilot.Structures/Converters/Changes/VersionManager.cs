@@ -16,6 +16,7 @@ public class VersionManager
         AddMigration(new Migration_2025_04_08());
         AddMigration(new Migration_2025_05_08());
         AddMigration(new Migration_2025_07_06());
+        AddMigration(new Migration_2025_07_24());
     }
 
     private void AddMigration(VersionMigration migration)

@@ -36,6 +36,7 @@ message WorldPacket {
     PlayerDirectMessagePacket player_direct_message_packet = 23;
     PlayerExchangeEffectsPacket player_exchange_effects_packet = 24;
     PlayerTeleportedPacket player_teleported_packet = 25;
+    PlayerMagicPacket player_magic_packet = 41;
 
     /* World packets - Mostly send out by the server */
     WorldReloadedPacket world_reloaded_packet = 26;
@@ -51,7 +52,7 @@ message WorldPacket {
     GlobalSwitchChangedPacket global_switch_changed_packet = 33;
     GlobalSwitchResetPacket global_switch_reset_packet = 34;
 
-    PerformWorldActionPacket perform_world_action_packet = 35;
+    WorldActionUpdatePacket world_action_update_packet = 35;
     ChangeSecretEditKeyPacket change_secret_edit_key_packet = 36;
 
     PlayerSpectatePacket player_spectate_packet = 37;
@@ -91,14 +92,16 @@ message OldChatMessagesPacket {
   repeated OldChatMessage old_chat_messages = 1;
 }
 
-message PerformWorldActionPacket {
+message WorldActionUpdatePacket {
   enum Action {
     SAVE_WORLD = 0;
     RELOAD_WORLD = 1;
     CLEAR_WORLD = 3;
+    AUTO_SAVE_WORLD = 4;
   }
 
   Action action = 1;
+  optional bool enabled = 2;
 }
 
 message ChangeSecretEditKeyPacket {
@@ -315,6 +318,15 @@ message PlayerDirectMessagePacket {
 message PlayerSetCollectiblesPacket {
   optional int32 player_id = 1;
   repeated PointInteger collected = 2;
+}
+
+message PlayerMagicPacket {
+  enum MagicType {
+    SMALL = 0;
+  }
+  int32 player_id = 1;
+  MagicType type = 2;
+  int32 amount = 3;
 }
 
 message PlayerWoot {
