@@ -19,6 +19,7 @@ using PixelWalker.Networking.Protobuf.WorldPackets;
 
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("config.json")
+    .AddJsonFile("config.development.json", optional: true)
     .AddEnvironmentVariables()
     .Build();
 
@@ -36,9 +37,9 @@ var point1 = new Point(0, 0);
 var point2 = new Point(0, 0);
 
 var client = PixelPilotClient.Builder()
-    .SetToken(config.AccountToken)
-    // .SetEmail(config.AccountEmail)
-    // .SetPassword(config.AccountPassword)
+    // .SetToken(config.AccountToken)
+    .SetEmail(config.AccountEmail)
+    .SetPassword(config.AccountPassword)
     .SetPrefix("[StructBot] ")
     .SetAutomaticReconnect(false)
     .Build();
@@ -161,7 +162,7 @@ client.OnPacketReceived += (_, packet) =>
     }
 };
 
-await client.Connect("8l04w8nv2ey451v");
+await client.Connect("r735212a9ff7a3f");
 await world.InitTask;
 
 client.SendChat("Connected!");
