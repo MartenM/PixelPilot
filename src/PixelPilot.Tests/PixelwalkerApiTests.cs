@@ -54,4 +54,14 @@ public class PixelwalkerApiTests
         Assert.NotNull(player);
         Assert.That(player.Username, Is.EqualTo("MARTEN"));
     }
+    
+    [Test]
+    public async Task TestGetMinimap()
+    {
+        // Test getting worlds of MartenM
+        var minimap = await _client.GetMinimap("mqczmoehfyangca");
+        
+        Assert.NotNull(minimap);
+        Assert.That(minimap.Length, Is.GreaterThan(0));
+    }
 }
