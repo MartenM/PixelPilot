@@ -17,6 +17,7 @@ using PixelWalker.Networking.Protobuf.WorldPackets;
 // Load the configuration. Don't store your account token in the code :)
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("config.json")
+    .AddJsonFile("config.development.json", optional: true)
     .AddEnvironmentVariables()
     .Build();
 
@@ -30,7 +31,8 @@ if (config == null)
 
 // Create a client.
 var client = PixelPilotClient.Builder()
-    .SetToken(config.AccountToken)
+    .SetEmail(config.AccountEmail)
+    .SetPassword(config.AccountPassword)
     .SetAutomaticReconnect(false)
     .Build();
 
@@ -77,8 +79,8 @@ client.OnClientConnected += (_) =>
 // Connect to a room.
 await client.Connect($"pixelpilot_testing", new JoinData()
 {
-    WorldHeight = 400,
-    WorldWidth = 636,
+    WorldHeight = 100,
+    WorldWidth = 100,
     WorldTitle = "[Sandbox]"
 });
 client.SendChat("I'm alive!");
