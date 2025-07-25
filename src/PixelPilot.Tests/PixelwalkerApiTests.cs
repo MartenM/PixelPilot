@@ -56,11 +56,34 @@ public class PixelwalkerApiTests
     }
     
     [Test]
-    public async Task TestGetMinimap()
+    public async Task TestGetMinimapInternals()
     {
-        var minimap = await _client.GetMinimap("teyi68i0plokzm1");
+        var world = await _client.GetPublicWorld("rayxnpc6oexzgf1");
+        
+        Assert.That(world, Is.Not.Null);
+        
+        var minimap = await _client.GetMinimap(world);
         
         Assert.NotNull(minimap);
         Assert.That(minimap.Length, Is.GreaterThan(0));
+    }
+    
+    [Test]
+    public async Task TestGetMinimap()
+    {
+        var world = await _client.GetPublicWorld("teyi68i0plokzm1");
+        
+        Assert.That(world, Is.Not.Null);
+        
+        var minimap1 = await _client.GetMinimap(world);
+        var minimap2 = await _client.GetMinimap("teyi68i0plokzm1");
+        
+        Assert.NotNull(minimap1);
+        Assert.That(minimap1.Length, Is.GreaterThan(0));
+        
+        Assert.NotNull(minimap2);
+        Assert.That(minimap2.Length, Is.GreaterThan(0));
+        
+        Assert.That(minimap1, Is.EqualTo(minimap2));
     }
 }

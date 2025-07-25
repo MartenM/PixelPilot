@@ -259,8 +259,9 @@ public class PixelApiClient : IDisposable
     /// <returns>PNG Byte[]</returns>
     public async Task<byte[]> GetMinimap(WorldEntry world)
     {
-        var apiUrl = $"{EndPoints.GameHttpEndpoint}/worlds/{world.Id}/minimap";
-
+        var apiUrl = $"{EndPoints.ApiEndpoint}/api/files/omma7comumpv34j/{world.Id}/{world.Minimap}";
+        _logger.LogInformation($"API Request: {apiUrl}");
+        
         byte[] bytes = await _client.GetByteArrayAsync(apiUrl);
         return bytes;
     }
