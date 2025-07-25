@@ -58,8 +58,7 @@ public class PixelwalkerApiTests
     [Test]
     public async Task TestGetMinimap()
     {
-        // Test getting worlds of MartenM
-        var minimap = await _client.GetMinimap("mqczmoehfyangca");
+        var minimap = await _client.GetMinimap("teyi68i0plokzm1");
         
         Assert.NotNull(minimap);
         Assert.That(minimap.Length, Is.GreaterThan(0));
