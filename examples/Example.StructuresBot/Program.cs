@@ -2,7 +2,6 @@
 
 // Load the configuration. Don't store your account token in the code :)
 using System.Drawing;
-using System.Text.Json;
 using Example.BasicBot;
 using Microsoft.Extensions.Configuration;
 using PixelPilot.Client;
@@ -11,6 +10,7 @@ using PixelPilot.Client.Players;
 using PixelPilot.Client.Players.Basic;
 using PixelPilot.Client.World;
 using PixelPilot.Client.World.Blocks.Types;
+using PixelPilot.Client.World.Constants;
 using PixelPilot.Common.Logging;
 using PixelPilot.Structures;
 using PixelPilot.Structures.Converters.PilotSimple;
@@ -46,6 +46,10 @@ var client = PixelPilotClient.Builder()
 
 var world = new PixelWorld();
 client.OnPacketReceived += world.HandlePacket;
+world.OnWorldInit += sender =>
+{
+    point2 = new Point(world.Width - 1, world.Height - 1);
+};
 
 var playerManager = new PlayerManager();
 client.OnPacketReceived += playerManager.HandlePacket;
@@ -151,9 +155,27 @@ client.OnPacketReceived += (_, packet) =>
                 // world.GetDifference(currentStructure, pasteX, pasteY).PasteInOrder(client, new Point(0, 0));
 
                 var packets = world.GetDifference(currentStructure, pasteX, pasteY).ToChunkedPackets();
-                
-                client.SendChat($"Pasting structure... {packets.Count}");
-                client.SendRange(packets);
+
+                if (packets.Count == 0)
+                {
+                    client.SendChat("Nothing to paste. All blocks already there!");
+                }
+                else
+                {
+                    client.SendChat($"Pasting structure... {packets.Count}");
+                    foreach(var bp in packets)
+                    {
+                        if (bp is WorldBlockPlacedPacket blockPlaced)
+                        {
+                            if (blockPlaced.BlockId == (int) PixelBlock.FallLeavesYellowBg)
+                            {
+                                Console.WriteLine($"Layer {(WorldLayer) blockPlaced.Layer} PLACING: {string.Join(",", blockPlaced.Positions.Select(p => $"({p.X} {p.Y})"))}");
+                                //client.SendChat($"PLACING THEM {blockPlaced.Positions}");
+                            }
+                        }
+                        client.Send(bp);
+                    }
+                }
                 
                 break;
             }
