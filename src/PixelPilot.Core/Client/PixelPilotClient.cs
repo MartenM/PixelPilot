@@ -21,7 +21,8 @@ namespace PixelPilot.Client;
 public class PixelPilotClient : IDisposable
 {
     // Constants
-    public static readonly int SecondsBeforeGatewayTimeout = 3;
+    private static readonly int SecondsBeforeGatewayTimeout = 3;
+    private const int ChatCharLimit = 150;
     
     private readonly TaskCompletionSource<bool> _connectCompletion = new();
     
@@ -260,7 +261,7 @@ public class PixelPilotClient : IDisposable
     /// <param name="prefix">If the message should be prefixed</param>
     public void SendChat(string msg, bool prefix = true)
     {
-        var maxLineLength = 120 - (prefix && BotPrefix != null ? BotPrefix.Length : 0);
+        var maxLineLength = ChatCharLimit - (prefix && BotPrefix != null ? BotPrefix.Length : 0);
         var charCount = 0;
 
         var lines = msg.Split(' ', StringSplitOptions.RemoveEmptyEntries)
