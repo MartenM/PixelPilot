@@ -190,30 +190,31 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
             "bnRJbnRlZ2VyEhYKDmhhc19nb2xkX2Nyb3duGAUgASgIEhgKEGhhc19zaWx2",
             "ZXJfY3Jvd24YBiABKAgSEAoIc3dpdGNoZXMYByABKAwSDwoHZ29kbW9kZRgI",
             "IAEoCBIPCgdtb2Rtb2RlGAkgASgIEg8KB3RlYW1faWQYCiABKAUSEAoIY291",
-            "bnRlcnMYCyADKAUi6wEKEFBsYXllclByb3BlcnRpZXMSEQoJcGxheWVyX2lk",
+            "bnRlcnMYCyADKAUi+wEKEFBsYXllclByb3BlcnRpZXMSEQoJcGxheWVyX2lk",
             "GAEgASgFEhIKCmFjY291bnRfaWQYAiABKAkSEAoIdXNlcm5hbWUYAyABKAkS",
             "DAoEZmFjZRgEIAEoBRIMCgRyb2xlGAUgASgJEhEKCWlzX2ZyaWVuZBgGIAEo",
-            "CBIrCghwb3NpdGlvbhgHIAEoCzIZLldvcmxkUGFja2V0cy5Qb2ludERvdWJs",
-            "ZRIWCg5pc193b3JsZF9vd25lchgIIAEoCBIqCgZyaWdodHMYCSABKAsyGi5X",
-            "b3JsZFBhY2tldHMuUGxheWVyUmlnaHRzIowBCgxQbGF5ZXJSaWdodHMSEAoI",
-            "Y2FuX2VkaXQYASABKAgSDwoHY2FuX2dvZBgCIAEoCBIaChJjYW5fdG9nZ2xl",
-            "X21pbmltYXAYAyABKAgSIQoZY2FuX2NoYW5nZV93b3JsZF9zZXR0aW5ncxgE",
-            "IAEoCBIaChJhdmFpbGFibGVfY29tbWFuZHMYBSADKAki1AIKCVdvcmxkTWV0",
-            "YRINCgV0aXRsZRgBIAEoCRINCgVwbGF5cxgCIAEoBRINCgVvd25lchgDIAEo",
-            "CRITCgtkZXNjcmlwdGlvbhgEIAEoCRISCgp2aXNpYmlsaXR5GAUgASgJEjUK",
-            "CndvcmxkX3R5cGUYBiABKA4yIS5Xb3JsZFBhY2tldHMuV29ybGRNZXRhLldv",
-            "cmxkVHlwZRIbChNoYXNfdW5zYXZlZF9jaGFuZ2VzGAcgASgIEhMKC21heF9w",
-            "bGF5ZXJzGAggASgFEhIKCm93bmVyX3JvbGUYCSABKAkSFwoPbWluaW1hcF9l",
-            "bmFibGVkGAogASgIEhsKE2hhc19zZWNyZXRfZWRpdF9rZXkYCyABKAgSDQoF",
-            "d29vdHMYDCABKAUiLwoJV29ybGRUeXBlEgkKBVNhdmVkEAASCwoHVW5zYXZl",
-            "ZBABEgoKBkxlZ2FjeRACIl4KDk9sZENoYXRNZXNzYWdlEhMKC3BsYXllcl9u",
-            "YW1lGAEgASgJEhMKC3BsYXllcl9yb2xlGAIgASgJEhEKCWlzX2ZyaWVuZBgD",
-            "IAEoCBIPCgdtZXNzYWdlGAQgASgJIiQKDFBvaW50SW50ZWdlchIJCgF4GAEg",
-            "ASgFEgkKAXkYAiABKAUiIwoLUG9pbnREb3VibGUSCQoBeBgBIAEoARIJCgF5",
-            "GAIgASgBImQKDFBsYXllckVmZmVjdBIMCgR0eXBlGAEgASgFEhUKCGR1cmF0",
-            "aW9uGAIgASgFSACIAQESFQoIc3RyZW5ndGgYAyABKAVIAYgBAUILCglfZHVy",
-            "YXRpb25CCwoJX3N0cmVuZ3RoQi+qAixQaXhlbFdhbGtlci5OZXR3b3JraW5n",
-            "LlByb3RvYnVmLldvcmxkUGFja2V0c2IGcHJvdG8z"));
+            "CBI7ChJsYXN0TW92ZW1lbnRQYWNrZXQYByABKAsyHy5Xb3JsZFBhY2tldHMu",
+            "UGxheWVyTW92ZWRQYWNrZXQSFgoOaXNfd29ybGRfb3duZXIYCCABKAgSKgoG",
+            "cmlnaHRzGAkgASgLMhouV29ybGRQYWNrZXRzLlBsYXllclJpZ2h0cyKMAQoM",
+            "UGxheWVyUmlnaHRzEhAKCGNhbl9lZGl0GAEgASgIEg8KB2Nhbl9nb2QYAiAB",
+            "KAgSGgoSY2FuX3RvZ2dsZV9taW5pbWFwGAMgASgIEiEKGWNhbl9jaGFuZ2Vf",
+            "d29ybGRfc2V0dGluZ3MYBCABKAgSGgoSYXZhaWxhYmxlX2NvbW1hbmRzGAUg",
+            "AygJItQCCglXb3JsZE1ldGESDQoFdGl0bGUYASABKAkSDQoFcGxheXMYAiAB",
+            "KAUSDQoFb3duZXIYAyABKAkSEwoLZGVzY3JpcHRpb24YBCABKAkSEgoKdmlz",
+            "aWJpbGl0eRgFIAEoCRI1Cgp3b3JsZF90eXBlGAYgASgOMiEuV29ybGRQYWNr",
+            "ZXRzLldvcmxkTWV0YS5Xb3JsZFR5cGUSGwoTaGFzX3Vuc2F2ZWRfY2hhbmdl",
+            "cxgHIAEoCBITCgttYXhfcGxheWVycxgIIAEoBRISCgpvd25lcl9yb2xlGAkg",
+            "ASgJEhcKD21pbmltYXBfZW5hYmxlZBgKIAEoCBIbChNoYXNfc2VjcmV0X2Vk",
+            "aXRfa2V5GAsgASgIEg0KBXdvb3RzGAwgASgFIi8KCVdvcmxkVHlwZRIJCgVT",
+            "YXZlZBAAEgsKB1Vuc2F2ZWQQARIKCgZMZWdhY3kQAiJeCg5PbGRDaGF0TWVz",
+            "c2FnZRITCgtwbGF5ZXJfbmFtZRgBIAEoCRITCgtwbGF5ZXJfcm9sZRgCIAEo",
+            "CRIRCglpc19mcmllbmQYAyABKAgSDwoHbWVzc2FnZRgEIAEoCSIkCgxQb2lu",
+            "dEludGVnZXISCQoBeBgBIAEoBRIJCgF5GAIgASgFIiMKC1BvaW50RG91Ymxl",
+            "EgkKAXgYASABKAESCQoBeRgCIAEoASJkCgxQbGF5ZXJFZmZlY3QSDAoEdHlw",
+            "ZRgBIAEoBRIVCghkdXJhdGlvbhgCIAEoBUgAiAEBEhUKCHN0cmVuZ3RoGAMg",
+            "ASgFSAGIAQFCCwoJX2R1cmF0aW9uQgsKCV9zdHJlbmd0aEIvqgIsUGl4ZWxX",
+            "YWxrZXIuTmV0d29ya2luZy5Qcm90b2J1Zi5Xb3JsZFBhY2tldHNiBnByb3Rv",
+            "Mw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -260,7 +261,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
             new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerMagicPacket), global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerMagicPacket.Parser, new[]{ "PlayerId", "Type", "Amount" }, null, new[]{ typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerMagicPacket.Types.MagicType) }, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerWoot), global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerWoot.Parser, new[]{ "PlayerId", "Active" }, new[]{ "PlayerId" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerWorldState), global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerWorldState.Parser, new[]{ "CoinsGold", "CoinsBlue", "Deaths", "CollectedItems", "HasGoldCrown", "HasSilverCrown", "Switches", "Godmode", "Modmode", "TeamId", "Counters" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerProperties), global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerProperties.Parser, new[]{ "PlayerId", "AccountId", "Username", "Face", "Role", "IsFriend", "Position", "IsWorldOwner", "Rights" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerProperties), global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerProperties.Parser, new[]{ "PlayerId", "AccountId", "Username", "Face", "Role", "IsFriend", "LastMovementPacket", "IsWorldOwner", "Rights" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerRights), global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerRights.Parser, new[]{ "CanEdit", "CanGod", "CanToggleMinimap", "CanChangeWorldSettings", "AvailableCommands" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.WorldMeta), global::PixelWalker.Networking.Protobuf.WorldPackets.WorldMeta.Parser, new[]{ "Title", "Plays", "Owner", "Description", "Visibility", "WorldType", "HasUnsavedChanges", "MaxPlayers", "OwnerRole", "MinimapEnabled", "HasSecretEditKey", "Woots" }, null, new[]{ typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.WorldMeta.Types.WorldType) }, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.OldChatMessage), global::PixelWalker.Networking.Protobuf.WorldPackets.OldChatMessage.Parser, new[]{ "PlayerName", "PlayerRole", "IsFriend", "Message" }, null, null, null, null),
@@ -14219,7 +14220,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       face_ = other.face_;
       role_ = other.role_;
       isFriend_ = other.isFriend_;
-      position_ = other.position_ != null ? other.position_.Clone() : null;
+      lastMovementPacket_ = other.lastMovementPacket_ != null ? other.lastMovementPacket_.Clone() : null;
       isWorldOwner_ = other.isWorldOwner_;
       rights_ = other.rights_ != null ? other.rights_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -14303,15 +14304,15 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       }
     }
 
-    /// <summary>Field number for the "position" field.</summary>
-    public const int PositionFieldNumber = 7;
-    private global::PixelWalker.Networking.Protobuf.WorldPackets.PointDouble position_;
+    /// <summary>Field number for the "lastMovementPacket" field.</summary>
+    public const int LastMovementPacketFieldNumber = 7;
+    private global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerMovedPacket lastMovementPacket_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::PixelWalker.Networking.Protobuf.WorldPackets.PointDouble Position {
-      get { return position_; }
+    public global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerMovedPacket LastMovementPacket {
+      get { return lastMovementPacket_; }
       set {
-        position_ = value;
+        lastMovementPacket_ = value;
       }
     }
 
@@ -14360,7 +14361,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       if (Face != other.Face) return false;
       if (Role != other.Role) return false;
       if (IsFriend != other.IsFriend) return false;
-      if (!object.Equals(Position, other.Position)) return false;
+      if (!object.Equals(LastMovementPacket, other.LastMovementPacket)) return false;
       if (IsWorldOwner != other.IsWorldOwner) return false;
       if (!object.Equals(Rights, other.Rights)) return false;
       return Equals(_unknownFields, other._unknownFields);
@@ -14376,7 +14377,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       if (Face != 0) hash ^= Face.GetHashCode();
       if (Role.Length != 0) hash ^= Role.GetHashCode();
       if (IsFriend != false) hash ^= IsFriend.GetHashCode();
-      if (position_ != null) hash ^= Position.GetHashCode();
+      if (lastMovementPacket_ != null) hash ^= LastMovementPacket.GetHashCode();
       if (IsWorldOwner != false) hash ^= IsWorldOwner.GetHashCode();
       if (rights_ != null) hash ^= Rights.GetHashCode();
       if (_unknownFields != null) {
@@ -14421,9 +14422,9 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
         output.WriteRawTag(48);
         output.WriteBool(IsFriend);
       }
-      if (position_ != null) {
+      if (lastMovementPacket_ != null) {
         output.WriteRawTag(58);
-        output.WriteMessage(Position);
+        output.WriteMessage(LastMovementPacket);
       }
       if (IsWorldOwner != false) {
         output.WriteRawTag(64);
@@ -14467,9 +14468,9 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
         output.WriteRawTag(48);
         output.WriteBool(IsFriend);
       }
-      if (position_ != null) {
+      if (lastMovementPacket_ != null) {
         output.WriteRawTag(58);
-        output.WriteMessage(Position);
+        output.WriteMessage(LastMovementPacket);
       }
       if (IsWorldOwner != false) {
         output.WriteRawTag(64);
@@ -14507,8 +14508,8 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       if (IsFriend != false) {
         size += 1 + 1;
       }
-      if (position_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Position);
+      if (lastMovementPacket_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(LastMovementPacket);
       }
       if (IsWorldOwner != false) {
         size += 1 + 1;
@@ -14546,11 +14547,11 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       if (other.IsFriend != false) {
         IsFriend = other.IsFriend;
       }
-      if (other.position_ != null) {
-        if (position_ == null) {
-          Position = new global::PixelWalker.Networking.Protobuf.WorldPackets.PointDouble();
+      if (other.lastMovementPacket_ != null) {
+        if (lastMovementPacket_ == null) {
+          LastMovementPacket = new global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerMovedPacket();
         }
-        Position.MergeFrom(other.Position);
+        LastMovementPacket.MergeFrom(other.LastMovementPacket);
       }
       if (other.IsWorldOwner != false) {
         IsWorldOwner = other.IsWorldOwner;
@@ -14605,10 +14606,10 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
             break;
           }
           case 58: {
-            if (position_ == null) {
-              Position = new global::PixelWalker.Networking.Protobuf.WorldPackets.PointDouble();
+            if (lastMovementPacket_ == null) {
+              LastMovementPacket = new global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerMovedPacket();
             }
-            input.ReadMessage(Position);
+            input.ReadMessage(LastMovementPacket);
             break;
           }
           case 64: {
@@ -14666,10 +14667,10 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
             break;
           }
           case 58: {
-            if (position_ == null) {
-              Position = new global::PixelWalker.Networking.Protobuf.WorldPackets.PointDouble();
+            if (lastMovementPacket_ == null) {
+              LastMovementPacket = new global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerMovedPacket();
             }
-            input.ReadMessage(Position);
+            input.ReadMessage(LastMovementPacket);
             break;
           }
           case 64: {

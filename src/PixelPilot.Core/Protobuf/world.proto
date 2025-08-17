@@ -360,7 +360,7 @@ message PlayerProperties {
   int32 face = 4;
   string role = 5;
   bool is_friend = 6;
-  PointDouble position = 7;
+  PlayerMovedPacket lastMovementPacket = 7;
   bool is_world_owner = 8;
   PlayerRights rights = 9;
 }
