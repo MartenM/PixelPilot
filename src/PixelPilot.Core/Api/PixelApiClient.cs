@@ -287,7 +287,6 @@ public class PixelApiClient : IDisposable
     {
         var apiUrl = $"{EndPoints.GameHttpEndpoint}/message_types";
         _logger.LogInformation($"API Request: {apiUrl}");
-        // https://game.pixelwalker.net/
         
         var eventTypes =
             await JsonSerializer.DeserializeAsync<string[]>(await _client.GetStreamAsync(apiUrl), _jsonOptions);
