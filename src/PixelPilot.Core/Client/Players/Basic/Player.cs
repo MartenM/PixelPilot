@@ -18,8 +18,8 @@ public class Player : IPixelPlayer
         Role = packet.Properties.Role;
         CanGod = packet.Properties.Rights.CanGod;
         CanEdit = packet.Properties.Rights.CanEdit;
-        X = packet.Properties.Position.X;
-        Y = packet.Properties.Position.Y;
+        X = packet.Properties.LastMovementPacket.Position.X;
+        Y = packet.Properties.LastMovementPacket.Position.X;
         GoldCoins = packet.WorldState.CoinsGold;
         BlueCoins = packet.WorldState.CoinsBlue;
         Deaths = packet.WorldState.Deaths;
