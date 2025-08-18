@@ -22,6 +22,13 @@
 
     <ItemGroup>
       <ProjectReference Include="..\PixelPilot.Core\PixelPilot.Core.csproj" />
+      <ProjectReference Include="..\PixelPilot.Structures\PixelPilot.Structures.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Structures\TestFiles\*">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
