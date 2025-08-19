@@ -136,6 +136,10 @@ public static class PixelBlockExtensions
             case PixelBlock.SignGreen:
             case PixelBlock.SignNormal:
             case PixelBlock.SignRed:
+            case PixelBlock.OuterspaceSignBlack:
+            case PixelBlock.OuterspaceSignBlue:
+            case PixelBlock.OuterspaceSignGreen:
+            case PixelBlock.OuterspaceSignRed:
                 return BlockType.Sign;
             case PixelBlock.EffectsJumpHeight:
                 return BlockType.EffectLeveled;
