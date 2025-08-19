@@ -34,6 +34,8 @@ public class PixelPilotClient : IDisposable
     private IPixelPacketQueue? _packetOutQueue;
 
     public bool DisposeApi { get; set; } = true;
+    
+    public Exception? LastException { get; private set; }
 
     /// <summary>
     /// Indicates if the client will try to automatically reconnect if the
@@ -163,6 +165,7 @@ public class PixelPilotClient : IDisposable
             {
                 // Sometimes things go wrong. Don't crash the socket in that case.
                 _logger.LogError(ex, $"Something went wrong while processing a socket message. {(Username != null ? $"(Bot: {Username})": null)}");
+                LastException = ex;
             }
         });
 
