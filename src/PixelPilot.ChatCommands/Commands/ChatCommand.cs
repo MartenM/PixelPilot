@@ -9,7 +9,7 @@ public abstract class ChatCommand : ICommandExecutor
     public string Description { get; }
     public string? Permission { get; }
 
-    public List<string> Aliases { get; } = new();
+    public List<string> Aliases { get; protected set; } = new();
     
     public IHelpFormatter? HelpFormatter { get; set; }
     
