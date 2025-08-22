@@ -44,6 +44,7 @@ public class PixelWorld
     /// <summary>
     /// Fired when a block was placed.
     /// </summary>
+    [Obsolete("Please use OnBlocksPlaced instead.")]
     public event BlockPlaced? OnBlockPlaced;
     
     /// <summary>
