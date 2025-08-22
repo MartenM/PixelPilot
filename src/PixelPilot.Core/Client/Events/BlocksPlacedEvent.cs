@@ -9,7 +9,7 @@ public class BlocksPlacedEvent : EventBase
     /// <summary>
     /// The user that placed the blocks.
     /// </summary>
-    public int UserId { get; init; }
+    public required int UserId { get; init; }
     
     /// <summary>
     /// The block that is being placed with this packet.
