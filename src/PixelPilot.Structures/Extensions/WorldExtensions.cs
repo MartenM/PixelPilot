@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using PixelPilot.Client;
+using PixelPilot.Client.Extensions;
 using PixelPilot.Client.World;
 using PixelPilot.Client.World.Blocks;
 using PixelPilot.Client.World.Blocks.Placed;

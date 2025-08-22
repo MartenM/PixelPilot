@@ -5,6 +5,7 @@ using System.Drawing;
 using Example.BasicBot;
 using Microsoft.Extensions.Configuration;
 using PixelPilot.Client;
+using PixelPilot.Client.Extensions;
 using PixelPilot.Client.Messages.Packets.Extensions;
 using PixelPilot.Client.Players;
 using PixelPilot.Client.Players.Basic;
@@ -44,7 +45,7 @@ var client = PixelPilotClient.Builder()
     .SetAutomaticReconnect(false)
     .Build();
 
-var world = new PixelWorld();
+var world = new PixelWorld(client);
 client.OnPacketReceived += world.HandlePacket;
 world.OnWorldInit += sender =>
 {
@@ -54,26 +55,15 @@ world.OnWorldInit += sender =>
 var playerManager = new PlayerManager();
 client.OnPacketReceived += playerManager.HandlePacket;
 
-world.OnBlockPlaced += async (sender, id, block, newBlock) =>
+world.OnBlocksPlaced += async (sender, blocksEvent) =>
 {
-    if (client.BotId == id) return;
-    
-    client.Send(block.AsPacketOut());
+    if (client.BotId == blocksEvent.UserId) return;
 
-    if (block.Block is ColoredBlock oldColorBlock)
+    if (blocksEvent.NewBlock.Block.ToString().Contains("Red"))
     {
-        client.SendChat($"Previous: R: {oldColorBlock.PrimaryColor.R} G: {oldColorBlock.PrimaryColor.G} B: {oldColorBlock.PrimaryColor.B}");
-    }
-    else
-    {
-        if (newBlock.Block is ColoredBlock newColoredBlock)
-        {
-            client.SendChat(
-                $"Placed: R: {newColoredBlock.PrimaryColor.R} G: {newColoredBlock.PrimaryColor.G} B: {newColoredBlock.PrimaryColor.B}");
-            client.Send(block.AsPacketOut());
-            await Task.Delay(500);
-            client.Send(newBlock.AsPacketOut());
-        }
+        // No red blocks allowed.
+        client.SendChat("You shall not place red blocks!");
+        blocksEvent.Cancelled = true;
     }
 };
 
@@ -184,7 +174,7 @@ client.OnPacketReceived += (_, packet) =>
     }
 };
 
-await client.Connect("r735212a9ff7a3f");
+await client.Connect("8l04w8nv2ey451v");
 await world.InitTask;
 
 client.SendChat("Connected!");

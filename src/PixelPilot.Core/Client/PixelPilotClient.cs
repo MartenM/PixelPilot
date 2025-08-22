@@ -4,10 +4,12 @@ using System.Text.Json.Serialization;
 using Google.Protobuf;
 using Microsoft.Extensions.Logging;
 using PixelPilot.Api;
+using PixelPilot.Client.Abstract;
 using PixelPilot.Client.Messages;
 using PixelPilot.Client.Messages.Exceptions;
 using PixelPilot.Client.Messages.Packets.Extensions;
 using PixelPilot.Client.Messages.Queue;
+using PixelPilot.Client.Players;
 using PixelPilot.Common;
 using PixelPilot.Common.Logging;
 using PixelWalker.Networking.Protobuf.WorldPackets;
@@ -18,7 +20,7 @@ namespace PixelPilot.Client;
 /// <summary>
 /// Client for interacting with the PixelWalker game server.
 /// </summary>
-public class PixelPilotClient : IDisposable
+public class PixelPilotClient : IPixelPilotClient, IDisposable
 {
     // Constants
     private static readonly int SecondsBeforeGatewayTimeout = 3;
@@ -278,6 +280,17 @@ public class PixelPilotClient : IDisposable
                 Message = $"{(prefix && BotPrefix != null ? BotPrefix : "")}{line}"
             });
         }
+    }
+
+    /// <summary>
+    /// Same as SendChat but as PM.
+    /// </summary>
+    /// <param name="player">Target player</param>
+    /// <param name="msg">The message</param>
+    /// <param name="prefix">If the message should contain the prefix</param>
+    public void SendPm(IPixelPlayer player, string msg, bool prefix = false)
+    {
+        SendPm(player.Username, msg, prefix);
     }
 
     /// <summary>

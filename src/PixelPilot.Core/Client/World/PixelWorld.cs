@@ -1,6 +1,9 @@
 ﻿using System.Drawing;
 using Google.Protobuf;
 using Microsoft.Extensions.Logging;
+using PixelPilot.Client.Abstract;
+using PixelPilot.Client.Events;
+using PixelPilot.Client.Extensions;
 using PixelPilot.Client.Messages;
 using PixelPilot.Client.World.Blocks;
 using PixelPilot.Client.World.Blocks.Placed;
@@ -21,7 +24,8 @@ namespace PixelPilot.Client.World;
 public class PixelWorld
 {
     private static ILogger _logger = LogManager.GetLogger("PixelPilot.World");
-    private readonly TaskCompletionSource<bool> _initializationTaskSource = new(); 
+    private readonly TaskCompletionSource<bool> _initializationTaskSource = new();
+    private IPixelPilotClient _client;
     
     /// <summary>
     /// A task that can be used to await world init completion.
@@ -38,8 +42,7 @@ public class PixelWorld
     private IPixelBlock[,,] _worldData;
     
     /// <summary>
-    /// Fired once init has been received by the client.
-    /// The 
+    /// Fired when a block was placed.
     /// </summary>
     public event BlockPlaced? OnBlockPlaced;
     
@@ -51,6 +54,12 @@ public class PixelWorld
     /// <param name="oldBlock">The previous state of the block.</param>
     /// <param name="newBlock">The new state of the block after being placed. Includes X, Y, Layer.</param>
     public delegate void BlockPlaced(object sender, int userId, IPlacedBlock oldBlock, IPlacedBlock newBlock);
+    
+    /// <summary>
+    /// Fired when blocks have been placed.
+    /// </summary>
+    public event BlocksPlaced? OnBlocksPlaced;
+    public delegate void BlocksPlaced(object sender, BlocksPlacedEvent blocksEvent);
     
     /// <summary>
     /// Fired after the world is initialized.
@@ -84,21 +93,11 @@ public class PixelWorld
     /// </summary>
     /// <param name="sender">The object that triggered the event.</param>
     public delegate void WorldCleared(object sender);
-   
-    public PixelWorld()
-    {
-        _worldData = new IPixelBlock[3, 0, 0];
-    }
-    public PixelWorld(int height, int width)
-    {
-        Height = height;
-        Width = width;
-        _worldData = new IPixelBlock[3, width, height];
-    }
 
-    public PixelWorld(PlayerInitPacket initPacket) : this(initPacket.WorldHeight, initPacket.WorldWidth)
+    public PixelWorld(IPixelPilotClient client)
     {
-        Init(initPacket.WorldData.ToByteArray());
+        _client = client;
+        _worldData = new IPixelBlock[3, 0, 0];
     }
 
     /// <summary>
@@ -217,14 +216,32 @@ public class PixelWorld
 
         if (packet is WorldBlockPlacedPacket place)
         {
+            var blockPlacedEvent = new BlocksPlacedEvent()
+            {
+                NewBlock = DeserializeBlock(place),
+                Positions = place.Positions.Select(p => new Point(p.X, p.Y))
+            };
+            OnBlocksPlaced?.Invoke(this, blockPlacedEvent);
             
+            // If cancelled revert all blocks.
+            if (blockPlacedEvent.Cancelled)
+            {
+                var revertBlocks = place.Positions
+                    .Select(p => new PlacedBlock(p.X, p.Y, place.Layer, _worldData[place.Layer, p.X, p.Y]))
+                    .ToList();
+                
+                _client.SendRange(revertBlocks.ToChunkedPackets());
+                return;
+            }
+            
+            // Otherwise update the world map.
             foreach (var point in place.Positions)
             {
                 // Rather make a copy of this, BUT that's currently not possible.
-                // TODO: Implement a cloning method.
+                // TODO: Deep clone blocks
                 var block = DeserializeBlock(place);
                 var oldBlock = _worldData[place.Layer, point.X, point.Y];
-            
+                
                 _worldData[place.Layer, point.X, point.Y] = block;
                 OnBlockPlaced?.Invoke(this, place.PlayerId, new PlacedBlock(point.X, point.Y, place.Layer, oldBlock), new PlacedBlock(point.X, point.Y, place.Layer, block));
             }

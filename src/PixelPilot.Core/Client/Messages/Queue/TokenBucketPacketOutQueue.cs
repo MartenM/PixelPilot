@@ -23,7 +23,14 @@ public class TokenBucketPacketOutQueue : IPixelPacketQueue
     public const int GuestTotalRateLimit = 100;
     public const int GuestChatRateLimit = 15;
     
+    /// <summary>
+    /// Maximum amount of packets stored up.
+    /// </summary>
     private const int MaxBurst = 50;
+    
+    /// <summary>
+    /// Tokens replenished per second
+    /// </summary>
     private const int BurstTotal = 20;
 
     private CancellationTokenSource _cancellationToken;

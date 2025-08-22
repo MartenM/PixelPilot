@@ -1,4 +1,5 @@
 ﻿using PixelPilot.Client;
+using PixelPilot.Client.Extensions;
 using PixelPilot.Client.World;
 using PixelPilot.Structures;
 using PixelPilot.Structures.Converters.PilotSimple;
@@ -113,7 +114,7 @@ public class PixelPilotStuctureTests
     [Timeout(600000)]
     public async Task TestWorldParsing(string worldId)
     {
-        var world = new PixelWorld();
+        var world = new PixelWorld(_client);
         _client.OnPacketReceived += world.HandlePacket;
         
         await _client.Connect(worldId);
