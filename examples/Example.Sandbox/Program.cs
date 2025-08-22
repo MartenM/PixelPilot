@@ -43,7 +43,7 @@ client.OnPacketReceived += playerManager.HandlePacket;
 
 // Create a PixelWorld class and attach the client to it.
 // Allow it to listen to client updates. Not required!
-var world = new PixelWorld();
+var world = new PixelWorld(client);
 client.OnPacketReceived += world.HandlePacket;
 world.OnBlockPlaced += (_, playerId, oldBlock, newBlock) =>
 {
