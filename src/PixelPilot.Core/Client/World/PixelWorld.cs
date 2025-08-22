@@ -220,6 +220,7 @@ public class PixelWorld
             var blockPlacedEvent = new BlocksPlacedEvent()
             {
                 NewBlock = DeserializeBlock(place),
+                Layer = (WorldLayer) place.Layer,
                 Positions = place.Positions.Select(p => new Point(p.X, p.Y))
             };
             OnBlocksPlaced?.Invoke(this, blockPlacedEvent);
