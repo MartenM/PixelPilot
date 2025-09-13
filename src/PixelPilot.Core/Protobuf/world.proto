@@ -170,6 +170,9 @@ message PlayerInitPacket {
 
   // Did player woot?
   PlayerWoot player_woot = 7;
+
+  // Text labels to display in the world
+  repeated TextLabel text_labels = 8;
 }
 
 message PlayerInitReceivedPacket {
@@ -385,8 +388,12 @@ message WorldMeta {
   int32 max_players = 8;
   string owner_role = 9;
   bool minimap_enabled = 10;
-  bool has_secret_edit_key = 11;
-  int32 woots = 12;
+  bool minimap_scaled = 11;
+  int32 minimap_max_width = 12;
+  int32 minimap_max_height = 13;
+  int32 minimap_edge_fade_width = 14;
+  bool has_secret_edit_key = 15;
+  int32 woots = 16;
 
   enum WorldType {
     Saved = 0;
@@ -425,4 +432,26 @@ message PlayerEffect {
   int32 type = 1;
   optional int32 duration = 2;
   optional int32 strength = 3;
+}
+
+/*
+ * Represents a text label.
+ */
+message TextLabel {
+  PointInteger position = 1;
+  string text = 2;
+  uint32 color = 3;
+  float max_width = 4;
+  bool shadow = 5;
+  TextAlignment text_alignment = 6;
+  int32 font_size = 7;
+}
+
+/*
+ * Text alignment options for TextLabel.
+ */
+enum TextAlignment {
+  LEFT = 0;
+  CENTER = 1;
+  RIGHT = 2;
 }
