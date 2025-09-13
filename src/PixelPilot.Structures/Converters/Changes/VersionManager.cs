@@ -34,4 +34,10 @@ public class VersionManager
             migration.ApplyMigration(mappedBlockData);
         }
     }
+
+    public static int CurrentVersion()
+    {
+        var manager =  new VersionManager();
+        return manager._migrations.Max(m => m.Value.ToVersion);
+    }
 }

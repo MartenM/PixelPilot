@@ -1,4 +1,5 @@
 ﻿using PixelPilot.Client.World.Blocks.Placed;
+using PixelPilot.Structures.Converters.Changes;
 
 namespace PixelPilot.Structures.Converters.PilotSimple;
 
@@ -17,7 +18,7 @@ public class PilotSimpleStructure
     public PilotSimpleStructure() {}
     private PilotSimpleStructure(int width, int height, Dictionary<string, string> meta, bool containsEmpty, List<IPlacedBlock> blocks)
     {
-        Version = 3;
+        Version = VersionManager.CurrentVersion();
         Width = width;
         Height = height;
         Meta = meta;
