@@ -8,6 +8,7 @@ using PixelPilot.Api.Responses;
 using PixelPilot.Api.Responses.Auth;
 using PixelPilot.Api.Responses.Collections;
 using PixelPilot.Api.Responses.visible;
+using PixelPilot.Client.World.Constants;
 using PixelPilot.Common;
 using PixelPilot.Common.Logging;
 
@@ -128,13 +129,30 @@ public class PixelApiClient : IDisposable
     /// Retrieves the mappings from the game API.
     /// </summary>
     /// <returns>A <see cref="MappingsResponse"/> containing the mappings, or null if the mappings are not available.</returns>
-    public async Task<MappingsResponse?> GetMappings()
+    public async Task<MappingsResponse> GetMappings()
     {
-        var apiUrl = $"{EndPoints.GameHttpEndpoint}/mappings";
+        var blockData = await GetPixelBlockMeta();
+        var mapping = new Dictionary<string, int>();
+
+        foreach (var block in blockData)
+        {
+            mapping.Add(block.PaletteId,  block.Id);
+        }
+        
+        return new MappingsResponse(mapping);
+    }
+
+    /// <summary>
+    /// Retrieves block information from the PixelWalker API.
+    /// </summary>
+    /// <returns></returns>
+    public async Task<List<PixelBlockMeta>> GetPixelBlockMeta()
+    {
+        var apiUrl = $"{EndPoints.GameHttpEndpoint}/listblocks";
         _logger.LogInformation($"API Request: {apiUrl}");
 
-        var mapping = await JsonSerializer.DeserializeAsync<Dictionary<string, int>>(await _client.GetStreamAsync(apiUrl));
-        return mapping == null ? null : new MappingsResponse(mapping);
+        var blockMetas = await JsonSerializer.DeserializeAsync<List<PixelBlockMeta>>(await _client.GetStreamAsync(apiUrl));
+        return blockMetas ?? throw new InvalidOperationException("Didn't get a valid response from the API.");
     }
 
     public async Task<IAuthResponse> GetAuth(string email, string password)
