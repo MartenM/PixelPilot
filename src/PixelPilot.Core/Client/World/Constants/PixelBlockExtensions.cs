@@ -150,11 +150,10 @@ public static class PixelBlockExtensions
             case PixelBlock.EffectsInvulnerability:
                 return BlockType.EffectTogglable;
             case PixelBlock.EffectsCurse:
+            case PixelBlock.EffectsPoison:
                 return BlockType.EffectTimed;
             case PixelBlock.EffectsZombie:
                 return BlockType.EffectTimed;
-            case PixelBlock.EffectsGravityforce:
-                return BlockType.EffectLeveled;
             case PixelBlock.EffectsMultiJump:
                 return BlockType.EffectLeveled;
             case PixelBlock.NoteDrum:
