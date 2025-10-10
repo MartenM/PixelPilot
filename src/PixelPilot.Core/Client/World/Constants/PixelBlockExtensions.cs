@@ -155,6 +155,7 @@ public static class PixelBlockExtensions
             case PixelBlock.EffectsZombie:
                 return BlockType.EffectTimed;
             case PixelBlock.EffectsMultiJump:
+            case PixelBlock.EffectsGravityForce:
                 return BlockType.EffectLeveled;
             case PixelBlock.NoteDrum:
             case PixelBlock.NoteGuitar:

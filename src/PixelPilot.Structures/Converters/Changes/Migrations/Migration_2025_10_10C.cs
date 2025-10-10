@@ -4,7 +4,7 @@ using PixelPilot.Structures.Converters.PilotSimple;
 
 namespace PixelPilot.Structures.Converters.Migrations.Migrations;
 
-public class Migration_2025_10_10C() : VersionMigration(12)
+public class Migration_2025_10_10C() : VersionMigration(11)
 {
     protected override void DoUpdate(MappedBlockData mappedBlockData)
     {
