@@ -43,7 +43,8 @@ public class Migration_2025_10_10C() : VersionMigration(11)
             
             
             // Welp lets change this a bit.
-            var migratedBlock = Convert.ToBase64String(CreateSimpleBlock(x, y, layer, mappedSpikeId, percentage));
+            // PIXELWALKER DOES NOT ALLOW VALUES THAT ARE NOT 5 % = 0
+            var migratedBlock = Convert.ToBase64String(CreateSimpleBlock(x, y, layer, mappedSpikeId, (int) Math.Round(percentage / 5.0) * 5));
             
             mappedBlockData.BlockData[i] = migratedBlock;
         }
