@@ -1,4 +1,5 @@
 ﻿using PixelPilot.Client.World.Constants;
+using PixelPilot.Structures.Converters.Changes;
 
 namespace PixelPilot.Structures.Converters.PilotSimple;
 
@@ -10,7 +11,7 @@ public class MappedBlockData
     }
     public MappedBlockData(List<PixelBlock> mapping, List<string> blockData)
     {
-        Version = 3;
+        Version = VersionManager.CurrentVersion();
         Mapping = mapping.Select(p => p.ToString()).ToList();
         BlockData = blockData;
     }

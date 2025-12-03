@@ -18,7 +18,7 @@ public class PilotSimpleStructure
     public PilotSimpleStructure() {}
     private PilotSimpleStructure(int width, int height, Dictionary<string, string> meta, bool containsEmpty, List<IPlacedBlock> blocks)
     {
-        Version = VersionManager.CurrentVersion();
+        Version = 1;
         Width = width;
         Height = height;
         Meta = meta;
