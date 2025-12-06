@@ -58,7 +58,7 @@ public class JsonBlockListConverter : JsonConverter<List<IPlacedBlock>>
                 tempId = binReader.ReadInt32();
                 block = blockMapping[tempId];
 
-                blocks.Add(new PlacedBlock(x, y, layer, PixelWorld.DeserializeBlock(binReader, block)));
+                blocks.Add(new PlacedBlock(x, y, layer, PixelWorld.Legacy_DeserializeBlock(binReader, block)));
             }
             catch (Exception ex)
             {

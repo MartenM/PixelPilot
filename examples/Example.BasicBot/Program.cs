@@ -8,6 +8,7 @@ using PixelWalker.Networking.Protobuf.WorldPackets;
 
 // Load the configuration. Don't store your account token in the code :)
 var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
     .AddJsonFile("config.json")
     .AddEnvironmentVariables()
     .Build();
@@ -22,7 +23,8 @@ if (config == null)
 
 // Create a client.
 var client = PixelPilotClient.Builder()
-    .SetToken(config.AccountToken)
+    .SetEmail(config.AccountEmail)
+    .SetPassword(config.AccountPassword)
     .SetAutomaticReconnect(false)
     .SetPrefix("[Bot] ")
     .Build();
@@ -89,7 +91,7 @@ client.OnClientDisconnected += (_, reason) =>
 };
 
 // Connect to a room.
-await client.Connect("rc9916e8db59f8a");
+await client.Connect("r2759ac03e4ff73");
 
 // Don't terminate.
 await client.WaitForDisconnect();

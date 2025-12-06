@@ -174,7 +174,7 @@ client.OnPacketReceived += (_, packet) =>
     }
 };
 
-await client.Connect("8l04w8nv2ey451v");
+await client.Connect("r2759ac03e4ff73");
 await world.InitTask;
 
 client.SendChat("Connected!");
