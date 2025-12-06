@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using PixelPilot.Api;
 using PixelPilot.Client.World.Blocks.Placed;
+using PixelPilot.Client.World.Constants;
 using PixelWalker.Networking.Protobuf.WorldPackets;
 
 namespace PixelPilot.Client.World.Blocks.V2;
@@ -12,9 +13,15 @@ public class FlexBlock : IPixelBlock
     public FlexBlock(int blockId)
     {
         BlockId = blockId;
-        Fields = new  Dictionary<string, object>();
+        Fields = new Dictionary<string, object>();
     }
     
+    public FlexBlock(PixelBlock block)
+    {
+        BlockId = (int) block;
+        Fields = new Dictionary<string, object>();
+    }
+
     public FlexBlock(int blockId, Dictionary<string, object> fields)
     {
         BlockId = blockId;
@@ -27,10 +34,11 @@ public class FlexBlock : IPixelBlock
     }
 
     public int BlockId { get; }
+
     public WorldBlockPlacedPacket AsPacketOut(int x, int y, int layer)
     {
         var packet = new WorldBlockPlacedPacket();
-        
+
         packet.BlockId = BlockId;
         packet.Layer = layer;
         packet.Positions.Add(new PointInteger()
@@ -43,10 +51,10 @@ public class FlexBlock : IPixelBlock
         {
             packet.Fields.Add(field.Key, FromObject(field.Value));
         }
-        
+
         return packet;
     }
-    
+
     public static BlockFieldValue FromObject(object value)
     {
         var proto = new BlockFieldValue();
@@ -81,15 +89,15 @@ public class FlexBlock : IPixelBlock
 
         return proto;
     }
-    
+
     public static object ToObject(BlockFieldValue proto)
     {
         return proto.ValueCase switch
         {
-            BlockFieldValue.ValueOneofCase.Int32Value     => proto.Int32Value,
-            BlockFieldValue.ValueOneofCase.Uint32Value    => proto.Uint32Value,
-            BlockFieldValue.ValueOneofCase.StringValue    => proto.StringValue,
-            BlockFieldValue.ValueOneofCase.BoolValue      => proto.BoolValue,
+            BlockFieldValue.ValueOneofCase.Int32Value => proto.Int32Value,
+            BlockFieldValue.ValueOneofCase.Uint32Value => proto.Uint32Value,
+            BlockFieldValue.ValueOneofCase.StringValue => proto.StringValue,
+            BlockFieldValue.ValueOneofCase.BoolValue => proto.BoolValue,
             BlockFieldValue.ValueOneofCase.ByteArrayValue => proto.ByteArrayValue.ToByteArray(),
             _ => throw new PixelApiException("Could not convert the BlockFieldValue. Is the API still up to date?")
         };
@@ -98,9 +106,10 @@ public class FlexBlock : IPixelBlock
     public WorldBlockPlacedPacket AsPacketOut(List<Point> positions, int layer)
     {
         var packet = new WorldBlockPlacedPacket();
-        
+
         packet.BlockId = BlockId;
         packet.Layer = layer;
+        
         foreach (var position in positions)
         {
             packet.Positions.Add(new PointInteger()
@@ -114,13 +123,13 @@ public class FlexBlock : IPixelBlock
         {
             packet.Fields.Add(field.Key, FromObject(field.Value));
         }
-        
+
         return packet;
     }
 
     public IPlacedBlock AsPlacedBlock(int x, int y, int layer)
     {
-        return new PlacedBlock(x, y , layer, this);
+        return new PlacedBlock(x, y, layer, this);
     }
 
     public byte[] AsWorldBuffer(int x, int y, int layer)
@@ -131,5 +140,38 @@ public class FlexBlock : IPixelBlock
     public byte[] AsWorldBuffer(int x, int y, int layer, int customId)
     {
         throw new PixelApiException("This method is no longer supported.");
+    }
+
+    protected bool Equals(FlexBlock other)
+    {
+        return BlockId == other.BlockId && EqualFields(other);
+    }
+
+    private bool EqualFields(FlexBlock other)
+    {
+        return Fields.Count == other.Fields.Count
+               && Fields.All(kvp => other.Fields.TryGetValue(kvp.Key, out var value) && kvp.Value.Equals(value));
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is null) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != GetType()) return false;
+        return Equals((FlexBlock)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        var hash = new HashCode();
+        hash.Add(BlockId);
+
+        foreach (var kvp in Fields.OrderBy(k => k.Key))
+        {
+            hash.Add(kvp.Key);
+            hash.Add(kvp.Value);
+        }
+
+        return hash.ToHashCode();
     }
 }

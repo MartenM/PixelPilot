@@ -10,7 +10,9 @@ using PixelPilot.Client.Messages.Packets.Extensions;
 using PixelPilot.Client.Players;
 using PixelPilot.Client.Players.Basic;
 using PixelPilot.Client.World;
+using PixelPilot.Client.World.Blocks.Placed;
 using PixelPilot.Client.World.Blocks.Types;
+using PixelPilot.Client.World.Blocks.V2;
 using PixelPilot.Client.World.Constants;
 using PixelPilot.Common.Logging;
 using PixelPilot.Structures;
@@ -59,12 +61,12 @@ world.OnBlocksPlaced += async (sender, blocksEvent) =>
 {
     if (client.BotId == blocksEvent.UserId) return;
 
-    if (blocksEvent.NewBlock.Block.ToString().Contains("Red"))
-    {
-        // No red blocks allowed.
-        client.SendChat("You shall not place red blocks!");
-        blocksEvent.Cancelled = true;
-    }
+    // if (blocksEvent.NewBlock.Block.ToString().Contains("Red"))
+    // {
+    //     // No red blocks allowed.
+    //     client.SendChat("You shall not place red blocks!");
+    //     blocksEvent.Cancelled = true;
+    // }
 };
 
 // Setup some basic commands. Only allow me to execute them.
@@ -104,6 +106,19 @@ client.OnPacketReceived += (_, packet) =>
                 currentStructure = world.GetStructure(point1, point2, false);
                 client.SendChat("Current structure has been set.");
                 break;
+            case "test":
+                var blocks = new List<IPlacedBlock>()
+                {
+                    new PlacedBlock(0, 0, WorldLayer.Foreground, new FlexBlock(PixelBlock.BasicCyan)),
+                    new PlacedBlock(1, 0, WorldLayer.Foreground, new FlexBlock(PixelBlock.BasicCyan)),
+                    new PlacedBlock(2, 0, WorldLayer.Foreground, new FlexBlock(PixelBlock.BasicCyan)),
+                    new PlacedBlock(3, 0, WorldLayer.Foreground, new FlexBlock(PixelBlock.BasicCyan)),
+                    new PlacedBlock(4, 0, WorldLayer.Foreground, new FlexBlock(PixelBlock.BasicCyan)),
+                };
+                var blockPacket = blocks.ToChunkedPackets();
+                
+                client.SendRange(blockPacket);
+                break;
             case "save":
                 if (currentStructure == null)
                 {
@@ -129,8 +144,16 @@ client.OnPacketReceived += (_, packet) =>
                     return;
                 }
 
+                if (!File.Exists($"./{args[1]}.json"))
+                {
+                    client.SendChat("Please provide a file name that exists.");
+                    return;
+                }
+
                 var rawLoad = File.ReadAllText($"./{args[1]}.json");
-                currentStructure = PilotSaveSerializer.Deserialize(rawLoad);
+                
+                client.SendChat("Loading structure...");
+                currentStructure = PilotSaveSerializer.Deserialize(client.GetApiClient(), rawLoad);
                 
                 client.SendChat("Structure loaded from file.");
                 break;
@@ -144,7 +167,7 @@ client.OnPacketReceived += (_, packet) =>
                 // Get the difference in packets. Then chunk the result together and send the packets.
                 // world.GetDifference(currentStructure, pasteX, pasteY).PasteInOrder(client, new Point(0, 0));
 
-                var packets = world.GetDifference(currentStructure, pasteX, pasteY).ToChunkedPackets();
+                var packets = currentStructure.BlocksWithEmpty.ToChunkedPackets();
 
                 if (packets.Count == 0)
                 {
@@ -155,14 +178,6 @@ client.OnPacketReceived += (_, packet) =>
                     client.SendChat($"Pasting structure... {packets.Count}");
                     foreach(var bp in packets)
                     {
-                        if (bp is WorldBlockPlacedPacket blockPlaced)
-                        {
-                            if (blockPlaced.BlockId == (int) PixelBlock.FallLeavesYellowBg)
-                            {
-                                Console.WriteLine($"Layer {(WorldLayer) blockPlaced.Layer} PLACING: {string.Join(",", blockPlaced.Positions.Select(p => $"({p.X} {p.Y})"))}");
-                                //client.SendChat($"PLACING THEM {blockPlaced.Positions}");
-                            }
-                        }
                         client.Send(bp);
                     }
                 }
@@ -174,7 +189,7 @@ client.OnPacketReceived += (_, packet) =>
     }
 };
 
-await client.Connect("r2759ac03e4ff73");
+await client.Connect("8l04w8nv2ey451v");
 await world.InitTask;
 
 client.SendChat("Connected!");

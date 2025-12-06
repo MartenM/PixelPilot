@@ -1,4 +1,5 @@
-﻿using PixelPilot.Client;
+﻿using PixelPilot.Api;
+using PixelPilot.Client;
 using PixelPilot.Client.Extensions;
 using PixelPilot.Client.World;
 using PixelPilot.Structures;
@@ -68,7 +69,7 @@ public class PixelPilotStuctureTests
         Assert.That(contents, Is.Not.Empty, $"File {fileName} should not be empty.");
 
         // Should go without errors.
-        var structure = PilotSaveSerializer.Deserialize(contents);
+        var structure = PilotSaveSerializer.Deserialize(_client.ApiClient, contents);
         Assert.That(structure, Is.Not.Null, $"Output structure should not be null.");
         Assert.That(structure.Blocks, Is.Not.Empty, $"Should have more than zero blocks.");
     }
@@ -80,7 +81,7 @@ public class PixelPilotStuctureTests
         // Load file contents
         var filePath = Path.Combine(TestContext.CurrentContext.TestDirectory, TestStructuresFolder, fileName);
         var contents = await File.ReadAllTextAsync(filePath);
-        var structure = PilotSaveSerializer.Deserialize(contents);
+        var structure = PilotSaveSerializer.Deserialize(_client.ApiClient, contents);
         
         // Create a client with an unsaved world for pasting test.
         var height = (int)Math.Ceiling((double)structure.Height / 25) * 25;

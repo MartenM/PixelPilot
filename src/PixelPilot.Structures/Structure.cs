@@ -1,5 +1,6 @@
 ﻿using PixelPilot.Client.World.Blocks;
 using PixelPilot.Client.World.Blocks.Placed;
+using PixelPilot.Client.World.Blocks.V2;
 using PixelPilot.Client.World.Constants;
 
 namespace PixelPilot.Structures;
@@ -48,7 +49,7 @@ public class Structure
                     {
                         if (!placed[l, x, y])
                         {
-                            emptyList.Add(new PlacedBlock(x, y, l, new BasicBlock(PixelBlock.Empty)));
+                            emptyList.Add(new PlacedBlock(x, y, l, new FlexBlock(PixelBlock.Empty)));
                         }
                     }
                 }

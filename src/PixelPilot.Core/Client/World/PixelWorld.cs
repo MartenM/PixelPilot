@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Text.RegularExpressions;
 using Google.Protobuf;
 using Google.Protobuf.Collections;
 using Microsoft.Extensions.Logging;
@@ -213,11 +214,11 @@ public class PixelWorld
                     {
                         if (l == 1 && x == 0 || x == Width - 1 || y == 0 || y == Height - 1)
                         {
-                            _worldData[l, x, y] = new BasicBlock(PixelBlock.BasicGray);
+                            _worldData[l, x, y] = new FlexBlock(PixelBlock.BasicGray);
                         }
                         else
                         {
-                            _worldData[l, x, y] = new BasicBlock(PixelBlock.Empty);
+                            _worldData[l, x, y] = new FlexBlock(PixelBlock.Empty);
                         }
                     }
                 }
