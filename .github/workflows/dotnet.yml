@@ -127,6 +127,7 @@ jobs:
       # Create and publish the release
       - name: Create Github Release
         uses: softprops/action-gh-release@v2
+        if: github.ref == 'refs/heads/main'
         id: release
         with:
           name: ${{ needs.deploy-planner.outputs.new-tag }}
