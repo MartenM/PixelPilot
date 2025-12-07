@@ -108,6 +108,7 @@ client.OnPacketReceived += (_, packet) =>
                 client.SendChat("Current structure has been set.");
                 break;
             case "test":
+            {
                 var blocks = new List<IPlacedBlock>()
                 {
                     new PlacedBlock(0, 0, WorldLayer.Foreground, new FlexBlock(PixelBlock.BasicCyan)),
@@ -120,7 +121,9 @@ client.OnPacketReceived += (_, packet) =>
                 
                 client.SendRange(blockPacket);
                 break;
+            }
             case "save":
+            {
                 if (currentStructure == null)
                 {
                     client.SendChat("Please copy a structure using .copy");
@@ -138,6 +141,7 @@ client.OnPacketReceived += (_, packet) =>
                 
                 client.SendChat("Structure saved to file.");
                 break;
+            }
             case "load_legacy":
             {
                 if (args.Length < 2)
@@ -192,7 +196,8 @@ client.OnPacketReceived += (_, packet) =>
                 // Get the difference in packets. Then chunk the result together and send the packets.
                 // world.GetDifference(currentStructure, pasteX, pasteY).PasteInOrder(client, new Point(0, 0));
 
-                var packets = world.GetDifference(currentStructure, pasteX, pasteY).ToChunkedPackets();
+                var blocks = world.GetDifference(currentStructure, 0, 0);
+                var packets = blocks.ToChunkedPackets();
 
                 if (packets.Count == 0)
                 {
