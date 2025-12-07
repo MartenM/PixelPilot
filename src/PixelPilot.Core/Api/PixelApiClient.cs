@@ -317,8 +317,6 @@ public class PixelApiClient : IDisposable
         var eventTypes =
             await JsonSerializer.DeserializeAsync<string[]>(await _client.GetStreamAsync(apiUrl), _jsonOptions);
         return eventTypes ?? throw new PixelApiException("An unknown exception occured while attempting to fetch the worlds");
-        
-        return [];
     }
     
     public void Dispose()

@@ -16,6 +16,7 @@ using PixelPilot.Client.World.Blocks.V2;
 using PixelPilot.Client.World.Constants;
 using PixelPilot.Common.Logging;
 using PixelPilot.Structures;
+using PixelPilot.Structures.Converters.Pilot2;
 using PixelPilot.Structures.Converters.PilotSimple;
 using PixelPilot.Structures.Extensions;
 using PixelWalker.Networking.Protobuf.WorldPackets;
@@ -132,12 +133,13 @@ client.OnPacketReceived += (_, packet) =>
                     return;
                 }
                 
-                var rawSave = PilotSaveSerializer.Serialize(currentStructure);
+                var rawSave = currentStructure.ToJson(true);
                 File.WriteAllText($"./{args[1]}.json", rawSave);
                 
                 client.SendChat("Structure saved to file.");
                 break;
-            case "load":
+            case "load_legacy":
+            {
                 if (args.Length < 2)
                 {
                     client.SendChat("Please provide a file name.");
@@ -157,6 +159,29 @@ client.OnPacketReceived += (_, packet) =>
                 
                 client.SendChat("Structure loaded from file.");
                 break;
+            }
+            case "load":
+            {
+                if (args.Length < 2)
+                {
+                    client.SendChat("Please provide a file name.");
+                    return;
+                }
+
+                if (!File.Exists($"./{args[1]}.json"))
+                {
+                    client.SendChat("Please provide a file name that exists.");
+                    return;
+                }
+
+                var rawLoad = File.ReadAllText($"./{args[1]}.json");
+                
+                client.SendChat("Loading structure...");
+                currentStructure = StructureExtensions.GetPilotStructureSave(rawLoad).ToStructure();
+                
+                client.SendChat("Structure loaded from file.");
+                break;
+            }
             case "paste":
             {
                 if (currentStructure == null) return;
@@ -167,7 +192,7 @@ client.OnPacketReceived += (_, packet) =>
                 // Get the difference in packets. Then chunk the result together and send the packets.
                 // world.GetDifference(currentStructure, pasteX, pasteY).PasteInOrder(client, new Point(0, 0));
 
-                var packets = currentStructure.BlocksWithEmpty.ToChunkedPackets();
+                var packets = world.GetDifference(currentStructure, pasteX, pasteY).ToChunkedPackets();
 
                 if (packets.Count == 0)
                 {

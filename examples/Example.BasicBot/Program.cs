@@ -1,5 +1,6 @@
 ﻿using Example.BasicBot;
 using Microsoft.Extensions.Configuration;
+using Microsoft.VisualBasic.CompilerServices;
 using PixelPilot.Client;
 using PixelPilot.Client.Players.Basic;
 using PixelPilot.Client.World;
@@ -38,10 +39,14 @@ client.OnPacketReceived += playerManager.HandlePacket;
 // Allow it to listen to client updates. Not required!
 var world = new PixelWorld(client);
 client.OnPacketReceived += world.HandlePacket;
-world.OnBlockPlaced += (_, playerId, oldBlock, _) =>
+world.OnBlocksPlaced += (_, blocksEvent) =>
 {
-    if (client.BotId == playerId) return;
-    client.Send(oldBlock.AsPacketOut());
+    if (blocksEvent.UserId == client.BotId)
+    {
+        return;
+    }
+
+    blocksEvent.Cancelled = true;
 };
 
 

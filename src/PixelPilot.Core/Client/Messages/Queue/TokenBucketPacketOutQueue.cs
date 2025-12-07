@@ -39,9 +39,9 @@ public class TokenBucketPacketOutQueue : IPixelPacketQueue
 
     private PixelPilotClient _client;
 
-    private TokenBucketRateLimiter _totalRateLimiter;
+    private TokenBucketRateLimiter _totalRateLimiter = null!;
 
-    private TokenBucketRateLimiter _chatRateLimiter;
+    private TokenBucketRateLimiter _chatRateLimiter = null!;
 
     private int _chatReplenishTime;
     
@@ -127,6 +127,7 @@ public class TokenBucketPacketOutQueue : IPixelPacketQueue
         
         _logger.LogDebug($"Total replenish duration {totalTime}");
         _logger.LogDebug($"Chat replenish duration {_chatReplenishTime}");
+        
         if (totalTime < 15)
         {
             _logger.LogWarning("Queue replenish time is lower then 15ms. The queue will still work, but it can't go faster like this.");

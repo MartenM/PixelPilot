@@ -4,14 +4,11 @@ using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using PixelPilot.Api;
 using PixelPilot.Client.Messages;
-using PixelPilot.Client.World;
-using PixelPilot.Client.World.Blocks;
 using PixelPilot.Client.World.Blocks.Placed;
 using PixelPilot.Client.World.Blocks.V2;
 using PixelPilot.Client.World.Constants;
 using PixelPilot.Common.Logging;
 using PixelPilot.Structures.Converters.Changes;
-using PixelPilot.Structures.Converters.Migrations;
 
 namespace PixelPilot.Structures.Converters.PilotSimple;
 

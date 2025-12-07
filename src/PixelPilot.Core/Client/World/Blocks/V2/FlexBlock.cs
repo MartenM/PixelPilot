@@ -6,6 +6,9 @@ using PixelWalker.Networking.Protobuf.WorldPackets;
 
 namespace PixelPilot.Client.World.Blocks.V2;
 
+/// <summary>
+/// The FlexBlock is new implementation of block data. It has a base, the block ID, and additional extra fields.
+/// </summary>
 public class FlexBlock : IPixelBlock
 {
     public Dictionary<string, object> Fields;
@@ -27,6 +30,12 @@ public class FlexBlock : IPixelBlock
         BlockId = blockId;
         Fields = fields;
     }
+    
+    public FlexBlock(PixelBlock block, Dictionary<string, object> fields)
+    {
+        BlockId = (int) block;
+        Fields = fields;
+    }
 
     public object Clone()
     {
@@ -34,6 +43,7 @@ public class FlexBlock : IPixelBlock
     }
 
     public int BlockId { get; }
+    public PixelBlock Block => (PixelBlock) BlockId;
 
     public WorldBlockPlacedPacket AsPacketOut(int x, int y, int layer)
     {

@@ -128,40 +128,6 @@ public class PixelWorld
     {
         return _worldData[layer, x, y];
     }
-    
-    /// <summary>
-    /// Initialize the world using a byte[].
-    /// </summary>
-    /// <param name="buffer"></param>
-    /// <exception cref="Exception"></exception>
-    [Obsolete]
-    public void LegacyInit(byte[] buffer)
-    {
-        if (Width == 0 || Height == 0) throw new Exception("World with and height must be set before serializing data!");
-        
-        using var stream = new MemoryStream(buffer);
-        using var reader = new BinaryReader(stream);
-
-        try
-        {
-            // Background
-            DeserializeLayer(0, reader);
-
-            // Foreground
-            DeserializeLayer(1, reader);
-            
-            // Overlay layer
-            DeserializeLayer(2, reader);
-        }
-        catch (EndOfStreamException ex)
-        {
-            _logger.LogError(ex, "The World reader unexpectedly reached the end of the stream. Are you sure the API is up-to-date?");
-        }
-
-        if (stream.Position != stream.Length)
-            throw new Exception(
-                $"Error while converting world buffer. Reader is at {stream.Position} while length is {stream.Length}");
-    }
 
     /// <summary>
     /// Utility method that can attached to the client.
@@ -198,7 +164,13 @@ public class PixelWorld
 
         if (packet is WorldReloadedPacket reload)
         {
-            
+            HandleWorldReload(new WorldBlockData
+            {
+                Pallet = reload.BlockDataPalette.ToList(),
+                BackgroundData = reload.BackgroundLayerData.ToByteArray(),
+                ForegroundData = reload.ForegroundLayerData.ToByteArray(),
+                OverlayData = reload.OverlayLayerData.ToByteArray(),
+            });
             OnWorldReloaded?.Invoke(this);
             return;
         }
@@ -223,6 +195,7 @@ public class PixelWorld
                     }
                 }
             }
+            
             OnWorldCleared?.Invoke(this);
             return;
         }
@@ -325,22 +298,6 @@ public class PixelWorld
 
         return dict;
     }
-    
-    /// <summary>
-    /// Deserialize a layer.
-    /// </summary>
-    /// <param name="layer">Current layer</param>
-    /// <param name="reader">Memory stream reader</param>
-    private void DeserializeLayer(int layer, BinaryReader reader)
-    {
-        for (int x = 0; x < Width; x++)
-        {
-            for (int y = 0; y < Height; y++)
-            {
-                _worldData[layer, x, y] = Legacy_DeserializeBlock(reader);
-            }
-        }
-    }
 
     public IEnumerable<PlacedBlock> GetBlocks(bool includeEmpty = true)
     {
@@ -356,69 +313,6 @@ public class PixelWorld
                     yield return new PlacedBlock(x, y, layer, block);
                 }
             }
-        }
-    }
-    
-    /// <summary>
-    /// Deserialize a block
-    /// </summary>
-    /// <param name="reader">Memory stream reader</param>
-    /// <returns>The block</returns>
-    /// <exception cref="ArgumentOutOfRangeException">Only when implementation is missing</exception>
-    public static IPixelBlock Legacy_DeserializeBlock(BinaryReader reader)
-    {
-        var block = (PixelBlock) reader.ReadInt32();
-        return Legacy_DeserializeBlock(reader, block);
-    }
-    
-    public static IPixelBlock Legacy_DeserializeBlock(BinaryReader reader, PixelBlock block)
-    {
-        // We want to construct a PixelBlock.
-        // First we need to know what type it is.
-        // Then we can fill in the rest.
-        var blockType = block.GetBlockType();
-        var extraFields = blockType.GetPacketFieldTypes();
-
-        // Read the extra fields
-        var extra = extraFields.Select(fieldT => BinaryFieldConverter.ReadTypeLe(reader, fieldT)).ToList();
-        
-        // Construct the block and return it. Hooray.
-        switch (blockType)
-        {
-            case BlockType.Normal:
-                return new BasicBlock((int) block);
-            case BlockType.Morphable:
-                return new MorphableBlock((int)block, extra[0]);
-            case BlockType.Portal:
-                return new PortalBlock( (int)block, extra[0], extra[1]);
-            case BlockType.SwitchActivator:
-                return new ActivatorBlock((int) block, extra[0], extra[1]);
-            case BlockType.SwitchResetter:
-                return new ResetterBlock((int)block, extra[0]);
-            case BlockType.WorldPortal:
-                return new WorldPortalBlock(extra[0], extra[1]);
-            case BlockType.EffectLeveled:
-                return new LeveledEffectBlock((int)block, extra[0]);
-            case BlockType.EffectTimed:
-                return new TimedEffectBlock((int)block, extra[0]);
-            case BlockType.EffectTogglable:
-                return new ToggleEffectBlock((int)block, extra[0]);
-            case BlockType.Sign:
-                return new SignBlock((int)block, extra[0]);
-            case BlockType.NoteBlock:
-                return new NoteBlock(block, extra[0]);
-            case BlockType.ColorBlock:
-            {
-                var color = Color.FromArgb(
-                    (int)((extra[0]) >> 24 & 0xFF), // Alpha
-                    (int)((extra[0] >> 16) & 0xFF), // Red
-                    (int)((extra[0] >> 8) & 0xFF), // Green
-                    (int)(extra[0] & 0xFF) // Blue
-                );
-                return new ColoredBlock(block, color);
-            }
-            default:
-                throw new ArgumentOutOfRangeException();
         }
     }
 }

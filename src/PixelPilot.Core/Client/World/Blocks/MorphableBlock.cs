@@ -10,6 +10,7 @@ namespace PixelPilot.Client.World.Blocks;
 /// Morphable blocks include blocks with multiple states.
 /// This includes decorations but also coin doors, gates, etc.
 /// </summary>
+[Obsolete("Use FlexBlock instead")]
 public class MorphableBlock : BasicBlock
 {
     public int Morph { get; set; }

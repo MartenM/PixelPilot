@@ -65,6 +65,38 @@ public class Structure
         }
     }
 
+    public IPixelBlock[,,] BlocksMatrix
+    {
+        get
+        {
+            var placed = new IPixelBlock[3, Width, Height];
+            
+            foreach (var block in Blocks)
+            {
+                placed[block.Layer, block.X, block.Y] = block.Block;
+            }
+            
+            // Iterate over this 3D array and add places that are still false.
+            // Iterate through each dimension of the array
+            for (int l = 0; l < 3; l++) // First dimension
+            {
+                for (int x = 0; x < Width; x++) // Second dimension (Width)
+                {
+                    for (int y = 0; y < Height; y++) // Third dimension (Height)
+                    {
+                        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+                        if (placed[l, x, y] == null)
+                        {
+                            placed[l, x, y] = new FlexBlock(PixelBlock.Empty);
+                        }
+                    }
+                }
+            }
+
+            return BlocksMatrix;
+        }
+    }
+
     /// <summary>
     /// Adds empty blocks where no blocks are in this structure.
     /// This action will modify the original struct.
