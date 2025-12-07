@@ -69,7 +69,7 @@ jobs:
     name: Deployment Planner
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
-    needs: build
+    needs: test
     outputs: 
       new-tag-found: ${{ steps.tag_check.outputs.new-tag-found }}
       new-tag: ${{ steps.tag_check.outputs.new-tag }}
