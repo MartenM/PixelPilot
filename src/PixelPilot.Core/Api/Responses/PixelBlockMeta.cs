@@ -8,4 +8,6 @@ public class PixelBlockMeta
     
     public long? MinimapColor { get; init; }
     public int? LegacyId { get; init; }
+
+    public List<FieldData> Fields { get; set; } = new();
 }

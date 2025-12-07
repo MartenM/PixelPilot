@@ -24,7 +24,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     static WorldReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Cgt3b3JsZC5wcm90bxIMV29ybGRQYWNrZXRzIsEXCgtXb3JsZFBhY2tldBIi",
+            "Cgt3b3JsZC5wcm90bxIMV29ybGRQYWNrZXRzIusYCgtXb3JsZFBhY2tldBIi",
             "CgRwaW5nGAEgASgLMhIuV29ybGRQYWNrZXRzLlBpbmdIABI8ChJwbGF5ZXJf",
             "aW5pdF9wYWNrZXQYAiABKAsyHi5Xb3JsZFBhY2tldHMuUGxheWVySW5pdFBh",
             "Y2tldEgAEkYKFHBsYXllcl9pbml0X3JlY2VpdmVkGAMgASgLMiYuV29ybGRQ",
@@ -66,167 +66,192 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
             "eWVyRXhjaGFuZ2VFZmZlY3RzUGFja2V0SAASSAoYcGxheWVyX3RlbGVwb3J0",
             "ZWRfcGFja2V0GBkgASgLMiQuV29ybGRQYWNrZXRzLlBsYXllclRlbGVwb3J0",
             "ZWRQYWNrZXRIABI+ChNwbGF5ZXJfbWFnaWNfcGFja2V0GCkgASgLMh8uV29y",
-            "bGRQYWNrZXRzLlBsYXllck1hZ2ljUGFja2V0SAASQgoVd29ybGRfcmVsb2Fk",
-            "ZWRfcGFja2V0GBogASgLMiEuV29ybGRQYWNrZXRzLldvcmxkUmVsb2FkZWRQ",
-            "YWNrZXRIABJAChR3b3JsZF9jbGVhcmVkX3BhY2tldBgbIAEoCzIgLldvcmxk",
-            "UGFja2V0cy5Xb3JsZENsZWFyZWRQYWNrZXRIABJHChh3b3JsZF9tZXRhX3Vw",
-            "ZGF0ZV9wYWNrZXQYHCABKAsyIy5Xb3JsZFBhY2tldHMuV29ybGRNZXRhVXBk",
-            "YXRlUGFja2V0SAASSQoZd29ybGRfYmxvY2tfcGxhY2VkX3BhY2tldBgdIAEo",
-            "CzIkLldvcmxkUGFja2V0cy5Xb3JsZEJsb2NrUGxhY2VkUGFja2V0SAASSQoZ",
-            "d29ybGRfYmxvY2tfZmlsbGVkX3BhY2tldBgeIAEoCzIkLldvcmxkUGFja2V0",
-            "cy5Xb3JsZEJsb2NrRmlsbGVkUGFja2V0SAASRwoYb2xkX2NoYXRfbWVzc2Fn",
-            "ZXNfcGFja2V0GB8gASgLMiMuV29ybGRQYWNrZXRzLk9sZENoYXRNZXNzYWdl",
-            "c1BhY2tldEgAEkIKFXN5c3RlbV9tZXNzYWdlX3BhY2tldBggIAEoCzIhLldv",
-            "cmxkUGFja2V0cy5TeXN0ZW1NZXNzYWdlUGFja2V0SAASTwocZ2xvYmFsX3N3",
-            "aXRjaF9jaGFuZ2VkX3BhY2tldBghIAEoCzInLldvcmxkUGFja2V0cy5HbG9i",
-            "YWxTd2l0Y2hDaGFuZ2VkUGFja2V0SAASSwoaZ2xvYmFsX3N3aXRjaF9yZXNl",
-            "dF9wYWNrZXQYIiABKAsyJS5Xb3JsZFBhY2tldHMuR2xvYmFsU3dpdGNoUmVz",
-            "ZXRQYWNrZXRIABJLChp3b3JsZF9hY3Rpb25fdXBkYXRlX3BhY2tldBgjIAEo",
-            "CzIlLldvcmxkUGFja2V0cy5Xb3JsZEFjdGlvblVwZGF0ZVBhY2tldEgAElAK",
-            "HWNoYW5nZV9zZWNyZXRfZWRpdF9rZXlfcGFja2V0GCQgASgLMicuV29ybGRQ",
-            "YWNrZXRzLkNoYW5nZVNlY3JldEVkaXRLZXlQYWNrZXRIABJEChZwbGF5ZXJf",
-            "c3BlY3RhdGVfcGFja2V0GCUgASgLMiIuV29ybGRQYWNrZXRzLlBsYXllclNw",
-            "ZWN0YXRlUGFja2V0SAASWQohcGxheWVyX2NvdW50ZXJfdHJhbnNhY3Rpb25f",
-            "cGFja2V0GCYgASgLMiwuV29ybGRQYWNrZXRzLlBsYXllckNvdW50ZXJUcmFu",
-            "c2FjdGlvblBhY2tldEgAElMKHnBsYXllcl9zZXRfY29sbGVjdGlibGVzX3Bh",
-            "Y2tldBgnIAEoCzIpLldvcmxkUGFja2V0cy5QbGF5ZXJTZXRDb2xsZWN0aWJs",
-            "ZXNQYWNrZXRIABIvCgtwbGF5ZXJfd29vdBgoIAEoCzIYLldvcmxkUGFja2V0",
-            "cy5QbGF5ZXJXb290SABCCAoGcGFja2V0IgYKBFBpbmciWQoZR2xvYmFsU3dp",
-            "dGNoQ2hhbmdlZFBhY2tldBIRCglwbGF5ZXJfaWQYASABKAUSEQoJc3dpdGNo",
-            "X2lkGAIgASgFEhYKDnN3aXRjaF9lbmFibGVkGAMgASgIIkQKF0dsb2JhbFN3",
-            "aXRjaFJlc2V0UGFja2V0EhEKCXBsYXllcl9pZBgBIAEoBRIWCg5zd2l0Y2hf",
-            "ZW5hYmxlZBgCIAEoCCJIChNTeXN0ZW1NZXNzYWdlUGFja2V0Eg0KBXRpdGxl",
-            "GAEgASgJEg8KB21lc3NhZ2UYAiABKAkSEQoJaXNfZGlhbG9nGAMgASgIIlAK",
-            "FU9sZENoYXRNZXNzYWdlc1BhY2tldBI3ChFvbGRfY2hhdF9tZXNzYWdlcxgB",
-            "IAMoCzIcLldvcmxkUGFja2V0cy5PbGRDaGF0TWVzc2FnZSLLAQoXV29ybGRB",
-            "Y3Rpb25VcGRhdGVQYWNrZXQSPAoGYWN0aW9uGAEgASgOMiwuV29ybGRQYWNr",
-            "ZXRzLldvcmxkQWN0aW9uVXBkYXRlUGFja2V0LkFjdGlvbhIUCgdlbmFibGVk",
-            "GAIgASgISACIAQEiUAoGQWN0aW9uEg4KClNBVkVfV09STEQQABIQCgxSRUxP",
-            "QURfV09STEQQARIPCgtDTEVBUl9XT1JMRBADEhMKD0FVVE9fU0FWRV9XT1JM",
-            "RBAEQgoKCF9lbmFibGVkIjEKGUNoYW5nZVNlY3JldEVkaXRLZXlQYWNrZXQS",
-            "FAoMbmV3X2VkaXRfa2V5GAEgASgJImkKHlBsYXllckNvdW50ZXJUcmFuc2Fj",
-            "dGlvblBhY2tldBIWCglwbGF5ZXJfaWQYASABKAVIAIgBARISCgpjb3VudGVy",
-            "X2lkGAIgASgFEg0KBWNvdW50GAMgASgFQgwKCl9wbGF5ZXJfaWQiKQoTV29y",
-            "bGRSZWxvYWRlZFBhY2tldBISCgp3b3JsZF9kYXRhGAEgASgMIhQKEldvcmxk",
-            "Q2xlYXJlZFBhY2tldCKkAQoWV29ybGRCbG9ja1BsYWNlZFBhY2tldBIWCglw",
-            "bGF5ZXJfaWQYASABKAVIAIgBARItCglwb3NpdGlvbnMYAiADKAsyGi5Xb3Js",
-            "ZFBhY2tldHMuUG9pbnRJbnRlZ2VyEg0KBWxheWVyGAMgASgFEhAKCGJsb2Nr",
-            "X2lkGAQgASgFEhQKDGV4dHJhX2ZpZWxkcxgFIAEoDEIMCgpfcGxheWVyX2lk",
-            "IpMBChZXb3JsZEJsb2NrRmlsbGVkUGFja2V0EiwKCHBvc2l0aW9uGAEgASgL",
-            "MhouV29ybGRQYWNrZXRzLlBvaW50SW50ZWdlchIUCgxpZ25vcmVMYXllcnMY",
-            "AiABKAgSDQoFbGF5ZXIYAyABKAUSEAoIYmxvY2tfaWQYBCABKAUSFAoMZXh0",
-            "cmFfZmllbGRzGAUgASgMIj4KFVdvcmxkTWV0YVVwZGF0ZVBhY2tldBIlCgRt",
-            "ZXRhGAEgASgLMhcuV29ybGRQYWNrZXRzLldvcmxkTWV0YSKzAgoQUGxheWVy",
-            "SW5pdFBhY2tldBI5ChFwbGF5ZXJfcHJvcGVydGllcxgBIAEoCzIeLldvcmxk",
-            "UGFja2V0cy5QbGF5ZXJQcm9wZXJ0aWVzEisKCndvcmxkX21ldGEYAiABKAsy",
-            "Fy5Xb3JsZFBhY2tldHMuV29ybGRNZXRhEhMKC3dvcmxkX3dpZHRoGAMgASgF",
-            "EhQKDHdvcmxkX2hlaWdodBgEIAEoBRIbChNnbG9iYWxfc3dpdGNoX3N0YXRl",
-            "GAUgASgMEhIKCndvcmxkX2RhdGEYBiABKAwSLQoLcGxheWVyX3dvb3QYByAB",
-            "KAsyGC5Xb3JsZFBhY2tldHMuUGxheWVyV29vdBIsCgt0ZXh0X2xhYmVscxgI",
-            "IAMoCzIXLldvcmxkUGFja2V0cy5UZXh0TGFiZWwiGgoYUGxheWVySW5pdFJl",
-            "Y2VpdmVkUGFja2V0In0KElBsYXllckpvaW5lZFBhY2tldBIyCgpwcm9wZXJ0",
-            "aWVzGAEgASgLMh4uV29ybGRQYWNrZXRzLlBsYXllclByb3BlcnRpZXMSMwoL",
-            "d29ybGRfc3RhdGUYAiABKAsyHi5Xb3JsZFBhY2tldHMuUGxheWVyV29ybGRT",
-            "dGF0ZSIlChBQbGF5ZXJMZWZ0UGFja2V0EhEKCXBsYXllcl9pZBgBIAEoBSJJ",
-            "ChBQbGF5ZXJDaGF0UGFja2V0EhYKCXBsYXllcl9pZBgBIAEoBUgAiAEBEg8K",
-            "B21lc3NhZ2UYAiABKAlCDAoKX3BsYXllcl9pZCJZChhQbGF5ZXJVcGRhdGVS",
-            "aWdodHNQYWNrZXQSEQoJcGxheWVyX2lkGAEgASgFEioKBnJpZ2h0cxgCIAEo",
-            "CzIaLldvcmxkUGFja2V0cy5QbGF5ZXJSaWdodHMiswIKEVBsYXllck1vdmVk",
-            "UGFja2V0EhYKCXBsYXllcl9pZBgBIAEoBUgAiAEBEisKCHBvc2l0aW9uGAIg",
-            "ASgLMhkuV29ybGRQYWNrZXRzLlBvaW50RG91YmxlEhIKCnZlbG9jaXR5X3gY",
-            "AyABKAESEgoKdmVsb2NpdHlfeRgEIAEoARISCgptb2RpZmllcl94GAUgASgB",
-            "EhIKCm1vZGlmaWVyX3kYBiABKAESEgoKaG9yaXpvbnRhbBgHIAEoBRIQCgh2",
-            "ZXJ0aWNhbBgIIAEoBRISCgpzcGFjZV9kb3duGAkgASgIEhcKD3NwYWNlX2p1",
-            "c3RfZG93bhgKIAEoCBIXCg9qdXN0X3RlbGVwb3J0ZWQYCyABKAgSDwoHdGlj",
-            "a19pZBgMIAEoBUIMCgpfcGxheWVyX2lkImsKFlBsYXllclRlbGVwb3J0ZWRQ",
-            "YWNrZXQSFgoJcGxheWVyX2lkGAEgASgFSACIAQESKwoIcG9zaXRpb24YAiAB",
-            "KAsyGS5Xb3JsZFBhY2tldHMuUG9pbnREb3VibGVCDAoKX3BsYXllcl9pZCJJ",
-            "ChBQbGF5ZXJGYWNlUGFja2V0EhYKCXBsYXllcl9pZBgBIAEoBUgAiAEBEg8K",
-            "B2ZhY2VfaWQYAiABKAVCDAoKX3BsYXllcl9pZCJVChRQbGF5ZXJTcGVjdGF0",
-            "ZVBhY2tldBIWCglwbGF5ZXJfaWQYASABKAVIAIgBARIXCg9zcGVjdGF0ZV9w",
-            "bGF5ZXIYAiABKAVCDAoKX3BsYXllcl9pZCJMChNQbGF5ZXJHb2RNb2RlUGFj",
-            "a2V0EhYKCXBsYXllcl9pZBgBIAEoBUgAiAEBEg8KB2VuYWJsZWQYAiABKAhC",
-            "DAoKX3BsYXllcl9pZCJMChNQbGF5ZXJNb2RNb2RlUGFja2V0EhYKCXBsYXll",
-            "cl9pZBgBIAEoBUgAiAEBEg8KB2VuYWJsZWQYAiABKAhCDAoKX3BsYXllcl9p",
-            "ZCI5Ch5QbGF5ZXJFbnRlclNlY3JldEVkaXRLZXlQYWNrZXQSFwoPc2VjcmV0",
-            "X2VkaXRfa2V5GAEgASgJImkKE1BsYXllclJlc3Bhd25QYWNrZXQSFgoJcGxh",
-            "eWVyX2lkGAEgASgFSACIAQESLAoIcG9zaXRpb24YAiABKAsyGi5Xb3JsZFBh",
-            "Y2tldHMuUG9pbnRJbnRlZ2VyQgwKCl9wbGF5ZXJfaWQieQoRUGxheWVyUmVz",
-            "ZXRQYWNrZXQSFgoJcGxheWVyX2lkGAEgASgFSACIAQESMQoIcG9zaXRpb24Y",
-            "AiABKAsyGi5Xb3JsZFBhY2tldHMuUG9pbnRJbnRlZ2VySAGIAQFCDAoKX3Bs",
-            "YXllcl9pZEILCglfcG9zaXRpb24inwEKFlBsYXllclRvdWNoQmxvY2tQYWNr",
-            "ZXQSFgoJcGxheWVyX2lkGAEgASgFSACIAQESMQoIcG9zaXRpb24YAiABKAsy",
-            "Gi5Xb3JsZFBhY2tldHMuUG9pbnRJbnRlZ2VySAGIAQESDQoFbGF5ZXIYAyAB",
-            "KAUSEAoIYmxvY2tfaWQYBCABKAVCDAoKX3BsYXllcl9pZEILCglfcG9zaXRp",
-            "b24itQEKFVBsYXllckFkZEVmZmVjdFBhY2tldBIRCglwbGF5ZXJfaWQYASAB",
-            "KAUSEQoJZWZmZWN0X2lkGAIgASgFEhUKCGR1cmF0aW9uGAMgASgFSACIAQES",
-            "FQoIc3RyZW5ndGgYBCABKAVIAYgBARIbCg5mcm9tX3BsYXllcl9pZBgFIAEo",
-            "BUgCiAEBQgsKCV9kdXJhdGlvbkILCglfc3RyZW5ndGhCEQoPX2Zyb21fcGxh",
-            "eWVyX2lkImwKGFBsYXllclJlbW92ZUVmZmVjdFBhY2tldBIRCglwbGF5ZXJf",
-            "aWQYASABKAUSEQoJZWZmZWN0X2lkGAIgASgFEhkKDHRvX3BsYXllcl9pZBgD",
-            "IAEoBUgAiAEBQg8KDV90b19wbGF5ZXJfaWQiLQoYUGxheWVyUmVzZXRFZmZl",
-            "Y3RzUGFja2V0EhEKCXBsYXllcl9pZBgBIAEoBSI3ChtQbGF5ZXJFeGNoYW5n",
-            "ZUVmZmVjdHNQYWNrZXQSGAoQdGFyZ2V0X3BsYXllcl9pZBgBIAEoBSJPChZQ",
-            "bGF5ZXJUZWFtVXBkYXRlUGFja2V0EhYKCXBsYXllcl9pZBgBIAEoBUgAiAEB",
-            "Eg8KB3RlYW1faWQYAiABKAVCDAoKX3BsYXllcl9pZCKKAQoaUGxheWVyQ291",
-            "bnRlcnNVcGRhdGVQYWNrZXQSFgoJcGxheWVyX2lkGAEgASgFSACIAQESDQoF",
-            "Y29pbnMYAiABKAUSEgoKYmx1ZV9jb2lucxgDIAEoBRIOCgZkZWF0aHMYBCAB",
-            "KAUSEwoLZnJvbV9zZXJ2ZXIYBSABKAhCDAoKX3BsYXllcl9pZCJxCh5QbGF5",
-            "ZXJMb2NhbFN3aXRjaENoYW5nZWRQYWNrZXQSFgoJcGxheWVyX2lkGAEgASgF",
-            "SACIAQESEQoJc3dpdGNoX2lkGAIgASgFEhYKDnN3aXRjaF9lbmFibGVkGAMg",
-            "ASgIQgwKCl9wbGF5ZXJfaWQiSQocUGxheWVyTG9jYWxTd2l0Y2hSZXNldFBh",
-            "Y2tldBIRCglwbGF5ZXJfaWQYASABKAUSFgoOc3dpdGNoX2VuYWJsZWQYAiAB",
-            "KAgiXgoZUGxheWVyRGlyZWN0TWVzc2FnZVBhY2tldBIWCg5mcm9tX3BsYXll",
-            "cl9pZBgBIAEoBRIYChB0YXJnZXRfcGxheWVyX2lkGAIgASgFEg8KB21lc3Nh",
-            "Z2UYAyABKAkicgobUGxheWVyU2V0Q29sbGVjdGlibGVzUGFja2V0EhYKCXBs",
-            "YXllcl9pZBgBIAEoBUgAiAEBEi0KCWNvbGxlY3RlZBgCIAMoCzIaLldvcmxk",
-            "UGFja2V0cy5Qb2ludEludGVnZXJCDAoKX3BsYXllcl9pZCKHAQoRUGxheWVy",
-            "TWFnaWNQYWNrZXQSEQoJcGxheWVyX2lkGAEgASgFEjcKBHR5cGUYAiABKA4y",
-            "KS5Xb3JsZFBhY2tldHMuUGxheWVyTWFnaWNQYWNrZXQuTWFnaWNUeXBlEg4K",
-            "BmFtb3VudBgDIAEoBSIWCglNYWdpY1R5cGUSCQoFU01BTEwQACJCCgpQbGF5",
-            "ZXJXb290EhYKCXBsYXllcl9pZBgBIAEoBUgAiAEBEg4KBmFjdGl2ZRgCIAEo",
-            "CEIMCgpfcGxheWVyX2lkIogCChBQbGF5ZXJXb3JsZFN0YXRlEhIKCmNvaW5z",
-            "X2dvbGQYASABKAUSEgoKY29pbnNfYmx1ZRgCIAEoBRIOCgZkZWF0aHMYAyAB",
-            "KAUSMwoPY29sbGVjdGVkX2l0ZW1zGAQgAygLMhouV29ybGRQYWNrZXRzLlBv",
-            "aW50SW50ZWdlchIWCg5oYXNfZ29sZF9jcm93bhgFIAEoCBIYChBoYXNfc2ls",
-            "dmVyX2Nyb3duGAYgASgIEhAKCHN3aXRjaGVzGAcgASgMEg8KB2dvZG1vZGUY",
-            "CCABKAgSDwoHbW9kbW9kZRgJIAEoCBIPCgd0ZWFtX2lkGAogASgFEhAKCGNv",
-            "dW50ZXJzGAsgAygFIvsBChBQbGF5ZXJQcm9wZXJ0aWVzEhEKCXBsYXllcl9p",
-            "ZBgBIAEoBRISCgphY2NvdW50X2lkGAIgASgJEhAKCHVzZXJuYW1lGAMgASgJ",
-            "EgwKBGZhY2UYBCABKAUSDAoEcm9sZRgFIAEoCRIRCglpc19mcmllbmQYBiAB",
-            "KAgSOwoSbGFzdE1vdmVtZW50UGFja2V0GAcgASgLMh8uV29ybGRQYWNrZXRz",
-            "LlBsYXllck1vdmVkUGFja2V0EhYKDmlzX3dvcmxkX293bmVyGAggASgIEioK",
-            "BnJpZ2h0cxgJIAEoCzIaLldvcmxkUGFja2V0cy5QbGF5ZXJSaWdodHMijAEK",
-            "DFBsYXllclJpZ2h0cxIQCghjYW5fZWRpdBgBIAEoCBIPCgdjYW5fZ29kGAIg",
-            "ASgIEhoKEmNhbl90b2dnbGVfbWluaW1hcBgDIAEoCBIhChljYW5fY2hhbmdl",
-            "X3dvcmxkX3NldHRpbmdzGAQgASgIEhoKEmF2YWlsYWJsZV9jb21tYW5kcxgF",
-            "IAMoCSLEAwoJV29ybGRNZXRhEg0KBXRpdGxlGAEgASgJEg0KBXBsYXlzGAIg",
-            "ASgFEg0KBW93bmVyGAMgASgJEhMKC2Rlc2NyaXB0aW9uGAQgASgJEhIKCnZp",
-            "c2liaWxpdHkYBSABKAkSNQoKd29ybGRfdHlwZRgGIAEoDjIhLldvcmxkUGFj",
-            "a2V0cy5Xb3JsZE1ldGEuV29ybGRUeXBlEhsKE2hhc191bnNhdmVkX2NoYW5n",
-            "ZXMYByABKAgSEwoLbWF4X3BsYXllcnMYCCABKAUSEgoKb3duZXJfcm9sZRgJ",
-            "IAEoCRIXCg9taW5pbWFwX2VuYWJsZWQYCiABKAgSFgoObWluaW1hcF9zY2Fs",
-            "ZWQYCyABKAgSGQoRbWluaW1hcF9tYXhfd2lkdGgYDCABKAUSGgoSbWluaW1h",
-            "cF9tYXhfaGVpZ2h0GA0gASgFEh8KF21pbmltYXBfZWRnZV9mYWRlX3dpZHRo",
-            "GA4gASgFEhsKE2hhc19zZWNyZXRfZWRpdF9rZXkYDyABKAgSDQoFd29vdHMY",
-            "ECABKAUiLwoJV29ybGRUeXBlEgkKBVNhdmVkEAASCwoHVW5zYXZlZBABEgoK",
-            "BkxlZ2FjeRACIl4KDk9sZENoYXRNZXNzYWdlEhMKC3BsYXllcl9uYW1lGAEg",
-            "ASgJEhMKC3BsYXllcl9yb2xlGAIgASgJEhEKCWlzX2ZyaWVuZBgDIAEoCBIP",
-            "CgdtZXNzYWdlGAQgASgJIiQKDFBvaW50SW50ZWdlchIJCgF4GAEgASgFEgkK",
-            "AXkYAiABKAUiIwoLUG9pbnREb3VibGUSCQoBeBgBIAEoARIJCgF5GAIgASgB",
-            "ImQKDFBsYXllckVmZmVjdBIMCgR0eXBlGAEgASgFEhUKCGR1cmF0aW9uGAIg",
-            "ASgFSACIAQESFQoIc3RyZW5ndGgYAyABKAVIAYgBAUILCglfZHVyYXRpb25C",
-            "CwoJX3N0cmVuZ3RoIsEBCglUZXh0TGFiZWwSLAoIcG9zaXRpb24YASABKAsy",
-            "Gi5Xb3JsZFBhY2tldHMuUG9pbnRJbnRlZ2VyEgwKBHRleHQYAiABKAkSDQoF",
-            "Y29sb3IYAyABKA0SEQoJbWF4X3dpZHRoGAQgASgCEg4KBnNoYWRvdxgFIAEo",
-            "CBIzCg50ZXh0X2FsaWdubWVudBgGIAEoDjIbLldvcmxkUGFja2V0cy5UZXh0",
-            "QWxpZ25tZW50EhEKCWZvbnRfc2l6ZRgHIAEoBSowCg1UZXh0QWxpZ25tZW50",
-            "EggKBExFRlQQABIKCgZDRU5URVIQARIJCgVSSUdIVBACQi+qAixQaXhlbFdh",
-            "bGtlci5OZXR3b3JraW5nLlByb3RvYnVmLldvcmxkUGFja2V0c2IGcHJvdG8z"));
+            "bGRQYWNrZXRzLlBsYXllck1hZ2ljUGFja2V0SAASUgoeZ2FtZV90aWNrc19z",
+            "eW5jX3JlcXVlc3RfcGFja2V0GCogASgLMiguV29ybGRQYWNrZXRzLkdhbWVU",
+            "aWNrc1N5bmNSZXF1ZXN0UGFja2V0SAASVAofZ2FtZV90aWNrc19zeW5jX3Jl",
+            "c3BvbnNlX3BhY2tldBgrIAEoCzIpLldvcmxkUGFja2V0cy5HYW1lVGlja3NT",
+            "eW5jUmVzcG9uc2VQYWNrZXRIABJCChV3b3JsZF9yZWxvYWRlZF9wYWNrZXQY",
+            "GiABKAsyIS5Xb3JsZFBhY2tldHMuV29ybGRSZWxvYWRlZFBhY2tldEgAEkAK",
+            "FHdvcmxkX2NsZWFyZWRfcGFja2V0GBsgASgLMiAuV29ybGRQYWNrZXRzLldv",
+            "cmxkQ2xlYXJlZFBhY2tldEgAEkcKGHdvcmxkX21ldGFfdXBkYXRlX3BhY2tl",
+            "dBgcIAEoCzIjLldvcmxkUGFja2V0cy5Xb3JsZE1ldGFVcGRhdGVQYWNrZXRI",
+            "ABJJChl3b3JsZF9ibG9ja19wbGFjZWRfcGFja2V0GB0gASgLMiQuV29ybGRQ",
+            "YWNrZXRzLldvcmxkQmxvY2tQbGFjZWRQYWNrZXRIABJJChl3b3JsZF9ibG9j",
+            "a19maWxsZWRfcGFja2V0GB4gASgLMiQuV29ybGRQYWNrZXRzLldvcmxkQmxv",
+            "Y2tGaWxsZWRQYWNrZXRIABJHChhvbGRfY2hhdF9tZXNzYWdlc19wYWNrZXQY",
+            "HyABKAsyIy5Xb3JsZFBhY2tldHMuT2xkQ2hhdE1lc3NhZ2VzUGFja2V0SAAS",
+            "QgoVc3lzdGVtX21lc3NhZ2VfcGFja2V0GCAgASgLMiEuV29ybGRQYWNrZXRz",
+            "LlN5c3RlbU1lc3NhZ2VQYWNrZXRIABJPChxnbG9iYWxfc3dpdGNoX2NoYW5n",
+            "ZWRfcGFja2V0GCEgASgLMicuV29ybGRQYWNrZXRzLkdsb2JhbFN3aXRjaENo",
+            "YW5nZWRQYWNrZXRIABJLChpnbG9iYWxfc3dpdGNoX3Jlc2V0X3BhY2tldBgi",
+            "IAEoCzIlLldvcmxkUGFja2V0cy5HbG9iYWxTd2l0Y2hSZXNldFBhY2tldEgA",
+            "EksKGndvcmxkX2FjdGlvbl91cGRhdGVfcGFja2V0GCMgASgLMiUuV29ybGRQ",
+            "YWNrZXRzLldvcmxkQWN0aW9uVXBkYXRlUGFja2V0SAASUAodY2hhbmdlX3Nl",
+            "Y3JldF9lZGl0X2tleV9wYWNrZXQYJCABKAsyJy5Xb3JsZFBhY2tldHMuQ2hh",
+            "bmdlU2VjcmV0RWRpdEtleVBhY2tldEgAEkQKFnBsYXllcl9zcGVjdGF0ZV9w",
+            "YWNrZXQYJSABKAsyIi5Xb3JsZFBhY2tldHMuUGxheWVyU3BlY3RhdGVQYWNr",
+            "ZXRIABJZCiFwbGF5ZXJfY291bnRlcl90cmFuc2FjdGlvbl9wYWNrZXQYJiAB",
+            "KAsyLC5Xb3JsZFBhY2tldHMuUGxheWVyQ291bnRlclRyYW5zYWN0aW9uUGFj",
+            "a2V0SAASUwoecGxheWVyX3NldF9jb2xsZWN0aWJsZXNfcGFja2V0GCcgASgL",
+            "MikuV29ybGRQYWNrZXRzLlBsYXllclNldENvbGxlY3RpYmxlc1BhY2tldEgA",
+            "Ei8KC3BsYXllcl93b290GCggASgLMhguV29ybGRQYWNrZXRzLlBsYXllcldv",
+            "b3RIAEIICgZwYWNrZXQiBgoEUGluZyJZChlHbG9iYWxTd2l0Y2hDaGFuZ2Vk",
+            "UGFja2V0EhEKCXBsYXllcl9pZBgBIAEoBRIRCglzd2l0Y2hfaWQYAiABKAUS",
+            "FgoOc3dpdGNoX2VuYWJsZWQYAyABKAgiRAoXR2xvYmFsU3dpdGNoUmVzZXRQ",
+            "YWNrZXQSEQoJcGxheWVyX2lkGAEgASgFEhYKDnN3aXRjaF9lbmFibGVkGAIg",
+            "ASgIIkgKE1N5c3RlbU1lc3NhZ2VQYWNrZXQSDQoFdGl0bGUYASABKAkSDwoH",
+            "bWVzc2FnZRgCIAEoCRIRCglpc19kaWFsb2cYAyABKAgiUAoVT2xkQ2hhdE1l",
+            "c3NhZ2VzUGFja2V0EjcKEW9sZF9jaGF0X21lc3NhZ2VzGAEgAygLMhwuV29y",
+            "bGRQYWNrZXRzLk9sZENoYXRNZXNzYWdlIssBChdXb3JsZEFjdGlvblVwZGF0",
+            "ZVBhY2tldBI8CgZhY3Rpb24YASABKA4yLC5Xb3JsZFBhY2tldHMuV29ybGRB",
+            "Y3Rpb25VcGRhdGVQYWNrZXQuQWN0aW9uEhQKB2VuYWJsZWQYAiABKAhIAIgB",
+            "ASJQCgZBY3Rpb24SDgoKU0FWRV9XT1JMRBAAEhAKDFJFTE9BRF9XT1JMRBAB",
+            "Eg8KC0NMRUFSX1dPUkxEEAMSEwoPQVVUT19TQVZFX1dPUkxEEARCCgoIX2Vu",
+            "YWJsZWQiMQoZQ2hhbmdlU2VjcmV0RWRpdEtleVBhY2tldBIUCgxuZXdfZWRp",
+            "dF9rZXkYASABKAkiaQoeUGxheWVyQ291bnRlclRyYW5zYWN0aW9uUGFja2V0",
+            "EhYKCXBsYXllcl9pZBgBIAEoBUgAiAEBEhIKCmNvdW50ZXJfaWQYAiABKAUS",
+            "DQoFY291bnQYAyABKAVCDAoKX3BsYXllcl9pZCKoAQoTV29ybGRSZWxvYWRl",
+            "ZFBhY2tldBI3ChJibG9ja19kYXRhX3BhbGV0dGUYASADKAsyGy5Xb3JsZFBh",
+            "Y2tldHMuQmxvY2tEYXRhSW5mbxIdChViYWNrZ3JvdW5kX2xheWVyX2RhdGEY",
+            "AiABKAwSHQoVZm9yZWdyb3VuZF9sYXllcl9kYXRhGAMgASgMEhoKEm92ZXJs",
+            "YXlfbGF5ZXJfZGF0YRgEIAEoDCIUChJXb3JsZENsZWFyZWRQYWNrZXQikwEK",
+            "D0Jsb2NrRmllbGRWYWx1ZRIVCgtpbnQzMl92YWx1ZRgBIAEoBUgAEhYKDHVp",
+            "bnQzMl92YWx1ZRgCIAEoDUgAEhYKDHN0cmluZ192YWx1ZRgDIAEoCUgAEhQK",
+            "CmJvb2xfdmFsdWUYBCABKAhIABIaChBieXRlX2FycmF5X3ZhbHVlGAUgASgM",
+            "SABCBwoFdmFsdWUingIKFldvcmxkQmxvY2tQbGFjZWRQYWNrZXQSFgoJcGxh",
+            "eWVyX2lkGAEgASgFSACIAQESLQoJcG9zaXRpb25zGAIgAygLMhouV29ybGRQ",
+            "YWNrZXRzLlBvaW50SW50ZWdlchINCgVsYXllchgDIAEoBRIQCghibG9ja19p",
+            "ZBgEIAEoBRJACgZmaWVsZHMYBSADKAsyMC5Xb3JsZFBhY2tldHMuV29ybGRC",
+            "bG9ja1BsYWNlZFBhY2tldC5GaWVsZHNFbnRyeRpMCgtGaWVsZHNFbnRyeRIL",
+            "CgNrZXkYASABKAkSLAoFdmFsdWUYAiABKAsyHS5Xb3JsZFBhY2tldHMuQmxv",
+            "Y2tGaWVsZFZhbHVlOgI4AUIMCgpfcGxheWVyX2lkIo0CChZXb3JsZEJsb2Nr",
+            "RmlsbGVkUGFja2V0EiwKCHBvc2l0aW9uGAEgASgLMhouV29ybGRQYWNrZXRz",
+            "LlBvaW50SW50ZWdlchIUCgxpZ25vcmVMYXllcnMYAiABKAgSDQoFbGF5ZXIY",
+            "AyABKAUSEAoIYmxvY2tfaWQYBCABKAUSQAoGZmllbGRzGAUgAygLMjAuV29y",
+            "bGRQYWNrZXRzLldvcmxkQmxvY2tGaWxsZWRQYWNrZXQuRmllbGRzRW50cnka",
+            "TAoLRmllbGRzRW50cnkSCwoDa2V5GAEgASgJEiwKBXZhbHVlGAIgASgLMh0u",
+            "V29ybGRQYWNrZXRzLkJsb2NrRmllbGRWYWx1ZToCOAEiPgoVV29ybGRNZXRh",
+            "VXBkYXRlUGFja2V0EiUKBG1ldGEYASABKAsyFy5Xb3JsZFBhY2tldHMuV29y",
+            "bGRNZXRhIs0DChBQbGF5ZXJJbml0UGFja2V0EjkKEXBsYXllcl9wcm9wZXJ0",
+            "aWVzGAEgASgLMh4uV29ybGRQYWNrZXRzLlBsYXllclByb3BlcnRpZXMSKwoK",
+            "d29ybGRfbWV0YRgCIAEoCzIXLldvcmxkUGFja2V0cy5Xb3JsZE1ldGESEwoL",
+            "d29ybGRfd2lkdGgYAyABKAUSFAoMd29ybGRfaGVpZ2h0GAQgASgFEhsKE2ds",
+            "b2JhbF9zd2l0Y2hfc3RhdGUYBSABKAwSLQoLcGxheWVyX3dvb3QYBiABKAsy",
+            "GC5Xb3JsZFBhY2tldHMuUGxheWVyV29vdBIsCgt0ZXh0X2xhYmVscxgHIAMo",
+            "CzIXLldvcmxkUGFja2V0cy5UZXh0TGFiZWwSNwoSYmxvY2tfZGF0YV9wYWxl",
+            "dHRlGAggAygLMhsuV29ybGRQYWNrZXRzLkJsb2NrRGF0YUluZm8SHQoVYmFj",
+            "a2dyb3VuZF9sYXllcl9kYXRhGAkgASgMEh0KFWZvcmVncm91bmRfbGF5ZXJf",
+            "ZGF0YRgKIAEoDBIaChJvdmVybGF5X2xheWVyX2RhdGEYCyABKAwSGQoRZ2Ft",
+            "ZV9lbGFwc2VkX3RpbWUYDCABKAMiqAEKDUJsb2NrRGF0YUluZm8SEAoIYmxv",
+            "Y2tfaWQYASABKAUSNwoGZmllbGRzGAIgAygLMicuV29ybGRQYWNrZXRzLkJs",
+            "b2NrRGF0YUluZm8uRmllbGRzRW50cnkaTAoLRmllbGRzRW50cnkSCwoDa2V5",
+            "GAEgASgJEiwKBXZhbHVlGAIgASgLMh0uV29ybGRQYWNrZXRzLkJsb2NrRmll",
+            "bGRWYWx1ZToCOAEiGgoYUGxheWVySW5pdFJlY2VpdmVkUGFja2V0In0KElBs",
+            "YXllckpvaW5lZFBhY2tldBIyCgpwcm9wZXJ0aWVzGAEgASgLMh4uV29ybGRQ",
+            "YWNrZXRzLlBsYXllclByb3BlcnRpZXMSMwoLd29ybGRfc3RhdGUYAiABKAsy",
+            "Hi5Xb3JsZFBhY2tldHMuUGxheWVyV29ybGRTdGF0ZSIlChBQbGF5ZXJMZWZ0",
+            "UGFja2V0EhEKCXBsYXllcl9pZBgBIAEoBSJJChBQbGF5ZXJDaGF0UGFja2V0",
+            "EhYKCXBsYXllcl9pZBgBIAEoBUgAiAEBEg8KB21lc3NhZ2UYAiABKAlCDAoK",
+            "X3BsYXllcl9pZCJZChhQbGF5ZXJVcGRhdGVSaWdodHNQYWNrZXQSEQoJcGxh",
+            "eWVyX2lkGAEgASgFEioKBnJpZ2h0cxgCIAEoCzIaLldvcmxkUGFja2V0cy5Q",
+            "bGF5ZXJSaWdodHMiswIKEVBsYXllck1vdmVkUGFja2V0EhYKCXBsYXllcl9p",
+            "ZBgBIAEoBUgAiAEBEisKCHBvc2l0aW9uGAIgASgLMhkuV29ybGRQYWNrZXRz",
+            "LlBvaW50RG91YmxlEhIKCnZlbG9jaXR5X3gYAyABKAESEgoKdmVsb2NpdHlf",
+            "eRgEIAEoARISCgptb2RpZmllcl94GAUgASgBEhIKCm1vZGlmaWVyX3kYBiAB",
+            "KAESEgoKaG9yaXpvbnRhbBgHIAEoBRIQCgh2ZXJ0aWNhbBgIIAEoBRISCgpz",
+            "cGFjZV9kb3duGAkgASgIEhcKD3NwYWNlX2p1c3RfZG93bhgKIAEoCBIXCg9q",
+            "dXN0X3RlbGVwb3J0ZWQYCyABKAgSDwoHdGlja19pZBgMIAEoBUIMCgpfcGxh",
+            "eWVyX2lkImsKFlBsYXllclRlbGVwb3J0ZWRQYWNrZXQSFgoJcGxheWVyX2lk",
+            "GAEgASgFSACIAQESKwoIcG9zaXRpb24YAiABKAsyGS5Xb3JsZFBhY2tldHMu",
+            "UG9pbnREb3VibGVCDAoKX3BsYXllcl9pZCJJChBQbGF5ZXJGYWNlUGFja2V0",
+            "EhYKCXBsYXllcl9pZBgBIAEoBUgAiAEBEg8KB2ZhY2VfaWQYAiABKAVCDAoK",
+            "X3BsYXllcl9pZCJVChRQbGF5ZXJTcGVjdGF0ZVBhY2tldBIWCglwbGF5ZXJf",
+            "aWQYASABKAVIAIgBARIXCg9zcGVjdGF0ZV9wbGF5ZXIYAiABKAVCDAoKX3Bs",
+            "YXllcl9pZCJMChNQbGF5ZXJHb2RNb2RlUGFja2V0EhYKCXBsYXllcl9pZBgB",
+            "IAEoBUgAiAEBEg8KB2VuYWJsZWQYAiABKAhCDAoKX3BsYXllcl9pZCJMChNQ",
+            "bGF5ZXJNb2RNb2RlUGFja2V0EhYKCXBsYXllcl9pZBgBIAEoBUgAiAEBEg8K",
+            "B2VuYWJsZWQYAiABKAhCDAoKX3BsYXllcl9pZCI5Ch5QbGF5ZXJFbnRlclNl",
+            "Y3JldEVkaXRLZXlQYWNrZXQSFwoPc2VjcmV0X2VkaXRfa2V5GAEgASgJImkK",
+            "E1BsYXllclJlc3Bhd25QYWNrZXQSFgoJcGxheWVyX2lkGAEgASgFSACIAQES",
+            "LAoIcG9zaXRpb24YAiABKAsyGi5Xb3JsZFBhY2tldHMuUG9pbnRJbnRlZ2Vy",
+            "QgwKCl9wbGF5ZXJfaWQieQoRUGxheWVyUmVzZXRQYWNrZXQSFgoJcGxheWVy",
+            "X2lkGAEgASgFSACIAQESMQoIcG9zaXRpb24YAiABKAsyGi5Xb3JsZFBhY2tl",
+            "dHMuUG9pbnRJbnRlZ2VySAGIAQFCDAoKX3BsYXllcl9pZEILCglfcG9zaXRp",
+            "b24inwEKFlBsYXllclRvdWNoQmxvY2tQYWNrZXQSFgoJcGxheWVyX2lkGAEg",
+            "ASgFSACIAQESMQoIcG9zaXRpb24YAiABKAsyGi5Xb3JsZFBhY2tldHMuUG9p",
+            "bnRJbnRlZ2VySAGIAQESDQoFbGF5ZXIYAyABKAUSEAoIYmxvY2tfaWQYBCAB",
+            "KAVCDAoKX3BsYXllcl9pZEILCglfcG9zaXRpb24itQEKFVBsYXllckFkZEVm",
+            "ZmVjdFBhY2tldBIRCglwbGF5ZXJfaWQYASABKAUSEQoJZWZmZWN0X2lkGAIg",
+            "ASgFEhUKCGR1cmF0aW9uGAMgASgFSACIAQESFQoIc3RyZW5ndGgYBCABKAVI",
+            "AYgBARIbCg5mcm9tX3BsYXllcl9pZBgFIAEoBUgCiAEBQgsKCV9kdXJhdGlv",
+            "bkILCglfc3RyZW5ndGhCEQoPX2Zyb21fcGxheWVyX2lkImwKGFBsYXllclJl",
+            "bW92ZUVmZmVjdFBhY2tldBIRCglwbGF5ZXJfaWQYASABKAUSEQoJZWZmZWN0",
+            "X2lkGAIgASgFEhkKDHRvX3BsYXllcl9pZBgDIAEoBUgAiAEBQg8KDV90b19w",
+            "bGF5ZXJfaWQiLQoYUGxheWVyUmVzZXRFZmZlY3RzUGFja2V0EhEKCXBsYXll",
+            "cl9pZBgBIAEoBSI3ChtQbGF5ZXJFeGNoYW5nZUVmZmVjdHNQYWNrZXQSGAoQ",
+            "dGFyZ2V0X3BsYXllcl9pZBgBIAEoBSJPChZQbGF5ZXJUZWFtVXBkYXRlUGFj",
+            "a2V0EhYKCXBsYXllcl9pZBgBIAEoBUgAiAEBEg8KB3RlYW1faWQYAiABKAVC",
+            "DAoKX3BsYXllcl9pZCKKAQoaUGxheWVyQ291bnRlcnNVcGRhdGVQYWNrZXQS",
+            "FgoJcGxheWVyX2lkGAEgASgFSACIAQESDQoFY29pbnMYAiABKAUSEgoKYmx1",
+            "ZV9jb2lucxgDIAEoBRIOCgZkZWF0aHMYBCABKAUSEwoLZnJvbV9zZXJ2ZXIY",
+            "BSABKAhCDAoKX3BsYXllcl9pZCJxCh5QbGF5ZXJMb2NhbFN3aXRjaENoYW5n",
+            "ZWRQYWNrZXQSFgoJcGxheWVyX2lkGAEgASgFSACIAQESEQoJc3dpdGNoX2lk",
+            "GAIgASgFEhYKDnN3aXRjaF9lbmFibGVkGAMgASgIQgwKCl9wbGF5ZXJfaWQi",
+            "SQocUGxheWVyTG9jYWxTd2l0Y2hSZXNldFBhY2tldBIRCglwbGF5ZXJfaWQY",
+            "ASABKAUSFgoOc3dpdGNoX2VuYWJsZWQYAiABKAgiXgoZUGxheWVyRGlyZWN0",
+            "TWVzc2FnZVBhY2tldBIWCg5mcm9tX3BsYXllcl9pZBgBIAEoBRIYChB0YXJn",
+            "ZXRfcGxheWVyX2lkGAIgASgFEg8KB21lc3NhZ2UYAyABKAkicgobUGxheWVy",
+            "U2V0Q29sbGVjdGlibGVzUGFja2V0EhYKCXBsYXllcl9pZBgBIAEoBUgAiAEB",
+            "Ei0KCWNvbGxlY3RlZBgCIAMoCzIaLldvcmxkUGFja2V0cy5Qb2ludEludGVn",
+            "ZXJCDAoKX3BsYXllcl9pZCKHAQoRUGxheWVyTWFnaWNQYWNrZXQSEQoJcGxh",
+            "eWVyX2lkGAEgASgFEjcKBHR5cGUYAiABKA4yKS5Xb3JsZFBhY2tldHMuUGxh",
+            "eWVyTWFnaWNQYWNrZXQuTWFnaWNUeXBlEg4KBmFtb3VudBgDIAEoBSIWCglN",
+            "YWdpY1R5cGUSCQoFU01BTEwQACJCCgpQbGF5ZXJXb290EhYKCXBsYXllcl9p",
+            "ZBgBIAEoBUgAiAEBEg4KBmFjdGl2ZRgCIAEoCEIMCgpfcGxheWVyX2lkIhwK",
+            "GkdhbWVUaWNrc1N5bmNSZXF1ZXN0UGFja2V0IksKG0dhbWVUaWNrc1N5bmNS",
+            "ZXNwb25zZVBhY2tldBIZChFnYW1lX2VsYXBzZWRfdGltZRgBIAEoAxIRCglp",
+            "c19wYXVzZWQYAiABKAgiiAIKEFBsYXllcldvcmxkU3RhdGUSEgoKY29pbnNf",
+            "Z29sZBgBIAEoBRISCgpjb2luc19ibHVlGAIgASgFEg4KBmRlYXRocxgDIAEo",
+            "BRIzCg9jb2xsZWN0ZWRfaXRlbXMYBCADKAsyGi5Xb3JsZFBhY2tldHMuUG9p",
+            "bnRJbnRlZ2VyEhYKDmhhc19nb2xkX2Nyb3duGAUgASgIEhgKEGhhc19zaWx2",
+            "ZXJfY3Jvd24YBiABKAgSEAoIc3dpdGNoZXMYByABKAwSDwoHZ29kbW9kZRgI",
+            "IAEoCBIPCgdtb2Rtb2RlGAkgASgIEg8KB3RlYW1faWQYCiABKAUSEAoIY291",
+            "bnRlcnMYCyADKAUi+wEKEFBsYXllclByb3BlcnRpZXMSEQoJcGxheWVyX2lk",
+            "GAEgASgFEhIKCmFjY291bnRfaWQYAiABKAkSEAoIdXNlcm5hbWUYAyABKAkS",
+            "DAoEZmFjZRgEIAEoBRIMCgRyb2xlGAUgASgJEhEKCWlzX2ZyaWVuZBgGIAEo",
+            "CBI7ChJsYXN0TW92ZW1lbnRQYWNrZXQYByABKAsyHy5Xb3JsZFBhY2tldHMu",
+            "UGxheWVyTW92ZWRQYWNrZXQSFgoOaXNfd29ybGRfb3duZXIYCCABKAgSKgoG",
+            "cmlnaHRzGAkgASgLMhouV29ybGRQYWNrZXRzLlBsYXllclJpZ2h0cyKMAQoM",
+            "UGxheWVyUmlnaHRzEhAKCGNhbl9lZGl0GAEgASgIEg8KB2Nhbl9nb2QYAiAB",
+            "KAgSGgoSY2FuX3RvZ2dsZV9taW5pbWFwGAMgASgIEiEKGWNhbl9jaGFuZ2Vf",
+            "d29ybGRfc2V0dGluZ3MYBCABKAgSGgoSYXZhaWxhYmxlX2NvbW1hbmRzGAUg",
+            "AygJIsQDCglXb3JsZE1ldGESDQoFdGl0bGUYASABKAkSDQoFcGxheXMYAiAB",
+            "KAUSDQoFb3duZXIYAyABKAkSEwoLZGVzY3JpcHRpb24YBCABKAkSEgoKdmlz",
+            "aWJpbGl0eRgFIAEoCRI1Cgp3b3JsZF90eXBlGAYgASgOMiEuV29ybGRQYWNr",
+            "ZXRzLldvcmxkTWV0YS5Xb3JsZFR5cGUSGwoTaGFzX3Vuc2F2ZWRfY2hhbmdl",
+            "cxgHIAEoCBITCgttYXhfcGxheWVycxgIIAEoBRISCgpvd25lcl9yb2xlGAkg",
+            "ASgJEhcKD21pbmltYXBfZW5hYmxlZBgKIAEoCBIWCg5taW5pbWFwX3NjYWxl",
+            "ZBgLIAEoCBIZChFtaW5pbWFwX21heF93aWR0aBgMIAEoBRIaChJtaW5pbWFw",
+            "X21heF9oZWlnaHQYDSABKAUSHwoXbWluaW1hcF9lZGdlX2ZhZGVfd2lkdGgY",
+            "DiABKAUSGwoTaGFzX3NlY3JldF9lZGl0X2tleRgPIAEoCBINCgV3b290cxgQ",
+            "IAEoBSIvCglXb3JsZFR5cGUSCQoFU2F2ZWQQABILCgdVbnNhdmVkEAESCgoG",
+            "TGVnYWN5EAIiXgoOT2xkQ2hhdE1lc3NhZ2USEwoLcGxheWVyX25hbWUYASAB",
+            "KAkSEwoLcGxheWVyX3JvbGUYAiABKAkSEQoJaXNfZnJpZW5kGAMgASgIEg8K",
+            "B21lc3NhZ2UYBCABKAkiJAoMUG9pbnRJbnRlZ2VyEgkKAXgYASABKAUSCQoB",
+            "eRgCIAEoBSIjCgtQb2ludERvdWJsZRIJCgF4GAEgASgBEgkKAXkYAiABKAEi",
+            "ZAoMUGxheWVyRWZmZWN0EgwKBHR5cGUYASABKAUSFQoIZHVyYXRpb24YAiAB",
+            "KAVIAIgBARIVCghzdHJlbmd0aBgDIAEoBUgBiAEBQgsKCV9kdXJhdGlvbkIL",
+            "Cglfc3RyZW5ndGgiwQEKCVRleHRMYWJlbBIsCghwb3NpdGlvbhgBIAEoCzIa",
+            "LldvcmxkUGFja2V0cy5Qb2ludEludGVnZXISDAoEdGV4dBgCIAEoCRINCgVj",
+            "b2xvchgDIAEoDRIRCgltYXhfd2lkdGgYBCABKAISDgoGc2hhZG93GAUgASgI",
+            "EjMKDnRleHRfYWxpZ25tZW50GAYgASgOMhsuV29ybGRQYWNrZXRzLlRleHRB",
+            "bGlnbm1lbnQSEQoJZm9udF9zaXplGAcgASgFKjAKDVRleHRBbGlnbm1lbnQS",
+            "CAoETEVGVBAAEgoKBkNFTlRFUhABEgkKBVJJR0hUEAJCL6oCLFBpeGVsV2Fs",
+            "a2VyLk5ldHdvcmtpbmcuUHJvdG9idWYuV29ybGRQYWNrZXRzYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.TextAlignment), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.WorldPacket), global::PixelWalker.Networking.Protobuf.WorldPackets.WorldPacket.Parser, new[]{ "Ping", "PlayerInitPacket", "PlayerInitReceived", "PlayerJoinedPacket", "PlayerLeftPacket", "PlayerChatPacket", "PlayerUpdateRightsPacket", "PlayerMovedPacket", "PlayerFacePacket", "PlayerGodModePacket", "PlayerModModePacket", "PlayerEnterSecretEditKeyPacket", "PlayerRespawnPacket", "PlayerResetPacket", "PlayerTouchBlockPacket", "PlayerAddEffectPacket", "PlayerRemoveEffectPacket", "PlayerResetEffectsPacket", "PlayerTeamUpdatePacket", "PlayerCountersUpdatePacket", "PlayerLocalSwitchChangedPacket", "PlayerLocalSwitchResetPacket", "PlayerDirectMessagePacket", "PlayerExchangeEffectsPacket", "PlayerTeleportedPacket", "PlayerMagicPacket", "WorldReloadedPacket", "WorldClearedPacket", "WorldMetaUpdatePacket", "WorldBlockPlacedPacket", "WorldBlockFilledPacket", "OldChatMessagesPacket", "SystemMessagePacket", "GlobalSwitchChangedPacket", "GlobalSwitchResetPacket", "WorldActionUpdatePacket", "ChangeSecretEditKeyPacket", "PlayerSpectatePacket", "PlayerCounterTransactionPacket", "PlayerSetCollectiblesPacket", "PlayerWoot" }, new[]{ "Packet" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.WorldPacket), global::PixelWalker.Networking.Protobuf.WorldPackets.WorldPacket.Parser, new[]{ "Ping", "PlayerInitPacket", "PlayerInitReceived", "PlayerJoinedPacket", "PlayerLeftPacket", "PlayerChatPacket", "PlayerUpdateRightsPacket", "PlayerMovedPacket", "PlayerFacePacket", "PlayerGodModePacket", "PlayerModModePacket", "PlayerEnterSecretEditKeyPacket", "PlayerRespawnPacket", "PlayerResetPacket", "PlayerTouchBlockPacket", "PlayerAddEffectPacket", "PlayerRemoveEffectPacket", "PlayerResetEffectsPacket", "PlayerTeamUpdatePacket", "PlayerCountersUpdatePacket", "PlayerLocalSwitchChangedPacket", "PlayerLocalSwitchResetPacket", "PlayerDirectMessagePacket", "PlayerExchangeEffectsPacket", "PlayerTeleportedPacket", "PlayerMagicPacket", "GameTicksSyncRequestPacket", "GameTicksSyncResponsePacket", "WorldReloadedPacket", "WorldClearedPacket", "WorldMetaUpdatePacket", "WorldBlockPlacedPacket", "WorldBlockFilledPacket", "OldChatMessagesPacket", "SystemMessagePacket", "GlobalSwitchChangedPacket", "GlobalSwitchResetPacket", "WorldActionUpdatePacket", "ChangeSecretEditKeyPacket", "PlayerSpectatePacket", "PlayerCounterTransactionPacket", "PlayerSetCollectiblesPacket", "PlayerWoot" }, new[]{ "Packet" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.Ping), global::PixelWalker.Networking.Protobuf.WorldPackets.Ping.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.GlobalSwitchChangedPacket), global::PixelWalker.Networking.Protobuf.WorldPackets.GlobalSwitchChangedPacket.Parser, new[]{ "PlayerId", "SwitchId", "SwitchEnabled" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.GlobalSwitchResetPacket), global::PixelWalker.Networking.Protobuf.WorldPackets.GlobalSwitchResetPacket.Parser, new[]{ "PlayerId", "SwitchEnabled" }, null, null, null, null),
@@ -235,12 +260,14 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
             new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.WorldActionUpdatePacket), global::PixelWalker.Networking.Protobuf.WorldPackets.WorldActionUpdatePacket.Parser, new[]{ "Action", "Enabled" }, new[]{ "Enabled" }, new[]{ typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.WorldActionUpdatePacket.Types.Action) }, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.ChangeSecretEditKeyPacket), global::PixelWalker.Networking.Protobuf.WorldPackets.ChangeSecretEditKeyPacket.Parser, new[]{ "NewEditKey" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerCounterTransactionPacket), global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerCounterTransactionPacket.Parser, new[]{ "PlayerId", "CounterId", "Count" }, new[]{ "PlayerId" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReloadedPacket), global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReloadedPacket.Parser, new[]{ "WorldData" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReloadedPacket), global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReloadedPacket.Parser, new[]{ "BlockDataPalette", "BackgroundLayerData", "ForegroundLayerData", "OverlayLayerData" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.WorldClearedPacket), global::PixelWalker.Networking.Protobuf.WorldPackets.WorldClearedPacket.Parser, null, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.WorldBlockPlacedPacket), global::PixelWalker.Networking.Protobuf.WorldPackets.WorldBlockPlacedPacket.Parser, new[]{ "PlayerId", "Positions", "Layer", "BlockId", "ExtraFields" }, new[]{ "PlayerId" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.WorldBlockFilledPacket), global::PixelWalker.Networking.Protobuf.WorldPackets.WorldBlockFilledPacket.Parser, new[]{ "Position", "IgnoreLayers", "Layer", "BlockId", "ExtraFields" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.BlockFieldValue), global::PixelWalker.Networking.Protobuf.WorldPackets.BlockFieldValue.Parser, new[]{ "Int32Value", "Uint32Value", "StringValue", "BoolValue", "ByteArrayValue" }, new[]{ "Value" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.WorldBlockPlacedPacket), global::PixelWalker.Networking.Protobuf.WorldPackets.WorldBlockPlacedPacket.Parser, new[]{ "PlayerId", "Positions", "Layer", "BlockId", "Fields" }, new[]{ "PlayerId" }, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
+            new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.WorldBlockFilledPacket), global::PixelWalker.Networking.Protobuf.WorldPackets.WorldBlockFilledPacket.Parser, new[]{ "Position", "IgnoreLayers", "Layer", "BlockId", "Fields" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.WorldMetaUpdatePacket), global::PixelWalker.Networking.Protobuf.WorldPackets.WorldMetaUpdatePacket.Parser, new[]{ "Meta" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerInitPacket), global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerInitPacket.Parser, new[]{ "PlayerProperties", "WorldMeta", "WorldWidth", "WorldHeight", "GlobalSwitchState", "WorldData", "PlayerWoot", "TextLabels" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerInitPacket), global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerInitPacket.Parser, new[]{ "PlayerProperties", "WorldMeta", "WorldWidth", "WorldHeight", "GlobalSwitchState", "PlayerWoot", "TextLabels", "BlockDataPalette", "BackgroundLayerData", "ForegroundLayerData", "OverlayLayerData", "GameElapsedTime" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.BlockDataInfo), global::PixelWalker.Networking.Protobuf.WorldPackets.BlockDataInfo.Parser, new[]{ "BlockId", "Fields" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerInitReceivedPacket), global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerInitReceivedPacket.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerJoinedPacket), global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerJoinedPacket.Parser, new[]{ "Properties", "WorldState" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerLeftPacket), global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerLeftPacket.Parser, new[]{ "PlayerId" }, null, null, null, null),
@@ -268,6 +295,8 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
             new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerSetCollectiblesPacket), global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerSetCollectiblesPacket.Parser, new[]{ "PlayerId", "Collected" }, new[]{ "PlayerId" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerMagicPacket), global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerMagicPacket.Parser, new[]{ "PlayerId", "Type", "Amount" }, null, new[]{ typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerMagicPacket.Types.MagicType) }, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerWoot), global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerWoot.Parser, new[]{ "PlayerId", "Active" }, new[]{ "PlayerId" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.GameTicksSyncRequestPacket), global::PixelWalker.Networking.Protobuf.WorldPackets.GameTicksSyncRequestPacket.Parser, null, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.GameTicksSyncResponsePacket), global::PixelWalker.Networking.Protobuf.WorldPackets.GameTicksSyncResponsePacket.Parser, new[]{ "GameElapsedTime", "IsPaused" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerWorldState), global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerWorldState.Parser, new[]{ "CoinsGold", "CoinsBlue", "Deaths", "CollectedItems", "HasGoldCrown", "HasSilverCrown", "Switches", "Godmode", "Modmode", "TeamId", "Counters" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerProperties), global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerProperties.Parser, new[]{ "PlayerId", "AccountId", "Username", "Face", "Role", "IsFriend", "LastMovementPacket", "IsWorldOwner", "Rights" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerRights), global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerRights.Parser, new[]{ "CanEdit", "CanGod", "CanToggleMinimap", "CanChangeWorldSettings", "AvailableCommands" }, null, null, null, null),
@@ -409,6 +438,12 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
           break;
         case PacketOneofCase.PlayerMagicPacket:
           PlayerMagicPacket = other.PlayerMagicPacket.Clone();
+          break;
+        case PacketOneofCase.GameTicksSyncRequestPacket:
+          GameTicksSyncRequestPacket = other.GameTicksSyncRequestPacket.Clone();
+          break;
+        case PacketOneofCase.GameTicksSyncResponsePacket:
+          GameTicksSyncResponsePacket = other.GameTicksSyncResponsePacket.Clone();
           break;
         case PacketOneofCase.WorldReloadedPacket:
           WorldReloadedPacket = other.WorldReloadedPacket.Clone();
@@ -787,6 +822,30 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       }
     }
 
+    /// <summary>Field number for the "game_ticks_sync_request_packet" field.</summary>
+    public const int GameTicksSyncRequestPacketFieldNumber = 42;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::PixelWalker.Networking.Protobuf.WorldPackets.GameTicksSyncRequestPacket GameTicksSyncRequestPacket {
+      get { return packetCase_ == PacketOneofCase.GameTicksSyncRequestPacket ? (global::PixelWalker.Networking.Protobuf.WorldPackets.GameTicksSyncRequestPacket) packet_ : null; }
+      set {
+        packet_ = value;
+        packetCase_ = value == null ? PacketOneofCase.None : PacketOneofCase.GameTicksSyncRequestPacket;
+      }
+    }
+
+    /// <summary>Field number for the "game_ticks_sync_response_packet" field.</summary>
+    public const int GameTicksSyncResponsePacketFieldNumber = 43;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::PixelWalker.Networking.Protobuf.WorldPackets.GameTicksSyncResponsePacket GameTicksSyncResponsePacket {
+      get { return packetCase_ == PacketOneofCase.GameTicksSyncResponsePacket ? (global::PixelWalker.Networking.Protobuf.WorldPackets.GameTicksSyncResponsePacket) packet_ : null; }
+      set {
+        packet_ = value;
+        packetCase_ = value == null ? PacketOneofCase.None : PacketOneofCase.GameTicksSyncResponsePacket;
+      }
+    }
+
     /// <summary>Field number for the "world_reloaded_packet" field.</summary>
     public const int WorldReloadedPacketFieldNumber = 26;
     /// <summary>
@@ -1003,6 +1062,8 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       PlayerExchangeEffectsPacket = 24,
       PlayerTeleportedPacket = 25,
       PlayerMagicPacket = 41,
+      GameTicksSyncRequestPacket = 42,
+      GameTicksSyncResponsePacket = 43,
       WorldReloadedPacket = 26,
       WorldClearedPacket = 27,
       WorldMetaUpdatePacket = 28,
@@ -1074,6 +1135,8 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       if (!object.Equals(PlayerExchangeEffectsPacket, other.PlayerExchangeEffectsPacket)) return false;
       if (!object.Equals(PlayerTeleportedPacket, other.PlayerTeleportedPacket)) return false;
       if (!object.Equals(PlayerMagicPacket, other.PlayerMagicPacket)) return false;
+      if (!object.Equals(GameTicksSyncRequestPacket, other.GameTicksSyncRequestPacket)) return false;
+      if (!object.Equals(GameTicksSyncResponsePacket, other.GameTicksSyncResponsePacket)) return false;
       if (!object.Equals(WorldReloadedPacket, other.WorldReloadedPacket)) return false;
       if (!object.Equals(WorldClearedPacket, other.WorldClearedPacket)) return false;
       if (!object.Equals(WorldMetaUpdatePacket, other.WorldMetaUpdatePacket)) return false;
@@ -1123,6 +1186,8 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       if (packetCase_ == PacketOneofCase.PlayerExchangeEffectsPacket) hash ^= PlayerExchangeEffectsPacket.GetHashCode();
       if (packetCase_ == PacketOneofCase.PlayerTeleportedPacket) hash ^= PlayerTeleportedPacket.GetHashCode();
       if (packetCase_ == PacketOneofCase.PlayerMagicPacket) hash ^= PlayerMagicPacket.GetHashCode();
+      if (packetCase_ == PacketOneofCase.GameTicksSyncRequestPacket) hash ^= GameTicksSyncRequestPacket.GetHashCode();
+      if (packetCase_ == PacketOneofCase.GameTicksSyncResponsePacket) hash ^= GameTicksSyncResponsePacket.GetHashCode();
       if (packetCase_ == PacketOneofCase.WorldReloadedPacket) hash ^= WorldReloadedPacket.GetHashCode();
       if (packetCase_ == PacketOneofCase.WorldClearedPacket) hash ^= WorldClearedPacket.GetHashCode();
       if (packetCase_ == PacketOneofCase.WorldMetaUpdatePacket) hash ^= WorldMetaUpdatePacket.GetHashCode();
@@ -1321,6 +1386,14 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
         output.WriteRawTag(202, 2);
         output.WriteMessage(PlayerMagicPacket);
       }
+      if (packetCase_ == PacketOneofCase.GameTicksSyncRequestPacket) {
+        output.WriteRawTag(210, 2);
+        output.WriteMessage(GameTicksSyncRequestPacket);
+      }
+      if (packetCase_ == PacketOneofCase.GameTicksSyncResponsePacket) {
+        output.WriteRawTag(218, 2);
+        output.WriteMessage(GameTicksSyncResponsePacket);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1495,6 +1568,14 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
         output.WriteRawTag(202, 2);
         output.WriteMessage(PlayerMagicPacket);
       }
+      if (packetCase_ == PacketOneofCase.GameTicksSyncRequestPacket) {
+        output.WriteRawTag(210, 2);
+        output.WriteMessage(GameTicksSyncRequestPacket);
+      }
+      if (packetCase_ == PacketOneofCase.GameTicksSyncResponsePacket) {
+        output.WriteRawTag(218, 2);
+        output.WriteMessage(GameTicksSyncResponsePacket);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -1582,6 +1663,12 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       }
       if (packetCase_ == PacketOneofCase.PlayerMagicPacket) {
         size += 2 + pb::CodedOutputStream.ComputeMessageSize(PlayerMagicPacket);
+      }
+      if (packetCase_ == PacketOneofCase.GameTicksSyncRequestPacket) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(GameTicksSyncRequestPacket);
+      }
+      if (packetCase_ == PacketOneofCase.GameTicksSyncResponsePacket) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(GameTicksSyncResponsePacket);
       }
       if (packetCase_ == PacketOneofCase.WorldReloadedPacket) {
         size += 2 + pb::CodedOutputStream.ComputeMessageSize(WorldReloadedPacket);
@@ -1796,6 +1883,18 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
             PlayerMagicPacket = new global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerMagicPacket();
           }
           PlayerMagicPacket.MergeFrom(other.PlayerMagicPacket);
+          break;
+        case PacketOneofCase.GameTicksSyncRequestPacket:
+          if (GameTicksSyncRequestPacket == null) {
+            GameTicksSyncRequestPacket = new global::PixelWalker.Networking.Protobuf.WorldPackets.GameTicksSyncRequestPacket();
+          }
+          GameTicksSyncRequestPacket.MergeFrom(other.GameTicksSyncRequestPacket);
+          break;
+        case PacketOneofCase.GameTicksSyncResponsePacket:
+          if (GameTicksSyncResponsePacket == null) {
+            GameTicksSyncResponsePacket = new global::PixelWalker.Networking.Protobuf.WorldPackets.GameTicksSyncResponsePacket();
+          }
+          GameTicksSyncResponsePacket.MergeFrom(other.GameTicksSyncResponsePacket);
           break;
         case PacketOneofCase.WorldReloadedPacket:
           if (WorldReloadedPacket == null) {
@@ -2277,6 +2376,24 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
             PlayerMagicPacket = subBuilder;
             break;
           }
+          case 338: {
+            global::PixelWalker.Networking.Protobuf.WorldPackets.GameTicksSyncRequestPacket subBuilder = new global::PixelWalker.Networking.Protobuf.WorldPackets.GameTicksSyncRequestPacket();
+            if (packetCase_ == PacketOneofCase.GameTicksSyncRequestPacket) {
+              subBuilder.MergeFrom(GameTicksSyncRequestPacket);
+            }
+            input.ReadMessage(subBuilder);
+            GameTicksSyncRequestPacket = subBuilder;
+            break;
+          }
+          case 346: {
+            global::PixelWalker.Networking.Protobuf.WorldPackets.GameTicksSyncResponsePacket subBuilder = new global::PixelWalker.Networking.Protobuf.WorldPackets.GameTicksSyncResponsePacket();
+            if (packetCase_ == PacketOneofCase.GameTicksSyncResponsePacket) {
+              subBuilder.MergeFrom(GameTicksSyncResponsePacket);
+            }
+            input.ReadMessage(subBuilder);
+            GameTicksSyncResponsePacket = subBuilder;
+            break;
+          }
         }
       }
     #endif
@@ -2663,6 +2780,24 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
             }
             input.ReadMessage(subBuilder);
             PlayerMagicPacket = subBuilder;
+            break;
+          }
+          case 338: {
+            global::PixelWalker.Networking.Protobuf.WorldPackets.GameTicksSyncRequestPacket subBuilder = new global::PixelWalker.Networking.Protobuf.WorldPackets.GameTicksSyncRequestPacket();
+            if (packetCase_ == PacketOneofCase.GameTicksSyncRequestPacket) {
+              subBuilder.MergeFrom(GameTicksSyncRequestPacket);
+            }
+            input.ReadMessage(subBuilder);
+            GameTicksSyncRequestPacket = subBuilder;
+            break;
+          }
+          case 346: {
+            global::PixelWalker.Networking.Protobuf.WorldPackets.GameTicksSyncResponsePacket subBuilder = new global::PixelWalker.Networking.Protobuf.WorldPackets.GameTicksSyncResponsePacket();
+            if (packetCase_ == PacketOneofCase.GameTicksSyncResponsePacket) {
+              subBuilder.MergeFrom(GameTicksSyncResponsePacket);
+            }
+            input.ReadMessage(subBuilder);
+            GameTicksSyncResponsePacket = subBuilder;
             break;
           }
         }
@@ -4599,7 +4734,10 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public WorldReloadedPacket(WorldReloadedPacket other) : this() {
-      worldData_ = other.worldData_;
+      blockDataPalette_ = other.blockDataPalette_.Clone();
+      backgroundLayerData_ = other.backgroundLayerData_;
+      foregroundLayerData_ = other.foregroundLayerData_;
+      overlayLayerData_ = other.overlayLayerData_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -4609,15 +4747,53 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       return new WorldReloadedPacket(this);
     }
 
-    /// <summary>Field number for the "world_data" field.</summary>
-    public const int WorldDataFieldNumber = 1;
-    private pb::ByteString worldData_ = pb::ByteString.Empty;
+    /// <summary>Field number for the "block_data_palette" field.</summary>
+    public const int BlockDataPaletteFieldNumber = 1;
+    private static readonly pb::FieldCodec<global::PixelWalker.Networking.Protobuf.WorldPackets.BlockDataInfo> _repeated_blockDataPalette_codec
+        = pb::FieldCodec.ForMessage(10, global::PixelWalker.Networking.Protobuf.WorldPackets.BlockDataInfo.Parser);
+    private readonly pbc::RepeatedField<global::PixelWalker.Networking.Protobuf.WorldPackets.BlockDataInfo> blockDataPalette_ = new pbc::RepeatedField<global::PixelWalker.Networking.Protobuf.WorldPackets.BlockDataInfo>();
+    /// <summary>
+    /// New structured world data format (same as PlayerInitPacket)
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pb::ByteString WorldData {
-      get { return worldData_; }
+    public pbc::RepeatedField<global::PixelWalker.Networking.Protobuf.WorldPackets.BlockDataInfo> BlockDataPalette {
+      get { return blockDataPalette_; }
+    }
+
+    /// <summary>Field number for the "background_layer_data" field.</summary>
+    public const int BackgroundLayerDataFieldNumber = 2;
+    private pb::ByteString backgroundLayerData_ = pb::ByteString.Empty;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pb::ByteString BackgroundLayerData {
+      get { return backgroundLayerData_; }
       set {
-        worldData_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        backgroundLayerData_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "foreground_layer_data" field.</summary>
+    public const int ForegroundLayerDataFieldNumber = 3;
+    private pb::ByteString foregroundLayerData_ = pb::ByteString.Empty;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pb::ByteString ForegroundLayerData {
+      get { return foregroundLayerData_; }
+      set {
+        foregroundLayerData_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "overlay_layer_data" field.</summary>
+    public const int OverlayLayerDataFieldNumber = 4;
+    private pb::ByteString overlayLayerData_ = pb::ByteString.Empty;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pb::ByteString OverlayLayerData {
+      get { return overlayLayerData_; }
+      set {
+        overlayLayerData_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
@@ -4636,7 +4812,10 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (WorldData != other.WorldData) return false;
+      if(!blockDataPalette_.Equals(other.blockDataPalette_)) return false;
+      if (BackgroundLayerData != other.BackgroundLayerData) return false;
+      if (ForegroundLayerData != other.ForegroundLayerData) return false;
+      if (OverlayLayerData != other.OverlayLayerData) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -4644,7 +4823,10 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (WorldData.Length != 0) hash ^= WorldData.GetHashCode();
+      hash ^= blockDataPalette_.GetHashCode();
+      if (BackgroundLayerData.Length != 0) hash ^= BackgroundLayerData.GetHashCode();
+      if (ForegroundLayerData.Length != 0) hash ^= ForegroundLayerData.GetHashCode();
+      if (OverlayLayerData.Length != 0) hash ^= OverlayLayerData.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -4663,9 +4845,18 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (WorldData.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteBytes(WorldData);
+      blockDataPalette_.WriteTo(output, _repeated_blockDataPalette_codec);
+      if (BackgroundLayerData.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteBytes(BackgroundLayerData);
+      }
+      if (ForegroundLayerData.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteBytes(ForegroundLayerData);
+      }
+      if (OverlayLayerData.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteBytes(OverlayLayerData);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -4677,9 +4868,18 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (WorldData.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteBytes(WorldData);
+      blockDataPalette_.WriteTo(ref output, _repeated_blockDataPalette_codec);
+      if (BackgroundLayerData.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteBytes(BackgroundLayerData);
+      }
+      if (ForegroundLayerData.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteBytes(ForegroundLayerData);
+      }
+      if (OverlayLayerData.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteBytes(OverlayLayerData);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -4691,8 +4891,15 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (WorldData.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeBytesSize(WorldData);
+      size += blockDataPalette_.CalculateSize(_repeated_blockDataPalette_codec);
+      if (BackgroundLayerData.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeBytesSize(BackgroundLayerData);
+      }
+      if (ForegroundLayerData.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeBytesSize(ForegroundLayerData);
+      }
+      if (OverlayLayerData.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeBytesSize(OverlayLayerData);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -4706,8 +4913,15 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       if (other == null) {
         return;
       }
-      if (other.WorldData.Length != 0) {
-        WorldData = other.WorldData;
+      blockDataPalette_.Add(other.blockDataPalette_);
+      if (other.BackgroundLayerData.Length != 0) {
+        BackgroundLayerData = other.BackgroundLayerData;
+      }
+      if (other.ForegroundLayerData.Length != 0) {
+        ForegroundLayerData = other.ForegroundLayerData;
+      }
+      if (other.OverlayLayerData.Length != 0) {
+        OverlayLayerData = other.OverlayLayerData;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -4729,7 +4943,19 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
-            WorldData = input.ReadBytes();
+            blockDataPalette_.AddEntriesFrom(input, _repeated_blockDataPalette_codec);
+            break;
+          }
+          case 18: {
+            BackgroundLayerData = input.ReadBytes();
+            break;
+          }
+          case 26: {
+            ForegroundLayerData = input.ReadBytes();
+            break;
+          }
+          case 34: {
+            OverlayLayerData = input.ReadBytes();
             break;
           }
         }
@@ -4752,7 +4978,19 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 10: {
-            WorldData = input.ReadBytes();
+            blockDataPalette_.AddEntriesFrom(ref input, _repeated_blockDataPalette_codec);
+            break;
+          }
+          case 18: {
+            BackgroundLayerData = input.ReadBytes();
+            break;
+          }
+          case 26: {
+            ForegroundLayerData = input.ReadBytes();
+            break;
+          }
+          case 34: {
+            OverlayLayerData = input.ReadBytes();
             break;
           }
         }
@@ -4926,6 +5164,467 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
 
   }
 
+  /// <summary>
+  /// Block field value that can hold different types
+  /// </summary>
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class BlockFieldValue : pb::IMessage<BlockFieldValue>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<BlockFieldValue> _parser = new pb::MessageParser<BlockFieldValue>(() => new BlockFieldValue());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<BlockFieldValue> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[11]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public BlockFieldValue() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public BlockFieldValue(BlockFieldValue other) : this() {
+      switch (other.ValueCase) {
+        case ValueOneofCase.Int32Value:
+          Int32Value = other.Int32Value;
+          break;
+        case ValueOneofCase.Uint32Value:
+          Uint32Value = other.Uint32Value;
+          break;
+        case ValueOneofCase.StringValue:
+          StringValue = other.StringValue;
+          break;
+        case ValueOneofCase.BoolValue:
+          BoolValue = other.BoolValue;
+          break;
+        case ValueOneofCase.ByteArrayValue:
+          ByteArrayValue = other.ByteArrayValue;
+          break;
+      }
+
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public BlockFieldValue Clone() {
+      return new BlockFieldValue(this);
+    }
+
+    /// <summary>Field number for the "int32_value" field.</summary>
+    public const int Int32ValueFieldNumber = 1;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int Int32Value {
+      get { return HasInt32Value ? (int) value_ : 0; }
+      set {
+        value_ = value;
+        valueCase_ = ValueOneofCase.Int32Value;
+      }
+    }
+    /// <summary>Gets whether the "int32_value" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasInt32Value {
+      get { return valueCase_ == ValueOneofCase.Int32Value; }
+    }
+    /// <summary> Clears the value of the oneof if it's currently set to "int32_value" </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearInt32Value() {
+      if (HasInt32Value) {
+        ClearValue();
+      }
+    }
+
+    /// <summary>Field number for the "uint32_value" field.</summary>
+    public const int Uint32ValueFieldNumber = 2;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public uint Uint32Value {
+      get { return HasUint32Value ? (uint) value_ : 0; }
+      set {
+        value_ = value;
+        valueCase_ = ValueOneofCase.Uint32Value;
+      }
+    }
+    /// <summary>Gets whether the "uint32_value" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasUint32Value {
+      get { return valueCase_ == ValueOneofCase.Uint32Value; }
+    }
+    /// <summary> Clears the value of the oneof if it's currently set to "uint32_value" </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearUint32Value() {
+      if (HasUint32Value) {
+        ClearValue();
+      }
+    }
+
+    /// <summary>Field number for the "string_value" field.</summary>
+    public const int StringValueFieldNumber = 3;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string StringValue {
+      get { return HasStringValue ? (string) value_ : ""; }
+      set {
+        value_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        valueCase_ = ValueOneofCase.StringValue;
+      }
+    }
+    /// <summary>Gets whether the "string_value" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasStringValue {
+      get { return valueCase_ == ValueOneofCase.StringValue; }
+    }
+    /// <summary> Clears the value of the oneof if it's currently set to "string_value" </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearStringValue() {
+      if (HasStringValue) {
+        ClearValue();
+      }
+    }
+
+    /// <summary>Field number for the "bool_value" field.</summary>
+    public const int BoolValueFieldNumber = 4;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool BoolValue {
+      get { return HasBoolValue ? (bool) value_ : false; }
+      set {
+        value_ = value;
+        valueCase_ = ValueOneofCase.BoolValue;
+      }
+    }
+    /// <summary>Gets whether the "bool_value" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasBoolValue {
+      get { return valueCase_ == ValueOneofCase.BoolValue; }
+    }
+    /// <summary> Clears the value of the oneof if it's currently set to "bool_value" </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearBoolValue() {
+      if (HasBoolValue) {
+        ClearValue();
+      }
+    }
+
+    /// <summary>Field number for the "byte_array_value" field.</summary>
+    public const int ByteArrayValueFieldNumber = 5;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pb::ByteString ByteArrayValue {
+      get { return HasByteArrayValue ? (pb::ByteString) value_ : pb::ByteString.Empty; }
+      set {
+        value_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        valueCase_ = ValueOneofCase.ByteArrayValue;
+      }
+    }
+    /// <summary>Gets whether the "byte_array_value" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasByteArrayValue {
+      get { return valueCase_ == ValueOneofCase.ByteArrayValue; }
+    }
+    /// <summary> Clears the value of the oneof if it's currently set to "byte_array_value" </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearByteArrayValue() {
+      if (HasByteArrayValue) {
+        ClearValue();
+      }
+    }
+
+    private object value_;
+    /// <summary>Enum of possible cases for the "value" oneof.</summary>
+    public enum ValueOneofCase {
+      None = 0,
+      Int32Value = 1,
+      Uint32Value = 2,
+      StringValue = 3,
+      BoolValue = 4,
+      ByteArrayValue = 5,
+    }
+    private ValueOneofCase valueCase_ = ValueOneofCase.None;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ValueOneofCase ValueCase {
+      get { return valueCase_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearValue() {
+      valueCase_ = ValueOneofCase.None;
+      value_ = null;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as BlockFieldValue);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(BlockFieldValue other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Int32Value != other.Int32Value) return false;
+      if (Uint32Value != other.Uint32Value) return false;
+      if (StringValue != other.StringValue) return false;
+      if (BoolValue != other.BoolValue) return false;
+      if (ByteArrayValue != other.ByteArrayValue) return false;
+      if (ValueCase != other.ValueCase) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (HasInt32Value) hash ^= Int32Value.GetHashCode();
+      if (HasUint32Value) hash ^= Uint32Value.GetHashCode();
+      if (HasStringValue) hash ^= StringValue.GetHashCode();
+      if (HasBoolValue) hash ^= BoolValue.GetHashCode();
+      if (HasByteArrayValue) hash ^= ByteArrayValue.GetHashCode();
+      hash ^= (int) valueCase_;
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (HasInt32Value) {
+        output.WriteRawTag(8);
+        output.WriteInt32(Int32Value);
+      }
+      if (HasUint32Value) {
+        output.WriteRawTag(16);
+        output.WriteUInt32(Uint32Value);
+      }
+      if (HasStringValue) {
+        output.WriteRawTag(26);
+        output.WriteString(StringValue);
+      }
+      if (HasBoolValue) {
+        output.WriteRawTag(32);
+        output.WriteBool(BoolValue);
+      }
+      if (HasByteArrayValue) {
+        output.WriteRawTag(42);
+        output.WriteBytes(ByteArrayValue);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (HasInt32Value) {
+        output.WriteRawTag(8);
+        output.WriteInt32(Int32Value);
+      }
+      if (HasUint32Value) {
+        output.WriteRawTag(16);
+        output.WriteUInt32(Uint32Value);
+      }
+      if (HasStringValue) {
+        output.WriteRawTag(26);
+        output.WriteString(StringValue);
+      }
+      if (HasBoolValue) {
+        output.WriteRawTag(32);
+        output.WriteBool(BoolValue);
+      }
+      if (HasByteArrayValue) {
+        output.WriteRawTag(42);
+        output.WriteBytes(ByteArrayValue);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (HasInt32Value) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Int32Value);
+      }
+      if (HasUint32Value) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Uint32Value);
+      }
+      if (HasStringValue) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(StringValue);
+      }
+      if (HasBoolValue) {
+        size += 1 + 1;
+      }
+      if (HasByteArrayValue) {
+        size += 1 + pb::CodedOutputStream.ComputeBytesSize(ByteArrayValue);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(BlockFieldValue other) {
+      if (other == null) {
+        return;
+      }
+      switch (other.ValueCase) {
+        case ValueOneofCase.Int32Value:
+          Int32Value = other.Int32Value;
+          break;
+        case ValueOneofCase.Uint32Value:
+          Uint32Value = other.Uint32Value;
+          break;
+        case ValueOneofCase.StringValue:
+          StringValue = other.StringValue;
+          break;
+        case ValueOneofCase.BoolValue:
+          BoolValue = other.BoolValue;
+          break;
+        case ValueOneofCase.ByteArrayValue:
+          ByteArrayValue = other.ByteArrayValue;
+          break;
+      }
+
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            Int32Value = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            Uint32Value = input.ReadUInt32();
+            break;
+          }
+          case 26: {
+            StringValue = input.ReadString();
+            break;
+          }
+          case 32: {
+            BoolValue = input.ReadBool();
+            break;
+          }
+          case 42: {
+            ByteArrayValue = input.ReadBytes();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            Int32Value = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            Uint32Value = input.ReadUInt32();
+            break;
+          }
+          case 26: {
+            StringValue = input.ReadString();
+            break;
+          }
+          case 32: {
+            BoolValue = input.ReadBool();
+            break;
+          }
+          case 42: {
+            ByteArrayValue = input.ReadBytes();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class WorldBlockPlacedPacket : pb::IMessage<WorldBlockPlacedPacket>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
@@ -4942,7 +5641,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[11]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[12]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4967,7 +5666,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       positions_ = other.positions_.Clone();
       layer_ = other.layer_;
       blockId_ = other.blockId_;
-      extraFields_ = other.extraFields_;
+      fields_ = other.fields_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -5042,19 +5741,18 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       }
     }
 
-    /// <summary>Field number for the "extra_fields" field.</summary>
-    public const int ExtraFieldsFieldNumber = 5;
-    private pb::ByteString extraFields_ = pb::ByteString.Empty;
+    /// <summary>Field number for the "fields" field.</summary>
+    public const int FieldsFieldNumber = 5;
+    private static readonly pbc::MapField<string, global::PixelWalker.Networking.Protobuf.WorldPackets.BlockFieldValue>.Codec _map_fields_codec
+        = new pbc::MapField<string, global::PixelWalker.Networking.Protobuf.WorldPackets.BlockFieldValue>.Codec(pb::FieldCodec.ForString(10, ""), pb::FieldCodec.ForMessage(18, global::PixelWalker.Networking.Protobuf.WorldPackets.BlockFieldValue.Parser), 42);
+    private readonly pbc::MapField<string, global::PixelWalker.Networking.Protobuf.WorldPackets.BlockFieldValue> fields_ = new pbc::MapField<string, global::PixelWalker.Networking.Protobuf.WorldPackets.BlockFieldValue>();
     /// <summary>
-    /// Legacy? Holds a byte[] that can hold extra information
+    /// Structured block fields
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pb::ByteString ExtraFields {
-      get { return extraFields_; }
-      set {
-        extraFields_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
+    public pbc::MapField<string, global::PixelWalker.Networking.Protobuf.WorldPackets.BlockFieldValue> Fields {
+      get { return fields_; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5076,7 +5774,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       if(!positions_.Equals(other.positions_)) return false;
       if (Layer != other.Layer) return false;
       if (BlockId != other.BlockId) return false;
-      if (ExtraFields != other.ExtraFields) return false;
+      if (!Fields.Equals(other.Fields)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -5088,7 +5786,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       hash ^= positions_.GetHashCode();
       if (Layer != 0) hash ^= Layer.GetHashCode();
       if (BlockId != 0) hash ^= BlockId.GetHashCode();
-      if (ExtraFields.Length != 0) hash ^= ExtraFields.GetHashCode();
+      hash ^= Fields.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -5120,10 +5818,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
         output.WriteRawTag(32);
         output.WriteInt32(BlockId);
       }
-      if (ExtraFields.Length != 0) {
-        output.WriteRawTag(42);
-        output.WriteBytes(ExtraFields);
-      }
+      fields_.WriteTo(output, _map_fields_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -5147,10 +5842,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
         output.WriteRawTag(32);
         output.WriteInt32(BlockId);
       }
-      if (ExtraFields.Length != 0) {
-        output.WriteRawTag(42);
-        output.WriteBytes(ExtraFields);
-      }
+      fields_.WriteTo(ref output, _map_fields_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -5171,9 +5863,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       if (BlockId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(BlockId);
       }
-      if (ExtraFields.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeBytesSize(ExtraFields);
-      }
+      size += fields_.CalculateSize(_map_fields_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -5196,9 +5886,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       if (other.BlockId != 0) {
         BlockId = other.BlockId;
       }
-      if (other.ExtraFields.Length != 0) {
-        ExtraFields = other.ExtraFields;
-      }
+      fields_.MergeFrom(other.fields_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -5235,7 +5923,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
             break;
           }
           case 42: {
-            ExtraFields = input.ReadBytes();
+            fields_.AddEntriesFrom(input, _map_fields_codec);
             break;
           }
         }
@@ -5274,7 +5962,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
             break;
           }
           case 42: {
-            ExtraFields = input.ReadBytes();
+            fields_.AddEntriesFrom(ref input, _map_fields_codec);
             break;
           }
         }
@@ -5299,7 +5987,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[12]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[13]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5323,7 +6011,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       ignoreLayers_ = other.ignoreLayers_;
       layer_ = other.layer_;
       blockId_ = other.blockId_;
-      extraFields_ = other.extraFields_;
+      fields_ = other.fields_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -5381,19 +6069,18 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       }
     }
 
-    /// <summary>Field number for the "extra_fields" field.</summary>
-    public const int ExtraFieldsFieldNumber = 5;
-    private pb::ByteString extraFields_ = pb::ByteString.Empty;
+    /// <summary>Field number for the "fields" field.</summary>
+    public const int FieldsFieldNumber = 5;
+    private static readonly pbc::MapField<string, global::PixelWalker.Networking.Protobuf.WorldPackets.BlockFieldValue>.Codec _map_fields_codec
+        = new pbc::MapField<string, global::PixelWalker.Networking.Protobuf.WorldPackets.BlockFieldValue>.Codec(pb::FieldCodec.ForString(10, ""), pb::FieldCodec.ForMessage(18, global::PixelWalker.Networking.Protobuf.WorldPackets.BlockFieldValue.Parser), 42);
+    private readonly pbc::MapField<string, global::PixelWalker.Networking.Protobuf.WorldPackets.BlockFieldValue> fields_ = new pbc::MapField<string, global::PixelWalker.Networking.Protobuf.WorldPackets.BlockFieldValue>();
     /// <summary>
-    /// Legacy? Holds a byte[] that can hold extra information
+    /// Structured block fields
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pb::ByteString ExtraFields {
-      get { return extraFields_; }
-      set {
-        extraFields_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
+    public pbc::MapField<string, global::PixelWalker.Networking.Protobuf.WorldPackets.BlockFieldValue> Fields {
+      get { return fields_; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5415,7 +6102,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       if (IgnoreLayers != other.IgnoreLayers) return false;
       if (Layer != other.Layer) return false;
       if (BlockId != other.BlockId) return false;
-      if (ExtraFields != other.ExtraFields) return false;
+      if (!Fields.Equals(other.Fields)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -5427,7 +6114,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       if (IgnoreLayers != false) hash ^= IgnoreLayers.GetHashCode();
       if (Layer != 0) hash ^= Layer.GetHashCode();
       if (BlockId != 0) hash ^= BlockId.GetHashCode();
-      if (ExtraFields.Length != 0) hash ^= ExtraFields.GetHashCode();
+      hash ^= Fields.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -5462,10 +6149,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
         output.WriteRawTag(32);
         output.WriteInt32(BlockId);
       }
-      if (ExtraFields.Length != 0) {
-        output.WriteRawTag(42);
-        output.WriteBytes(ExtraFields);
-      }
+      fields_.WriteTo(output, _map_fields_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -5492,10 +6176,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
         output.WriteRawTag(32);
         output.WriteInt32(BlockId);
       }
-      if (ExtraFields.Length != 0) {
-        output.WriteRawTag(42);
-        output.WriteBytes(ExtraFields);
-      }
+      fields_.WriteTo(ref output, _map_fields_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -5518,9 +6199,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       if (BlockId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(BlockId);
       }
-      if (ExtraFields.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeBytesSize(ExtraFields);
-      }
+      size += fields_.CalculateSize(_map_fields_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -5548,9 +6227,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       if (other.BlockId != 0) {
         BlockId = other.BlockId;
       }
-      if (other.ExtraFields.Length != 0) {
-        ExtraFields = other.ExtraFields;
-      }
+      fields_.MergeFrom(other.fields_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -5590,7 +6267,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
             break;
           }
           case 42: {
-            ExtraFields = input.ReadBytes();
+            fields_.AddEntriesFrom(input, _map_fields_codec);
             break;
           }
         }
@@ -5632,7 +6309,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
             break;
           }
           case 42: {
-            ExtraFields = input.ReadBytes();
+            fields_.AddEntriesFrom(ref input, _map_fields_codec);
             break;
           }
         }
@@ -5657,7 +6334,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[13]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[14]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5868,7 +6545,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[14]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[15]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5893,9 +6570,13 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       worldWidth_ = other.worldWidth_;
       worldHeight_ = other.worldHeight_;
       globalSwitchState_ = other.globalSwitchState_;
-      worldData_ = other.worldData_;
       playerWoot_ = other.playerWoot_ != null ? other.playerWoot_.Clone() : null;
       textLabels_ = other.textLabels_.Clone();
+      blockDataPalette_ = other.blockDataPalette_.Clone();
+      backgroundLayerData_ = other.backgroundLayerData_;
+      foregroundLayerData_ = other.foregroundLayerData_;
+      overlayLayerData_ = other.overlayLayerData_;
+      gameElapsedTime_ = other.gameElapsedTime_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -5974,20 +6655,8 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       }
     }
 
-    /// <summary>Field number for the "world_data" field.</summary>
-    public const int WorldDataFieldNumber = 6;
-    private pb::ByteString worldData_ = pb::ByteString.Empty;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pb::ByteString WorldData {
-      get { return worldData_; }
-      set {
-        worldData_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
     /// <summary>Field number for the "player_woot" field.</summary>
-    public const int PlayerWootFieldNumber = 7;
+    public const int PlayerWootFieldNumber = 6;
     private global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerWoot playerWoot_;
     /// <summary>
     /// Did player woot?
@@ -6002,9 +6671,9 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     }
 
     /// <summary>Field number for the "text_labels" field.</summary>
-    public const int TextLabelsFieldNumber = 8;
+    public const int TextLabelsFieldNumber = 7;
     private static readonly pb::FieldCodec<global::PixelWalker.Networking.Protobuf.WorldPackets.TextLabel> _repeated_textLabels_codec
-        = pb::FieldCodec.ForMessage(66, global::PixelWalker.Networking.Protobuf.WorldPackets.TextLabel.Parser);
+        = pb::FieldCodec.ForMessage(58, global::PixelWalker.Networking.Protobuf.WorldPackets.TextLabel.Parser);
     private readonly pbc::RepeatedField<global::PixelWalker.Networking.Protobuf.WorldPackets.TextLabel> textLabels_ = new pbc::RepeatedField<global::PixelWalker.Networking.Protobuf.WorldPackets.TextLabel>();
     /// <summary>
     /// Text labels to display in the world
@@ -6013,6 +6682,71 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public pbc::RepeatedField<global::PixelWalker.Networking.Protobuf.WorldPackets.TextLabel> TextLabels {
       get { return textLabels_; }
+    }
+
+    /// <summary>Field number for the "block_data_palette" field.</summary>
+    public const int BlockDataPaletteFieldNumber = 8;
+    private static readonly pb::FieldCodec<global::PixelWalker.Networking.Protobuf.WorldPackets.BlockDataInfo> _repeated_blockDataPalette_codec
+        = pb::FieldCodec.ForMessage(66, global::PixelWalker.Networking.Protobuf.WorldPackets.BlockDataInfo.Parser);
+    private readonly pbc::RepeatedField<global::PixelWalker.Networking.Protobuf.WorldPackets.BlockDataInfo> blockDataPalette_ = new pbc::RepeatedField<global::PixelWalker.Networking.Protobuf.WorldPackets.BlockDataInfo>();
+    /// <summary>
+    /// Structured world data format
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::PixelWalker.Networking.Protobuf.WorldPackets.BlockDataInfo> BlockDataPalette {
+      get { return blockDataPalette_; }
+    }
+
+    /// <summary>Field number for the "background_layer_data" field.</summary>
+    public const int BackgroundLayerDataFieldNumber = 9;
+    private pb::ByteString backgroundLayerData_ = pb::ByteString.Empty;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pb::ByteString BackgroundLayerData {
+      get { return backgroundLayerData_; }
+      set {
+        backgroundLayerData_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "foreground_layer_data" field.</summary>
+    public const int ForegroundLayerDataFieldNumber = 10;
+    private pb::ByteString foregroundLayerData_ = pb::ByteString.Empty;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pb::ByteString ForegroundLayerData {
+      get { return foregroundLayerData_; }
+      set {
+        foregroundLayerData_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "overlay_layer_data" field.</summary>
+    public const int OverlayLayerDataFieldNumber = 11;
+    private pb::ByteString overlayLayerData_ = pb::ByteString.Empty;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pb::ByteString OverlayLayerData {
+      get { return overlayLayerData_; }
+      set {
+        overlayLayerData_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "game_elapsed_time" field.</summary>
+    public const int GameElapsedTimeFieldNumber = 12;
+    private long gameElapsedTime_;
+    /// <summary>
+    /// Elapsed ticks since game started (100 ticks per second) - clients use this as reference point (0)
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public long GameElapsedTime {
+      get { return gameElapsedTime_; }
+      set {
+        gameElapsedTime_ = value;
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -6035,9 +6769,13 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       if (WorldWidth != other.WorldWidth) return false;
       if (WorldHeight != other.WorldHeight) return false;
       if (GlobalSwitchState != other.GlobalSwitchState) return false;
-      if (WorldData != other.WorldData) return false;
       if (!object.Equals(PlayerWoot, other.PlayerWoot)) return false;
       if(!textLabels_.Equals(other.textLabels_)) return false;
+      if(!blockDataPalette_.Equals(other.blockDataPalette_)) return false;
+      if (BackgroundLayerData != other.BackgroundLayerData) return false;
+      if (ForegroundLayerData != other.ForegroundLayerData) return false;
+      if (OverlayLayerData != other.OverlayLayerData) return false;
+      if (GameElapsedTime != other.GameElapsedTime) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -6050,9 +6788,13 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       if (WorldWidth != 0) hash ^= WorldWidth.GetHashCode();
       if (WorldHeight != 0) hash ^= WorldHeight.GetHashCode();
       if (GlobalSwitchState.Length != 0) hash ^= GlobalSwitchState.GetHashCode();
-      if (WorldData.Length != 0) hash ^= WorldData.GetHashCode();
       if (playerWoot_ != null) hash ^= PlayerWoot.GetHashCode();
       hash ^= textLabels_.GetHashCode();
+      hash ^= blockDataPalette_.GetHashCode();
+      if (BackgroundLayerData.Length != 0) hash ^= BackgroundLayerData.GetHashCode();
+      if (ForegroundLayerData.Length != 0) hash ^= ForegroundLayerData.GetHashCode();
+      if (OverlayLayerData.Length != 0) hash ^= OverlayLayerData.GetHashCode();
+      if (GameElapsedTime != 0L) hash ^= GameElapsedTime.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -6091,15 +6833,28 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
         output.WriteRawTag(42);
         output.WriteBytes(GlobalSwitchState);
       }
-      if (WorldData.Length != 0) {
-        output.WriteRawTag(50);
-        output.WriteBytes(WorldData);
-      }
       if (playerWoot_ != null) {
-        output.WriteRawTag(58);
+        output.WriteRawTag(50);
         output.WriteMessage(PlayerWoot);
       }
       textLabels_.WriteTo(output, _repeated_textLabels_codec);
+      blockDataPalette_.WriteTo(output, _repeated_blockDataPalette_codec);
+      if (BackgroundLayerData.Length != 0) {
+        output.WriteRawTag(74);
+        output.WriteBytes(BackgroundLayerData);
+      }
+      if (ForegroundLayerData.Length != 0) {
+        output.WriteRawTag(82);
+        output.WriteBytes(ForegroundLayerData);
+      }
+      if (OverlayLayerData.Length != 0) {
+        output.WriteRawTag(90);
+        output.WriteBytes(OverlayLayerData);
+      }
+      if (GameElapsedTime != 0L) {
+        output.WriteRawTag(96);
+        output.WriteInt64(GameElapsedTime);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -6130,15 +6885,28 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
         output.WriteRawTag(42);
         output.WriteBytes(GlobalSwitchState);
       }
-      if (WorldData.Length != 0) {
-        output.WriteRawTag(50);
-        output.WriteBytes(WorldData);
-      }
       if (playerWoot_ != null) {
-        output.WriteRawTag(58);
+        output.WriteRawTag(50);
         output.WriteMessage(PlayerWoot);
       }
       textLabels_.WriteTo(ref output, _repeated_textLabels_codec);
+      blockDataPalette_.WriteTo(ref output, _repeated_blockDataPalette_codec);
+      if (BackgroundLayerData.Length != 0) {
+        output.WriteRawTag(74);
+        output.WriteBytes(BackgroundLayerData);
+      }
+      if (ForegroundLayerData.Length != 0) {
+        output.WriteRawTag(82);
+        output.WriteBytes(ForegroundLayerData);
+      }
+      if (OverlayLayerData.Length != 0) {
+        output.WriteRawTag(90);
+        output.WriteBytes(OverlayLayerData);
+      }
+      if (GameElapsedTime != 0L) {
+        output.WriteRawTag(96);
+        output.WriteInt64(GameElapsedTime);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -6164,13 +6932,23 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       if (GlobalSwitchState.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeBytesSize(GlobalSwitchState);
       }
-      if (WorldData.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeBytesSize(WorldData);
-      }
       if (playerWoot_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(PlayerWoot);
       }
       size += textLabels_.CalculateSize(_repeated_textLabels_codec);
+      size += blockDataPalette_.CalculateSize(_repeated_blockDataPalette_codec);
+      if (BackgroundLayerData.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeBytesSize(BackgroundLayerData);
+      }
+      if (ForegroundLayerData.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeBytesSize(ForegroundLayerData);
+      }
+      if (OverlayLayerData.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeBytesSize(OverlayLayerData);
+      }
+      if (GameElapsedTime != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(GameElapsedTime);
+      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -6204,9 +6982,6 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       if (other.GlobalSwitchState.Length != 0) {
         GlobalSwitchState = other.GlobalSwitchState;
       }
-      if (other.WorldData.Length != 0) {
-        WorldData = other.WorldData;
-      }
       if (other.playerWoot_ != null) {
         if (playerWoot_ == null) {
           PlayerWoot = new global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerWoot();
@@ -6214,6 +6989,19 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
         PlayerWoot.MergeFrom(other.PlayerWoot);
       }
       textLabels_.Add(other.textLabels_);
+      blockDataPalette_.Add(other.blockDataPalette_);
+      if (other.BackgroundLayerData.Length != 0) {
+        BackgroundLayerData = other.BackgroundLayerData;
+      }
+      if (other.ForegroundLayerData.Length != 0) {
+        ForegroundLayerData = other.ForegroundLayerData;
+      }
+      if (other.OverlayLayerData.Length != 0) {
+        OverlayLayerData = other.OverlayLayerData;
+      }
+      if (other.GameElapsedTime != 0L) {
+        GameElapsedTime = other.GameElapsedTime;
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -6260,18 +7048,34 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
             break;
           }
           case 50: {
-            WorldData = input.ReadBytes();
-            break;
-          }
-          case 58: {
             if (playerWoot_ == null) {
               PlayerWoot = new global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerWoot();
             }
             input.ReadMessage(PlayerWoot);
             break;
           }
-          case 66: {
+          case 58: {
             textLabels_.AddEntriesFrom(input, _repeated_textLabels_codec);
+            break;
+          }
+          case 66: {
+            blockDataPalette_.AddEntriesFrom(input, _repeated_blockDataPalette_codec);
+            break;
+          }
+          case 74: {
+            BackgroundLayerData = input.ReadBytes();
+            break;
+          }
+          case 82: {
+            ForegroundLayerData = input.ReadBytes();
+            break;
+          }
+          case 90: {
+            OverlayLayerData = input.ReadBytes();
+            break;
+          }
+          case 96: {
+            GameElapsedTime = input.ReadInt64();
             break;
           }
         }
@@ -6320,18 +7124,261 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
             break;
           }
           case 50: {
-            WorldData = input.ReadBytes();
-            break;
-          }
-          case 58: {
             if (playerWoot_ == null) {
               PlayerWoot = new global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerWoot();
             }
             input.ReadMessage(PlayerWoot);
             break;
           }
-          case 66: {
+          case 58: {
             textLabels_.AddEntriesFrom(ref input, _repeated_textLabels_codec);
+            break;
+          }
+          case 66: {
+            blockDataPalette_.AddEntriesFrom(ref input, _repeated_blockDataPalette_codec);
+            break;
+          }
+          case 74: {
+            BackgroundLayerData = input.ReadBytes();
+            break;
+          }
+          case 82: {
+            ForegroundLayerData = input.ReadBytes();
+            break;
+          }
+          case 90: {
+            OverlayLayerData = input.ReadBytes();
+            break;
+          }
+          case 96: {
+            GameElapsedTime = input.ReadInt64();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  /// <summary>
+  /// Information about a block data type for the palette
+  /// </summary>
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class BlockDataInfo : pb::IMessage<BlockDataInfo>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<BlockDataInfo> _parser = new pb::MessageParser<BlockDataInfo>(() => new BlockDataInfo());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<BlockDataInfo> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[16]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public BlockDataInfo() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public BlockDataInfo(BlockDataInfo other) : this() {
+      blockId_ = other.blockId_;
+      fields_ = other.fields_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public BlockDataInfo Clone() {
+      return new BlockDataInfo(this);
+    }
+
+    /// <summary>Field number for the "block_id" field.</summary>
+    public const int BlockIdFieldNumber = 1;
+    private int blockId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int BlockId {
+      get { return blockId_; }
+      set {
+        blockId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "fields" field.</summary>
+    public const int FieldsFieldNumber = 2;
+    private static readonly pbc::MapField<string, global::PixelWalker.Networking.Protobuf.WorldPackets.BlockFieldValue>.Codec _map_fields_codec
+        = new pbc::MapField<string, global::PixelWalker.Networking.Protobuf.WorldPackets.BlockFieldValue>.Codec(pb::FieldCodec.ForString(10, ""), pb::FieldCodec.ForMessage(18, global::PixelWalker.Networking.Protobuf.WorldPackets.BlockFieldValue.Parser), 18);
+    private readonly pbc::MapField<string, global::PixelWalker.Networking.Protobuf.WorldPackets.BlockFieldValue> fields_ = new pbc::MapField<string, global::PixelWalker.Networking.Protobuf.WorldPackets.BlockFieldValue>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::MapField<string, global::PixelWalker.Networking.Protobuf.WorldPackets.BlockFieldValue> Fields {
+      get { return fields_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as BlockDataInfo);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(BlockDataInfo other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (BlockId != other.BlockId) return false;
+      if (!Fields.Equals(other.Fields)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (BlockId != 0) hash ^= BlockId.GetHashCode();
+      hash ^= Fields.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (BlockId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(BlockId);
+      }
+      fields_.WriteTo(output, _map_fields_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (BlockId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(BlockId);
+      }
+      fields_.WriteTo(ref output, _map_fields_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (BlockId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(BlockId);
+      }
+      size += fields_.CalculateSize(_map_fields_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(BlockDataInfo other) {
+      if (other == null) {
+        return;
+      }
+      if (other.BlockId != 0) {
+        BlockId = other.BlockId;
+      }
+      fields_.MergeFrom(other.fields_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            BlockId = input.ReadInt32();
+            break;
+          }
+          case 18: {
+            fields_.AddEntriesFrom(input, _map_fields_codec);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            BlockId = input.ReadInt32();
+            break;
+          }
+          case 18: {
+            fields_.AddEntriesFrom(ref input, _map_fields_codec);
             break;
           }
         }
@@ -6359,7 +7406,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[15]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[17]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -6520,7 +7567,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[16]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[18]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -6773,7 +7820,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[17]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[19]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -6975,7 +8022,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[18]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[20]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -7226,7 +8273,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[19]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[21]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -7471,7 +8518,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[20]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[22]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8102,7 +9149,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[21]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[23]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8363,7 +9410,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[22]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[24]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8615,7 +9662,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[23]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[25]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8867,7 +9914,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[24]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[26]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -9119,7 +10166,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[25]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[27]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -9370,7 +10417,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[26]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[28]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -9569,7 +10616,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[27]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[29]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -9830,7 +10877,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[28]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[30]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -10091,7 +11138,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[29]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[31]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -10426,7 +11473,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[30]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[32]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -10819,7 +11866,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[31]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[33]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -11107,7 +12154,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[32]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[34]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -11305,7 +12352,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[33]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[35]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -11504,7 +12551,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[34]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[36]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -11756,7 +12803,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[35]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[37]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -12119,7 +13166,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[36]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[38]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -12407,7 +13454,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[37]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[39]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -12642,7 +13689,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[38]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[40]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -12915,7 +13962,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[39]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[41]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -13155,7 +14202,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[40]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[42]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -13440,7 +14487,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[41]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[43]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -13677,6 +14724,411 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
   }
 
   /// <summary>
+  /// Empty - client requests current game ticks 
+  /// </summary>
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class GameTicksSyncRequestPacket : pb::IMessage<GameTicksSyncRequestPacket>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<GameTicksSyncRequestPacket> _parser = new pb::MessageParser<GameTicksSyncRequestPacket>(() => new GameTicksSyncRequestPacket());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<GameTicksSyncRequestPacket> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[44]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GameTicksSyncRequestPacket() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GameTicksSyncRequestPacket(GameTicksSyncRequestPacket other) : this() {
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GameTicksSyncRequestPacket Clone() {
+      return new GameTicksSyncRequestPacket(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as GameTicksSyncRequestPacket);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(GameTicksSyncRequestPacket other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(GameTicksSyncRequestPacket other) {
+      if (other == null) {
+        return;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class GameTicksSyncResponsePacket : pb::IMessage<GameTicksSyncResponsePacket>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<GameTicksSyncResponsePacket> _parser = new pb::MessageParser<GameTicksSyncResponsePacket>(() => new GameTicksSyncResponsePacket());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<GameTicksSyncResponsePacket> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[45]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GameTicksSyncResponsePacket() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GameTicksSyncResponsePacket(GameTicksSyncResponsePacket other) : this() {
+      gameElapsedTime_ = other.gameElapsedTime_;
+      isPaused_ = other.isPaused_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GameTicksSyncResponsePacket Clone() {
+      return new GameTicksSyncResponsePacket(this);
+    }
+
+    /// <summary>Field number for the "game_elapsed_time" field.</summary>
+    public const int GameElapsedTimeFieldNumber = 1;
+    private long gameElapsedTime_;
+    /// <summary>
+    /// Current game ticks from server 
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public long GameElapsedTime {
+      get { return gameElapsedTime_; }
+      set {
+        gameElapsedTime_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "is_paused" field.</summary>
+    public const int IsPausedFieldNumber = 2;
+    private bool isPaused_;
+    /// <summary>
+    /// Whether ticking is currently paused 
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool IsPaused {
+      get { return isPaused_; }
+      set {
+        isPaused_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as GameTicksSyncResponsePacket);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(GameTicksSyncResponsePacket other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (GameElapsedTime != other.GameElapsedTime) return false;
+      if (IsPaused != other.IsPaused) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (GameElapsedTime != 0L) hash ^= GameElapsedTime.GetHashCode();
+      if (IsPaused != false) hash ^= IsPaused.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (GameElapsedTime != 0L) {
+        output.WriteRawTag(8);
+        output.WriteInt64(GameElapsedTime);
+      }
+      if (IsPaused != false) {
+        output.WriteRawTag(16);
+        output.WriteBool(IsPaused);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (GameElapsedTime != 0L) {
+        output.WriteRawTag(8);
+        output.WriteInt64(GameElapsedTime);
+      }
+      if (IsPaused != false) {
+        output.WriteRawTag(16);
+        output.WriteBool(IsPaused);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (GameElapsedTime != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(GameElapsedTime);
+      }
+      if (IsPaused != false) {
+        size += 1 + 1;
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(GameTicksSyncResponsePacket other) {
+      if (other == null) {
+        return;
+      }
+      if (other.GameElapsedTime != 0L) {
+        GameElapsedTime = other.GameElapsedTime;
+      }
+      if (other.IsPaused != false) {
+        IsPaused = other.IsPaused;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            GameElapsedTime = input.ReadInt64();
+            break;
+          }
+          case 16: {
+            IsPaused = input.ReadBool();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            GameElapsedTime = input.ReadInt64();
+            break;
+          }
+          case 16: {
+            IsPaused = input.ReadBool();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  /// <summary>
   ///
   ///============================================
   ///PARTS, not messages themselves.
@@ -13697,7 +15149,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[42]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[46]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -14245,7 +15697,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[43]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[47]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -14757,7 +16209,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[44]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[48]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -15092,7 +16544,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[45]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[49]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -15859,7 +17311,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[46]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[50]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -16172,7 +17624,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[47]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[51]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -16411,7 +17863,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[48]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[52]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -16651,7 +18103,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[49]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[53]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -16958,7 +18410,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[50]; }
+      get { return global::PixelWalker.Networking.Protobuf.WorldPackets.WorldReflection.Descriptor.MessageTypes[54]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

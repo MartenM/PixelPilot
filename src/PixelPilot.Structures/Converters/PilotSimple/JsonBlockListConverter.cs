@@ -1,12 +1,14 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
-using PixelPilot.Client.World;
+using PixelPilot.Api;
+using PixelPilot.Client.Messages;
 using PixelPilot.Client.World.Blocks.Placed;
+using PixelPilot.Client.World.Blocks.V2;
 using PixelPilot.Client.World.Constants;
 using PixelPilot.Common.Logging;
 using PixelPilot.Structures.Converters.Changes;
-using PixelPilot.Structures.Converters.Migrations;
 
 namespace PixelPilot.Structures.Converters.PilotSimple;
 
@@ -18,6 +20,14 @@ public class JsonBlockListConverter : JsonConverter<List<IPlacedBlock>>
 {
     private static ILogger _logger = LogManager.GetLogger("JsonBlockListConverter");
     private static VersionManager _versionManager = new();
+    
+    public PixelApiClient _apiClient;
+
+    public JsonBlockListConverter(PixelApiClient apiClient)
+    {
+        _apiClient = apiClient;
+    }
+
     public override List<IPlacedBlock>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         using JsonDocument document = JsonDocument.ParseValue(ref reader);
@@ -58,7 +68,7 @@ public class JsonBlockListConverter : JsonConverter<List<IPlacedBlock>>
                 tempId = binReader.ReadInt32();
                 block = blockMapping[tempId];
 
-                blocks.Add(new PlacedBlock(x, y, layer, PixelWorld.DeserializeBlock(binReader, block)));
+                blocks.Add(new PlacedBlock(x, y, layer, LegacyStructureSerializer(binReader, block)));
             }
             catch (Exception ex)
             {
@@ -69,6 +79,70 @@ public class JsonBlockListConverter : JsonConverter<List<IPlacedBlock>>
 
         return blocks;
     }
+    
+    
+    public FlexBlock LegacyStructureSerializer(BinaryReader reader, PixelBlock block)
+    {
+        // We want to construct a PixelBlock.
+        // First we need to know what type it is.
+        // Then we can fill in the rest.
+        var blockType = block.GetBlockType();
+        var extraFields = blockType.GetPacketFieldTypes();
+
+        // Read the extra fields
+        var extra = extraFields.Select(fieldT => BinaryFieldConverter.ReadTypeLe(reader, fieldT)).ToList();
+
+        // Now since it's not order based anymore we need to convert
+        // from order to the correct names.
+        // Well that sucks pretty hard you know.
+        var webRequest = _apiClient.GetPixelBlockMeta();
+        webRequest.Wait();
+
+        var mappings = webRequest.Result;
+        var mapping = mappings.FirstOrDefault(m => m.PaletteId == ToSnakeCase(block.ToString()));
+        if (mapping == null)
+        {
+            throw new PixelApiException($"Could not find mapping for {block.ToString()}. Translated to: {ToSnakeCase(block.ToString())}");
+        }
+        
+        
+        var dict = new Dictionary<string, object>();
+        for (int i = 0; i < mapping.Fields.Count; i++)
+        {
+            dict.Add(mapping.Fields[i].Name, extra[0]);
+        }
+
+        return new FlexBlock((int)block, dict);
+    }
+    
+    private static Dictionary<string, string> SnakeCache = new Dictionary<string, string>();
+    private static string ToSnakeCase(string input)
+    {
+        if (string.IsNullOrWhiteSpace(input))
+            return input;
+
+        if (SnakeCache.TryGetValue(input, out var snakeCase))
+        {
+            return snakeCase;
+        }
+
+        string result = input;
+
+        // Insert underscore between lower-to-upper (e.g., "myVar" → "my_Var")
+        result = Regex.Replace(result, "([a-z0-9])([A-Z])", "$1_$2");
+
+        // Insert underscore between letter–number (e.g., "Value1" → "Value_1")
+        result = Regex.Replace(result, "([A-Za-z])([0-9])", "$1_$2");
+        
+        result = result.ToLower();
+        
+        result = result.Replace("2_px", "2px");
+        result = result.Replace("1_px", "1px");
+        
+        SnakeCache.Add(input, result);
+        return result;
+    }
+
 
     public override void Write(Utf8JsonWriter writer, List<IPlacedBlock> blocks, JsonSerializerOptions options)
     {

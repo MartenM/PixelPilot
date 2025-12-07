@@ -1,6 +1,9 @@
 ﻿using System.Drawing;
+using System.Text.RegularExpressions;
 using Google.Protobuf;
+using Google.Protobuf.Collections;
 using Microsoft.Extensions.Logging;
+using PixelPilot.Api;
 using PixelPilot.Client.Abstract;
 using PixelPilot.Client.Events;
 using PixelPilot.Client.Extensions;
@@ -10,6 +13,7 @@ using PixelPilot.Client.World.Blocks.Placed;
 using PixelPilot.Client.World.Blocks.Types;
 using PixelPilot.Client.World.Blocks.Types.Effects;
 using PixelPilot.Client.World.Blocks.Types.Music;
+using PixelPilot.Client.World.Blocks.V2;
 using PixelPilot.Client.World.Constants;
 using PixelPilot.Common.Logging;
 using PixelWalker.Networking.Protobuf.WorldPackets;
@@ -124,39 +128,6 @@ public class PixelWorld
     {
         return _worldData[layer, x, y];
     }
-    
-    /// <summary>
-    /// Initialize the world using a byte[].
-    /// </summary>
-    /// <param name="buffer"></param>
-    /// <exception cref="Exception"></exception>
-    public void Init(byte[] buffer)
-    {
-        if (Width == 0 || Height == 0) throw new Exception("World with and height must be set before serializing data!");
-        
-        using var stream = new MemoryStream(buffer);
-        using var reader = new BinaryReader(stream);
-
-        try
-        {
-            // Background
-            DeserializeLayer(0, reader);
-
-            // Foreground
-            DeserializeLayer(1, reader);
-            
-            // Overlay layer
-            DeserializeLayer(2, reader);
-        }
-        catch (EndOfStreamException ex)
-        {
-            _logger.LogError(ex, "The World reader unexpectedly reached the end of the stream. Are you sure the API is up-to-date?");
-        }
-
-        if (stream.Position != stream.Length)
-            throw new Exception(
-                $"Error while converting world buffer. Reader is at {stream.Position} while length is {stream.Length}");
-    }
 
     /// <summary>
     /// Utility method that can attached to the client.
@@ -172,7 +143,14 @@ public class PixelWorld
             Width = init.WorldWidth;
             _worldMeta = init.WorldMeta;
             _worldData = new IPixelBlock[3, Width, Height];
-            Init(init.WorldData.ToByteArray());
+            
+            HandleWorldReload(new WorldBlockData
+            {
+                Pallet = init.BlockDataPalette.ToList(),
+                BackgroundData = init.BackgroundLayerData.ToByteArray(),
+                ForegroundData = init.ForegroundLayerData.ToByteArray(),
+                OverlayData = init.OverlayLayerData.ToByteArray(),
+            });
             
             OnWorldInit?.Invoke(this);
             _initializationTaskSource.TrySetResult(true);
@@ -186,7 +164,13 @@ public class PixelWorld
 
         if (packet is WorldReloadedPacket reload)
         {
-            Init(reload.WorldData.ToByteArray());
+            HandleWorldReload(new WorldBlockData
+            {
+                Pallet = reload.BlockDataPalette.ToList(),
+                BackgroundData = reload.BackgroundLayerData.ToByteArray(),
+                ForegroundData = reload.ForegroundLayerData.ToByteArray(),
+                OverlayData = reload.OverlayLayerData.ToByteArray(),
+            });
             OnWorldReloaded?.Invoke(this);
             return;
         }
@@ -202,15 +186,16 @@ public class PixelWorld
                     {
                         if (l == 1 && x == 0 || x == Width - 1 || y == 0 || y == Height - 1)
                         {
-                            _worldData[l, x, y] = new BasicBlock(PixelBlock.BasicGray);
+                            _worldData[l, x, y] = new FlexBlock(PixelBlock.BasicGray);
                         }
                         else
                         {
-                            _worldData[l, x, y] = new BasicBlock(PixelBlock.Empty);
+                            _worldData[l, x, y] = new FlexBlock(PixelBlock.Empty);
                         }
                     }
                 }
             }
+            
             OnWorldCleared?.Invoke(this);
             return;
         }
@@ -220,7 +205,7 @@ public class PixelWorld
             var blockPlacedEvent = new BlocksPlacedEvent()
             {
                 UserId = place.PlayerId,
-                NewBlock = DeserializeBlock(place),
+                NewBlock = new FlexBlock(place.BlockId, ToPixelFieldDict(place.Fields)),
                 Layer = (WorldLayer) place.Layer,
                 Positions = place.Positions.Select(p => new Point(p.X, p.Y))
             };
@@ -242,7 +227,7 @@ public class PixelWorld
             {
                 // Rather make a copy of this, BUT that's currently not possible.
                 // TODO: Deep clone blocks
-                var block = DeserializeBlock(place);
+                var block = new FlexBlock(place.BlockId, ToPixelFieldDict(place.Fields));
                 var oldBlock = _worldData[place.Layer, point.X, point.Y];
                 
                 _worldData[place.Layer, point.X, point.Y] = block;
@@ -250,21 +235,68 @@ public class PixelWorld
             }
         }
     }
-    
-    /// <summary>
-    /// Deserialize a layer.
-    /// </summary>
-    /// <param name="layer">Current layer</param>
-    /// <param name="reader">Memory stream reader</param>
-    private void DeserializeLayer(int layer, BinaryReader reader)
+
+    private class WorldBlockData
     {
-        for (int x = 0; x < Width; x++)
+        public required List<BlockDataInfo> Pallet { get; set; }
+        public required byte[] BackgroundData { get; set; }
+        public required byte[] ForegroundData { get; set; }
+        public required byte[] OverlayData { get; set; }
+    }
+
+    private void HandleWorldReload(WorldBlockData worldBlockData)
+    {
+        _worldData = new IPixelBlock[3, Width, Height];
+        
+        var pallet = worldBlockData.Pallet;
+        HandleLayer(pallet, worldBlockData.BackgroundData, (int) WorldLayer.Background);
+        HandleLayer(pallet, worldBlockData.ForegroundData, (int) WorldLayer.Foreground);
+        HandleLayer(pallet, worldBlockData.OverlayData, (int) WorldLayer.Overlay);
+    }
+
+    private void HandleLayer(List<BlockDataInfo> pallet, byte[] layerData, int layer)
+    {
+        var binaryStream = new MemoryStream(layerData);
+        var binaryReader = new BinaryReader(binaryStream);
+        
+        int i = 0;
+        while (i < Height * Width)
         {
-            for (int y = 0; y < Height; y++)
-            {
-                _worldData[layer, x, y] = DeserializeBlock(reader);
+            int palletId = binaryReader.Read7BitEncodedInt();
+            var palletBlock = pallet[palletId];
+            
+            int amount = binaryReader.Read7BitEncodedInt();
+            for (int di = 0; di < amount; di++) {
+                int x = i / Height;
+                int y = i % Height;
+
+                _worldData[layer, x, y] = ToFlexBlock(palletBlock);
+                
+                i++;
             }
         }
+
+        if (binaryReader.BaseStream.Position != binaryReader.BaseStream.Length)
+        {
+            throw new PixelApiException($"Layer {layer} did not finish serializing yet. Are you sure the API is up-to-date?");
+        }
+    }
+
+    private FlexBlock ToFlexBlock(BlockDataInfo block)
+    {
+        return new FlexBlock(block.BlockId, ToPixelFieldDict(block.Fields));
+    }
+
+    private Dictionary<string, object> ToPixelFieldDict(
+        MapField<string, BlockFieldValue> raw)
+    {
+        var dict = new Dictionary<string, object>();
+        foreach (var pair in raw)
+        {
+            dict.Add(pair.Key, FlexBlock.ToObject(pair.Value));
+        }
+
+        return dict;
     }
 
     public IEnumerable<PlacedBlock> GetBlocks(bool includeEmpty = true)
@@ -281,127 +313,6 @@ public class PixelWorld
                     yield return new PlacedBlock(x, y, layer, block);
                 }
             }
-        }
-    }
-    
-    /// <summary>
-    /// Desterialize a blok
-    /// </summary>
-    /// <param name="reader">Memory stream reader</param>
-    /// <returns>The block</returns>
-    /// <exception cref="ArgumentOutOfRangeException">Only when implementation is missing</exception>
-    public static IPixelBlock DeserializeBlock(BinaryReader reader)
-    {
-        var block = (PixelBlock) reader.ReadInt32();
-        return DeserializeBlock(reader, block);
-    }
-    
-    public static IPixelBlock DeserializeBlock(BinaryReader reader, PixelBlock block)
-    {
-        // We want to construct a PixelBlock.
-        // First we need to know what type it is.
-        // Then we can fill in the rest.
-        var blockType = block.GetBlockType();
-        var extraFields = blockType.GetPacketFieldTypes();
-
-        // Read the extra fields
-        var extra = extraFields.Select(fieldT => BinaryFieldConverter.ReadTypeLe(reader, fieldT)).ToList();
-        
-        // Construct the block and return it. Hooray.
-        switch (blockType)
-        {
-            case BlockType.Normal:
-                return new BasicBlock((int) block);
-            case BlockType.Morphable:
-                return new MorphableBlock((int)block, extra[0]);
-            case BlockType.Portal:
-                return new PortalBlock( (int)block, extra[0], extra[1]);
-            case BlockType.SwitchActivator:
-                return new ActivatorBlock((int) block, extra[0], extra[1]);
-            case BlockType.SwitchResetter:
-                return new ResetterBlock((int)block, extra[0]);
-            case BlockType.WorldPortal:
-                return new WorldPortalBlock(extra[0], extra[1]);
-            case BlockType.EffectLeveled:
-                return new LeveledEffectBlock((int)block, extra[0]);
-            case BlockType.EffectTimed:
-                return new TimedEffectBlock((int)block, extra[0]);
-            case BlockType.EffectTogglable:
-                return new ToggleEffectBlock((int)block, extra[0]);
-            case BlockType.Sign:
-                return new SignBlock((int)block, extra[0]);
-            case BlockType.NoteBlock:
-                return new NoteBlock(block, extra[0]);
-            case BlockType.ColorBlock:
-            {
-                var color = Color.FromArgb(
-                    (int)((extra[0]) >> 24 & 0xFF), // Alpha
-                    (int)((extra[0] >> 16) & 0xFF), // Red
-                    (int)((extra[0] >> 8) & 0xFF), // Green
-                    (int)(extra[0] & 0xFF) // Blue
-                );
-                return new ColoredBlock(block, color);
-            }
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-    }
-
-
-    /// <summary>
-    /// Deserializes a WorldBlockPlacedPacket into an IPixelBlock object.
-    /// This conversion loses information about where, or by who, a block was placed.
-    /// </summary>
-    /// <param name="packet">The WorldBlockPlacedPacket to deserialize.</param>
-    /// <exception cref="NotImplementedException">If the type has not been implemented yet.</exception>
-    /// <returns>An IPlacedBlock object representing the deserialized packet but without location data.</returns>
-    public static IPixelBlock DeserializeBlock(WorldBlockPlacedPacket packet)
-    {
-        var pixelBlock = (PixelBlock)packet.BlockId;
-
-        // We want to construct a PixelBlock.
-        // First we need to know what type it is.
-        // Then we can fill in the rest.
-        var blockType = pixelBlock.GetBlockType();
-        var blockFields = BinaryDataList.FromByteArray(packet.ExtraFields.ToByteArray()).Items.ToArray();
-
-        // Construct the block and return it. Hooray.
-        switch (blockType)
-        {
-            case BlockType.Normal:
-                return new BasicBlock((int)pixelBlock);
-            case BlockType.Morphable:
-                return new MorphableBlock((int)pixelBlock, blockFields[0]);
-            case BlockType.Portal:
-                return new PortalBlock((int)pixelBlock, blockFields[0], blockFields[1]);
-            case BlockType.SwitchActivator:
-                return new ActivatorBlock((int)pixelBlock, blockFields[0], blockFields[1] == 1);
-            case BlockType.SwitchResetter:
-                return new ResetterBlock((int)pixelBlock, blockFields[0] == 1);
-            case BlockType.WorldPortal:
-                return new WorldPortalBlock(blockFields[0], blockFields[1]);
-            case BlockType.EffectLeveled:
-                return new LeveledEffectBlock((int)pixelBlock, blockFields[0]);
-            case BlockType.EffectTimed:
-                return new TimedEffectBlock((int)pixelBlock, blockFields[0]);
-            case BlockType.EffectTogglable:
-                return new ToggleEffectBlock((int)pixelBlock, blockFields[0]);
-            case BlockType.Sign:
-                return new SignBlock((int)pixelBlock, blockFields[0]);
-            case BlockType.NoteBlock:
-                return new NoteBlock(pixelBlock, blockFields[0]);
-            case BlockType.ColorBlock:
-            {
-                var color = Color.FromArgb(
-                    (int)((blockFields[0]) & 0xFF), // Alpha
-                    (int)((blockFields[0] >> 8) & 0xFF), // Red
-                    (int)((blockFields[0] >> 16) & 0xFF), // Green
-                    (int)(blockFields[0] >> 24 & 0xFF) // Blue
-                );
-                return new ColoredBlock(pixelBlock,color);
-            }
-            default:
-                throw new NotImplementedException("Missing implementation of new BlockType!");
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using PixelPilot.Client;
 using PixelPilot.Client.World.Blocks;
+using PixelPilot.Client.World.Blocks.V2;
 using PixelPilot.Client.World.Constants;
 
 namespace Example.BasicBot;
@@ -17,7 +18,7 @@ public static class PlatformUtil
                 {
                     for (int x = 0; x < 7; x++)
                     {
-                        client.Send(new BasicBlock(betaBlocks[currentIndex]).AsPacketOut(34 +x, 70, 1));
+                        client.Send(new FlexBlock(betaBlocks[currentIndex]).AsPacketOut(34 +x, 70, 1));
                         Thread.Sleep(25);
                     }
 

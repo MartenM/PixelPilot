@@ -1,31 +1,24 @@
 ﻿using System.Text.Json;
+using PixelPilot.Api;
 
 namespace PixelPilot.Structures.Converters.PilotSimple;
 
 public static class PilotSaveSerializer
 {
+    [Obsolete("No longer supported. Please use the newer safe format.")]
     public static string Serialize(Structure structure)
     {
-        var options = new JsonSerializerOptions()
-        {
-            Converters =
-            {
-                new JsonBlockListConverter()
-            }
-        };
-
-        var pilotStruct = PilotSimpleStructure.FromStructure(structure);
-        var json = JsonSerializer.Serialize(pilotStruct, options);
-        return json;
+        throw new NotImplementedException();
     }
 
-    public static Structure Deserialize(string rawData)
+    [Obsolete("Obsolete, please migrate to the latest version A.S.P.")]
+    public static Structure Deserialize(PixelApiClient apiClient, string rawData)
     {
         var options = new JsonSerializerOptions()
         {
             Converters =
             {
-                new JsonBlockListConverter()
+                new JsonBlockListConverter(apiClient)
             }
         };
 

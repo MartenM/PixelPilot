@@ -293,6 +293,11 @@ public class PixelPilotClient : IPixelPilotClient, IDisposable
         SendPm(player.Username, msg, prefix);
     }
 
+    public PixelApiClient GetApiClient()
+    {
+        return ApiClient;
+    }
+
     /// <summary>
     /// Same as SendChat but as PM.
     /// </summary>

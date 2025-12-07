@@ -8,6 +8,7 @@ using PixelPilot.Client.Players.Basic;
 using PixelPilot.Client.World;
 using PixelPilot.Client.World.Blocks;
 using PixelPilot.Client.World.Blocks.Placed;
+using PixelPilot.Client.World.Blocks.V2;
 using PixelPilot.Client.World.Constants;
 using PixelPilot.Common.Logging;
 using PixelPilot.Structures.Converters.PilotSimple;
@@ -64,7 +65,7 @@ client.OnPacketReceived += (_, packet) =>
 	switch (packet)
 	{
 		case PlayerChatPacket { Message: "place"}:
-            client.Send(new PlacedBlock(0, 0, WorldLayer.Foreground, new BasicBlock(PixelBlock.HazardSpikesBrownUp)).AsPacketOut());
+            client.Send(new PlacedBlock(0, 0, WorldLayer.Foreground, new FlexBlock(PixelBlock.HazardSpikesBrownUp)).AsPacketOut());
             break;
 	}
 };
