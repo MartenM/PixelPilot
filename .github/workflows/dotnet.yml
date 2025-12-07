@@ -58,7 +58,7 @@ jobs:
         dotnet-version: 8.0.x
 
     - name: Show enviroment
-      run: echo "Enviroment: $PIXELWALKER_ENDPOINT"
+      run: echo "$PIXELWALKER_ENDPOINT"
       env:
         PIXELWALKER_ENDPOINT: ${{ github.ref == 'refs/heads/staging' && 'staging' || 'production' }}
 
