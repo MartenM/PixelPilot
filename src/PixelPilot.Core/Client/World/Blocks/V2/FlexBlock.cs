@@ -160,7 +160,17 @@ public class FlexBlock : IPixelBlock
     private bool EqualFields(FlexBlock other)
     {
         return Fields.Count == other.Fields.Count
-               && Fields.All(kvp => other.Fields.TryGetValue(kvp.Key, out var value) && kvp.Value.Equals(value));
+               && Fields.All(kvp => other.Fields.TryGetValue(kvp.Key, out var value) && EqualFields(kvp.Value, value));
+    }
+
+    private bool EqualFields(object a, object b)
+    {
+        if (a is byte[] ab && b is byte[] bb)
+        {
+            return ab.SequenceEqual(bb);
+        }
+
+        return a.Equals(b);
     }
 
     public override bool Equals(object? obj)
