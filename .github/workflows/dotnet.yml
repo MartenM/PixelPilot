@@ -15,26 +15,53 @@ env:
   NuGetDirectory: ${{ github.workspace}}/nuget
 
 jobs:
+  # Build the project.
   build:
-    name: Build & Test
+    name: Build
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+
     - name: Restore dependencies
       run: dotnet restore
+
     - name: Build
-      run: dotnet build --no-restore
-    - name: Test
+      run: dotnet build --no-restore --configuration Release
+
+    # Upload build output so the test job can use it
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-output
+        path: |
+          ./**/bin/Release/
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Download build artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: build-output
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Run tests
       run: dotnet test --no-build --verbosity normal
       env:
-          PIXELWALKER_TEST_EMAIL: ${{ secrets.PIXELWALKER_TEST_EMAIL }}
-          PIXELWALKER_TEST_PASSWORD: ${{ secrets.PIXELWALKER_TEST_PASSWORD }}
-    - name: Pack
-      run: dotnet pack --no-restore
+        PIXELWALKER_TEST_EMAIL: ${{ secrets.PIXELWALKER_TEST_EMAIL }}
+        PIXELWALKER_TEST_PASSWORD: ${{ secrets.PIXELWALKER_TEST_PASSWORD }}
 
   # Create a NUGET release if pushed to main.
   # Checks for PixelPilot.Core for an updated project version.
@@ -42,7 +69,7 @@ jobs:
     name: Deployment Planner
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
-    needs: build
+    needs: test
     outputs: 
       new-tag-found: ${{ steps.tag_check.outputs.new-tag-found }}
       new-tag: ${{ steps.tag_check.outputs.new-tag }}
@@ -127,6 +154,7 @@ jobs:
       # Create and publish the release
       - name: Create Github Release
         uses: softprops/action-gh-release@v2
+        if: github.ref == 'refs/heads/main'
         id: release
         with:
           name: ${{ needs.deploy-planner.outputs.new-tag }}
