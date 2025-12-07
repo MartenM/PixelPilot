@@ -57,11 +57,20 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Show enviroment
+      run: echo "$PIXELWALKER_ENDPOINT"
+      env:
+        PIXELWALKER_ENDPOINT: ${{ github.ref == 'refs/heads/staging' && 'staging' || 'production' }}
+
     - name: Run tests
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal --configuration Release
       env:
         PIXELWALKER_TEST_EMAIL: ${{ secrets.PIXELWALKER_TEST_EMAIL }}
         PIXELWALKER_TEST_PASSWORD: ${{ secrets.PIXELWALKER_TEST_PASSWORD }}
+        PIXELWALKER_ENDPOINT: ${{ github.ref == 'refs/heads/staging' && 'staging' || 'production' }}
 
   # Create a NUGET release if pushed to main.
   # Checks for PixelPilot.Core for an updated project version.
