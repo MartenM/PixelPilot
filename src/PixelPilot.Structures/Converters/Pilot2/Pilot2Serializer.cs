@@ -3,18 +3,17 @@ using PixelPilot.Api;
 using PixelPilot.Client.World.Blocks.Placed;
 using PixelPilot.Client.World.Blocks.V2;
 using PixelPilot.Client.World.Constants;
-using PixelPilot.Structures.Converters.PilotSimple;
 
 namespace PixelPilot.Structures.Converters.Pilot2;
 
-public static class StructureExtensions
+public static class Pilot2Serializer
 {
     /// <summary>
     /// Convert a structure to the save format.
     /// </summary>
     /// <param name="structure"></param>
     /// <returns></returns>
-    public static PilotStructureSave ToSave(this Structure structure)
+    private static PilotStructureSave ToSave(Structure structure)
     {
         var save = new PilotStructureSave();
         save.Height =  structure.Height;
@@ -67,14 +66,13 @@ public static class StructureExtensions
         
         return newIndex;
     }
-    
 
     /// <summary>
     /// Convert a save format back to a structure.
     /// </summary>
     /// <param name="save"></param>
     /// <returns></returns>
-    public static Structure ToStructure(this PilotStructureSave save)
+    private static Structure ToStructure(PilotStructureSave save)
     {
         var blocks = new List<IPlacedBlock>();
 
@@ -92,23 +90,11 @@ public static class StructureExtensions
 
         return structure;
     }
-    
-    /// <summary>
-    /// Convert a structure to the JSON save format.
-    /// </summary>
-    /// <param name="structure"></param>
-    /// <param name="filePath"></param>
-    /// <param name="writeIndented"></param>
-    public static async Task ToFile(this Structure structure, string filePath, bool writeIndented = false)
-    {
-        var saveText = structure.ToSave().ToJson(writeIndented);
-        
-        if (!filePath.EndsWith(".json"))
-        {
-            filePath += ".json";
-        }
 
-        await File.WriteAllTextAsync(filePath, saveText);
+    public static Structure ToStructure(string rawData)
+    {
+        var save = ToSave(rawData);
+        return ToStructure(save);
     }
 
     /// <summary>
@@ -117,7 +103,7 @@ public static class StructureExtensions
     /// <param name="save"></param>
     /// <param name="writeIndented"></param>
     /// <returns></returns>
-    public static string ToJson(this PilotStructureSave save, bool writeIndented)
+    public static string ToJson(PilotStructureSave save, bool writeIndented)
     {
         var options = new JsonSerializerOptions
         {
@@ -132,45 +118,21 @@ public static class StructureExtensions
         return text;
     }
 
-    public static string ToJson(this Structure structure, bool writeIndented = false)
+    public static string ToJson(Structure structure, bool writeIndented = false)
     {
-        return structure.ToSave().ToJson(writeIndented);
-    }
-
-    /// <summary>
-    /// Load a structure from a file in save format.
-    /// </summary>
-    /// <param name="filePath"></param>
-    /// <param name="writeIndented"></param>
-    /// <returns></returns>
-    /// <exception cref="PixelApiException"></exception>
-    public static async Task<Structure> LoadFile(string filePath, bool writeIndented = false)
-    {
-        if (!filePath.EndsWith(".json"))
-        {
-            filePath += ".json";
-        }
-
-        if (!File.Exists(filePath))
-        {
-            throw new PixelApiException("Could not find file: " + filePath);
-        }
-
-        var saveText = await File.ReadAllTextAsync(filePath);
-        var save = GetPilotStructureSave(saveText);
-
-        return save.ToStructure();
+        var save = ToSave(structure);
+        return ToJson(save, writeIndented);
     }
 
     /// <summary>
     /// Get the safe format from a save.
     /// </summary>
-    /// <param name="saveText"></param>
+    /// <param name="rawData"></param>
     /// <returns></returns>
     /// <exception cref="PixelApiException"></exception>
-    public static PilotStructureSave GetPilotStructureSave(string saveText)
+    private static PilotStructureSave ToSave(string rawData)
     {
-        var save = JsonSerializer.Deserialize<PilotStructureSave>(saveText, options: new JsonSerializerOptions()
+        var save = JsonSerializer.Deserialize<PilotStructureSave>(rawData, options: new JsonSerializerOptions()
         {
             Converters = { 
                 new PalletReferenceConverter() 

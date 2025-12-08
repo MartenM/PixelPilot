@@ -22,12 +22,10 @@ public class JsonBlockListConverter : JsonConverter<List<IPlacedBlock>>
 {
     private static ILogger _logger = LogManager.GetLogger("JsonBlockListConverter");
     private static VersionManager _versionManager = new();
-    
-    public PixelApiClient _apiClient;
 
-    public JsonBlockListConverter(PixelApiClient apiClient)
+    public JsonBlockListConverter()
     {
-        _apiClient = apiClient;
+        
     }
 
     public override List<IPlacedBlock>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

@@ -16,6 +16,7 @@ using PixelPilot.Client.World.Blocks.V2;
 using PixelPilot.Client.World.Constants;
 using PixelPilot.Common.Logging;
 using PixelPilot.Structures;
+using PixelPilot.Structures.Converters;
 using PixelPilot.Structures.Converters.Pilot2;
 using PixelPilot.Structures.Converters.PilotSimple;
 using PixelPilot.Structures.Extensions;
@@ -41,7 +42,6 @@ var point1 = new Point(0, 0);
 var point2 = new Point(0, 0);
 
 var client = PixelPilotClient.Builder()
-    // .SetToken(config.AccountToken)
     .SetEmail(config.AccountEmail)
     .SetPassword(config.AccountPassword)
     .SetPrefix("[StructBot] ")
@@ -136,32 +136,10 @@ client.OnPacketReceived += (_, packet) =>
                     return;
                 }
                 
-                var rawSave = currentStructure.ToJson(true);
+                var rawSave = PilotSaveSerializer.Serialize(currentStructure);
                 File.WriteAllText($"./{args[1]}.json", rawSave);
                 
                 client.SendChat("Structure saved to file.");
-                break;
-            }
-            case "load_legacy":
-            {
-                if (args.Length < 2)
-                {
-                    client.SendChat("Please provide a file name.");
-                    return;
-                }
-
-                if (!File.Exists($"./{args[1]}.json"))
-                {
-                    client.SendChat("Please provide a file name that exists.");
-                    return;
-                }
-
-                var rawLoad = File.ReadAllText($"./{args[1]}.json");
-                
-                client.SendChat("Loading structure...");
-                currentStructure = PilotSaveSerializer.Deserialize(client.GetApiClient(), rawLoad);
-                
-                client.SendChat("Structure loaded from file.");
                 break;
             }
             case "load":
@@ -181,7 +159,7 @@ client.OnPacketReceived += (_, packet) =>
                 var rawLoad = File.ReadAllText($"./{args[1]}.json");
                 
                 client.SendChat("Loading structure...");
-                currentStructure = StructureExtensions.GetPilotStructureSave(rawLoad).ToStructure();
+                currentStructure = PilotSaveSerializer.Deserialize(rawLoad);
                 
                 client.SendChat("Structure loaded from file.");
                 break;

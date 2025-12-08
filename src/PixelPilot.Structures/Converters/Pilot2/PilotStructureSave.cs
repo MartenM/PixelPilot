@@ -5,7 +5,8 @@
 /// </summary>
 public class PilotStructureSave
 {
-    public int SaveVersion { get; set; }
+    // Save version used to indicate what version this safe is using.
+    public int Version { get; set; } = 20;
     
     public int Width { get; set; }
     public int Height { get; set; }
