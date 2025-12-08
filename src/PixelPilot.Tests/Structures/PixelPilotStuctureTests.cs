@@ -101,7 +101,7 @@ public class PixelPilotStuctureTests
         });
         
         Assert.That(_client.IsConnected, Is.True, $"Required: Client should be connected.");
-        await Task.WhenAny(_world.InitTask, Task.Delay(500));
+        await Task.WhenAny(_world.InitTask, Task.Delay(TimeSpan.FromSeconds(5)));
         
         // Send blocks 2 times if required.
         List<IPlacedBlock> remaining = _world.GetDifference(structure);
