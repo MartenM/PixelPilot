@@ -1,8 +1,10 @@
-﻿using System.Text.Json;
+﻿using System.Reflection;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using PixelPilot.Api;
+using PixelPilot.Api.Responses;
 using PixelPilot.Client.Messages;
 using PixelPilot.Client.World.Blocks.Placed;
 using PixelPilot.Client.World.Blocks.V2;
@@ -95,24 +97,53 @@ public class JsonBlockListConverter : JsonConverter<List<IPlacedBlock>>
         // Now since it's not order based anymore we need to convert
         // from order to the correct names.
         // Well that sucks pretty hard you know.
-        var webRequest = _apiClient.GetPixelBlockMeta();
-        webRequest.Wait();
-
-        var mappings = webRequest.Result;
+        var mappings = GetLegacyMapping();
         var mapping = mappings.FirstOrDefault(m => m.PaletteId == ToSnakeCase(block.ToString()));
         if (mapping == null)
         {
             throw new PixelApiException($"Could not find mapping for {block.ToString()}. Translated to: {ToSnakeCase(block.ToString())}");
         }
         
-        
         var dict = new Dictionary<string, object>();
-        for (int i = 0; i < mapping.Fields.Count; i++)
+        switch (block)
         {
-            dict.Add(mapping.Fields[i].Name, extra[0]);
+            case PixelBlock.SwitchLocalActivator:
+            {
+                dict.Add(mapping.Fields[0].Name, extra[1]);
+                dict.Add(mapping.Fields[1].Name, extra[0]);
+                break;
+            }
+            default:
+            {
+                for (int i = 0; i < mapping.Fields.Count; i++)
+                {
+                    dict.Add(mapping.Fields[i].Name, extra[i]);
+                }
+                break;
+            }
         }
 
         return new FlexBlock((int)block, dict);
+    }
+
+    private static List<PixelBlockMeta>? _legacyMapping = null;
+    private List<PixelBlockMeta> GetLegacyMapping()
+    {
+        if (_legacyMapping != null)
+        {
+            return _legacyMapping;
+        }
+        
+        var assembly = Assembly.GetExecutingAssembly();
+        var resourceName = "PixelPilot.Structures.Converters.PilotSimple.legacy_listblock.json";
+        
+        using var stream = assembly.GetManifestResourceStream(resourceName);
+        using var reader = new StreamReader(stream!);
+        var text = reader.ReadToEnd();
+        
+        var data = JsonSerializer.Deserialize<List<PixelBlockMeta>>(text) ?? throw new PixelApiException("Could not find the required legacy_mapping.json");
+        _legacyMapping = data;
+        return _legacyMapping;
     }
     
     private static Dictionary<string, string> SnakeCache = new Dictionary<string, string>();

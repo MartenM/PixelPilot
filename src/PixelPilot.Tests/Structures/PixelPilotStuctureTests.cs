@@ -2,6 +2,7 @@
 using PixelPilot.Client;
 using PixelPilot.Client.Extensions;
 using PixelPilot.Client.World;
+using PixelPilot.Client.World.Blocks.Placed;
 using PixelPilot.Structures;
 using PixelPilot.Structures.Converters.PilotSimple;
 using PixelPilot.Structures.Extensions;
@@ -11,6 +12,7 @@ namespace PixelGameTests.Structures;
 public class PixelPilotStuctureTests
 {
     private PixelPilotClient _client;
+    private PixelWorld _world;
     private static Random _random = new();
 
     private static List<string> TestPopulatedWorlds =
@@ -51,12 +53,16 @@ public class PixelPilotStuctureTests
             return;
         }
 
+        
         _client = PixelPilotClient.Builder()
             .SetEmail(email)
             .SetPassword(password)
             .SetPrefix("[CI/CD]")
             .SetAutomaticReconnect(false)
             .Build();
+        
+        _world = new PixelWorld(_client);
+        _client.OnPacketReceived += _world.HandlePacket;
     }
 
     [TestCaseSource(nameof(TestStructureFiles))]
@@ -95,15 +101,34 @@ public class PixelPilotStuctureTests
         });
         
         Assert.That(_client.IsConnected, Is.True, $"Required: Client should be connected.");
-
-        var blockMessages = structure.BlocksWithEmpty.ToChunkedPackets();
+        await Task.WhenAny(_world.InitTask, Task.Delay(500));
         
-        _client.SendRange(blockMessages);
-        await _client.WaitForEmptyQueue();
+        // Send blocks 2 times if required.
+        List<IPlacedBlock> remaining = _world.GetDifference(structure);
+        int packetsSend = 0;
+        for (int attempt = 0; attempt < 2; attempt++)
+        {
+            // Send the blocks
+            var packets = remaining.ToChunkedPackets();
+            packetsSend += packets.Count;
+            
+            _client.SendRange(packets);
+            await _client.WaitForEmptyQueue();
+            await Task.Delay(250);
+            
+            // Check remaining + exit early.
+            remaining = _world.GetDifference(structure);
+            if (remaining.Count == 0)
+            {
+                break;
+            }
+        }
+        
         
         Assert.Multiple(() =>
         {
-            Assert.That(blockMessages, Is.Not.Empty, $"Safety check: At least placed some blocks.");
+            Assert.That(packetsSend, Is.Not.EqualTo(0), $"Safety check: At least placed some blocks.");
+            Assert.That(remaining.Count, Is.EqualTo(0), $"There are {remaining.Count} remaining blocks. Types: {string.Join(", ", remaining.Select(rb => rb.Block.Block.ToString()).Distinct().ToList())}");
             Assert.That(_client.IsConnected, Is.True, $"Client should not have disconnected.");
             Assert.That(_client.LastException, Is.Null, $"Client should have not generated any issues.");
         });
