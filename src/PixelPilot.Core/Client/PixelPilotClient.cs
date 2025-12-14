@@ -365,7 +365,7 @@ public class PixelPilotClient : IPixelPilotClient, IDisposable
             if (_packetOutQueue != null)
             {
                 var isWorldOwner = init.PlayerProperties.IsWorldOwner;
-                _packetOutQueue.IsOwner = isWorldOwner;
+                _packetOutQueue.IsOwner = isWorldOwner && init.WorldMeta.WorldType != WorldMeta.Types.WorldType.Unsaved;
 
                 if (!isWorldOwner)
                 {
