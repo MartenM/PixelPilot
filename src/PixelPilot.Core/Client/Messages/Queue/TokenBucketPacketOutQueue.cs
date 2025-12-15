@@ -12,7 +12,7 @@ namespace PixelPilot.Client.Messages.Queue;
 /// </summary>
 public class TokenBucketPacketOutQueue : IPixelPacketQueue
 {
-    private readonly ILogger _logger = LogManager.GetLogger("PacketOutQueue");
+    private readonly ILogger _logger = LogManager.GetLogger("Client.Messages.Queue");
 
     private int _totalRateLimit = OwnerTotalRateLimit;
     private int _chatRateLimit = OwnerChatRateLimit;
@@ -21,7 +21,7 @@ public class TokenBucketPacketOutQueue : IPixelPacketQueue
     public const int OwnerChatRateLimit = 15;
 
     public const int GuestTotalRateLimit = 100;
-    public const int GuestChatRateLimit = 15;
+    public const int GuestChatRateLimit = 5;
     
     /// <summary>
     /// Maximum amount of packets stored up.
@@ -57,17 +57,17 @@ public class TokenBucketPacketOutQueue : IPixelPacketQueue
 
             if (_isOwner)
             {
-                _totalRateLimit = GuestTotalRateLimit;
-                _chatRateLimit = GuestChatRateLimit;
-            }
-            else
-            {
                 _totalRateLimit = OwnerTotalRateLimit;
                 _chatRateLimit = OwnerChatRateLimit;
             }
+            else
+            {
+                _totalRateLimit = GuestTotalRateLimit;
+                _chatRateLimit = GuestChatRateLimit;
+            }
             
             // Set property, recreate the rate limiters.
-            _logger.LogDebug("Recreating rate limiters. Limits have been changed.");
+            _logger.LogInformation("Recreating rate limiters. Limits have been changed. IsOwner: {IsOwner}", _isOwner);
             
             CreateRateLimiters();
         }
@@ -106,28 +106,29 @@ public class TokenBucketPacketOutQueue : IPixelPacketQueue
     /// </summary>
     private void CreateRateLimiters()
     {
+        var totalReplenishTime = TimeSpan.FromMilliseconds((1000D /  _totalRateLimit) * BurstTotal);
+        var chatReplenishTime = TimeSpan.FromMilliseconds(1000D / _chatRateLimit);
+        
         _totalRateLimiter = new TokenBucketRateLimiter(new TokenBucketRateLimiterOptions()
         {
             QueueLimit = 1,
             TokenLimit = MaxBurst,
-            ReplenishmentPeriod = TimeSpan.FromMilliseconds((1000D /  _totalRateLimit) * BurstTotal),
+            ReplenishmentPeriod = totalReplenishTime,
             TokensPerPeriod = BurstTotal
         });
-        
+
         _chatRateLimiter = new TokenBucketRateLimiter(new TokenBucketRateLimiterOptions()
         {
             QueueLimit = 1,
             TokenLimit = 1,
-            ReplenishmentPeriod = TimeSpan.FromMilliseconds(1000D / _chatRateLimit),
+            ReplenishmentPeriod = chatReplenishTime,
             TokensPerPeriod = 1
         });
         
-        var totalTime = (int) _totalRateLimiter.ReplenishmentPeriod.TotalMilliseconds;
-        _chatReplenishTime = (int) _chatRateLimiter.ReplenishmentPeriod.TotalMilliseconds;
-        
-        _logger.LogDebug($"Total replenish duration {totalTime}");
-        _logger.LogDebug($"Chat replenish duration {_chatReplenishTime}");
-        if (totalTime < 15)
+
+        _logger.LogDebug($"Total replenish duration {totalReplenishTime.TotalMilliseconds}ms ({_totalRateLimit})");
+        _logger.LogDebug($"Chat replenish duration {chatReplenishTime.TotalMilliseconds}ms ({_chatRateLimit})");
+        if (totalReplenishTime.TotalMilliseconds < 15)
         {
             _logger.LogWarning("Queue replenish time is lower then 15ms. The queue will still work, but it can't go faster like this.");
         }
