@@ -7,6 +7,7 @@
       "Default": "Information",
       "PixelPilot.API": "Information",
       "PixelPilot.Client": "Information",
+      "PixelPilot.Client.Messages.": "Debug",
       "PixelPilot.World": "Information",
       "PixelPilot.PacketConverter": "Information",
       "Microsoft": "Warning",
