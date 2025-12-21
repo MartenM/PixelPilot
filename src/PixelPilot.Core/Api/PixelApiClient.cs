@@ -142,16 +142,24 @@ public class PixelApiClient : IDisposable
         return new MappingsResponse(mapping);
     }
 
+    private static List<PixelBlockMeta>? _cachedBlockMetas = null;
+
     /// <summary>
     /// Retrieves block information from the PixelWalker API.
     /// </summary>
     /// <returns></returns>
     public async Task<List<PixelBlockMeta>> GetPixelBlockMeta()
     {
+        if (_cachedBlockMetas != null)
+        {
+            return _cachedBlockMetas;
+        }
+        
         var apiUrl = $"{EndPoints.GameHttpEndpoint}/listblocks";
         _logger.LogInformation($"API Request: {apiUrl}");
 
         var blockMetas = await JsonSerializer.DeserializeAsync<List<PixelBlockMeta>>(await _client.GetStreamAsync(apiUrl));
+        _cachedBlockMetas = blockMetas;
         return blockMetas ?? throw new InvalidOperationException("Didn't get a valid response from the API.");
     }
 
@@ -309,8 +317,6 @@ public class PixelApiClient : IDisposable
         var eventTypes =
             await JsonSerializer.DeserializeAsync<string[]>(await _client.GetStreamAsync(apiUrl), _jsonOptions);
         return eventTypes ?? throw new PixelApiException("An unknown exception occured while attempting to fetch the worlds");
-        
-        return [];
     }
     
     public void Dispose()

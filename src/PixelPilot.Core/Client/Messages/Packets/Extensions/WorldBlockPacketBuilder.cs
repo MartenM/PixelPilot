@@ -12,8 +12,7 @@ public static class WorldBlockPacketBuilder
         var packet = new WorldBlockPlacedPacket()
         {
             Layer = layer,
-            BlockId = blockId,
-            ExtraFields = ByteString.Empty
+            BlockId = blockId
         };
         
         packet.Positions.Add(new PointInteger() { X = x, Y = y });
@@ -28,8 +27,7 @@ public static class WorldBlockPacketBuilder
         var packet = new WorldBlockPlacedPacket()
         {
             Layer = layer,
-            BlockId = blockId,
-            ExtraFields = ByteString.CopyFrom(encodedExtra)
+            BlockId = blockId
         };
         
         packet.Positions.Add(new PointInteger() { X = x, Y = y });
@@ -42,8 +40,7 @@ public static class WorldBlockPacketBuilder
         var packet = new WorldBlockPlacedPacket()
         {
             Layer = layer,
-            BlockId = blockId,
-            ExtraFields = ByteString.Empty
+            BlockId = blockId
         };
 
         foreach (var position in positions)
@@ -61,8 +58,7 @@ public static class WorldBlockPacketBuilder
         var packet = new WorldBlockPlacedPacket()
         {
             Layer = layer,
-            BlockId = blockId,
-            ExtraFields = ByteString.CopyFrom(encodedExtra)
+            BlockId = blockId
         };
         
         foreach (var position in positions)

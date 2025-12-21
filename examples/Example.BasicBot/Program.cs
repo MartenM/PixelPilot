@@ -1,5 +1,6 @@
 ﻿using Example.BasicBot;
 using Microsoft.Extensions.Configuration;
+using Microsoft.VisualBasic.CompilerServices;
 using PixelPilot.Client;
 using PixelPilot.Client.Players.Basic;
 using PixelPilot.Client.World;
@@ -8,6 +9,7 @@ using PixelWalker.Networking.Protobuf.WorldPackets;
 
 // Load the configuration. Don't store your account token in the code :)
 var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
     .AddJsonFile("config.json")
     .AddEnvironmentVariables()
     .Build();
@@ -22,7 +24,8 @@ if (config == null)
 
 // Create a client.
 var client = PixelPilotClient.Builder()
-    .SetToken(config.AccountToken)
+    .SetEmail(config.AccountEmail)
+    .SetPassword(config.AccountPassword)
     .SetAutomaticReconnect(false)
     .SetPrefix("[Bot] ")
     .Build();
@@ -36,10 +39,14 @@ client.OnPacketReceived += playerManager.HandlePacket;
 // Allow it to listen to client updates. Not required!
 var world = new PixelWorld(client);
 client.OnPacketReceived += world.HandlePacket;
-world.OnBlockPlaced += (_, playerId, oldBlock, _) =>
+world.OnBlocksPlaced += (_, blocksEvent) =>
 {
-    if (client.BotId == playerId) return;
-    client.Send(oldBlock.AsPacketOut());
+    if (blocksEvent.UserId == client.BotId)
+    {
+        return;
+    }
+
+    blocksEvent.Cancelled = true;
 };
 
 
@@ -89,7 +96,7 @@ client.OnClientDisconnected += (_, reason) =>
 };
 
 // Connect to a room.
-await client.Connect("rc9916e8db59f8a");
+await client.Connect("r2759ac03e4ff73");
 
 // Don't terminate.
 await client.WaitForDisconnect();

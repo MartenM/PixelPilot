@@ -39,9 +39,9 @@ public class TokenBucketPacketOutQueue : IPixelPacketQueue
 
     private PixelPilotClient _client;
 
-    private TokenBucketRateLimiter _totalRateLimiter;
+    private TokenBucketRateLimiter _totalRateLimiter = null!;
 
-    private TokenBucketRateLimiter _chatRateLimiter;
+    private TokenBucketRateLimiter _chatRateLimiter = null!;
 
     private int _chatReplenishTime;
     

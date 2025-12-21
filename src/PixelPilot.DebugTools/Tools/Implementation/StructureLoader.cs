@@ -9,10 +9,10 @@ public class StructureLoader : CommandLineTool
         var location = fullText;
         var fileData = File.ReadAllText(location);
 
-        var structure = PilotSaveSerializer.Deserialize(fileData);
-        
-        Console.WriteLine("The struct was loaded successfully!");
-        Console.WriteLine($"Total blocks: \t{structure.Blocks.Count}");
-        Console.WriteLine($"Dimensions: \t{structure.Width}x{structure.Height}");
+        // var structure = PilotSaveSerializer.Deserialize(fileData);
+        //
+        // Console.WriteLine("The struct was loaded successfully!");
+        // Console.WriteLine($"Total blocks: \t{structure.Blocks.Count}");
+        // Console.WriteLine($"Dimensions: \t{structure.Width}x{structure.Height}");
     }
 }

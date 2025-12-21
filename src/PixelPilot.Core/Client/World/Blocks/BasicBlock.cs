@@ -11,6 +11,7 @@ namespace PixelPilot.Client.World.Blocks;
 /// Basic blocks only have a block ID.
 /// No special data can be assigned to them.
 /// </summary>
+[Obsolete("Use FlexBlock instead")]
 public class BasicBlock : IPixelBlock
 {
     public BasicBlock(int blockId)
