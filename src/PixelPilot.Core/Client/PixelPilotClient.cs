@@ -423,7 +423,7 @@ public class PixelPilotClient : IPixelPilotClient, IDisposable
     {
         return Task.Run(async () =>
         {
-            while (PacketQueueSize > 0)
+            while (PacketQueueSize > 0 && IsConnected)
                 await Task.Delay(checkTime);
         });
     }
