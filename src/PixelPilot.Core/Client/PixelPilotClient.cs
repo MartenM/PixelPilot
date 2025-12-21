@@ -369,7 +369,7 @@ public class PixelPilotClient : IPixelPilotClient, IDisposable
             // Update rate limit if required
             if (_packetOutQueue != null)
             {
-                var isWorldOwner = init.PlayerProperties.IsWorldOwner && init.WorldMeta.WorldType != WorldMeta.Types.WorldType.Unsaved;
+                var isWorldOwner = init.PlayerProperties.IsWorldOwner;
                 _packetOutQueue.IsOwner = isWorldOwner;
 
                 if (!isWorldOwner)
