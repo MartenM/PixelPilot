@@ -6,6 +6,7 @@ using PixelWalker.Networking.Protobuf.WorldPackets;
 
 namespace PixelPilot.Client.World.Blocks.Types.Effects;
 
+[Obsolete("Use FlexBlock instead")]
 public class ToggleEffectBlock : BasicBlock
 {
     public bool Enabled { get; set; }

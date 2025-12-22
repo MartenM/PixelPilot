@@ -6,6 +6,7 @@ using PixelWalker.Networking.Protobuf.WorldPackets;
 
 namespace PixelPilot.Client.World.Blocks.Types.Effects;
 
+[Obsolete("Use FlexBlock instead")]
 public class TimedEffectBlock : BasicBlock
 {
     public int Duration { get; set; }

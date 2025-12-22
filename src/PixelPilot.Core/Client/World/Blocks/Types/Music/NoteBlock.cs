@@ -5,6 +5,7 @@ using PixelWalker.Networking.Protobuf.WorldPackets;
 
 namespace PixelPilot.Client.World.Blocks.Types.Music;
 
+[Obsolete("Use FlexBlock instead")]
 public class NoteBlock : BasicBlock
 {
     protected byte[] Notes;

@@ -5,6 +5,7 @@ using PixelWalker.Networking.Protobuf.WorldPackets;
 
 namespace PixelPilot.Client.World.Blocks.Types;
 
+[Obsolete("Use FlexBlock instead")]
 public class ColoredBlock : BasicBlock
 {
     public Color PrimaryColor { get; set; }

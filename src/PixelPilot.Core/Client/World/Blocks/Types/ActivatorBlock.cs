@@ -5,6 +5,7 @@ using PixelWalker.Networking.Protobuf.WorldPackets;
 
 namespace PixelPilot.Client.World.Blocks.Types;
 
+[Obsolete("Use FlexBlock instead")]
 public class ActivatorBlock : BasicBlock
 {
     public int SwitchId { get; set; }

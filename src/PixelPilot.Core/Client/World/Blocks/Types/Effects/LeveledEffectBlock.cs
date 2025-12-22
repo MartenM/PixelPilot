@@ -6,6 +6,7 @@ using PixelWalker.Networking.Protobuf.WorldPackets;
 
 namespace PixelPilot.Client.World.Blocks.Types.Effects;
 
+[Obsolete("Use FlexBlock instead")]
 public class LeveledEffectBlock : BasicBlock
 {
     public int Level { get; set; }
