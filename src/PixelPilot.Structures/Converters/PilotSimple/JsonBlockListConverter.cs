@@ -96,7 +96,7 @@ public class JsonBlockListConverter : JsonConverter<List<IPlacedBlock>>
         // from order to the correct names.
         // Well that sucks pretty hard you know.
         var mappings = GetLegacyMapping();
-        var mapping = mappings.FirstOrDefault(m => m.PaletteId == ToSnakeCase(block.ToString()));
+        var mapping = mappings[ToSnakeCase(block.ToString())];
         if (mapping == null)
         {
             throw new PixelApiException($"Could not find mapping for {block.ToString()}. Translated to: {ToSnakeCase(block.ToString())}");
@@ -109,6 +109,12 @@ public class JsonBlockListConverter : JsonConverter<List<IPlacedBlock>>
             {
                 dict.Add(mapping.Fields[0].Name, extra[1]);
                 dict.Add(mapping.Fields[1].Name, extra[0]);
+                break;
+            }
+            case PixelBlock.PortalWorld:
+            {
+                dict.Add(mapping.Fields[0].Name, extra[0]);
+                dict.Add(mapping.Fields[1].Name, extra[1].ToString());
                 break;
             }
             default:
@@ -124,8 +130,8 @@ public class JsonBlockListConverter : JsonConverter<List<IPlacedBlock>>
         return new FlexBlock((int)block, dict);
     }
 
-    private static List<PixelBlockMeta>? _legacyMapping = null;
-    private List<PixelBlockMeta> GetLegacyMapping()
+    private static Dictionary<string, PixelBlockMeta>? _legacyMapping = null;
+    private Dictionary<string, PixelBlockMeta> GetLegacyMapping()
     {
         if (_legacyMapping != null)
         {
@@ -140,7 +146,13 @@ public class JsonBlockListConverter : JsonConverter<List<IPlacedBlock>>
         var text = reader.ReadToEnd();
         
         var data = JsonSerializer.Deserialize<List<PixelBlockMeta>>(text) ?? throw new PixelApiException("Could not find the required legacy_mapping.json");
-        _legacyMapping = data;
+        
+        _legacyMapping = new  Dictionary<string, PixelBlockMeta>();
+        foreach (var meta in data)
+        {
+            _legacyMapping.Add(ToSnakeCase(meta.PaletteId), meta);
+        }
+        
         return _legacyMapping;
     }
     

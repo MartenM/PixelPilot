@@ -1307,12 +1307,11 @@
       },
       {
         "Name": "spawn_id",
-        "Type": "Int32",
+        "Type": "String",
         "Description": "The spawn point ID in the target world",
-        "MinValue": 0,
-        "MaxValue": 999,
-        "DefaultValue": 0,
-        "Required": false
+        "DefaultValue": "0",
+        "Required": false,
+        "Pattern": "^[a-zA-Z0-9]{1,5}$"
       }
     ],
     "LegacyMorphs": {
