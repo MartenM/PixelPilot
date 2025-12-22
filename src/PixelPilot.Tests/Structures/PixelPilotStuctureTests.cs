@@ -32,7 +32,13 @@ public class PixelPilotStuctureTests
         string folder = Path.Combine(TestContext.CurrentContext.TestDirectory, TestStructuresFolder);
         foreach (var file in Directory.GetFiles(folder, "*.json"))
         {
-            yield return Path.GetFileName(file);
+            var name = Path.GetFileName(file);
+            if (name.StartsWith("DISABLED"))
+            {
+                continue;
+            }
+            
+            yield return name;
         }
     }
     
@@ -124,12 +130,20 @@ public class PixelPilotStuctureTests
                 break;
             }
         }
-        
+
+        var detailedError =
+            remaining.Select(rb =>
+            {
+                var found = _world.BlockAt(rb.Layer, rb.X, rb.Y);
+                var equal = rb.Block.Equals(found);
+                return
+                    $"Expected: {rb.Block.Block} Found: {found.Block} Equals: {equal}";
+            });
         
         Assert.Multiple(() =>
         {
             Assert.That(packetsSend, Is.Not.EqualTo(0), $"Safety check: At least placed some blocks.");
-            Assert.That(remaining.Count, Is.EqualTo(0), $"There are {remaining.Count} remaining blocks. Types: {string.Join(", ", remaining.Select(rb => rb.Block.Block.ToString()).Distinct().ToList())}");
+            Assert.That(remaining.Count, Is.EqualTo(0), $"There are {remaining.Count} remaining blocks. Details:\n {string.Join("\n", detailedError)}");
             Assert.That(_client.IsConnected, Is.True, $"Client should not have disconnected.");
             Assert.That(_client.LastException, Is.Null, $"Client should have not generated any issues.");
         });

@@ -76,8 +76,13 @@ public class BinaryFieldConverter
     /// <param name="fieldType">The type of data to read.</param>
     /// <returns>The data read from the BinaryReader.</returns>
     /// <exception cref="Exception">Thrown when the provided fieldType is not supported.</exception>
-    public static dynamic ReadTypeLe(BinaryReader reader, PacketFieldType fieldType)
+    public static dynamic? ReadTypeLe(BinaryReader reader, PacketFieldType fieldType)
     {
+        if (reader.BaseStream.Position >= reader.BaseStream.Length)
+        {
+            return null;
+        }
+        
         switch (fieldType)
         {
             case PacketFieldType.String:

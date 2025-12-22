@@ -83,51 +83,74 @@ public class JsonBlockListConverter : JsonConverter<List<IPlacedBlock>>
     
     public FlexBlock LegacyStructureSerializer(BinaryReader reader, PixelBlock block)
     {
-        // We want to construct a PixelBlock.
-        // First we need to know what type it is.
-        // Then we can fill in the rest.
-        var blockType = block.GetBlockType();
-        var extraFields = blockType.GetPacketFieldTypes();
-
-        // Read the extra fields
-        var extra = extraFields.Select(fieldT => BinaryFieldConverter.ReadTypeLe(reader, fieldT)).ToList();
-
-        // Now since it's not order based anymore we need to convert
-        // from order to the correct names.
-        // Well that sucks pretty hard you know.
-        var mappings = GetLegacyMapping();
-        var mapping = mappings[ToSnakeCase(block.ToString())];
-        if (mapping == null)
+        try
         {
-            throw new PixelApiException($"Could not find mapping for {block.ToString()}. Translated to: {ToSnakeCase(block.ToString())}");
-        }
-        
-        var dict = new Dictionary<string, object>();
-        switch (block)
-        {
-            case PixelBlock.SwitchLocalActivator:
+            // We want to construct a PixelBlock.
+            // First we need to know what type it is.
+            // Then we can fill in the rest.
+            var blockType = block.GetBlockType();
+            var extraFields = blockType.GetPacketFieldTypes();
+
+            // Read the extra fields
+            var extra = extraFields.Select(fieldT => BinaryFieldConverter.ReadTypeLe(reader, fieldT)).ToList();
+
+            // Now since it's not order based anymore we need to convert
+            // from order to the correct names.
+            // Well that sucks pretty hard you know.
+            var mappings = GetLegacyMapping();
+            var mapping = mappings[ToSnakeCase(block.ToString())];
+            if (mapping == null)
             {
-                dict.Add(mapping.Fields[0].Name, extra[1]);
-                dict.Add(mapping.Fields[1].Name, extra[0]);
-                break;
+                throw new PixelApiException(
+                    $"Could not find mapping for {block.ToString()}. Translated to: {ToSnakeCase(block.ToString())}");
             }
-            case PixelBlock.PortalWorld:
+
+            var dict = new Dictionary<string, object>();
+            switch (block)
             {
-                dict.Add(mapping.Fields[0].Name, extra[0]);
-                dict.Add(mapping.Fields[1].Name, extra[1].ToString());
-                break;
-            }
-            default:
-            {
-                for (int i = 0; i < mapping.Fields.Count; i++)
+                case PixelBlock.SwitchLocalActivator:
                 {
-                    dict.Add(mapping.Fields[i].Name, extra[i]);
+                    dict.Add(mapping.Fields[0].Name, extra[1]);
+                    dict.Add(mapping.Fields[1].Name, extra[0]);
+                    break;
                 }
-                break;
-            }
-        }
+                case PixelBlock.PortalWorld:
+                {
+                    dict.Add(mapping.Fields[0].Name, extra[0]);
+                    dict.Add(mapping.Fields[1].Name, extra[1]?.ToString());
+                    break;
+                }
+                case PixelBlock.ToolPortalWorldSpawn:
+                {
+                    if (extra[0] != null)
+                    {
+                        dict.Add(mapping.Fields[0].Name, extra[0]);
+                    }
+                    else
+                    {
+                        dict.Add(mapping.Fields[0].Name, "0");
+                    }
+                    
+                    break;
+                }
+                default:
+                {
+                    for (int i = 0; i < mapping.Fields.Count; i++)
+                    {
+                        dict.Add(mapping.Fields[i].Name, extra[i]);
+                    }
 
-        return new FlexBlock((int)block, dict);
+                    break;
+                }
+            }
+
+            return new FlexBlock((int)block, dict);
+        }
+        catch (Exception ex)
+        {
+            throw new PixelApiException(
+                $"Could not legacy serialize for {block.ToString()}. Translated to: {ToSnakeCase(block.ToString())}");
+        }
     }
 
     private static Dictionary<string, PixelBlockMeta>? _legacyMapping = null;
@@ -155,8 +178,13 @@ public class JsonBlockListConverter : JsonConverter<List<IPlacedBlock>>
         
         return _legacyMapping;
     }
+
+    private static Dictionary<string, string> _predefined = new Dictionary<string, string>()
+    {
+        { "ClayTileXBg", "clay_tile_x_bg" },
+    };
     
-    private static Dictionary<string, string> SnakeCache = new Dictionary<string, string>();
+    private static readonly Dictionary<string, string> SnakeCache = new Dictionary<string, string>();
     private static string ToSnakeCase(string input)
     {
         if (string.IsNullOrWhiteSpace(input))
@@ -167,10 +195,16 @@ public class JsonBlockListConverter : JsonConverter<List<IPlacedBlock>>
             return snakeCase;
         }
 
+        if (_predefined.TryGetValue(input, out snakeCase))
+        {
+            SnakeCache.Add(input, snakeCase);
+            return snakeCase;
+        }
+
         string result = input;
 
         // Insert underscore between lower-to-upper (e.g., "myVar" → "my_Var")
-        result = Regex.Replace(result, "([a-z0-9])([A-Z])", "$1_$2");
+        result = Regex.Replace(input, "(?<!^)(?=[A-Z])", "_");
 
         // Insert underscore between letter–number (e.g., "Value1" → "Value_1")
         result = Regex.Replace(result, "([A-Za-z])([0-9])", "$1_$2");
@@ -179,7 +213,7 @@ public class JsonBlockListConverter : JsonConverter<List<IPlacedBlock>>
         
         result = result.Replace("2_px", "2px");
         result = result.Replace("1_px", "1px");
-        
+
         SnakeCache.Add(input, result);
         return result;
     }

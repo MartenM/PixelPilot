@@ -172,7 +172,6 @@ public class PixelPilotClient : IPixelPilotClient, IDisposable
         });
 
         // Start the websocket. Set connected to True.
-        
         await _socketClient.Start();
 
         var timeout = Task.Delay(TimeSpan.FromSeconds(5));

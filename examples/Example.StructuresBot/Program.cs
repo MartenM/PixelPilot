@@ -71,6 +71,28 @@ world.OnBlocksPlaced += async (sender, blocksEvent) =>
         }
         client.SendRange(replace.ToChunkedPackets());
     }
+
+    blocksEvent.Cancelled = true;
+
+    _ = Task.Run(async () =>
+    {
+        await Task.Delay(250);
+        var first = new List<IPlacedBlock>();
+        foreach (var pos in blocksEvent.Positions)
+        {
+            first.Add(new PlacedBlock(pos.X, pos.Y, blocksEvent.Layer, new FlexBlock(PixelBlock.BasicGray)));
+        }
+        client.SendRange(first.ToChunkedPackets());
+        
+        await Task.Delay(500);
+        var replace = new List<IPlacedBlock>();
+        foreach (var pos in blocksEvent.Positions)
+        {
+            replace.Add(new PlacedBlock(pos.X, pos.Y, blocksEvent.Layer, blocksEvent.NewBlock));
+        }
+
+        client.SendRange(replace.ToChunkedPackets());
+    });
 };
 
 // Setup some basic commands. Only allow me to execute them.
@@ -116,11 +138,7 @@ client.OnPacketReceived += (_, packet) =>
             {
                 var blocks = new List<IPlacedBlock>()
                 {
-                    new PlacedBlock(0, 0, WorldLayer.Foreground, new FlexBlock(PixelBlock.BasicCyan)),
-                    new PlacedBlock(1, 0, WorldLayer.Foreground, new FlexBlock(PixelBlock.BasicCyan)),
-                    new PlacedBlock(2, 0, WorldLayer.Foreground, new FlexBlock(PixelBlock.BasicCyan)),
-                    new PlacedBlock(3, 0, WorldLayer.Foreground, new FlexBlock(PixelBlock.BasicCyan)),
-                    new PlacedBlock(4, 0, WorldLayer.Foreground, new FlexBlock(PixelBlock.BasicCyan)),
+                    
                 };
                 var blockPacket = blocks.ToChunkedPackets();
                 

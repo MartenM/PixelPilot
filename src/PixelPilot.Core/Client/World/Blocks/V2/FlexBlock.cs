@@ -90,7 +90,11 @@ public class FlexBlock : IPixelBlock
             case byte[] bytes:
                 proto.ByteArrayValue = Google.Protobuf.ByteString.CopyFrom(bytes);
                 break;
-
+            
+            // Special case: null
+            case null:
+                break;
+            
             default:
                 throw new ArgumentException(
                     $"Unsupported value type: {value?.GetType().FullName}"
