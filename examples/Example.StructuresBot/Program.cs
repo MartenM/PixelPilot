@@ -95,12 +95,9 @@ client.OnPacketReceived += (_, packet) =>
             case "exec":
                 client.SendChat($"/{string.Join(" ", args.Skip(1))}", prefix: false);
                 break;
-            case "brrt":
-                client.Send(new PlacedBlock(0, 0, WorldLayer.Foreground, new FlexBlock(PixelBlock.PortalWorld, new Dictionary<string, object>()
-                {
-                    ["target"] = "asdf",
-                    ["spawn_id"] = "1"
-                })).AsPacketOut());
+            case "at":
+                var blockAt = world.BlockAt(WorldLayer.Foreground, player.BlockX, player.BlockY);
+                client.SendChat($"{player.BlockX} {player.BlockY} It's an: {blockAt.Block.ToString()}");
                 break;
             case "p1":
                 point1 = new Point(player.BlockX, player.BlockY);
