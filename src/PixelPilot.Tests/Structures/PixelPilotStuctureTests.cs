@@ -81,7 +81,7 @@ public class PixelPilotStuctureTests
     }
 
     [TestCaseSource(nameof(TestStructureFiles))]
-    [Timeout(600000)]
+    [Timeout(60000)]
     public async Task TestStucturePasting(string fileName)
     {
         // Load file contents
@@ -92,8 +92,9 @@ public class PixelPilotStuctureTests
         // Create a client with an unsaved world for pasting test.
         var height = (int)Math.Ceiling((double)structure.Height / 25) * 25;
         var width = (int)Math.Ceiling((double)structure.Width / 25) * 25;
-        
-        await _client.Connect($"pixelpilot_nunit_{_random.Next(1000)}{1000}", new JoinData()
+
+        var worldId = $"pixelpilot_nunit_{_random.Next(1000)}{1000}";
+        await _client.Connect(worldId, new JoinData()
         {
             WorldHeight = height,
             WorldWidth = width,
