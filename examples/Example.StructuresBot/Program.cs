@@ -62,12 +62,15 @@ world.OnBlocksPlaced += async (sender, blocksEvent) =>
 {
     if (client.BotId == blocksEvent.UserId) return;
 
-    // if (blocksEvent.NewBlock.Block.ToString().Contains("Red"))
-    // {
-    //     // No red blocks allowed.
-    //     client.SendChat("You shall not place red blocks!");
-    //     blocksEvent.Cancelled = true;
-    // }
+    if (blocksEvent.NewBlock.Block == PixelBlock.CrownGold)
+    {
+        var replace = new List<IPlacedBlock>();
+        foreach (var pos in blocksEvent.Positions)
+        {
+            replace.Add(new PlacedBlock(pos.X, pos.Y, blocksEvent.Layer, new FlexBlock(PixelBlock.GildedGoldBasic)));
+        }
+        client.SendRange(replace.ToChunkedPackets());
+    }
 };
 
 // Setup some basic commands. Only allow me to execute them.
@@ -78,8 +81,6 @@ client.OnPacketReceived += (_, packet) =>
     
     IPixelPlayer? player = playerManager.GetPlayer(playerId.Value);
     if (player == null) return;
-
-    
 
     // Simple command structures.
     if (packet is PlayerChatPacket chat)
@@ -93,6 +94,13 @@ client.OnPacketReceived += (_, packet) =>
         {
             case "exec":
                 client.SendChat($"/{string.Join(" ", args.Skip(1))}", prefix: false);
+                break;
+            case "brrt":
+                client.Send(new PlacedBlock(0, 0, WorldLayer.Foreground, new FlexBlock(PixelBlock.PortalWorld, new Dictionary<string, object>()
+                {
+                    ["target"] = "asdf",
+                    ["spawn_id"] = "1"
+                })).AsPacketOut());
                 break;
             case "p1":
                 point1 = new Point(player.BlockX, player.BlockY);
@@ -197,7 +205,12 @@ client.OnPacketReceived += (_, packet) =>
     }
 };
 
-await client.Connect("8l04w8nv2ey451v");
+await client.Connect("test-room-id", new JoinData()
+{
+    WorldHeight = 25,
+    WorldWidth = 25,
+    WorldTitle = "TEST!"
+});
 await world.InitTask;
 
 client.SendChat("Connected!");

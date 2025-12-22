@@ -65,10 +65,14 @@ world.OnBlocksPlaced += async (sender, blocksEvent) =>
 {
     if (client.BotId == blocksEvent.UserId) return;
 
-    var replace = new List<IPlacedBlock>();
-    foreach (var pos in blocksEvent.Positions)
+    if (blocksEvent.NewBlock.Block == PixelBlock.CrownGold)
     {
-        replace.Add(new PlacedBlock(pos.X, pos.Y, blocksEvent.Layer, new FlexBlock(PixelBlock.GildedGoldBasic)));
+        var replace = new List<IPlacedBlock>();
+        foreach (var pos in blocksEvent.Positions)
+        {
+            replace.Add(new PlacedBlock(pos.X, pos.Y, blocksEvent.Layer, new FlexBlock(PixelBlock.GildedGoldBasic)));
+        }
+        client.SendRange(replace.ToChunkedPackets());
     }
 };
 ```
