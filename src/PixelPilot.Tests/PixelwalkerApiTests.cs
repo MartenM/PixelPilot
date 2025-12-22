@@ -86,4 +86,11 @@ public class PixelwalkerApiTests
         
         Assert.That(minimap1, Is.EqualTo(minimap2));
     }
+    
+    [Test]
+    public async Task TestGetGameVersion()
+    {
+        var version = await _client.GetGameVersion();
+        var i = 0;
+    }
 }

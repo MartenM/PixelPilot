@@ -318,6 +318,25 @@ public class PixelApiClient : IDisposable
             await JsonSerializer.DeserializeAsync<string[]>(await _client.GetStreamAsync(apiUrl), _jsonOptions);
         return eventTypes ?? throw new PixelApiException("An unknown exception occured while attempting to fetch the worlds");
     }
+
+    /// <summary>
+    /// Get the game version as described by the server.
+    /// </summary>
+    /// <returns>Game version in format yyyy.mm.update</returns>
+    /// <exception cref="PixelApiException"></exception>
+    public async Task<string> GetGameVersion()
+    {
+        var apiUrl = $"{EndPoints.GameHttpEndpoint}/version";
+        _logger.LogInformation($"API Request: {apiUrl}");
+        
+        var response = await JsonSerializer.DeserializeAsync<Dictionary<string, string>>(await _client.GetStreamAsync(apiUrl), _jsonOptions);
+        if (response == null)
+        {
+            throw new PixelApiException("An unknown exception occured while attempting to fetch the worlds");
+        }
+
+        return response["version"];
+    }
     
     public void Dispose()
     {
