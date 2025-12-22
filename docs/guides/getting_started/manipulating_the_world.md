@@ -11,6 +11,9 @@ To parse the block packets can be quite complicated, so if you don't want to do 
 
 To get started with the `PixelWorld` class, create an instance of it and ensure it receives packet updates from the client.
 
+> [!WARNING]
+> Setup your world and `client.OnPacketReceived` handlers **BEFORE** connecting the bot to your world.
+
 ```csharp
 // Create a PixelWorld class and attach the client to it.
 // Allow it to listen to client updates. Not required!
@@ -25,6 +28,7 @@ The world has several layers. Each layer is used for a specific type of block. C
 |-------|--------------|-----------------------|
 | 0     | Background   | WorldLayer.Background |
 | 1     | Foreground   | WorldLayer.Foreground |
+| 2     | Overlay   | WorldLayer.Overlay |
 
 In order to get a block at a specific coordinate and layer you can use the following snippet.
 We then check if it's a coin. Note that the `block.Block` gives us an enum. This enum can be cast to an INT if required.
@@ -36,27 +40,17 @@ Console.WriteLine($"It is a: {worldBlock.Block} with ID {block.BlockId}");
 
 ### Blocks with additional data.
 Some blocks contain additional data. Think about portals, gates, signs, etc.
-To access this data, you can simply cast the IPixelBlock to it's desired type. In this example we will check for portal block.
+To access this data, you can simply cast the IPixelBlock a FlexBlock. This is the underlying type of all blocks. In the future better support for blocks will be added again.
 ```csharp
 var worldBlock = world.BlockAt(layer, x, y);
-if (worldBlock is PortalBlock portalBlock)
-{
-    Console.WriteLine($"It is a portal with target {portalBlock.TargetId}");
-}
-else
-{
-    Console.WriteLine("The block is not a portal.");
-}
+var flexBlock = (FlexBlock) worldBlock;
 ```
-
-> [!TIP]
-> The 'is' keyword is used to cast the object. For more information about casting check [here](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/types/casting-and-type-conversions)
 
 ### Sending blocks
 In order to send your own blocks you can simply create an instance of the class.
 A block placement also needs a location, so we wrap the block with the `PlacedBlock` class.
 ```csharp
-BasicBlock block = new BasicBlock(PixelBlock.CrownGold);
+var block = new FlexBlock(PixelBlock.CrownGold);
 PlacedBlock placedBlock = new PlacedBlock(x, y, WorldLayer.Foreground, block);
 client.Send(placedBlock.AsPacketOut());
 ```
@@ -67,12 +61,14 @@ Lets say we want to disable people from placing a crown block. In order to do th
 The following code snippet can be used to achieve the actions we want.
 
 ```csharp
-world.OnBlockPlaced += (_, playerId, oldBlock, newBlock) =>
+world.OnBlocksPlaced += async (sender, blocksEvent) =>
 {
-    // Ignore our own bot
-    if (client.BotId == playerId) return;
+    if (client.BotId == blocksEvent.UserId) return;
 
-    if (newBlock.Block.Block != PixelBlock.Crown) return;
-    client.Send(oldBlock.AsPacketOut());
+    var replace = new List<IPlacedBlock>();
+    foreach (var pos in blocksEvent.Positions)
+    {
+        replace.Add(new PlacedBlock(pos.X, pos.Y, blocksEvent.Layer, new FlexBlock(PixelBlock.GildedGoldBasic)));
+    }
 };
 ```

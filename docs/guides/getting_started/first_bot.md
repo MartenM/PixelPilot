@@ -24,8 +24,8 @@ var client = PixelPilotClient.Builder()
 
 # Create a bot by using email/password
 var client = PixelPilotClient.Builder()
-    .SetEmail(config.AccountEmail)
-    .SetPassword(config.AccountPassword)
+    .SetEmail("your-email@example.com")
+    .SetPassword("super-secret-password")
     .SetAutomaticReconnect(false)
     .Build();
 ```
