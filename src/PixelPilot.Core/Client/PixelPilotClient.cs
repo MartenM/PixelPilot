@@ -31,6 +31,7 @@ public class PixelPilotClient : IPixelPilotClient, IDisposable
     private readonly ILogger _logger = LogManager.GetLogger("Client");
     public readonly PixelApiClient ApiClient;
     private WebsocketClient? _socketClient;
+    public TimeSpan ConnectionTimeout { get; private set; }
     
     public string? BotPrefix { get; set; } = null;
     private IPixelPacketQueue? _packetOutQueue;
@@ -38,6 +39,7 @@ public class PixelPilotClient : IPixelPilotClient, IDisposable
     public bool DisposeApi { get; set; } = true;
     
     public Exception? LastException { get; private set; }
+    
 
     /// <summary>
     /// Indicates if the client will try to automatically reconnect if the
@@ -98,11 +100,12 @@ public class PixelPilotClient : IPixelPilotClient, IDisposable
     public event ClientDisconnected? OnClientDisconnected;
     public delegate void ClientDisconnected(object sender, string? reason);
     
-    public PixelPilotClient(PixelApiClient apiClient, bool automaticReconnect, string? botPrefix, Func<PixelPilotClient, IPixelPacketQueue?> configurePacketQueue)
+    public PixelPilotClient(PixelApiClient apiClient, bool automaticReconnect, string? botPrefix, Func<PixelPilotClient, IPixelPacketQueue?> configurePacketQueue, TimeSpan connectionTimeout)
     {
         ApiClient = apiClient;
         AutomaticReconnect = automaticReconnect;
         BotPrefix = botPrefix;
+        ConnectionTimeout = connectionTimeout;
 
         _packetOutQueue = configurePacketQueue.Invoke(this);
     }
@@ -142,7 +145,7 @@ public class PixelPilotClient : IPixelPilotClient, IDisposable
             _socketClient = new WebsocketClient(new Uri(gameRoomUrl));
         }
         
-        _socketClient.ReconnectTimeout = TimeSpan.FromSeconds(5000);
+        _socketClient.ReconnectTimeout = ConnectionTimeout;
         _socketClient.IsReconnectionEnabled = AutomaticReconnect;
         _socketClient.ReconnectionHappened.Subscribe(info =>
         {
@@ -174,7 +177,7 @@ public class PixelPilotClient : IPixelPilotClient, IDisposable
         // Start the websocket. Set connected to True.
         await _socketClient.Start();
 
-        var timeout = Task.Delay(TimeSpan.FromSeconds(5));
+        var timeout = Task.Delay(ConnectionTimeout);
         var completedTask = await Task.WhenAny(_connectCompletion.Task, timeout);
         
         if (completedTask == _connectCompletion.Task && IsConnected)
@@ -379,13 +382,23 @@ public class PixelPilotClient : IPixelPilotClient, IDisposable
             
             // We connected!
             IsConnected = true;
-            _connectCompletion.TrySetResult(true);
             
             InvokeWithTimings("ClientConnected", () =>
             {
                 _packetOutQueue?.Start();
                 return Task.Run(() => OnClientConnected?.Invoke(this));
             }).Wait();
+            
+            InvokeWithTimings("PacketReceived", () =>
+            {
+                return Task.Run(() => OnPacketReceived?.Invoke(this, packet));
+            }).Wait();
+            
+            // Set this one after firing the init packet to all handlers.
+            // This ensures that we do not create any confusion
+            // about handlers not being setup yet (like world).
+            _connectCompletion.TrySetResult(true);
+            return;
         }
 
         // Fire the event to be used by the API users.

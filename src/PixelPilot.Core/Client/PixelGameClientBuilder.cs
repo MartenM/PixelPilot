@@ -11,6 +11,7 @@ public class PixelGameClientBuilder
 
     public PixelApiClient? ApiClient;
     public bool AutomaticReconnect { get; set; } = false;
+    public TimeSpan ConnectTimeout { get; set; } = TimeSpan.FromSeconds(5);
 
     public string? Prefix { get; set; }
 
@@ -48,6 +49,17 @@ public class PixelGameClientBuilder
     public PixelGameClientBuilder SetPrefix(string? prefix)
     {
         Prefix = prefix;
+        return this;
+    }
+
+    /// <summary>
+    /// Used to set the connection timeout for both the socket and connect process.
+    /// </summary>
+    /// <param name="timeout"></param>
+    /// <returns></returns>
+    public PixelGameClientBuilder SetConnectTimeout(TimeSpan timeout)
+    {
+        ConnectTimeout = timeout;
         return this;
     }
 
@@ -92,6 +104,6 @@ public class PixelGameClientBuilder
             }
         }
         
-        return new PixelPilotClient(ApiClient, AutomaticReconnect, Prefix, ConfigurePacketQueue);
+        return new PixelPilotClient(ApiClient, AutomaticReconnect, Prefix, ConfigurePacketQueue, ConnectTimeout);
     }
 }

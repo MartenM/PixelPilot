@@ -203,7 +203,6 @@ await client.Connect("test-room-id", new JoinData()
     WorldWidth = 25,
     WorldTitle = "TEST!"
 });
-await world.InitTask;
 
 client.SendChat("Connected!");
 await client.WaitForDisconnect();
