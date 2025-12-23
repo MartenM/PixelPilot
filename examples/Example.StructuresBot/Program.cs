@@ -11,14 +11,11 @@ using PixelPilot.Client.Players;
 using PixelPilot.Client.Players.Basic;
 using PixelPilot.Client.World;
 using PixelPilot.Client.World.Blocks.Placed;
-using PixelPilot.Client.World.Blocks.Types;
 using PixelPilot.Client.World.Blocks.V2;
 using PixelPilot.Client.World.Constants;
 using PixelPilot.Common.Logging;
 using PixelPilot.Structures;
 using PixelPilot.Structures.Converters;
-using PixelPilot.Structures.Converters.Pilot2;
-using PixelPilot.Structures.Converters.PilotSimple;
 using PixelPilot.Structures.Extensions;
 using PixelWalker.Networking.Protobuf.WorldPackets;
 
@@ -73,26 +70,6 @@ world.OnBlocksPlaced += async (sender, blocksEvent) =>
     }
 
     blocksEvent.Cancelled = true;
-
-    _ = Task.Run(async () =>
-    {
-        await Task.Delay(250);
-        var first = new List<IPlacedBlock>();
-        foreach (var pos in blocksEvent.Positions)
-        {
-            first.Add(new PlacedBlock(pos.X, pos.Y, blocksEvent.Layer, new FlexBlock(PixelBlock.BasicGray)));
-        }
-        client.SendRange(first.ToChunkedPackets());
-        
-        await Task.Delay(500);
-        var replace = new List<IPlacedBlock>();
-        foreach (var pos in blocksEvent.Positions)
-        {
-            replace.Add(new PlacedBlock(pos.X, pos.Y, blocksEvent.Layer, blocksEvent.NewBlock));
-        }
-
-        client.SendRange(replace.ToChunkedPackets());
-    });
 };
 
 // Setup some basic commands. Only allow me to execute them.
