@@ -77,7 +77,7 @@ public static class WorldExtensions
         List<IPlacedBlock> difference = new();
         if (structure.Width + x > world.Width || structure.Height + y > world.Height)
             throw new PixelGameException(
-                "Attempted to a get the difference between a structure and world, but the structure goes outside the world!");
+                $"Attempted to a get the difference between a structure and world, but the structure goes outside the world! Structure size: {structure.Width}x{structure.Height} World size: {world.Width}x{world.Height}");
         
         foreach (var block in structure.BlocksWithEmpty)
         {
