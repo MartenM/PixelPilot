@@ -14,7 +14,7 @@ public class Player : IPixelPlayer
         Id = packet.Properties.PlayerId;
         AccountId = packet.Properties.AccountId;
         Username = packet.Properties.Username;
-        Face = packet.Properties.Face;
+        Smiley = packet.Properties.SmileyId;
         Role = packet.Properties.Role;
         CanGod = packet.Properties.Rights.CanGod;
         CanEdit = packet.Properties.Rights.CanEdit;
@@ -29,12 +29,12 @@ public class Player : IPixelPlayer
         Modmode = packet.WorldState.Modmode;
     }
 
-    public Player(int id, string accountId, string username, int face, string role, Color chatColor, double x, double y, int coins, int blueCoins, int deaths, bool godmode, bool modmode, bool hasCrown, bool canGod, bool canEdit)
+    public Player(int id, string accountId, string username, string smiley, string role, Color chatColor, double x, double y, int coins, int blueCoins, int deaths, bool godmode, bool modmode, bool hasCrown, bool canGod, bool canEdit)
     {
         Id = id;
         AccountId = accountId;
         Username = username;
-        Face = face;
+        Smiley = smiley;
         Role = role;
         ChatColor = chatColor;
         X = x;
@@ -52,7 +52,7 @@ public class Player : IPixelPlayer
     public int Id { get; }
     public string AccountId { get; }
     public string Username { get;  }
-    public int Face { get; set; }
+    public string Smiley { get; set; }
     public bool IsAdmin => Role.Equals("admin");
     public string Role { get; }
     public Color ChatColor { get; set; }

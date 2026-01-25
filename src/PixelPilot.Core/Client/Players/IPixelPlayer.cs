@@ -19,7 +19,7 @@ public interface IPixelPlayer
     /// The display name of the player.
     /// </summary>
     public string Username { get;  }
-    public int Face { get; set; }
+    public string Smiley { get; set; }
     public bool IsAdmin { get; }
     public string Role { get; }
     
