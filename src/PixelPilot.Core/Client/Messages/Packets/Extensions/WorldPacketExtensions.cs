@@ -64,7 +64,8 @@ public static class WorldPacketExtensions
         {
             case PlayerMovedPacket:
             case PlayerChatPacket:
-            case PlayerFacePacket:
+            case PlayerSmileyPacket:
+            case PlayerAuraPacket:
             case PlayerLocalSwitchChangedPacket:
             case PlayerLocalSwitchResetPacket:
             case GlobalSwitchChangedPacket:
