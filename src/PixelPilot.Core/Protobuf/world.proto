@@ -3,7 +3,6 @@ package WorldPackets;
 
 option csharp_namespace = "PixelWalker.Networking.Protobuf.WorldPackets";
 
-
 message WorldPacket {
   oneof packet {
     /* Ping packet */
@@ -19,7 +18,8 @@ message WorldPacket {
     PlayerChatPacket player_chat_packet = 6;
     PlayerUpdateRightsPacket player_update_rights_packet = 7;
     PlayerMovedPacket player_moved_packet = 8;
-    PlayerFacePacket player_face_packet = 9;
+    PlayerSmileyPacket player_smiley_packet = 9;
+    PlayerAuraPacket player_aura_packet = 45;
     PlayerGodModePacket player_god_mode_packet = 10;
     PlayerModModePacket player_mod_mode_packet = 11;
     PlayerEnterSecretEditKeyPacket player_enter_secret_edit_key_packet = 12;
@@ -46,6 +46,7 @@ message WorldPacket {
     WorldMetaUpdatePacket world_meta_update_packet = 28;
     WorldBlockPlacedPacket world_block_placed_packet = 29;
     WorldBlockFilledPacket world_block_filled_packet = 30;
+    WorldLabelsUpdatePacket world_labels_update_packet = 44;
 
     /* MISC */
     OldChatMessagesPacket old_chat_messages_packet = 31;
@@ -85,9 +86,17 @@ message GlobalSwitchResetPacket {
 }
 
 message SystemMessagePacket {
+  enum Type {
+    CHAT = 0;
+    TOAST = 1;
+    DIALOG = 2;
+  }
+
   string title = 1;
   string message = 2;
-  bool is_dialog = 3;
+  Type type = 3;
+  bool is_broadcast = 4;
+  optional string icon = 5;
 }
 
 message OldChatMessagesPacket {
@@ -168,6 +177,9 @@ message WorldMetaUpdatePacket {
   WorldMeta meta = 1;
 }
 
+message WorldLabelsUpdatePacket {
+  repeated ProtoTextLabel text_labels = 1;
+}
 
 /*
  * PLAYER PACKETS
@@ -188,7 +200,7 @@ message PlayerInitPacket {
   PlayerWoot player_woot = 6;
 
   // Text labels to display in the world
-  repeated TextLabel text_labels = 7;
+  repeated ProtoTextLabel text_labels = 7;
 
   // Structured world data format
   repeated BlockDataInfo block_data_palette = 8;
@@ -198,6 +210,9 @@ message PlayerInitPacket {
 
   // Elapsed ticks since game started (100 ticks per second) - clients use this as reference point (0)
   int64 game_elapsed_time = 12;
+
+  // Owned shop item ids for the connecting player (e.g. "smiley_frustrated", "aura_pinwheel")
+  repeated string owned_items = 13;
 }
 
 // Information about a block data type for the palette
@@ -253,9 +268,14 @@ message PlayerTeleportedPacket {
   PointDouble position = 2;
 }
 
-message PlayerFacePacket {
+message PlayerSmileyPacket {
   optional int32 player_id = 1;
-  int32 face_id = 2;
+  string smiley_id = 2;
+}
+
+message PlayerAuraPacket {
+  optional int32 player_id = 1;
+  string aura_id = 2;
 }
 
 message PlayerSpectatePacket {
@@ -402,12 +422,13 @@ message PlayerProperties {
   int32 player_id = 1;
   string account_id = 2;
   string username = 3;
-  int32 face = 4;
-  string role = 5;
-  bool is_friend = 6;
-  PlayerMovedPacket lastMovementPacket = 7;
-  bool is_world_owner = 8;
-  PlayerRights rights = 9;
+  string smiley_id = 4;
+  string aura_id = 5;
+  string role = 6;
+  bool is_friend = 7;
+  PlayerMovedPacket lastMovementPacket = 8;
+  bool is_world_owner = 9;
+  PlayerRights rights = 10;
 }
 
 message PlayerRights {
@@ -479,7 +500,7 @@ message PlayerEffect {
 /*
  * Represents a text label.
  */
-message TextLabel {
+message ProtoTextLabel {
   PointInteger position = 1;
   string text = 2;
   uint32 color = 3;
