@@ -13,6 +13,14 @@ public class PilotStructureSave
     public Dictionary<string, string> Meta { get; set; } = new();
 
     public int BlocksVersion { get; set; }
+    
+    /// <summary>
+    /// Stores the 'block data' once such that it can be referenced in the blockReferences.
+    /// </summary>
     public List<PalletMapping> BlockPallet { get; set; } = new();
+    
+    /// <summary>
+    /// Stores what blocks are on a certain position and layer.
+    /// </summary>
     public List<PalletReference> BlockReferences { get; set; } = new();
 }
