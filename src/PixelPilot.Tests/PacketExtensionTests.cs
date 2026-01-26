@@ -36,10 +36,10 @@ public class PacketExtensionTests
         
         Assert.That(b.PacketCase, Is.EqualTo(WorldPacket.PacketOneofCase.Ping));
         
-        var facePacket = new PlayerFacePacket();
+        var facePacket = new PlayerSmileyPacket();
         var c = facePacket.ToWorldPacket();
         
-        Assert.That(c.PacketCase, Is.EqualTo(WorldPacket.PacketOneofCase.PlayerFacePacket));
+        Assert.That(c.PacketCase, Is.EqualTo(WorldPacket.PacketOneofCase.PlayerSmileyPacket));
         
         var initReceivedPacket = new PlayerInitReceivedPacket();
         var d = initReceivedPacket.ToWorldPacket();
