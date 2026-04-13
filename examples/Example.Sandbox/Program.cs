@@ -1,18 +1,14 @@
-﻿using System.Drawing;
-using Example.BasicBot;
+﻿using Example.BasicBot;
 using Microsoft.Extensions.Configuration;
 using PixelPilot.Client;
 using PixelPilot.Client.Messages.Packets.Extensions;
 using PixelPilot.Client.Players;
 using PixelPilot.Client.Players.Basic;
 using PixelPilot.Client.World;
-using PixelPilot.Client.World.Blocks;
 using PixelPilot.Client.World.Blocks.Placed;
 using PixelPilot.Client.World.Blocks.V2;
 using PixelPilot.Client.World.Constants;
 using PixelPilot.Common.Logging;
-using PixelPilot.Structures.Converters.PilotSimple;
-using PixelPilot.Structures.Extensions;
 using PixelWalker.Networking.Protobuf.WorldPackets;
 
 // Load the configuration. Don't store your account token in the code :)

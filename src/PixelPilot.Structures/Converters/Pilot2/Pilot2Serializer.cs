@@ -110,7 +110,8 @@ public static class Pilot2Serializer
             WriteIndented = writeIndented,
             Converters =
             {
-                new PalletReferenceConverter()
+                new PalletReferenceConverter(),
+                new PalletFieldsConverter(),
             }
         };
 
@@ -135,7 +136,8 @@ public static class Pilot2Serializer
         var save = JsonSerializer.Deserialize<PilotStructureSave>(rawData, options: new JsonSerializerOptions()
         {
             Converters = { 
-                new PalletReferenceConverter() 
+                new PalletReferenceConverter(),
+                new PalletFieldsConverter(),
             }
         }) ?? throw new PixelApiException("Could load structure");
 
@@ -152,14 +154,7 @@ public static class Pilot2Serializer
             {
                 if (kvp.Value is JsonElement e)
                 {
-                    if (e.ValueKind == JsonValueKind.Number)
-                    {
-                        pallet.Fields[kvp.Key] = e.GetUInt32();
-                    }
-                    else if (e.ValueKind == JsonValueKind.String)
-                    {
-                        pallet.Fields[kvp.Key] = e.ToString();
-                    }
+                    throw new PixelApiException("A field was not properly converted to it's native type.");
                 }
             }
         }
@@ -167,8 +162,6 @@ public static class Pilot2Serializer
         // Safety check so no virus gets out ;)
         if (save.BlockPallet.Any(p => p.Fields?.Any(kvp => kvp.Value is JsonElement) == true))
         {
-            var blockPalletErrors = save.BlockPallet.Where(p => p.Fields?.Any(kvp => kvp.Value is JsonElement) == true)
-                .ToList();
             throw new PixelApiException("A field was not properly converted to it's native type.");
         }
         

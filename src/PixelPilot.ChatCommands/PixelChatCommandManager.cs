@@ -109,15 +109,14 @@ public class PixelChatCommandManager<T> : IChatCommandManager where T : IPixelPl
             sender.SendMessage(CommandMessages.NoPermission);
             return;
         }
-
-        var result = command.ExecuteCommand(sender, commandText, args.Skip(1).ToArray());
+        
         if (command.IsAsync)
         {
             Task.Run(async () =>
             {
                 try
                 {
-                    await result;
+                    await command.ExecuteCommand(sender, commandText, args.Skip(1).ToArray());
                 }
                 catch (Exception ex)
                 {
@@ -129,6 +128,7 @@ public class PixelChatCommandManager<T> : IChatCommandManager where T : IPixelPl
         {
             try
             {
+                var result = command.ExecuteCommand(sender, commandText, args.Skip(1).ToArray());
                 result.Wait();
             }
             catch (Exception ex)

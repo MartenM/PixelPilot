@@ -96,6 +96,11 @@ public class PixelPilotStuctureTests
         var structure = PilotSaveSerializer.Deserialize(contents);
         
         // Create a client with an unsaved world for pasting test.
+        await TestClientPasting(structure);
+    }
+
+    private async Task TestClientPasting(Structure structure)
+    {
         var height = (int)Math.Ceiling((double)structure.Height / 25) * 25;
         var width = (int)Math.Ceiling((double)structure.Width / 25) * 25;
 
@@ -148,6 +153,26 @@ public class PixelPilotStuctureTests
         });
         
         await _client.Disconnect();
+    }
+
+    [TestCaseSource(nameof(TestStructureFiles))]
+    [Timeout(60000)]
+    public async Task TestMigration(string fileName)
+    {
+        // Load file contents
+        var filePath = Path.Combine(TestContext.CurrentContext.TestDirectory, TestStructuresFolder, fileName);
+        var contents = await File.ReadAllTextAsync(filePath);
+        var structure = PilotSaveSerializer.Deserialize(contents);
+        
+        Assert.That(structure, Is.Not.Null, $"Output structure should not be null.");
+        var newSerializedString = PilotSaveSerializer.Serialize(structure);
+        
+        Assert.That(contents, Is.Not.Empty, $"Input structure should not be empty.");
+        
+        var toStuctureAgain = PilotSaveSerializer.Deserialize(newSerializedString);
+        Assert.That(toStuctureAgain.Blocks.Count, Is.EqualTo(structure.Blocks.Count), $"Same amount of blocks.");
+
+        await TestClientPasting(toStuctureAgain);
     }
 
     [TestCaseSource(nameof(TestPopulatedWorlds))]
