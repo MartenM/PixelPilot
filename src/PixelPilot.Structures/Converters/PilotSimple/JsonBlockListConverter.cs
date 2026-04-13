@@ -120,6 +120,12 @@ public class JsonBlockListConverter : JsonConverter<List<IPlacedBlock>>
                     dict.Add(mapping.Fields[1].Name, extra[1]?.ToString());
                     break;
                 }
+                case PixelBlock.SwitchGlobalActivator:
+                {
+                    dict.Add(mapping.Fields[0].Name, extra[1]);
+                    dict.Add(mapping.Fields[1].Name, extra[0]);
+                    break;
+                }
                 case PixelBlock.ToolPortalWorldSpawn:
                 {
                     if (extra[0] != null)
