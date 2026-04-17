@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+﻿using System.Threading.Channels;
 using System.Threading.RateLimiting;
 using Google.Protobuf;
 using Microsoft.Extensions.Logging;
@@ -7,45 +7,36 @@ using PixelWalker.Networking.Protobuf.WorldPackets;
 
 namespace PixelPilot.Client.Messages.Queue;
 
-/// <summary>
-/// Rate limits outgoing messages by consuming tokens.
-/// </summary>
 public class TokenBucketPacketOutQueue : IPixelPacketQueue
 {
     private readonly ILogger _logger = LogManager.GetLogger("Client.Messages.Queue");
-
-    private int _totalRateLimit = OwnerTotalRateLimit;
-    private int _chatRateLimit = OwnerChatRateLimit;
 
     public const int OwnerTotalRateLimit = 250;
     public const int OwnerChatRateLimit = 15;
 
     public const int GuestTotalRateLimit = 100;
     public const int GuestChatRateLimit = 5;
-    
-    /// <summary>
-    /// Maximum amount of packets stored up.
-    /// </summary>
+
     private const int MaxBurst = 50;
-    
-    /// <summary>
-    /// Tokens replenished per second
-    /// </summary>
     private const int BurstTotal = 20;
 
-    private CancellationTokenSource _cancellationToken;
+    private readonly PixelPilotClient _client;
+
+    private readonly Channel<IMessage> _channel;
+    private readonly Channel<IMessage> _delayedChatChannel;
+
+    private CancellationTokenSource _cts = new();
     private Task? _processingTask;
-    public bool IsProcessing { get; private set; }
 
-    private PixelPilotClient _client;
+    private TokenBucketRateLimiter _totalLimiter = null!;
+    private TokenBucketRateLimiter _chatLimiter = null!;
 
-    private TokenBucketRateLimiter _totalRateLimiter = null!;
+    private int _totalRateLimit = OwnerTotalRateLimit;
+    private int _chatRateLimit = OwnerChatRateLimit;
 
-    private TokenBucketRateLimiter _chatRateLimiter = null!;
-
-    private int _chatReplenishTime;
-    
     private bool _isOwner = true;
+
+    public bool IsProcessing { get; private set; }
 
     public bool IsOwner
     {
@@ -55,164 +46,145 @@ public class TokenBucketPacketOutQueue : IPixelPacketQueue
             if (_isOwner == value) return;
             _isOwner = value;
 
-            if (_isOwner)
-            {
-                _totalRateLimit = OwnerTotalRateLimit;
-                _chatRateLimit = OwnerChatRateLimit;
-            }
-            else
-            {
-                _totalRateLimit = GuestTotalRateLimit;
-                _chatRateLimit = GuestChatRateLimit;
-            }
-            
-            // Set property, recreate the rate limiters.
-            _logger.LogInformation("Recreating rate limiters. Limits have been changed. IsOwner: {IsOwner}", _isOwner);
-            
-            CreateRateLimiters();
+            _totalRateLimit = _isOwner ? OwnerTotalRateLimit : GuestTotalRateLimit;
+            _chatRateLimit = _isOwner ? OwnerChatRateLimit : GuestChatRateLimit;
+
+            _logger.LogInformation("Recreating rate limiters. IsOwner: {IsOwner}", _isOwner);
+            RecreateLimiters();
         }
     }
-    
-    /// <summary>
-    /// Initial queue
-    /// </summary>
-    private readonly BlockingCollection<IMessage> _packetQueue = new();
-    
-    /// <summary>
-    /// Queue for chat messages that got delayed.
-    /// Should be send as soon as space becomes available again.
-    /// </summary>
-    private readonly Queue<IMessage> _delayedChatMessageQueue = new();
+
+    public int QueueSize => _channel.Reader.Count + _delayedChatChannel.Reader.Count;
 
     public TokenBucketPacketOutQueue(PixelPilotClient client)
     {
         _client = client;
-        _cancellationToken = new CancellationTokenSource();
-        IsProcessing = false;
-        
-        _totalRateLimiter = new TokenBucketRateLimiter(new TokenBucketRateLimiterOptions()
+
+        _channel = Channel.CreateUnbounded<IMessage>(new UnboundedChannelOptions
         {
-            QueueLimit = 1,
-            TokenLimit = MaxBurst,
-            ReplenishmentPeriod = TimeSpan.FromMilliseconds((1000.00 /  _totalRateLimit) * BurstTotal),
-            TokensPerPeriod = BurstTotal
+            SingleReader = true,
+            SingleWriter = false
         });
-        
-        CreateRateLimiters();
+
+        _delayedChatChannel = Channel.CreateUnbounded<IMessage>(new UnboundedChannelOptions
+        {
+            SingleReader = true,
+            SingleWriter = false
+        });
+
+        RecreateLimiters();
     }
 
-    /// <summary>
-    /// Creates the rate limiters based on the properties.
-    /// </summary>
-    private void CreateRateLimiters()
+    private void RecreateLimiters()
     {
-        var totalReplenishTime = TimeSpan.FromMilliseconds((1000D /  _totalRateLimit) * BurstTotal);
-        var chatReplenishTime = TimeSpan.FromMilliseconds(1000D / _chatRateLimit);
-        
-        _totalRateLimiter = new TokenBucketRateLimiter(new TokenBucketRateLimiterOptions()
+        var totalReplenish = TimeSpan.FromMilliseconds((1000d / _totalRateLimit) * BurstTotal);
+        var chatReplenish = TimeSpan.FromMilliseconds(1000d / _chatRateLimit);
+
+        var newTotal = new TokenBucketRateLimiter(new TokenBucketRateLimiterOptions
         {
-            QueueLimit = 1,
             TokenLimit = MaxBurst,
-            ReplenishmentPeriod = totalReplenishTime,
-            TokensPerPeriod = BurstTotal
+            TokensPerPeriod = BurstTotal,
+            ReplenishmentPeriod = totalReplenish,
+            QueueLimit = int.MaxValue
         });
 
-        _chatRateLimiter = new TokenBucketRateLimiter(new TokenBucketRateLimiterOptions()
+        var newChat = new TokenBucketRateLimiter(new TokenBucketRateLimiterOptions
         {
-            QueueLimit = 1,
             TokenLimit = 1,
-            ReplenishmentPeriod = chatReplenishTime,
-            TokensPerPeriod = 1
+            TokensPerPeriod = 1,
+            ReplenishmentPeriod = chatReplenish,
+            QueueLimit = int.MaxValue
         });
-        
 
-        _logger.LogDebug($"Total replenish duration {totalReplenishTime.TotalMilliseconds}ms ({_totalRateLimit})");
-        _logger.LogDebug($"Chat replenish duration {chatReplenishTime.TotalMilliseconds}ms ({_chatRateLimit})");
-        if (totalReplenishTime.TotalMilliseconds < 15)
-        {
-            _logger.LogWarning("Queue replenish time is lower then 15ms. The queue will still work, but it can't go faster like this.");
-        }
+        var oldTotal = Interlocked.Exchange(ref _totalLimiter, newTotal);
+        var oldChat = Interlocked.Exchange(ref _chatLimiter, newChat);
+
+        oldTotal?.Dispose();
+        oldChat?.Dispose();
+
+        _logger.LogDebug("Total replenish {Ms}ms", totalReplenish.TotalMilliseconds);
+        _logger.LogDebug("Chat replenish {Ms}ms", chatReplenish.TotalMilliseconds);
     }
 
     public void EnqueuePacket(IMessage packet)
     {
-        _packetQueue.Add(packet);
+        _channel.Writer.TryWrite(packet);
     }
-
-    public int QueueSize => _packetQueue.Count + _delayedChatMessageQueue.Count;
 
     public Task Start()
     {
         if (IsProcessing) return Task.CompletedTask;
 
         IsProcessing = true;
-        _processingTask = Task.Run(async () =>
-        {
-            try
-            {
-                await ProcessQueue();
-            }
-            catch (OperationCanceledException)
-            {
-                _logger.LogDebug("TokenBucketPacketOutQueue has Task has been cancelled.");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occured.");
-            } 
-        });
+        _cts = new CancellationTokenSource();
+
+        _processingTask = Task.Run(ProcessAsync);
         return Task.CompletedTask;
     }
 
     public async Task Stop()
     {
         if (!IsProcessing) return;
-        await _cancellationToken.CancelAsync();
-        await _processingTask?.WaitAsync(TimeSpan.FromSeconds(5))!;
+
+        _cts.Cancel();
+
+        if (_processingTask != null)
+        {
+            await _processingTask.WaitAsync(TimeSpan.FromSeconds(5));
+        }
+
         IsProcessing = false;
     }
 
-    private async Task ProcessQueue()
+    private async Task ProcessAsync()
     {
-        // We only assume one client is working on this at the time.
-        while (!_cancellationToken.Token.IsCancellationRequested)
+        var token = _cts.Token;
+
+        try
         {
-            // Handle delayed packets.
-            if (_delayedChatMessageQueue.Count > 0 && _chatRateLimiter.AttemptAcquire().IsAcquired)
+            while (!token.IsCancellationRequested)
             {
-                await _totalRateLimiter.AcquireAsync(1, _cancellationToken.Token);
-                _client.SendDirect(_delayedChatMessageQueue.Dequeue());
-                continue;
-            }
-            
-            // Handle main queue
-            _packetQueue.TryTake(out var packet, _chatReplenishTime, _cancellationToken.Token);
-            if (packet == null) continue;
-            
-            // Send the packet. Delay the treat yay.
-            if (packet is PlayerChatPacket chatPacket)
-            {
-                // Check if chat rate limit is fine.
-                // Otherwise schedule for later.
-                if (!_chatRateLimiter.AttemptAcquire().IsAcquired)
+                // Prioritize delayed chat
+                if (_delayedChatChannel.Reader.TryRead(out var delayed))
                 {
-                    // TODO: Switch out with delayed packet if available.
-                    _delayedChatMessageQueue.Enqueue(chatPacket);
+                    await _chatLimiter.AcquireAsync(1, token);
+                    await _totalLimiter.AcquireAsync(1, token);
+
+                    _client.SendDirect(delayed);
                     continue;
                 }
-            }
 
-            await _totalRateLimiter.AcquireAsync(1, _cancellationToken.Token);
-            _client.SendDirect(packet);
+                var packet = await _channel.Reader.ReadAsync(token);
+
+                if (packet is PlayerChatPacket)
+                {
+                    var lease = await _chatLimiter.AcquireAsync(1, token);
+                    if (!lease.IsAcquired)
+                    {
+                        await _delayedChatChannel.Writer.WriteAsync(packet, token);
+                        continue;
+                    }
+                }
+
+                await _totalLimiter.AcquireAsync(1, token);
+                _client.SendDirect(packet);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            _logger.LogDebug("Processing cancelled");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Processing error");
         }
     }
 
     public void Dispose()
     {
-        GC.SuppressFinalize(this);
-        _cancellationToken.Dispose();
-        _totalRateLimiter.Dispose();
-        _chatRateLimiter.Dispose();
-        _packetQueue.Dispose();
+        _cts.Cancel();
+        _cts.Dispose();
+        _totalLimiter.Dispose();
+        _chatLimiter.Dispose();
     }
 }
