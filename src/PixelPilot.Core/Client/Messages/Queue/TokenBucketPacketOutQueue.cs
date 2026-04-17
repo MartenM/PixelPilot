@@ -33,6 +33,9 @@ public class TokenBucketPacketOutQueue : IPixelPacketQueue
 
     private int _totalRateLimit = OwnerTotalRateLimit;
     private int _chatRateLimit = OwnerChatRateLimit;
+    
+    private int _mainQueueCount;
+    private int _delayedQueueCount;
 
     private bool _isOwner = true;
 
@@ -54,7 +57,7 @@ public class TokenBucketPacketOutQueue : IPixelPacketQueue
         }
     }
 
-    public int QueueSize => _channel.Reader.Count + _delayedChatChannel.Reader.Count;
+    public int QueueSize => _mainQueueCount + _delayedQueueCount;
 
     public TokenBucketPacketOutQueue(PixelPilotClient client)
     {
@@ -108,7 +111,10 @@ public class TokenBucketPacketOutQueue : IPixelPacketQueue
 
     public void EnqueuePacket(IMessage packet)
     {
-        _channel.Writer.TryWrite(packet);
+        if (_channel.Writer.TryWrite(packet))
+        {
+            Interlocked.Increment(ref _mainQueueCount);
+        }
     }
 
     public Task Start()
@@ -147,6 +153,8 @@ public class TokenBucketPacketOutQueue : IPixelPacketQueue
                 // Prioritize delayed chat
                 if (_delayedChatChannel.Reader.TryRead(out var delayed))
                 {
+                    Interlocked.Decrement(ref _delayedQueueCount);
+                    
                     await _chatLimiter.AcquireAsync(1, token);
                     await _totalLimiter.AcquireAsync(1, token);
 
@@ -155,6 +163,7 @@ public class TokenBucketPacketOutQueue : IPixelPacketQueue
                 }
 
                 var packet = await _channel.Reader.ReadAsync(token);
+                Interlocked.Decrement(ref _mainQueueCount);
 
                 if (packet is PlayerChatPacket)
                 {
@@ -162,6 +171,7 @@ public class TokenBucketPacketOutQueue : IPixelPacketQueue
                     if (!lease.IsAcquired)
                     {
                         await _delayedChatChannel.Writer.WriteAsync(packet, token);
+                        Interlocked.Increment(ref _delayedQueueCount);
                         continue;
                     }
                 }
