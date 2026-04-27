@@ -34,7 +34,7 @@ public class PixelWorld
     public int Height { get; private set; }
     public int Width { get; private set; }
 
-    private WorldMeta? _worldMeta { get; set; }
+    private WorldMeta? _worldMeta;
     public string OwnerUsername => _worldMeta?.Owner ?? string.Empty;
     public string WorldName => _worldMeta?.Title ?? string.Empty;
 
