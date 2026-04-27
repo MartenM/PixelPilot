@@ -115,12 +115,14 @@ public class PixelPilotStuctureTests
         Assert.That(_client.IsConnected, Is.True, $"Required: Client should be connected.");
         
         // Send blocks 2 times if required.
-        List<IPlacedBlock> remaining = _world.GetDifference(structure);
+        WorldExtensions.WorldDifference diff = _world.GetDifference(structure);
+        List<IPlacedBlock> remainingBlocks = diff.Blocks;
         int packetsSend = 0;
+        
         for (int attempt = 0; attempt < 2; attempt++)
         {
             // Send the blocks
-            var packets = remaining.ToChunkedPackets();
+            var packets = diff.AsPackets().ToList();
             packetsSend += packets.Count;
             
             _client.SendRange(packets);
@@ -128,15 +130,16 @@ public class PixelPilotStuctureTests
             await Task.Delay(250);
             
             // Check remaining + exit early.
-            remaining = _world.GetDifference(structure);
-            if (remaining.Count == 0)
+            diff = _world.GetDifference(structure);
+            remainingBlocks = diff.Blocks;
+            if (remainingBlocks.Count == 0)
             {
                 break;
             }
         }
 
         var detailedError =
-            remaining.Select(rb =>
+            remainingBlocks.Select(rb =>
             {
                 var found = _world.BlockAt(rb.Layer, rb.X, rb.Y);
                 var equal = rb.Block.Equals(found);
@@ -147,7 +150,7 @@ public class PixelPilotStuctureTests
         Assert.Multiple(() =>
         {
             Assert.That(packetsSend, Is.Not.EqualTo(0), $"Safety check: At least placed some blocks.");
-            Assert.That(remaining.Count, Is.EqualTo(0), $"There are {remaining.Count} remaining blocks. Details:\n {string.Join("\n", detailedError)}");
+            Assert.That(remainingBlocks.Count, Is.EqualTo(0), $"There are {remainingBlocks.Count} remaining blocks. Details:\n {string.Join("\n", detailedError)}");
             Assert.That(_client.IsConnected, Is.True, $"Client should not have disconnected.");
             Assert.That(_client.LastException, Is.Null, $"Client should have not generated any issues.");
         });

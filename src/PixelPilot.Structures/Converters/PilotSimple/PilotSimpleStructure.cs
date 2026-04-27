@@ -1,4 +1,5 @@
 ﻿using PixelPilot.Client.World.Blocks.Placed;
+using PixelPilot.Client.World.Labels;
 using PixelPilot.Structures.Converters.Changes;
 
 namespace PixelPilot.Structures.Converters.PilotSimple;
@@ -33,6 +34,6 @@ public class PilotSimpleStructure
 
     public Structure ToStructure()
     {
-        return new Structure(Width, Height, Meta, ContainsEmpty, Blocks);
+        return new Structure(Width, Height, Meta, ContainsEmpty, Blocks, new List<ITextLabel>());
     }
 }

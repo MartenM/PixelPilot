@@ -2,6 +2,7 @@
 
 // Load the configuration. Don't store your account token in the code :)
 using System.Drawing;
+using System.Text.Json;
 using Example.BasicBot;
 using Microsoft.Extensions.Configuration;
 using PixelPilot.Client;
@@ -13,6 +14,7 @@ using PixelPilot.Client.World;
 using PixelPilot.Client.World.Blocks.Placed;
 using PixelPilot.Client.World.Blocks.V2;
 using PixelPilot.Client.World.Constants;
+using PixelPilot.Client.World.Labels;
 using PixelPilot.Common.Logging;
 using PixelPilot.Structures;
 using PixelPilot.Structures.Converters;
@@ -69,7 +71,7 @@ world.OnBlocksPlaced += async (sender, blocksEvent) =>
         client.SendRange(replace.ToChunkedPackets());
     }
 
-    blocksEvent.Cancelled = true;
+    // blocksEvent.Cancelled = true;
 };
 
 // Setup some basic commands. Only allow me to execute them.
@@ -174,17 +176,17 @@ client.OnPacketReceived += (_, packet) =>
                 // Get the difference in packets. Then chunk the result together and send the packets.
                 // world.GetDifference(currentStructure, pasteX, pasteY).PasteInOrder(client, new Point(0, 0));
 
-                var blocks = world.GetDifference(currentStructure, 0, 0);
-                var packets = blocks.ToChunkedPackets();
+                var difference = world.GetDifference(currentStructure, 0, 0);
+                var packetDifference = difference.AsPackets().ToList();
 
-                if (packets.Count == 0)
+                if (packetDifference.Count == 0)
                 {
                     client.SendChat("Nothing to paste. All blocks already there!");
                 }
                 else
                 {
-                    client.SendChat($"Pasting structure... {packets.Count}");
-                    foreach(var bp in packets)
+                    client.SendChat($"Pasting structure... {packetDifference.Count}");
+                    foreach(var bp in packetDifference)
                     {
                         client.Send(bp);
                     }
@@ -197,12 +199,26 @@ client.OnPacketReceived += (_, packet) =>
     }
 };
 
-await client.Connect("test-room-id", new JoinData()
-{
-    WorldHeight = 25,
-    WorldWidth = 25,
-    WorldTitle = "TEST!"
-});
+await client.Connect("r1b7216992b9944");
+// await client.Connect("test-room-id", new JoinData()
+// {
+//     WorldHeight = 25,
+//     WorldWidth = 25,
+//     WorldTitle = "TEST!"
+// });
 
 client.SendChat("Connected!");
+
+var labels = world.GetLabels();
+var placedTextLabel = labels.First();
+
+var newLabel = new TextLabel(placedTextLabel.Label);
+newLabel.Text = "BRRRT";
+
+//
+// Console.WriteLine(string.Join(", ", world.GetLabels().Select(l => JsonSerializer.Serialize(l, options: new JsonSerializerOptions()
+// {
+//     WriteIndented = true
+// }))));
+
 await client.WaitForDisconnect();

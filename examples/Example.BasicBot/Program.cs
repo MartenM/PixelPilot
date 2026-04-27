@@ -7,7 +7,9 @@ using PixelPilot.Client.World;
 using PixelPilot.Common.Logging;
 using PixelWalker.Networking.Protobuf.WorldPackets;
 
-// Load the configuration. Don't store your account token in the code :)
+while (true)
+{
+    // Load the configuration. Don't store your account token in the code :)
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
     .AddJsonFile("config.json")
@@ -100,3 +102,4 @@ await client.Connect("r2759ac03e4ff73");
 
 // Don't terminate.
 await client.WaitForDisconnect();
+}

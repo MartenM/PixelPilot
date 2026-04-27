@@ -8,6 +8,7 @@ using PixelPilot.Client.Abstract;
 using PixelPilot.Client.Events;
 using PixelPilot.Client.Extensions;
 using PixelPilot.Client.Messages;
+using PixelPilot.Client.Messages.Packets.Extensions;
 using PixelPilot.Client.World.Blocks;
 using PixelPilot.Client.World.Blocks.Placed;
 using PixelPilot.Client.World.Blocks.Types;
@@ -15,6 +16,7 @@ using PixelPilot.Client.World.Blocks.Types.Effects;
 using PixelPilot.Client.World.Blocks.Types.Music;
 using PixelPilot.Client.World.Blocks.V2;
 using PixelPilot.Client.World.Constants;
+using PixelPilot.Client.World.Labels;
 using PixelPilot.Common.Logging;
 using PixelWalker.Networking.Protobuf.WorldPackets;
 
@@ -39,6 +41,8 @@ public class PixelWorld
     public string WorldName => _worldMeta?.Title ?? string.Empty;
 
     private IPixelBlock[,,] _worldData;
+
+    private readonly Dictionary<string, TextLabel> _labels;
     
     /// <summary>
     /// Fired when a block was placed.
@@ -98,6 +102,7 @@ public class PixelWorld
     {
         _client = client;
         _worldData = new IPixelBlock[3, 0, 0];
+        _labels = new Dictionary<string, TextLabel>();
     }
 
     /// <summary>
@@ -125,6 +130,38 @@ public class PixelWorld
     }
 
     /// <summary>
+    /// Get all labels in the world.
+    /// </summary>
+    /// <returns></returns>
+    public List<IPlacedTextLabel> GetLabels()
+    {
+        return _labels.Select(kvp => new PlacedTextLabel()
+        {
+            Id = kvp.Key,
+            Label = kvp.Value
+        }).Cast<IPlacedTextLabel>().ToList();
+    }
+    
+    /// <summary>
+    /// Get a existing text label.
+    /// </summary>
+    /// <param name="labelId"></param>
+    /// <returns></returns>
+    public IPlacedTextLabel? GetLabel(string labelId)
+    {
+        if (_labels.TryGetValue(labelId, out var textLabel))
+        {
+            return new PlacedTextLabel()
+            {
+                Id = labelId,
+                Label = textLabel
+            };
+        }
+
+        return null;
+    }
+
+    /// <summary>
     /// Utility method that can attached to the client.
     /// This allows for an easy hook without having to write this each time.
     /// </summary>
@@ -145,6 +182,7 @@ public class PixelWorld
                 BackgroundData = init.BackgroundLayerData.ToByteArray(),
                 ForegroundData = init.ForegroundLayerData.ToByteArray(),
                 OverlayData = init.OverlayLayerData.ToByteArray(),
+                TextLabels = init.TextLabels.ToList(),
             });
             
             OnWorldInit?.Invoke(this);
@@ -155,6 +193,19 @@ public class PixelWorld
         if (packet is WorldMetaUpdatePacket meta)
         {
             _worldMeta = meta.Meta;
+            return;
+        }
+
+        if (packet is WorldLabelUpsertPacket textLabelUpsert)
+        {
+            HandleTextLabelUpsert(textLabelUpsert);
+            return;
+        }
+
+        if (packet is WorldLabelDeletePacket textLabelDelete)
+        {
+            HandleTextLabelDelete(textLabelDelete);
+            return;
         }
 
         if (packet is WorldReloadedPacket reload)
@@ -165,6 +216,7 @@ public class PixelWorld
                 BackgroundData = reload.BackgroundLayerData.ToByteArray(),
                 ForegroundData = reload.ForegroundLayerData.ToByteArray(),
                 OverlayData = reload.OverlayLayerData.ToByteArray(),
+                TextLabels = reload.TextLabels.ToList(),
             });
             OnWorldReloaded?.Invoke(this);
             return;
@@ -173,6 +225,7 @@ public class PixelWorld
         if (packet is WorldClearedPacket clear)
         {
             _worldData = new IPixelBlock[3, Width, Height];
+            _labels.Clear();
             for (int l = 0; l < 3; l++)
             {
                 for (int x = 0; x < Width; x++)
@@ -237,19 +290,48 @@ public class PixelWorld
         public required byte[] BackgroundData { get; set; }
         public required byte[] ForegroundData { get; set; }
         public required byte[] OverlayData { get; set; }
+        
+        public required List<ProtoTextLabel> TextLabels { get; set; }
     }
 
     private void HandleWorldReload(WorldBlockData worldBlockData)
     {
         _worldData = new IPixelBlock[3, Width, Height];
+        _labels.Clear();
         
         var pallet = worldBlockData.Pallet;
-        HandleLayer(pallet, worldBlockData.BackgroundData, (int) WorldLayer.Background);
-        HandleLayer(pallet, worldBlockData.ForegroundData, (int) WorldLayer.Foreground);
-        HandleLayer(pallet, worldBlockData.OverlayData, (int) WorldLayer.Overlay);
+        SerializeLayer(pallet, worldBlockData.BackgroundData, (int) WorldLayer.Background);
+        SerializeLayer(pallet, worldBlockData.ForegroundData, (int) WorldLayer.Foreground);
+        SerializeLayer(pallet, worldBlockData.OverlayData, (int) WorldLayer.Overlay);
+        
+        SerializeTextLabels(worldBlockData.TextLabels);
     }
 
-    private void HandleLayer(List<BlockDataInfo> pallet, byte[] layerData, int layer)
+    private void HandleTextLabelUpsert(WorldLabelUpsertPacket packet)
+    {
+        if (_labels.TryGetValue(packet.Label.Id, out var label))
+        {
+            label.UpdateWithProtoTextLabel(packet.Label);
+            return;
+        }
+        
+        _labels.Add(packet.Label.Id, TextLabel.FromProtoTextLabel(packet.Label));
+    }
+    
+    private void HandleTextLabelDelete(WorldLabelDeletePacket packet)
+    {
+        _labels.Remove(packet.Id);
+    }
+
+    private void SerializeTextLabels(List<ProtoTextLabel> textLabels)
+    {
+        foreach (var label in textLabels)
+        {
+            _labels.Add(label.Id, TextLabel.FromProtoTextLabel(label));
+        }
+    }
+
+    private void SerializeLayer(List<BlockDataInfo> pallet, byte[] layerData, int layer)
     {
         var binaryStream = new MemoryStream(layerData);
         var binaryReader = new BinaryReader(binaryStream);

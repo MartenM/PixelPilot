@@ -1,4 +1,6 @@
-﻿namespace PixelPilot.Structures.Converters.Pilot2;
+﻿using PixelPilot.Client.World.Labels;
+
+namespace PixelPilot.Structures.Converters.Pilot2;
 
 /// <summary>
 /// DTO Used to hold structure information that can be saved to JSON.
@@ -13,6 +15,8 @@ public class PilotStructureSave
     public Dictionary<string, string> Meta { get; set; } = new();
 
     public int BlocksVersion { get; set; }
+
+    public List<TextLabel> Labels { get; set; } = new();
     
     /// <summary>
     /// Stores the 'block data' once such that it can be referenced in the blockReferences.

@@ -2,24 +2,28 @@
 using PixelPilot.Client.World.Blocks.Placed;
 using PixelPilot.Client.World.Blocks.V2;
 using PixelPilot.Client.World.Constants;
+using PixelPilot.Client.World.Labels;
 
 namespace PixelPilot.Structures;
 
 public class Structure
 {
-    public Structure(int width, int height, Dictionary<string, string> meta, bool containsEmpty, List<IPlacedBlock> blocks)
+    public Structure(int width, int height, Dictionary<string, string> meta, bool containsEmpty, List<IPlacedBlock> blocks, List<ITextLabel> labels)
     {
         Width = width;
         Height = height;
         Meta = meta;
         ContainsEmpty = containsEmpty;
         Blocks = blocks;
+        Labels = labels;
     }
     public int Width { get; }
     public int Height { get; }
     public Dictionary<string, string> Meta { get; set; }
     public bool ContainsEmpty { get; private set; }
     public List<IPlacedBlock> Blocks { get; private set; }
+    
+    public List<ITextLabel> Labels { get; private set; }
 
     /// <summary>
     /// Returns a computed list of the structure which includes empty blocks.

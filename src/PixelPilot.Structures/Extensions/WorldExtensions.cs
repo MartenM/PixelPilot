@@ -1,15 +1,18 @@
 ﻿using System.Drawing;
+using Google.Protobuf;
 using PixelPilot.Client;
 using PixelPilot.Client.Extensions;
 using PixelPilot.Client.World;
 using PixelPilot.Client.World.Blocks;
 using PixelPilot.Client.World.Blocks.Placed;
 using PixelPilot.Client.World.Constants;
+using PixelPilot.Client.World.Labels;
 
 namespace PixelPilot.Structures.Extensions;
 
 public static class WorldExtensions
 {
+    
     /// <summary>
     /// Get a structure from the world.
     /// </summary>
@@ -38,7 +41,19 @@ public static class WorldExtensions
             }
         }
 
-        return new Structure(width, height, new Dictionary<string, string>(), copyEmpty, blocks);
+        List<ITextLabel> labels = new List<ITextLabel>();
+        foreach (var placedTextLabel in world.GetLabels())
+        {
+            if (placedTextLabel.Label.Position.X / 16 >= x && placedTextLabel.Label.Position.X / 16 <= x + width)
+            {
+                if (placedTextLabel.Label.Position.Y / 16 >= x && placedTextLabel.Label.Position.Y / 16 <= x + height)
+                {
+                    labels.Add(new TextLabel(placedTextLabel.Label));
+                }
+            }
+        }
+        
+        return new Structure(width, height, new Dictionary<string, string>(), copyEmpty, blocks, labels);
     }
     
     /// <summary>
@@ -60,6 +75,17 @@ public static class WorldExtensions
         return GetStructure(world, topleft.X, topleft.Y, width + 1, height + 1, copyEmpty);
     }
 
+    public class WorldDifference
+    {
+        public required List<IPlacedBlock> Blocks { get; init; }
+        public required List<ITextLabel> Labels { get; init; }
+
+        public IEnumerable<IMessage> AsPackets()
+        {
+            return Blocks.ToChunkedPackets().Concat(Labels.Select(l => l.ToUpsertPacket()));
+        }
+    }
+
     /// <summary>
     /// Get the difference between the world and structure at a specified place in the world.
     /// The returned list will be translated towards the origin point (unless disabled using the parameters) by copying the original blocks.
@@ -72,7 +98,7 @@ public static class WorldExtensions
     /// <param name="translate">If the output should be translated to the differences in the world.</param>
     /// <returns></returns>
     /// <exception cref="PixelGameException"></exception>
-    public static List<IPlacedBlock> GetDifference(this PixelWorld world, Structure structure, int x = 0, int y = 0, bool translate = true)
+    public static WorldDifference GetDifference(this PixelWorld world, Structure structure, int x = 0, int y = 0, bool translate = true)
     {
         List<IPlacedBlock> difference = new();
         if (structure.Width + x > world.Width || structure.Height + y > world.Height)
@@ -86,13 +112,51 @@ public static class WorldExtensions
 
             difference.Add(block);
         }
+        
+        // Get label difference.
+        var labelDifference = structure.Labels.Where(structureLabel =>
+        {
+            // Modify the structure to get the correct comparison.
+            var translatedLabel = new TextLabel(structureLabel);
+            translatedLabel.Position = new Point(structureLabel.Position.X + (x * 16), structureLabel.Position.Y + (y * 16)); 
+            
+            // Rather inefficient, go through all labels and check if there is a matching one.
+            foreach (var worldLabel in world.GetLabels())
+            {
+                if (worldLabel.Label.Equals(translatedLabel))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }).ToList();
 
         // If not translated, just return the stucture differences.
-        if (!translate) return difference;
+        if (!translate)
+        {
+            return new WorldDifference()
+            {
+                Blocks = difference,
+                Labels = labelDifference
+            };
+        }
         
         // Deep copy the blocks and translate them.
-        var translated = difference.Select(pb => new PlacedBlock(pb.X + x, pb.Y + y, pb.Layer, (IPixelBlock) pb.Block.Clone())).ToList();
-        return translated.Cast<IPlacedBlock>().ToList();
+        var translatedBlocks = difference.Select(pb => new PlacedBlock(pb.X + x, pb.Y + y, pb.Layer, (IPixelBlock) pb.Block.Clone())).ToList();
+        var translatedLabels = labelDifference.Select(label =>
+        {
+            var translatedLabel = new TextLabel(label);
+            translatedLabel.Position = new Point(label.Position.X + (x * 16), label.Position.Y + (y * 16)); 
+
+            return label;
+        });
+
+        return new WorldDifference()
+        {
+            Blocks = translatedBlocks.Cast<IPlacedBlock>().ToList(),
+            Labels = translatedLabels.ToList()
+        };
     }
     
     public static async Task PasteSafe(this PixelWorld world, Structure structure, PixelPilotClient client, Point pasteLocation, int maxAttempts = 5)
@@ -100,9 +164,13 @@ public static class WorldExtensions
         int attempts = 0;
         while (attempts < maxAttempts)
         {
-            var diffPackets = world
-                .GetDifference(structure, pasteLocation.X, pasteLocation.Y, true)
-                .ToChunkedPackets();
+            var difference = world.GetDifference(structure, pasteLocation.X, pasteLocation.Y, true);
+            
+            // Blocks
+            var diffPackets = difference.Blocks.ToChunkedPackets();
+            
+            // Labels
+            diffPackets.AddRange(difference.Labels.Select(l => l.ToUpsertPacket()));
             
             // If no diff, return.
             if (diffPackets.Count == 0) return;
