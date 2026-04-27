@@ -31,12 +31,6 @@ public class PixelWorld
     private readonly TaskCompletionSource<bool> _initializationTaskSource = new();
     private IPixelPilotClient _client;
     
-    /// <summary>
-    /// A task that can be used to await world init completion.
-    /// This ensures the world has been properly populated before using it.
-    /// </summary>
-    [Obsolete("Please use `await client.Connect()` instead. It should handle other dependencies better now.")]
-    public Task InitTask => _initializationTaskSource.Task;
     public int Height { get; private set; }
     public int Width { get; private set; }
 
