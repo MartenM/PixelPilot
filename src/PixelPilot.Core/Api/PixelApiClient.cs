@@ -65,7 +65,7 @@ public class PixelApiClient : IDisposable
         // Auth failure, we cannot continue.
         if (result is AuthErrorResponse authResponse)
         {
-            throw new PixelApiException("Failed to retrieve login token using the given information.");
+            throw new PixelApiException($"Failed to retrieve login token using the given information. Code {authResponse.Code}, Message: {authResponse.Message}");
         }
         
         // Success
