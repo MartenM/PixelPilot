@@ -46,9 +46,15 @@ public static class WorldExtensions
         {
             if (placedTextLabel.Label.Position.X / 16 >= x && placedTextLabel.Label.Position.X / 16 <= x + width)
             {
-                if (placedTextLabel.Label.Position.Y / 16 >= x && placedTextLabel.Label.Position.Y / 16 <= x + height)
+                if (placedTextLabel.Label.Position.Y / 16 >= y && placedTextLabel.Label.Position.Y / 16 <= y + height)
                 {
-                    labels.Add(new TextLabel(placedTextLabel.Label));
+                    var dx = placedTextLabel.Label.Position.X - x * 16;
+                    var dy = placedTextLabel.Label.Position.Y - y * 16;
+
+                    var label = new TextLabel(placedTextLabel.Label);
+                    label.Position = new Point(dx, dy);
+                    
+                    labels.Add(label);
                 }
             }
         }
@@ -149,13 +155,13 @@ public static class WorldExtensions
             var translatedLabel = new TextLabel(label);
             translatedLabel.Position = new Point(label.Position.X + (x * 16), label.Position.Y + (y * 16)); 
 
-            return label;
+            return translatedLabel;
         });
 
         return new WorldDifference()
         {
             Blocks = translatedBlocks.Cast<IPlacedBlock>().ToList(),
-            Labels = translatedLabels.ToList()
+            Labels = translatedLabels.Cast<ITextLabel>().ToList()
         };
     }
     
