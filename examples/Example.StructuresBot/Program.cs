@@ -1,10 +1,6 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-// Load the configuration. Don't store your account token in the code :)
-using System.Drawing;
-using System.Text.Json;
-using Example.BasicBot;
+﻿using System.Drawing;
 using Microsoft.Extensions.Configuration;
+using Example.BasicBot;
 using PixelPilot.Client;
 using PixelPilot.Client.Extensions;
 using PixelPilot.Client.Messages.Packets.Extensions;
@@ -14,12 +10,13 @@ using PixelPilot.Client.World;
 using PixelPilot.Client.World.Blocks.Placed;
 using PixelPilot.Client.World.Blocks.V2;
 using PixelPilot.Client.World.Constants;
-using PixelPilot.Client.World.Labels;
 using PixelPilot.Common.Logging;
 using PixelPilot.Structures;
 using PixelPilot.Structures.Converters;
 using PixelPilot.Structures.Extensions;
 using PixelWalker.Networking.Protobuf.WorldPackets;
+
+#region Configuration
 
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("config.json")
@@ -28,17 +25,24 @@ var configuration = new ConfigurationBuilder()
     .Build();
 
 LogManager.Configure(configuration.GetSection("Logging"));
+
 var config = configuration.Get<BasicConfig>();
+
 if (config == null)
 {
-    Console.WriteLine("The configuration file could not be loaded.");
+    Console.WriteLine("Failed to load configuration.");
     return;
 }
 
-// Basic things and vars
-Structure? currentStructure = null;
-var point1 = new Point(0, 0);
-var point2 = new Point(0, 0);
+#endregion
+
+#region Runtime State
+
+var state = new BotState();
+
+#endregion
+
+#region Client Setup
 
 var client = PixelPilotClient.Builder()
     .SetEmail(config.AccountEmail)
@@ -49,176 +53,325 @@ var client = PixelPilotClient.Builder()
 
 var world = new PixelWorld(client);
 client.OnPacketReceived += world.HandlePacket;
-world.OnWorldInit += sender =>
-{
-    point2 = new Point(world.Width - 1, world.Height - 1);
-};
 
 var playerManager = new PlayerManager();
 client.OnPacketReceived += playerManager.HandlePacket;
 
-world.OnBlocksPlaced += async (sender, blocksEvent) =>
-{
-    if (client.BotId == blocksEvent.UserId) return;
+#endregion
 
+#region World Init
+
+world.OnWorldInit += _ =>
+{
+    state.Point2 = new Point(world.Width - 1, world.Height - 1);
+};
+
+#endregion
+
+#region Block Constants
+const PixelBlock Point1SelectorBlock = PixelBlock.CoinGold;
+const PixelBlock Point2SelectorBlock = PixelBlock.CoinBlue;
+#endregion
+
+#region Block Placement Handling
+
+world.OnBlocksPlaced += async (_, blocksEvent) =>
+{
+    if (!state.Enabled)
+        return;
+
+    var placerId = blocksEvent.UserId;
+
+    // Ignore bot placements
+    if (placerId == client.BotId)
+        return;
+
+    var player = playerManager.GetPlayer(placerId);
+
+    if (player == null)
+        return;
+
+    //
+    // Protected blocks example
+    //
     if (blocksEvent.NewBlock.Block == PixelBlock.CrownGold)
     {
-        var replace = new List<IPlacedBlock>();
-        foreach (var pos in blocksEvent.Positions)
-        {
-            replace.Add(new PlacedBlock(pos.X, pos.Y, blocksEvent.Layer, new FlexBlock(PixelBlock.GildedGoldBasic)));
-        }
-        client.SendRange(replace.ToChunkedPackets());
-    }
-
-    // blocksEvent.Cancelled = true;
-};
-
-// Setup some basic commands. Only allow me to execute them.
-client.OnPacketReceived += (_, packet) =>
-{
-    var playerId = packet.GetPlayerId();
-    if (playerId == null) return;
-    
-    IPixelPlayer? player = playerManager.GetPlayer(playerId.Value);
-    if (player == null) return;
-
-    // Simple command structures.
-    if (packet is PlayerChatPacket chat)
-    {
-        if (!chat.Message.StartsWith(".") || player.Username != "MARTEN") return;
-
-        var fullText = chat.Message.Substring(1);
-        var args = fullText.Split(' ');
-
-        switch (args[0])
-        {
-            case "exec":
-                client.SendChat($"/{string.Join(" ", args.Skip(1))}", prefix: false);
-                break;
-            case "at":
-                var blockAt = world.BlockAt(WorldLayer.Foreground, player.BlockX, player.BlockY);
-                client.SendChat($"{player.BlockX} {player.BlockY} It's an: {blockAt.Block.ToString()}");
-                break;
-            case "p1":
-                point1 = new Point(player.BlockX, player.BlockY);
-                client.SendChat($"Point 1 has been set. {point1}");
-                break;
-            case "p2":
-                point2 = new Point(player.BlockX, player.BlockY);
-                client.SendChat($"Point 2 has been set. {point2}");
-                break;
-            case "select":
-            case "copy":
-                currentStructure = world.GetStructure(point1, point2, false);
-                client.SendChat("Current structure has been set.");
-                break;
-            case "test":
-            {
-                var blocks = new List<IPlacedBlock>()
-                {
-                    
-                };
-                var blockPacket = blocks.ToChunkedPackets();
-                
-                client.SendRange(blockPacket);
-                break;
-            }
-            case "save":
-            {
-                if (currentStructure == null)
-                {
-                    client.SendChat("Please copy a structure using .copy");
-                    return;
-                }
-                
-                if (args.Length < 2 || currentStructure == null)
-                {
-                    client.SendChat("Please provide a file name.");
-                    return;
-                }
-                
-                var rawSave = PilotSaveSerializer.Serialize(currentStructure);
-                File.WriteAllText($"./{args[1]}.json", rawSave);
-                
-                client.SendChat("Structure saved to file.");
-                break;
-            }
-            case "load":
-            {
-                if (args.Length < 2)
-                {
-                    client.SendChat("Please provide a file name.");
-                    return;
-                }
-
-                if (!File.Exists($"./{args[1]}.json"))
-                {
-                    client.SendChat("Please provide a file name that exists.");
-                    return;
-                }
-
-                var rawLoad = File.ReadAllText($"./{args[1]}.json");
-                
-                client.SendChat("Loading structure...");
-                currentStructure = PilotSaveSerializer.Deserialize(rawLoad);
-                
-                client.SendChat("Structure loaded from file.");
-                break;
-            }
-            case "paste":
-            {
-                if (currentStructure == null) return;
-                
-                var pasteX = player.BlockX;
-                var pasteY = player.BlockY;
-                
-                // Get the difference in packets. Then chunk the result together and send the packets.
-                // world.GetDifference(currentStructure, pasteX, pasteY).PasteInOrder(client, new Point(0, 0));
-
-                var difference = world.GetDifference(currentStructure, 0, 0);
-                var packetDifference = difference.AsPackets().ToList();
-
-                if (packetDifference.Count == 0)
-                {
-                    client.SendChat("Nothing to paste. All blocks already there!");
-                }
-                else
-                {
-                    client.SendChat($"Pasting structure... {packetDifference.Count}");
-                    foreach(var bp in packetDifference)
-                    {
-                        client.Send(bp);
-                    }
-                }
-                
-                break;
-            }
-        }
+        blocksEvent.Cancelled = true;
         return;
     }
+
+    //
+    // Selection blocks
+    //
+    if (blocksEvent.Positions.Count() == 1)
+    {
+        var blockPos = blocksEvent.Positions.First();
+        if (blocksEvent.NewBlock.Block == Point1SelectorBlock)
+        {
+            state.Point1 = new Point(
+                blockPos.X,
+                blockPos.Y
+            );
+
+            blocksEvent.Cancelled = true;
+            client.SendChat($"Point 1 set to {state.Point1}");
+            return;
+        }
+
+        if (blocksEvent.NewBlock.Block == Point2SelectorBlock)
+        {
+            state.Point2 = new Point(
+                blockPos.X,
+                blockPos.Y
+            );
+
+            blocksEvent.Cancelled = true;
+            client.SendChat($"Point 2 set to {state.Point2}");
+            return;
+        }
+        
+        //
+        // Waiting for paste origin
+        //
+        if (state.WaitingForPasteOrigin)
+        {
+            state.WaitingForPasteOrigin = false;
+            blocksEvent.Cancelled = true;
+
+            if (state.CurrentStructure == null)
+            {
+                client.SendChat("No structure loaded.");
+                return;
+            }
+
+            var pasteX = blockPos.X;
+            var pasteY = blockPos.Y;
+
+            await PasteStructure(
+                client,
+                world,
+                state.CurrentStructure,
+                pasteX,
+                pasteY
+            );
+
+            client.SendChat($"Structure pasted at {pasteX}, {pasteY}");
+        }
+    }
 };
 
-await client.Connect("r1b7216992b9944");
-// await client.Connect("test-room-id", new JoinData()
-// {
-//     WorldHeight = 25,
-//     WorldWidth = 25,
-//     WorldTitle = "TEST!"
-// });
+#endregion
+
+#region Chat Commands
+
+client.OnPacketReceived += (_, packet) =>
+{
+    if (packet is not PlayerChatPacket chat)
+        return;
+
+    var playerId = packet.GetPlayerId();
+
+    if (playerId == null)
+        return;
+
+    var player = playerManager.GetPlayer(playerId.Value);
+
+    if (player == null)
+        return;
+
+    // Restrict commands
+    if (player.Username != client.Username)
+        return;
+
+    if (!chat.Message.StartsWith("."))
+        return;
+
+    var args = chat.Message[1..].Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+    if (args.Length == 0)
+        return;
+
+    var command = args[0].ToLowerInvariant();
+
+    var playerPosition = new Point(
+        (int)Math.Round(player.X / 16.0),
+        (int)Math.Round(player.Y / 16.0)
+    );
+
+    switch (command)
+    {
+        case "on":
+        {
+            state.Enabled = true;
+            client.SendChat("Bot enabled.");
+            break;
+        }
+
+        case "off":
+        {
+            state.Enabled = false;
+            state.WaitingForPasteOrigin = false;
+            client.SendChat("Bot disabled.");
+            break;
+        }
+
+        case "p1":
+        {
+            state.Point1 = playerPosition;
+            client.SendChat($"Point 1 set to {state.Point1}");
+            break;
+        }
+
+        case "p2":
+        {
+            state.Point2 = playerPosition;
+            client.SendChat($"Point 2 set to {state.Point2}");
+            break;
+        }
+
+        case "copy":
+        case "select":
+        {
+            state.CurrentStructure = world.GetStructure(
+                state.Point1,
+                state.Point2,
+                false
+            );
+
+            client.SendChat("Structure copied.");
+            break;
+        }
+
+        case "save":
+        {
+            if (state.CurrentStructure == null)
+            {
+                client.SendChat("No structure copied.");
+                return;
+            }
+
+            if (args.Length < 2)
+            {
+                client.SendChat("Provide a filename.");
+                return;
+            }
+
+            var fileName = $"{args[1]}.json";
+
+            var raw = PilotSaveSerializer.Serialize(state.CurrentStructure);
+
+            File.WriteAllText(fileName, raw);
+
+            client.SendChat($"Saved to {fileName}");
+            break;
+        }
+
+        case "load":
+        {
+            if (args.Length < 2)
+            {
+                client.SendChat("Provide a filename.");
+                return;
+            }
+
+            var fileName = $"{args[1]}.json";
+
+            if (!File.Exists(fileName))
+            {
+                client.SendChat("File does not exist.");
+                return;
+            }
+
+            var raw = File.ReadAllText(fileName);
+
+            state.CurrentStructure = PilotSaveSerializer.Deserialize(raw);
+
+            client.SendChat("Structure loaded.");
+            break;
+        }
+
+        case "paste":
+        {
+            if (state.CurrentStructure == null)
+            {
+                client.SendChat("No structure loaded.");
+                return;
+            }
+
+            state.WaitingForPasteOrigin = true;
+
+            client.SendChat("Place a block to choose paste origin.");
+            break;
+        }
+
+        case "cancel":
+        {
+            state.WaitingForPasteOrigin = false;
+            client.SendChat("Cancelled pending actions.");
+            break;
+        }
+    }
+};
+
+#endregion
+
+#region Connection
+
+await client.Connect("r735212a9ff7a3f");
 
 client.SendChat("Connected!");
 
-var labels = world.GetLabels();
-var placedTextLabel = labels.First();
-
-var newLabel = new TextLabel(placedTextLabel.Label);
-newLabel.Text = "BRRRT";
-
-//
-// Console.WriteLine(string.Join(", ", world.GetLabels().Select(l => JsonSerializer.Serialize(l, options: new JsonSerializerOptions()
-// {
-//     WriteIndented = true
-// }))));
-
 await client.WaitForDisconnect();
+
+#endregion
+
+#region Helpers
+
+async Task PasteStructure(
+    PixelPilotClient client,
+    PixelWorld world,
+    Structure structure,
+    int x,
+    int y)
+{
+    var difference = world.GetDifference(structure, x, y);
+
+    var packets = difference
+        .AsPackets()
+        .ToList();
+
+    if (packets.Count == 0)
+    {
+        client.SendChat("Nothing to paste.");
+        return;
+    }
+
+    client.SendChat($"Pasting {packets.Count} packets...");
+
+    foreach (var packet in packets)
+    {
+        client.Send(packet);
+
+        // Optional throttle
+        await Task.Delay(5);
+    }
+}
+
+#endregion
+
+#region State
+
+class BotState
+{
+    public bool Enabled { get; set; } = true;
+
+    public bool WaitingForPasteOrigin { get; set; }
+
+    public Point Point1 { get; set; } = new(0, 0);
+
+    public Point Point2 { get; set; } = new(0, 0);
+
+    public Structure? CurrentStructure { get; set; }
+}
+
+#endregion
