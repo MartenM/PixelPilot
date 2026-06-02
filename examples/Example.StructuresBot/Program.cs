@@ -241,6 +241,12 @@ client.OnPacketReceived += (_, packet) =>
             client.SendChat("Structure copied.");
             break;
         }
+        case "world":
+        {
+            state.CurrentStructure = world.GetWorldStructure(copyEmpty: false);
+            client.SendChat("World Structure copied.");
+            break;
+        }
 
         case "save":
         {
@@ -286,7 +292,17 @@ client.OnPacketReceived += (_, packet) =>
 
             state.CurrentStructure = PilotSaveSerializer.Deserialize(raw);
 
-            client.SendChat("Structure loaded.");
+            if (state.CurrentStructure.Meta.ContainsKey(WorldStructure.WorldSettingsKey))
+            {
+                state.CurrentStructure = new WorldStructure(state.CurrentStructure);
+                client.SendChat("World Structure loaded.");
+            }
+            else
+            {
+                client.SendChat("Structure loaded.");
+            }
+
+           
             break;
         }
 
@@ -317,7 +333,7 @@ client.OnPacketReceived += (_, packet) =>
 
 #region Connection
 
-await client.Connect("r735212a9ff7a3f");
+await client.Connect("r91a2a75381ca22");
 
 client.SendChat("Connected!");
 
@@ -339,6 +355,16 @@ async Task PasteStructure(
     var packets = difference
         .AsPackets()
         .ToList();
+    
+    if (structure is WorldStructure worldStructure)
+    {
+        var settings = worldStructure.WorldSettings;
+        if (settings != null)
+        {
+            client.SendChat("Also applying world settings...");
+            client.Send(settings.AsUpdatePacket());
+        }
+    }
 
     if (packets.Count == 0)
     {

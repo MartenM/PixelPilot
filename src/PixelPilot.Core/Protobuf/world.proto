@@ -50,6 +50,7 @@ message WorldPacket {
     WorldLabelDeleteRequestPacket world_label_delete_request_packet = 47;
     WorldLabelUpsertPacket world_label_upsert_packet = 48;
     WorldLabelDeletePacket world_label_delete_packet = 49;
+    WorldResizePacket world_resize_packet = 50;
 
     /* MISC */
     OldChatMessagesPacket old_chat_messages_packet = 31;
@@ -104,6 +105,13 @@ message SystemMessagePacket {
 
 message OldChatMessagesPacket {
   repeated OldChatMessage old_chat_messages = 1;
+}
+
+message WorldResizePacket {
+  int32 left = 1;
+  int32 top = 2;
+  int32 right = 3;
+  int32 bottom = 4;
 }
 
 message WorldActionUpdatePacket {
@@ -478,6 +486,10 @@ message WorldMeta {
   int32 minimap_edge_fade_width = 14;
   bool has_secret_edit_key = 15;
   int32 woots = 16;
+  bool has_background_color = 17;
+  int32 background_color = 18;
+  bool has_void_color = 19;
+  int32 void_color = 20;
 
   enum WorldType {
     Saved = 0;

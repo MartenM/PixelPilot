@@ -81,6 +81,15 @@ public static class WorldExtensions
         return GetStructure(world, topleft.X, topleft.Y, width + 1, height + 1, copyEmpty);
     }
 
+    public static WorldStructure GetWorldStructure(this PixelWorld world, bool copyEmpty = false)
+    {
+        var structure = GetStructure(world, 0, 0, world.Width - 1, world.Height - 1, copyEmpty);
+        var worldStructure = new WorldStructure(structure);
+        worldStructure.WorldSettings = world.WorldSettings;
+        
+        return worldStructure;
+    }
+
     public class WorldDifference
     {
         public required List<IPlacedBlock> Blocks { get; init; }

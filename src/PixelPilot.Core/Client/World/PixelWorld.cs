@@ -17,6 +17,7 @@ using PixelPilot.Client.World.Blocks.Types.Music;
 using PixelPilot.Client.World.Blocks.V2;
 using PixelPilot.Client.World.Constants;
 using PixelPilot.Client.World.Labels;
+using PixelPilot.Client.World.Meta;
 using PixelPilot.Common.Logging;
 using PixelWalker.Networking.Protobuf.WorldPackets;
 
@@ -36,7 +37,10 @@ public class PixelWorld
     public int Height { get; private set; }
     public int Width { get; private set; }
 
+    public PixelWorldSettings WorldSettings => new PixelWorldSettings(_worldMeta!);
+    
     private WorldMeta? _worldMeta;
+    public WorldMeta InternalWorldMeta => _worldMeta ?? throw new PixelGameException("World is not ready yet.");
     public string OwnerUsername => _worldMeta?.Owner ?? string.Empty;
     public string WorldName => _worldMeta?.Title ?? string.Empty;
 
