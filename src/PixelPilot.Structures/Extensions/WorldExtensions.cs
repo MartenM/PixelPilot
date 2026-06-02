@@ -83,7 +83,7 @@ public static class WorldExtensions
 
     public static WorldStructure GetWorldStructure(this PixelWorld world, bool copyEmpty = false)
     {
-        var structure = GetStructure(world, 0, 0, world.Width - 1, world.Height - 1, copyEmpty);
+        var structure = GetStructure(world, 0, 0, world.Width, world.Height, copyEmpty);
         var worldStructure = new WorldStructure(structure);
         worldStructure.WorldSettings = world.WorldSettings;
         
