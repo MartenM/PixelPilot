@@ -14,7 +14,8 @@ public static class WorldExtensions
 {
     
     /// <summary>
-    /// Get a structure from the world.
+    /// Get a structure from the world. If the whole world is specified labels outside the world
+    /// will be saved too.
     /// </summary>
     /// <param name="world"></param>
     /// <param name="x"></param>
@@ -42,11 +43,12 @@ public static class WorldExtensions
         }
 
         List<ITextLabel> labels = new List<ITextLabel>();
+        var wholeWorld = (world.Width == width && world.Height == height);
         foreach (var placedTextLabel in world.GetLabels())
         {
-            if (placedTextLabel.Label.Position.X / 16 >= x && placedTextLabel.Label.Position.X / 16 <= x + width)
+            if (wholeWorld || (placedTextLabel.Label.Position.X / 16 >= x && placedTextLabel.Label.Position.X / 16 <= x + width))
             {
-                if (placedTextLabel.Label.Position.Y / 16 >= y && placedTextLabel.Label.Position.Y / 16 <= y + height)
+                if (wholeWorld || (placedTextLabel.Label.Position.Y / 16 >= y && placedTextLabel.Label.Position.Y / 16 <= y + height))
                 {
                     var dx = placedTextLabel.Label.Position.X - x * 16;
                     var dy = placedTextLabel.Label.Position.Y - y * 16;
