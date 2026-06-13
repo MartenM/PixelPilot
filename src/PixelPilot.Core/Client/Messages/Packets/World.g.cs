@@ -269,7 +269,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
             "eBgBIAEoBRIJCgF5GAIgASgFIiMKC1BvaW50RG91YmxlEgkKAXgYASABKAES",
             "CQoBeRgCIAEoASJkCgxQbGF5ZXJFZmZlY3QSDAoEdHlwZRgBIAEoBRIVCghk",
             "dXJhdGlvbhgCIAEoBUgAiAEBEhUKCHN0cmVuZ3RoGAMgASgFSAGIAQFCCwoJ",
-            "X2R1cmF0aW9uQgsKCV9zdHJlbmd0aCKAAwoOUHJvdG9UZXh0TGFiZWwSDwoC",
+            "X2R1cmF0aW9uQgsKCV9zdHJlbmd0aCK/AwoOUHJvdG9UZXh0TGFiZWwSDwoC",
             "aWQYASABKAlIAIgBARIsCghwb3NpdGlvbhgCIAEoCzIaLldvcmxkUGFja2V0",
             "cy5Qb2ludEludGVnZXISDAoEdGV4dBgDIAEoCRINCgVjb2xvchgEIAEoDRIW",
             "CgltYXhfd2lkdGgYBSABKAJIAYgBARIOCgZzaGFkb3cYBiABKAgSMwoOdGV4",
@@ -277,10 +277,11 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
             "dBIRCglmb250X3NpemUYCCABKAUSGQoRY2hhcmFjdGVyX3NwYWNpbmcYCSAB",
             "KAISFAoMbGluZV9zcGFjaW5nGAogASgCEhQKDHJlbmRlcl9sYXllchgLIAEo",
             "BRIUCgxzaGFkb3dfY29sb3IYDCABKA0SFwoPc2hhZG93X29mZnNldF94GA0g",
-            "ASgFEhcKD3NoYWRvd19vZmZzZXRfeRgOIAEoBUIFCgNfaWRCDAoKX21heF93",
-            "aWR0aCowCg1UZXh0QWxpZ25tZW50EggKBExFRlQQABIKCgZDRU5URVIQARIJ",
-            "CgVSSUdIVBACQi+qAixQaXhlbFdhbGtlci5OZXR3b3JraW5nLlByb3RvYnVm",
-            "LldvcmxkUGFja2V0c2IGcHJvdG8z"));
+            "ASgFEhcKD3NoYWRvd19vZmZzZXRfeRgOIAEoBRIPCgdvdXRsaW5lGA8gASgI",
+            "EhUKDW91dGxpbmVfY29sb3IYECABKA0SFQoNb3V0bGluZV93aWR0aBgRIAEo",
+            "BUIFCgNfaWRCDAoKX21heF93aWR0aCowCg1UZXh0QWxpZ25tZW50EggKBExF",
+            "RlQQABIKCgZDRU5URVIQARIJCgVSSUdIVBACQi+qAixQaXhlbFdhbGtlci5O",
+            "ZXR3b3JraW5nLlByb3RvYnVmLldvcmxkUGFja2V0c2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.TextAlignment), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -344,7 +345,7 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
             new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.PointInteger), global::PixelWalker.Networking.Protobuf.WorldPackets.PointInteger.Parser, new[]{ "X", "Y" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.PointDouble), global::PixelWalker.Networking.Protobuf.WorldPackets.PointDouble.Parser, new[]{ "X", "Y" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerEffect), global::PixelWalker.Networking.Protobuf.WorldPackets.PlayerEffect.Parser, new[]{ "Type", "Duration", "Strength" }, new[]{ "Duration", "Strength" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.ProtoTextLabel), global::PixelWalker.Networking.Protobuf.WorldPackets.ProtoTextLabel.Parser, new[]{ "Id", "Position", "Text", "Color", "MaxWidth", "Shadow", "TextAlignment", "FontSize", "CharacterSpacing", "LineSpacing", "RenderLayer", "ShadowColor", "ShadowOffsetX", "ShadowOffsetY" }, new[]{ "Id", "MaxWidth" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::PixelWalker.Networking.Protobuf.WorldPackets.ProtoTextLabel), global::PixelWalker.Networking.Protobuf.WorldPackets.ProtoTextLabel.Parser, new[]{ "Id", "Position", "Text", "Color", "MaxWidth", "Shadow", "TextAlignment", "FontSize", "CharacterSpacing", "LineSpacing", "RenderLayer", "ShadowColor", "ShadowOffsetX", "ShadowOffsetY", "Outline", "OutlineColor", "OutlineWidth" }, new[]{ "Id", "MaxWidth" }, null, null, null)
           }));
     }
     #endregion
@@ -20658,6 +20659,9 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       shadowColor_ = other.shadowColor_;
       shadowOffsetX_ = other.shadowOffsetX_;
       shadowOffsetY_ = other.shadowOffsetY_;
+      outline_ = other.outline_;
+      outlineColor_ = other.outlineColor_;
+      outlineWidth_ = other.outlineWidth_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -20864,6 +20868,42 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       }
     }
 
+    /// <summary>Field number for the "outline" field.</summary>
+    public const int OutlineFieldNumber = 15;
+    private bool outline_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Outline {
+      get { return outline_; }
+      set {
+        outline_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "outline_color" field.</summary>
+    public const int OutlineColorFieldNumber = 16;
+    private uint outlineColor_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public uint OutlineColor {
+      get { return outlineColor_; }
+      set {
+        outlineColor_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "outline_width" field.</summary>
+    public const int OutlineWidthFieldNumber = 17;
+    private int outlineWidth_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int OutlineWidth {
+      get { return outlineWidth_; }
+      set {
+        outlineWidth_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -20893,6 +20933,9 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       if (ShadowColor != other.ShadowColor) return false;
       if (ShadowOffsetX != other.ShadowOffsetX) return false;
       if (ShadowOffsetY != other.ShadowOffsetY) return false;
+      if (Outline != other.Outline) return false;
+      if (OutlineColor != other.OutlineColor) return false;
+      if (OutlineWidth != other.OutlineWidth) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -20914,6 +20957,9 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       if (ShadowColor != 0) hash ^= ShadowColor.GetHashCode();
       if (ShadowOffsetX != 0) hash ^= ShadowOffsetX.GetHashCode();
       if (ShadowOffsetY != 0) hash ^= ShadowOffsetY.GetHashCode();
+      if (Outline != false) hash ^= Outline.GetHashCode();
+      if (OutlineColor != 0) hash ^= OutlineColor.GetHashCode();
+      if (OutlineWidth != 0) hash ^= OutlineWidth.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -20988,6 +21034,18 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
         output.WriteRawTag(112);
         output.WriteInt32(ShadowOffsetY);
       }
+      if (Outline != false) {
+        output.WriteRawTag(120);
+        output.WriteBool(Outline);
+      }
+      if (OutlineColor != 0) {
+        output.WriteRawTag(128, 1);
+        output.WriteUInt32(OutlineColor);
+      }
+      if (OutlineWidth != 0) {
+        output.WriteRawTag(136, 1);
+        output.WriteInt32(OutlineWidth);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -21054,6 +21112,18 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
         output.WriteRawTag(112);
         output.WriteInt32(ShadowOffsetY);
       }
+      if (Outline != false) {
+        output.WriteRawTag(120);
+        output.WriteBool(Outline);
+      }
+      if (OutlineColor != 0) {
+        output.WriteRawTag(128, 1);
+        output.WriteUInt32(OutlineColor);
+      }
+      if (OutlineWidth != 0) {
+        output.WriteRawTag(136, 1);
+        output.WriteInt32(OutlineWidth);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -21105,6 +21175,15 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       }
       if (ShadowOffsetY != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(ShadowOffsetY);
+      }
+      if (Outline != false) {
+        size += 1 + 1;
+      }
+      if (OutlineColor != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeUInt32Size(OutlineColor);
+      }
+      if (OutlineWidth != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(OutlineWidth);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -21162,6 +21241,15 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
       }
       if (other.ShadowOffsetY != 0) {
         ShadowOffsetY = other.ShadowOffsetY;
+      }
+      if (other.Outline != false) {
+        Outline = other.Outline;
+      }
+      if (other.OutlineColor != 0) {
+        OutlineColor = other.OutlineColor;
+      }
+      if (other.OutlineWidth != 0) {
+        OutlineWidth = other.OutlineWidth;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -21241,6 +21329,18 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
             ShadowOffsetY = input.ReadInt32();
             break;
           }
+          case 120: {
+            Outline = input.ReadBool();
+            break;
+          }
+          case 128: {
+            OutlineColor = input.ReadUInt32();
+            break;
+          }
+          case 136: {
+            OutlineWidth = input.ReadInt32();
+            break;
+          }
         }
       }
     #endif
@@ -21317,6 +21417,18 @@ namespace PixelWalker.Networking.Protobuf.WorldPackets {
           }
           case 112: {
             ShadowOffsetY = input.ReadInt32();
+            break;
+          }
+          case 120: {
+            Outline = input.ReadBool();
+            break;
+          }
+          case 128: {
+            OutlineColor = input.ReadUInt32();
+            break;
+          }
+          case 136: {
+            OutlineWidth = input.ReadInt32();
             break;
           }
         }

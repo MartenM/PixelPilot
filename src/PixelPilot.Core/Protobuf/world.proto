@@ -548,6 +548,9 @@ message ProtoTextLabel {
   uint32 shadow_color = 12;
   int32 shadow_offset_x = 13;
   int32 shadow_offset_y = 14;
+  bool outline = 15;
+  uint32 outline_color = 16;
+  int32 outline_width = 17;
 }
 
 /*
