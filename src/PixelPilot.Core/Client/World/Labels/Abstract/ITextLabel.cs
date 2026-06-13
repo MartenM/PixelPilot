@@ -31,6 +31,11 @@ public interface ITextLabel
     public int ShadowOffsetX { get; }
 
     public int ShadowOffsetY { get; }
+    
+    public bool OutlineEnabled { get;  }
+    public int OutlineWidth { get;  }
+    public Color OutlineColor { get;  }
+    
 
     public ProtoTextLabel AsProtoTextLabel();
 

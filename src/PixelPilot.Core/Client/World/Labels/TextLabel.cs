@@ -34,6 +34,10 @@ public class TextLabel : ITextLabel
 
     public int ShadowOffsetY { get; set; }
     
+    public bool OutlineEnabled { get; set; }
+    public int OutlineWidth { get; set; }
+    public Color OutlineColor { get; set; }
+    
 
     public TextLabel() {}
 
@@ -52,6 +56,10 @@ public class TextLabel : ITextLabel
         Position = label.Position;
         TextAlignment = label.TextAlignment;
         Text = label.Text;
+
+        OutlineEnabled = label.OutlineEnabled;
+        OutlineWidth = label.OutlineWidth;
+        OutlineColor = label.OutlineColor;
     }
 
     public static TextLabel FromProtoTextLabel(ProtoTextLabel protoTextLabel)
@@ -75,7 +83,10 @@ public class TextLabel : ITextLabel
                RenderLayer == other.RenderLayer && 
                ShadowColor.Equals(other.ShadowColor) && 
                ShadowOffsetX == other.ShadowOffsetX && 
-               ShadowOffsetY == other.ShadowOffsetY;
+               ShadowOffsetY == other.ShadowOffsetY && 
+               OutlineEnabled == other.OutlineEnabled &&
+               OutlineColor ==  other.OutlineColor &&
+               OutlineWidth == other.OutlineWidth;
     }
 
     public override bool Equals(object? obj)
@@ -102,6 +113,9 @@ public class TextLabel : ITextLabel
         hashCode.Add(ShadowColor);
         hashCode.Add(ShadowOffsetX);
         hashCode.Add(ShadowOffsetY);
+        hashCode.Add(OutlineColor);
+        hashCode.Add(OutlineWidth);
+        hashCode.Add(OutlineEnabled);
         return hashCode.ToHashCode();
     }
 
@@ -121,7 +135,10 @@ public class TextLabel : ITextLabel
             ShadowOffsetY = ShadowOffsetY,
             Position = Position.ToPoint(),
             TextAlignment = TextAlignment.ToProtoTextLabelAlignment(),
-            Text = Text
+            Text = Text,
+            Outline = OutlineEnabled,
+            OutlineWidth = OutlineWidth,
+            OutlineColor = OutlineColor.ToUint()
         };
     }
 
@@ -148,6 +165,10 @@ public class TextLabel : ITextLabel
         Position = label.Position.ToPoint();
         TextAlignment = label.TextAlignment.ToLabelTextAlignment();
         Text = label.Text;
+
+        OutlineEnabled = label.Outline;
+        OutlineWidth = label.OutlineWidth;
+        OutlineColor = label.OutlineColor.ToColor();
     }
     
     

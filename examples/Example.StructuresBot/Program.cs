@@ -247,6 +247,16 @@ client.OnPacketReceived += (_, packet) =>
             client.SendChat("World Structure copied.");
             break;
         }
+        case "test":
+        {
+            var worldSettings = world.WorldSettings;
+            worldSettings.Title = "noob";
+            worldSettings.VoidColor = Color.Gray;
+            worldSettings.HasVoidColor = true;
+            client.Send(worldSettings.AsUpdatePacket());
+            client.SendChat("PONG");
+            break;
+        }
 
         case "save":
         {
@@ -333,7 +343,7 @@ client.OnPacketReceived += (_, packet) =>
 
 #region Connection
 
-await client.Connect("r91a2a75381ca22");
+await client.Connect("ps8of5j9rd6wdaw");
 
 client.SendChat("Connected!");
 
