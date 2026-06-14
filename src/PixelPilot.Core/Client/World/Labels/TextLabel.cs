@@ -73,7 +73,7 @@ public class TextLabel : ITextLabel
     {
         return Position.Equals(other.Position) && 
                Text == other.Text && 
-               Color.Equals(other.Color) && 
+               Color.EqualColor(other.Color) && 
                MaxWidth.Equals(other.MaxWidth) && 
                Shadow == other.Shadow && 
                TextAlignment == other.TextAlignment && 
@@ -85,7 +85,7 @@ public class TextLabel : ITextLabel
                ShadowOffsetX == other.ShadowOffsetX && 
                ShadowOffsetY == other.ShadowOffsetY && 
                OutlineEnabled == other.OutlineEnabled &&
-               OutlineColor ==  other.OutlineColor &&
+               OutlineColor.EqualColor(other.OutlineColor) &&
                OutlineWidth == other.OutlineWidth;
     }
 

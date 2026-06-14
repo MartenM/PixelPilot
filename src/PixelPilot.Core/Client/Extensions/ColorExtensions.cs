@@ -46,4 +46,9 @@ public static class ColorExtensions
 
         return Color.FromArgb(a, r, g, b);
     }
+
+    public static bool EqualColor(this Color a, Color b)
+    {
+        return a.A == b.A && a.R == b.R && a.G == b.G && a.B == b.B;
+    }
 }

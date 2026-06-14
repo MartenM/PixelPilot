@@ -343,7 +343,7 @@ client.OnPacketReceived += (_, packet) =>
 
 #region Connection
 
-await client.Connect("ps8of5j9rd6wdaw");
+await client.Connect("r91a2a75381ca22");
 
 client.SendChat("Connected!");
 
