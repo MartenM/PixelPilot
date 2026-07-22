@@ -4,253 +4,326 @@ package WorldPackets;
 option csharp_namespace = "PixelWalker.Networking.Protobuf.WorldPackets";
 
 message WorldPacket {
-  oneof packet {
-    /* Ping packet */
-    Ping ping = 1;
+    oneof packet {
+        /* Ping packet */
+        Ping ping = 1;
 
-    /* On join */
-    PlayerInitPacket player_init_packet = 2;
-    PlayerInitReceivedPacket player_init_received = 3;
+        /* On join */
+        PlayerInitPacket player_init_packet = 2;
+        PlayerInitReceivedPacket player_init_received = 3;
 
-    /* Player packets - Send/received while playing */
-    PlayerJoinedPacket player_joined_packet = 4;
-    PlayerLeftPacket player_left_packet = 5;
-    PlayerChatPacket player_chat_packet = 6;
-    PlayerUpdateRightsPacket player_update_rights_packet = 7;
-    PlayerMovedPacket player_moved_packet = 8;
-    PlayerSmileyPacket player_smiley_packet = 9;
-    PlayerAuraPacket player_aura_packet = 45;
-    PlayerGodModePacket player_god_mode_packet = 10;
-    PlayerModModePacket player_mod_mode_packet = 11;
-    PlayerEnterSecretEditKeyPacket player_enter_secret_edit_key_packet = 12;
-    PlayerRespawnPacket player_respawn_packet = 13;
-    PlayerResetPacket player_reset_packet = 14;
-    PlayerTouchBlockPacket player_touch_block_packet = 15;
-    PlayerAddEffectPacket player_add_effect_packet = 16;
-    PlayerRemoveEffectPacket player_remove_effect_packet = 17;
-    PlayerResetEffectsPacket player_reset_effects_packet = 18;
-    PlayerTeamUpdatePacket player_team_update_packet = 19;
-    PlayerCountersUpdatePacket player_counters_update_packet = 20;
-    PlayerLocalSwitchChangedPacket player_local_switch_changed_packet = 21;
-    PlayerLocalSwitchResetPacket player_local_switch_reset_packet = 22;
-    PlayerDirectMessagePacket player_direct_message_packet = 23;
-    PlayerExchangeEffectsPacket player_exchange_effects_packet = 24;
-    PlayerTeleportedPacket player_teleported_packet = 25;
-    PlayerMagicPacket player_magic_packet = 41;
-    GameTicksSyncRequestPacket game_ticks_sync_request_packet = 42;
-    GameTicksSyncResponsePacket game_ticks_sync_response_packet = 43;
+        /* Player packets - Send/received while playing */
+        PlayerJoinedPacket player_joined_packet = 4;
+        PlayerLeftPacket player_left_packet = 5;
+        PlayerChatPacket player_chat_packet = 6;
+        PlayerUpdateRightsPacket player_update_rights_packet = 7;
+        PlayerMovedPacket player_moved_packet = 8;
+        PlayerSmileyPacket player_smiley_packet = 9;
+        PlayerAuraPacket player_aura_packet = 45;
+        PlayerGodModePacket player_god_mode_packet = 10;
+        PlayerModModePacket player_mod_mode_packet = 11;
+        PlayerEnterSecretEditKeyPacket player_enter_secret_edit_key_packet = 12;
+        PlayerRespawnPacket player_respawn_packet = 13;
+        PlayerResetPacket player_reset_packet = 14;
+        PlayerTouchBlockPacket player_touch_block_packet = 15;
+        PlayerAddEffectPacket player_add_effect_packet = 16;
+        PlayerRemoveEffectPacket player_remove_effect_packet = 17;
+        PlayerResetEffectsPacket player_reset_effects_packet = 18;
+        PlayerTeamUpdatePacket player_team_update_packet = 19;
+        PlayerCountersUpdatePacket player_counters_update_packet = 20;
+        PlayerLocalSwitchChangedPacket player_local_switch_changed_packet = 21;
+        PlayerLocalSwitchResetPacket player_local_switch_reset_packet = 22;
+        PlayerDirectMessagePacket player_direct_message_packet = 23;
+        PlayerExchangeEffectsPacket player_exchange_effects_packet = 24;
+        PlayerTeleportedPacket player_teleported_packet = 25;
+        PlayerMagicPacket player_magic_packet = 41;
+        GameTicksSyncRequestPacket game_ticks_sync_request_packet = 42;
+        GameTicksSyncResponsePacket game_ticks_sync_response_packet = 43;
 
-    /* World packets - Mostly send out by the server */
-    WorldReloadedPacket world_reloaded_packet = 26;
-    WorldClearedPacket world_cleared_packet = 27;
-    WorldMetaUpdatePacket world_meta_update_packet = 28;
-    WorldBlockPlacedPacket world_block_placed_packet = 29;
-    WorldBlockFilledPacket world_block_filled_packet = 30;
-    WorldLabelUpsertRequestPacket world_label_upsert_request_packet = 46;
-    WorldLabelDeleteRequestPacket world_label_delete_request_packet = 47;
-    WorldLabelUpsertPacket world_label_upsert_packet = 48;
-    WorldLabelDeletePacket world_label_delete_packet = 49;
-    WorldResizePacket world_resize_packet = 50;
+        /* World packets - Mostly send out by the server */
+        WorldReloadedPacket world_reloaded_packet = 26;
+        WorldClearedPacket world_cleared_packet = 27;
+        WorldMetaUpdatePacket world_meta_update_packet = 28;
+        WorldBlockPlacedPacket world_block_placed_packet = 29;
+        WorldBlockFilledPacket world_block_filled_packet = 30;
+        WorldLabelUpsertRequestPacket world_label_upsert_request_packet = 46;
+        WorldLabelDeleteRequestPacket world_label_delete_request_packet = 47;
+        WorldLabelUpsertPacket world_label_upsert_packet = 48;
+        WorldLabelDeletePacket world_label_delete_packet = 49;
+        WorldResizePacket world_resize_packet = 50;
 
-    /* MISC */
-    OldChatMessagesPacket old_chat_messages_packet = 31;
-    SystemMessagePacket system_message_packet = 32;
+        /* Zone packets */
+        WorldZoneUpsertRequestPacket world_zone_upsert_request_packet = 51;
+        WorldZoneUpsertPacket world_zone_upsert_packet = 52;
+        WorldZoneDeleteRequestPacket world_zone_delete_request_packet = 53;
+        WorldZoneDeletePacket world_zone_delete_packet = 54;
+        WorldZoneAreaEditRequestPacket world_zone_area_edit_request_packet = 55;
+        WorldZoneAreaEditPacket world_zone_area_edit_packet = 56;
+        WorldZoneReorderRequestPacket world_zone_reorder_request_packet = 57;
+        WorldZoneReorderPacket world_zone_reorder_packet = 58;
 
-    GlobalSwitchChangedPacket global_switch_changed_packet = 33;
-    GlobalSwitchResetPacket global_switch_reset_packet = 34;
+        /* MISC */
+        OldChatMessagesPacket old_chat_messages_packet = 31;
+        SystemMessagePacket system_message_packet = 32;
+        
+        GlobalSwitchChangedPacket global_switch_changed_packet = 33;
+        GlobalSwitchResetPacket global_switch_reset_packet = 34;
 
-    WorldActionUpdatePacket world_action_update_packet = 35;
-    ChangeSecretEditKeyPacket change_secret_edit_key_packet = 36;
+        WorldActionUpdatePacket world_action_update_packet = 35;
+        ChangeSecretEditKeyPacket change_secret_edit_key_packet = 36;
 
-    PlayerSpectatePacket player_spectate_packet = 37;
+        PlayerSpectatePacket player_spectate_packet = 37;
 
-    PlayerCounterTransactionPacket player_counter_transaction_packet = 38;
-    PlayerSetCollectiblesPacket player_set_collectibles_packet = 39;
+        PlayerCounterTransactionPacket player_counter_transaction_packet = 38;
+        PlayerSetCollectiblesPacket player_set_collectibles_packet = 39;
 
-    PlayerWoot player_woot = 40;
-  }
+        PlayerWoot player_woot = 40;
+    }
 }
 
 message Ping {
-  /* Empty */
+    /* Empty */
 }
 
 /*
  * Misc PACKETS
  */
 message GlobalSwitchChangedPacket {
-  int32 player_id = 1;
-  int32 switch_id = 2;
-  bool switch_enabled = 3;
+    int32 player_id = 1;
+    int32 switch_id = 2;
+    bool switch_enabled = 3;
 }
 
 message GlobalSwitchResetPacket {
-  int32 player_id = 1;
-  bool switch_enabled = 2;
+    int32 player_id = 1;
+    bool switch_enabled = 2;
 }
 
 message SystemMessagePacket {
-  enum Type {
-    CHAT = 0;
-    TOAST = 1;
-    DIALOG = 2;
-  }
+    enum Type {
+        CHAT = 0;
+        TOAST = 1;
+        DIALOG = 2;
+    }
 
-  string title = 1;
-  string message = 2;
-  Type type = 3;
-  bool is_broadcast = 4;
-  optional string icon = 5;
+    string title = 1;
+    string message = 2;
+    Type type = 3;
+    bool is_broadcast = 4;
+    optional string icon = 5;
 }
 
 message OldChatMessagesPacket {
-  repeated OldChatMessage old_chat_messages = 1;
+    repeated OldChatMessage old_chat_messages = 1;
 }
 
 message WorldResizePacket {
-  int32 left = 1;
-  int32 top = 2;
-  int32 right = 3;
-  int32 bottom = 4;
+    int32 left = 1;
+    int32 top = 2;
+    int32 right = 3;
+    int32 bottom = 4;
 }
 
 message WorldActionUpdatePacket {
-  enum Action {
-    SAVE_WORLD = 0;
-    RELOAD_WORLD = 1;
-    CLEAR_WORLD = 3;
-    AUTO_SAVE_WORLD = 4;
-  }
+    enum Action {
+        SAVE_WORLD = 0;
+        RELOAD_WORLD = 1;
+        CLEAR_WORLD = 3;
+        AUTO_SAVE_WORLD = 4;
+    }
 
-  Action action = 1;
-  optional bool enabled = 2;
+    Action action = 1;
+    optional bool enabled = 2;
 }
 
 message ChangeSecretEditKeyPacket {
-  string new_edit_key = 1;
+    string new_edit_key = 1;
 }
 
 message PlayerCounterTransactionPacket {
-  optional int32 player_id = 1;
-  int32 counter_id = 2;
-  int32 count = 3;
+    optional int32 player_id = 1;
+    int32 counter_id = 2;
+    int32 count = 3;
 }
 
 /*
  * World PACKETS
  */
 message WorldReloadedPacket {
-  // New structured world data format (same as PlayerInitPacket)
-  repeated BlockDataInfo block_data_palette = 1;
-  bytes background_layer_data = 2;
-  bytes foreground_layer_data = 3;
-  bytes overlay_layer_data = 4;
+    // New structured world data format (same as PlayerInitPacket)
+    repeated BlockDataInfo block_data_palette = 1;
+    bytes background_layer_data = 2;
+    bytes foreground_layer_data = 3;
+    bytes overlay_layer_data = 4;
 
-  // Text labels to display in the world
-  repeated ProtoTextLabel text_labels = 5;
+    // Text labels to display in the world
+    repeated ProtoTextLabel text_labels = 5;
+
+    // Zones defined in the world
+    repeated ProtoZone zones = 6;
 }
 
 message WorldClearedPacket {
-  /* Empty */
+    /* Empty */
 }
 
 // Block field value that can hold different types
 message BlockFieldValue {
-  oneof value {
-    int32 int32_value = 1;
-    uint32 uint32_value = 2;
-    string string_value = 3;
-    bool bool_value = 4;
-    bytes byte_array_value = 5;
-  }
+    oneof value {
+        int32 int32_value = 1;
+        uint32 uint32_value = 2;
+        string string_value = 3;
+        bool bool_value = 4;
+        bytes byte_array_value = 5;
+    }
 }
 
 message WorldBlockPlacedPacket {
-  optional int32 player_id = 1;
+    optional int32 player_id = 1;
+    
+    // Repeated for use in fill operations
+    repeated PointInteger positions = 2;
+    int32 layer = 3;
+    int32 block_id = 4;
 
-  // Repeated for use in fill operations
-  repeated PointInteger positions = 2;
-  int32 layer = 3;
-  int32 block_id = 4;
-
-  // Structured block fields
-  map<string, BlockFieldValue> fields = 5;
+    // Structured block fields
+    map<string, BlockFieldValue> fields = 5;
 }
 
 message WorldBlockFilledPacket {
-  PointInteger position = 1;
-  bool ignoreLayers = 2;
-  int32 layer = 3;
-  int32 block_id = 4;
+    PointInteger position = 1;
+    bool ignoreLayers = 2;
+    int32 layer = 3;
+    int32 block_id = 4;
 
-  // Structured block fields
-  map<string, BlockFieldValue> fields = 5;
+    // Structured block fields
+    map<string, BlockFieldValue> fields = 5;
 }
 
 message WorldMetaUpdatePacket {
-  WorldMeta meta = 1;
+    WorldMeta meta = 1;
 }
 
 message WorldLabelUpsertRequestPacket {
-  ProtoTextLabel label = 1;
-  optional string flow_id = 2;
+    ProtoTextLabel label = 1;
+    optional string flow_id = 2;
 }
 
 message WorldLabelDeleteRequestPacket {
-  string id = 1;
+    string id = 1;
 }
 
 message WorldLabelUpsertPacket {
-  ProtoTextLabel label = 1;
-  optional string flow_id = 2;
+    ProtoTextLabel label = 1;
+    optional string flow_id = 2;
 }
 
 message WorldLabelDeletePacket {
-  string id = 1;
+    string id = 1;
+}
+
+/*
+ * Zone PACKETS
+ */
+
+// Client -> server: create a zone or update its settings.
+message WorldZoneUpsertRequestPacket {
+    ProtoZone zone = 1;
+}
+
+// Server -> clients: a zone was created or its settings changed.
+message WorldZoneUpsertPacket {
+    ProtoZone zone = 1;
+}
+
+// Client -> server: delete a zone.
+message WorldZoneDeleteRequestPacket {
+    string id = 1;
+}
+
+// Server -> clients: a zone was deleted.
+message WorldZoneDeletePacket {
+    string id = 1;
+}
+
+// Client -> server: add or remove a rectangle to/from a zone's membership.
+message WorldZoneAreaEditRequestPacket {
+    string zone_id = 1;
+    int32 x = 2;
+    int32 y = 3;
+    int32 width = 4;
+    int32 height = 5;
+    bool add = 6;
+}
+
+// Server -> clients: apply a rectangle add/remove to a zone's membership.
+message WorldZoneAreaEditPacket {
+    optional int32 player_id = 1;
+    string zone_id = 2;
+    int32 x = 3;
+    int32 y = 4;
+    int32 width = 5;
+    int32 height = 6;
+    bool add = 7;
+}
+
+// Client -> server: move a zone to a new position in the zone list.
+message WorldZoneReorderRequestPacket {
+    string id = 1;
+    int32 index = 2;
+}
+
+// Server -> clients: a zone moved to a new position in the zone list.
+message WorldZoneReorderPacket {
+    string id = 1;
+    int32 index = 2;
 }
 
 /*
  * PLAYER PACKETS
  */
 message PlayerInitPacket {
-  /* player_id located in PlayerProperties */
-  PlayerProperties player_properties = 1;
-  WorldMeta world_meta = 2;
+    /* player_id located in PlayerProperties */
+    PlayerProperties player_properties = 1;
+    WorldMeta world_meta = 2;
 
-  /* Static world information */
-  int32 world_width = 3;
-  int32 world_height = 4;
+    /* Static world information */
+    int32 world_width = 3;
+    int32 world_height = 4;
 
-  /* Very specific world state */
-  bytes global_switch_state = 5;
+    /* Very specific world state */
+    bytes global_switch_state = 5;
 
-  // Did player woot?
-  PlayerWoot player_woot = 6;
+    // Did player woot?
+    PlayerWoot player_woot = 6;
 
-  // Text labels to display in the world
-  repeated ProtoTextLabel text_labels = 7;
+    // Text labels to display in the world
+    repeated ProtoTextLabel text_labels = 7;
+    
+    // Structured world data format
+    repeated BlockDataInfo block_data_palette = 8;
+    bytes background_layer_data = 9;
+    bytes foreground_layer_data = 10;
+    bytes overlay_layer_data = 11;
+    
+    // Elapsed ticks since game started (100 ticks per second) - clients use this as reference point (0)
+    int64 game_elapsed_time = 12;
 
-  // Structured world data format
-  repeated BlockDataInfo block_data_palette = 8;
-  bytes background_layer_data = 9;
-  bytes foreground_layer_data = 10;
-  bytes overlay_layer_data = 11;
+    // Owned shop item ids for the connecting player (e.g. "smiley_frustrated", "aura_pinwheel")
+    repeated string owned_items = 13;
 
-  // Elapsed ticks since game started (100 ticks per second) - clients use this as reference point (0)
-  int64 game_elapsed_time = 12;
-
-  // Owned shop item ids for the connecting player (e.g. "smiley_frustrated", "aura_pinwheel")
-  repeated string owned_items = 13;
+    // Zones defined in the world
+    repeated ProtoZone zones = 14;
 }
 
 // Information about a block data type for the palette
 message BlockDataInfo {
-  int32 block_id = 1;
-  map<string, BlockFieldValue> fields = 2;
+    int32 block_id = 1;
+    map<string, BlockFieldValue> fields = 2;
 }
 
 message PlayerInitReceivedPacket {
-  /* Pong back to the server that init has been done. */
+    /* Pong back to the server that init has been done. */
 }
 
 message PlayerJoinedPacket {
@@ -259,172 +332,172 @@ message PlayerJoinedPacket {
 }
 
 message PlayerLeftPacket {
-  /* No content required */
-  int32 player_id = 1;
+    /* No content required */
+    int32 player_id = 1;
 }
 
 message PlayerChatPacket {
-  optional int32 player_id = 1;
-  string message = 2;
+    optional int32 player_id = 1;
+    string message = 2;
 }
 
 message PlayerUpdateRightsPacket {
-  int32 player_id = 1;
-  PlayerRights rights = 2;
+    int32 player_id = 1;
+    PlayerRights rights = 2;
 }
 
 message PlayerMovedPacket {
-  optional int32 player_id = 1;
+    optional int32 player_id = 1;
+    
+    PointDouble position = 2;
+    double velocity_x = 3;
+    double velocity_y = 4;
+    double modifier_x = 5;
+    double modifier_y = 6;
+    int32 horizontal = 7;
+    int32 vertical = 8;
 
-  PointDouble position = 2;
-  double velocity_x = 3;
-  double velocity_y = 4;
-  double modifier_x = 5;
-  double modifier_y = 6;
-  int32 horizontal = 7;
-  int32 vertical = 8;
+    bool space_down = 9;
+    bool space_just_down = 10;
+    bool just_teleported = 11;
 
-  bool space_down = 9;
-  bool space_just_down = 10;
-  bool just_teleported = 11;
-
-  int32 tick_id = 12;
+    int32 tick_id = 12;
 }
 
 message PlayerTeleportedPacket {
-  optional int32 player_id = 1;
-  PointDouble position = 2;
+    optional int32 player_id = 1;
+    PointDouble position = 2;
 }
 
 message PlayerSmileyPacket {
-  optional int32 player_id = 1;
-  string smiley_id = 2;
+    optional int32 player_id = 1;
+    string smiley_id = 2;
 }
 
 message PlayerAuraPacket {
-  optional int32 player_id = 1;
-  string aura_id = 2;
+    optional int32 player_id = 1;
+    string aura_id = 2;
 }
 
 message PlayerSpectatePacket {
-  optional int32 player_id = 1;
-  int32 spectate_player = 2;
+    optional int32 player_id = 1;
+    int32 spectate_player = 2;
 }
 
 message PlayerGodModePacket {
-  optional int32 player_id = 1;
-  bool enabled = 2;
+    optional int32 player_id = 1;
+    bool enabled = 2;
 }
 
 message PlayerModModePacket {
-  optional int32 player_id = 1;
-  bool enabled = 2;
+    optional int32 player_id = 1;
+    bool enabled = 2;
 }
 
 message PlayerEnterSecretEditKeyPacket {
-  string secret_edit_key = 1;
+    string secret_edit_key = 1;
 }
 
 message PlayerRespawnPacket {
-  optional int32 player_id = 1;
-  PointInteger position = 2;
+    optional int32 player_id = 1;
+    PointInteger position = 2;
 }
 
 message PlayerResetPacket {
-  optional int32 player_id = 1;
-  optional PointInteger position = 2;
+    optional int32 player_id = 1;
+    optional PointInteger position = 2;
 }
 
 message PlayerTouchBlockPacket {
-  optional int32 player_id = 1;
-  optional PointInteger position = 2;
-  int32 layer = 3;
-  int32 block_id = 4;
+    optional int32 player_id = 1;
+    optional PointInteger position = 2;
+    int32 layer = 3;
+    int32 block_id = 4;
 }
 
 message PlayerAddEffectPacket {
-  int32 player_id = 1;
-  int32 effect_id = 2;
-  optional int32 duration = 3;
-  optional int32 strength = 4;
-  optional int32 from_player_id = 5;
+    int32 player_id = 1;
+    int32 effect_id = 2;
+    optional int32 duration = 3;
+    optional int32 strength = 4;
+    optional int32 from_player_id = 5;
 }
 
 message PlayerRemoveEffectPacket {
-  int32 player_id = 1;
-  int32 effect_id = 2;
-  optional int32 to_player_id = 3;
+    int32 player_id = 1;
+    int32 effect_id = 2;
+    optional int32 to_player_id = 3;
 }
 
 message PlayerResetEffectsPacket {
-  int32 player_id = 1;
+    int32 player_id = 1;
 }
 
 message PlayerExchangeEffectsPacket {
-  int32 target_player_id = 1;
+    int32 target_player_id = 1;
 }
 
 message PlayerTeamUpdatePacket {
-  optional int32 player_id = 1;
-  int32 team_id = 2;
+    optional int32 player_id = 1;
+    int32 team_id = 2;
 }
 
 message PlayerCountersUpdatePacket {
-  optional int32 player_id = 1;
+    optional int32 player_id = 1;
 
-  int32 coins = 2;
-  int32 blue_coins = 3;
-  int32 deaths = 4;
+    int32 coins = 2;
+    int32 blue_coins = 3;
+    int32 deaths = 4;
 
-  bool from_server = 5;
+    bool from_server = 5;
 }
 
 message PlayerLocalSwitchChangedPacket {
-  optional int32 player_id = 1;
-  int32 switch_id = 2;
-  bool switch_enabled = 3;
+    optional int32 player_id = 1;
+    int32 switch_id = 2;
+    bool switch_enabled = 3;
 }
 
 message PlayerLocalSwitchResetPacket {
-  int32 player_id = 1;
-  bool switch_enabled = 2;
+    int32 player_id = 1;
+    bool switch_enabled = 2;
 }
 
 message PlayerDirectMessagePacket {
-  int32 from_player_id = 1;
-  int32 target_player_id = 2;
+    int32 from_player_id = 1;
+    int32 target_player_id = 2;
 
-  string message = 3;
+    string message = 3;
 }
 
 message PlayerSetCollectiblesPacket {
-  optional int32 player_id = 1;
-  repeated PointInteger collected = 2;
+    optional int32 player_id = 1;
+    repeated PointInteger collected = 2;
 }
 
 message PlayerMagicPacket {
-  enum MagicType {
-    SMALL = 0;
-  }
-  int32 player_id = 1;
-  MagicType type = 2;
-  int32 amount = 3;
+    enum MagicType {
+        SMALL = 0;
+    }
+    int32 player_id = 1;
+    MagicType type = 2;
+    int32 amount = 3;
 }
 
 message PlayerWoot {
-  optional int32 player_id = 1;
-  bool active = 2;
+    optional int32 player_id = 1;
+    bool active = 2;
 }
 
 message GameTicksSyncRequestPacket {
-  /* Empty - client requests current game ticks */
+    /* Empty - client requests current game ticks */
 }
 
 message GameTicksSyncResponsePacket {
-  /* Current game ticks from server */
-  int64 game_elapsed_time = 1;
-  /* Whether ticking is currently paused */
-  bool is_paused = 2;
+    /* Current game ticks from server */
+    int64 game_elapsed_time = 1;
+    /* Whether ticking is currently paused */
+    bool is_paused = 2;
 }
 
 /*
@@ -433,131 +506,268 @@ message GameTicksSyncResponsePacket {
      ============================================
  */
 message PlayerWorldState {
-  int32 coins_gold = 1;
-  int32 coins_blue = 2;
-  int32 deaths = 3;
-  repeated PointInteger collected_items = 4;
-  bool has_gold_crown = 5;
-  bool has_silver_crown = 6;
-  bytes switches = 7;
-  bool godmode = 8;
-  bool modmode = 9;
-  int32 team_id = 10;
-  repeated int32 counters = 11;
+    int32 coins_gold = 1;
+    int32 coins_blue = 2;
+    int32 deaths = 3;
+    repeated PointInteger collected_items = 4;
+    bool has_gold_crown = 5;
+    bool has_silver_crown = 6;
+    bytes switches = 7;
+    bool godmode = 8;
+    bool modmode = 9;
+    int32 team_id = 10;
+    repeated int32 counters = 11;
 }
 
 message PlayerProperties {
-  int32 player_id = 1;
-  string account_id = 2;
-  string username = 3;
-  string smiley_id = 4;
-  string aura_id = 5;
-  string role = 6;
-  bool is_friend = 7;
-  PlayerMovedPacket lastMovementPacket = 8;
-  bool is_world_owner = 9;
-  PlayerRights rights = 10;
+    int32 player_id = 1;
+    string account_id = 2;
+    string username = 3;
+    string smiley_id = 4;
+    string aura_id = 5;
+    string role = 6;
+    bool is_friend = 7;
+    PlayerMovedPacket lastMovementPacket = 8;
+    bool is_world_owner = 9;
+    PlayerRights rights = 10;
 }
 
 message PlayerRights {
-  bool can_edit = 1;
-  bool can_god = 2;
-  bool can_toggle_minimap = 3;
-  bool can_change_world_settings = 4;
+    bool can_edit = 1;
+    bool can_god = 2;
+    bool can_toggle_minimap = 3;
+    bool can_change_world_settings = 4;
 
-  repeated string available_commands = 5;
-  bool can_manage_labels = 6;
+    repeated string available_commands = 5;
+    bool can_manage_labels = 6;
 }
 
 message WorldMeta {
-  string title = 1;
-  int32 plays = 2;
-  string owner = 3;
-  string description = 4;
-  string visibility = 5;
-  WorldType world_type = 6;
-  bool has_unsaved_changes = 7;
-  int32 max_players = 8;
-  string owner_role = 9;
-  bool minimap_enabled = 10;
-  bool minimap_scaled = 11;
-  int32 minimap_max_width = 12;
-  int32 minimap_max_height = 13;
-  int32 minimap_edge_fade_width = 14;
-  bool has_secret_edit_key = 15;
-  int32 woots = 16;
-  bool has_background_color = 17;
-  int32 background_color = 18;
-  bool has_void_color = 19;
-  int32 void_color = 20;
+    string title = 1;
+    int32 plays = 2;
+    string owner = 3;
+    string description = 4;
+    string visibility = 5;
+    WorldType world_type = 6;
+    bool has_unsaved_changes = 7;
+    int32 max_players = 8;
+    string owner_role = 9;
+    bool minimap_enabled = 10;
+    bool minimap_scaled = 11;
+    int32 minimap_max_width = 12;
+    int32 minimap_max_height = 13;
+    int32 minimap_edge_fade_width = 14;
+    bool has_secret_edit_key = 15;
+    int32 woots = 16;
+    bool has_background_color = 17;
+    int32 background_color = 18;
+    bool has_void_color = 19;
+    int32 void_color = 20;
 
-  enum WorldType {
-    Saved = 0;
-    Unsaved = 1;
-    Legacy = 2;
-  }
+    enum WorldType {
+        Saved = 0;
+        Unsaved = 1;
+        Legacy = 2;
+    }
 }
 
 message OldChatMessage {
-  string player_name = 1;
-  string player_role = 2;
-  bool is_friend = 3;
-  string message = 4;
+    string player_name = 1;
+    string player_role = 2;
+    bool is_friend = 3;
+    string message = 4;
 }
 
 /*
  * Represents an integer position.
  */
 message PointInteger {
-  int32 x = 1;
-  int32 y = 2;
+    int32 x = 1;
+    int32 y = 2;
 }
 
 /*
  * Represents a double position.
  */
 message PointDouble {
-  double x = 1;
-  double y = 2;
+    double x = 1;
+    double y = 2;
 }
 
 /*
  * Represents an effect.
  */
 message PlayerEffect {
-  int32 type = 1;
-  optional int32 duration = 2;
-  optional int32 strength = 3;
+    int32 type = 1;
+    optional int32 duration = 2;
+    optional int32 strength = 3;
 }
 
 /*
  * Represents a text label.
  */
 message ProtoTextLabel {
-  optional string id = 1;
-  PointInteger position = 2;
-  string text = 3;
-  uint32 color = 4;
-  optional float max_width = 5;
-  bool shadow = 6;
-  TextAlignment text_alignment = 7;
-  int32 font_size = 8;
-  float character_spacing = 9;
-  float line_spacing = 10;
-  int32 render_layer = 11;
-  uint32 shadow_color = 12;
-  int32 shadow_offset_x = 13;
-  int32 shadow_offset_y = 14;
-  bool outline = 15;
-  uint32 outline_color = 16;
-  int32 outline_width = 17;
+    optional string id = 1;
+    PointInteger position = 2;
+    string text = 3;
+    uint32 color = 4;
+    optional float max_width = 5;
+    bool shadow = 6;
+    TextAlignment text_alignment = 7;
+    int32 font_size = 8;
+    float character_spacing = 9;
+    float line_spacing = 10;
+    int32 render_layer = 11;
+    uint32 shadow_color = 12;
+    int32 shadow_offset_x = 13;
+    int32 shadow_offset_y = 14;
+    bool outline = 15;
+    uint32 outline_color = 16;
+    int32 outline_width = 17;
 }
 
 /*
  * Text alignment options for TextLabel.
  */
 enum TextAlignment {
-  LEFT = 0;
-  CENTER = 1;
-  RIGHT = 2;
+    LEFT = 0;
+    CENTER = 1;
+    RIGHT = 2;
+}
+
+/*
+ * Zone enums. INHERIT takes the value from the next lower-priority zone,
+ * falling back to the global zone.
+ */
+enum ZoneVision {
+    ZONE_VISION_INHERIT = 0;
+    ZONE_VISION_OFF = 1;
+    ZONE_VISION_ON = 2;
+}
+
+enum ZoneCameraMode {
+    ZONE_CAMERA_MODE_INHERIT = 0;
+    ZONE_CAMERA_MODE_FOLLOW = 1;
+    ZONE_CAMERA_MODE_LOCK = 2;
+}
+
+enum ZoneCameraTarget {
+    ZONE_CAMERA_TARGET_INHERIT = 0;
+    ZONE_CAMERA_TARGET_WHOLE = 1;
+    ZONE_CAMERA_TARGET_PART = 2;
+}
+
+enum ZoneCameraMovement {
+    ZONE_CAMERA_MOVEMENT_INHERIT = 0;
+    ZONE_CAMERA_MOVEMENT_SMOOTH = 1;
+    ZONE_CAMERA_MOVEMENT_INSTANT = 2;
+}
+
+enum ZoneLighting {
+    ZONE_LIGHTING_INHERIT = 0;
+    ZONE_LIGHTING_OFF = 1;
+    ZONE_LIGHTING_ON = 2;
+}
+
+enum ZoneFog {
+    ZONE_FOG_INHERIT = 0;
+    ZONE_FOG_OFF = 1;
+    ZONE_FOG_ON = 2;
+}
+
+enum ZoneDistortion {
+    ZONE_DISTORTION_INHERIT = 0;
+    ZONE_DISTORTION_OFF = 1;
+    ZONE_DISTORTION_ON = 2;
+}
+
+enum ZonePlayerLight {
+    ZONE_PLAYER_LIGHT_INHERIT = 0;
+    ZONE_PLAYER_LIGHT_OFF = 1;
+    ZONE_PLAYER_LIGHT_ON = 2;
+}
+
+message ProtoZone {
+    string id = 1;
+    string name = 2;
+    int32 priority = 3;
+    // Display color as a hue (0-359)
+    int32 hue = 4;
+
+    int32 width = 5;
+    int32 height = 6;
+    bytes membership_rle = 7; // per-block 0/1 mask, RLE-compressed
+
+    ZoneVision vision = 8;
+    // Hides the zone's interior from players outside it.
+    ZoneVision vision_outside = 9;
+    // Fill color (0xRRGGBB) for hidden areas; overrides the world's void color.
+    bool has_vision_color = 10;
+    int32 vision_color = 11;
+
+    ZoneCameraMode camera_mode_x = 12;
+    ZoneCameraMode camera_mode_y = 13;
+    ZoneCameraTarget camera_target = 14;
+    ZoneCameraMovement camera_movement = 15;
+    // Camera follow smoothing while not locked to this zone.
+    ZoneCameraMovement camera_follow_movement = 16;
+
+    // Each effect below has per-side feather widths (px), signed per-side
+    // margins (px, positive grows outward) and edge smoothing (px, rounds
+    // corners of the feathered coverage).
+
+    // Lighting (darken + tint)
+    ZoneLighting lighting = 17;
+    int32 light_darkness = 18;   // 0-100
+    int32 light_hue = 19;        // 0-359
+    int32 light_tint = 20;       // 0-100
+    int32 light_feather_top = 21;
+    int32 light_feather_right = 22;
+    int32 light_feather_bottom = 23;
+    int32 light_feather_left = 24;
+    int32 light_margin_top = 25;
+    int32 light_margin_right = 26;
+    int32 light_margin_bottom = 27;
+    int32 light_margin_left = 28;
+    int32 light_smoothing = 29;
+
+    // Personal light carried by players inside the zone.
+    ZonePlayerLight player_light = 30;
+    int32 player_light_radius = 31;     // px
+    int32 player_light_strength = 32;   // 0-100
+    int32 player_light_hue = 33;        // 0-359
+    int32 player_light_saturation = 34; // 0-100
+
+    // Fog
+    ZoneFog fog = 35;
+    int32 fog_hue = 36;        // 0-359
+    int32 fog_saturation = 37; // 0-100
+    int32 fog_opacity = 38;    // 0-100
+    int32 fog_density = 39;    // 0-100
+    int32 fog_direction = 40;  // 0-359 degrees, clockwise from east
+    int32 fog_speed = 41;      // 0-100
+    int32 fog_feather_top = 42;
+    int32 fog_feather_right = 43;
+    int32 fog_feather_bottom = 44;
+    int32 fog_feather_left = 45;
+    int32 fog_margin_top = 46;
+    int32 fog_margin_right = 47;
+    int32 fog_margin_bottom = 48;
+    int32 fog_margin_left = 49;
+    int32 fog_smoothing = 50;
+
+    // Distortion
+    ZoneDistortion distortion = 51;
+    int32 distortion_strength = 52; // 0-100
+    int32 distortion_scale = 53;    // 0-100
+    int32 distortion_speed = 54;    // 0-100
+    int32 distortion_feather_top = 55;
+    int32 distortion_feather_right = 56;
+    int32 distortion_feather_bottom = 57;
+    int32 distortion_feather_left = 58;
+    int32 distortion_margin_top = 59;
+    int32 distortion_margin_right = 60;
+    int32 distortion_margin_bottom = 61;
+    int32 distortion_margin_left = 62;
+    int32 distortion_smoothing = 63;
 }
