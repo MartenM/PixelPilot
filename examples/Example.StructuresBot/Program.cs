@@ -362,10 +362,6 @@ async Task PasteStructure(
 {
     var difference = world.GetDifference(structure, x, y);
 
-    var packets = difference
-        .AsPackets()
-        .ToList();
-    
     if (structure is WorldStructure worldStructure)
     {
         var settings = worldStructure.WorldSettings;
@@ -376,21 +372,18 @@ async Task PasteStructure(
         }
     }
 
-    if (packets.Count == 0)
+    var packetCount = difference.Blocks.Count + difference.Labels.Count +
+                      difference.ZoneUpserts.Count + difference.ZoneAreaEdits.Count;
+
+    if (packetCount == 0)
     {
         client.SendChat("Nothing to paste.");
         return;
     }
 
-    client.SendChat($"Pasting {packets.Count} packets...");
+    client.SendChat($"Pasting {packetCount} changes...");
 
-    foreach (var packet in packets)
-    {
-        client.Send(packet);
-
-        // Optional throttle
-        await Task.Delay(5);
-    }
+    await world.PasteDifference(client, difference);
 }
 
 #endregion

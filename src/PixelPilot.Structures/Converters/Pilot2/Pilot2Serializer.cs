@@ -4,6 +4,7 @@ using PixelPilot.Client.World.Blocks.Placed;
 using PixelPilot.Client.World.Blocks.V2;
 using PixelPilot.Client.World.Constants;
 using PixelPilot.Client.World.Labels;
+using PixelPilot.Client.World.Zones;
 
 namespace PixelPilot.Structures.Converters.Pilot2;
 
@@ -22,7 +23,8 @@ public static class Pilot2Serializer
         save.Meta =  structure.Meta;
 
         save.Labels = structure.Labels.Cast<TextLabel>().ToList();
-        
+        save.Zones = structure.Zones.Cast<Zone>().ToList();
+
         save.BlocksVersion = 1;
         
         // Create mappings
@@ -89,7 +91,8 @@ public static class Pilot2Serializer
         }
         
         var structure = new Structure(
-            save.Width, save.Height, save.Meta, false, blocks, save.Labels.Cast<ITextLabel>().ToList());
+            save.Width, save.Height, save.Meta, false, blocks, save.Labels.Cast<ITextLabel>().ToList(),
+            save.Zones.Cast<IZone>().ToList());
 
         return structure;
     }
@@ -116,6 +119,7 @@ public static class Pilot2Serializer
                 new PalletReferenceConverter(),
                 new PalletFieldsConverter(),
                 new ColorConverter(),
+                new ZoneMembershipConverter(),
             }
         };
 
@@ -139,10 +143,11 @@ public static class Pilot2Serializer
     {
         var save = JsonSerializer.Deserialize<PilotStructureSave>(rawData, options: new JsonSerializerOptions()
         {
-            Converters = { 
+            Converters = {
                 new PalletReferenceConverter(),
                 new PalletFieldsConverter(),
                 new ColorConverter(),
+                new ZoneMembershipConverter(),
             }
         }) ?? throw new PixelApiException("Could load structure");
 

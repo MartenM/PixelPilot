@@ -18,6 +18,7 @@ using PixelPilot.Client.World.Blocks.V2;
 using PixelPilot.Client.World.Constants;
 using PixelPilot.Client.World.Labels;
 using PixelPilot.Client.World.Meta;
+using PixelPilot.Client.World.Zones;
 using PixelPilot.Common.Logging;
 using PixelWalker.Networking.Protobuf.WorldPackets;
 
@@ -47,6 +48,9 @@ public class PixelWorld
     private IPixelBlock[,,] _worldData;
 
     private readonly Dictionary<string, TextLabel> _labels;
+
+    private readonly Dictionary<string, Zone> _zones;
+    private readonly List<string> _zoneOrder;
     
     /// <summary>
     /// Fired when a block was placed.
@@ -95,18 +99,33 @@ public class PixelWorld
     /// Fired after the world is initialized.
     /// </summary>
     public event WorldCleared? OnWorldCleared;
-    
+
     /// <summary>
     /// Represents a delegate for the WorldCleared event.
     /// </summary>
     /// <param name="sender">The object that triggered the event.</param>
     public delegate void WorldCleared(object sender);
 
+    /// <summary>
+    /// Fired when a zone is created or its settings change. Does not fire for membership-only
+    /// changes applied via area-edit packets.
+    /// </summary>
+    public event ZoneUpserted? OnZoneUpserted;
+
+    /// <summary>
+    /// Represents a delegate for the ZoneUpserted event.
+    /// </summary>
+    /// <param name="sender">The object that triggered the event.</param>
+    /// <param name="zone">The zone as it is after the upsert, including its (possibly newly assigned) id.</param>
+    public delegate void ZoneUpserted(object sender, IPlacedZone zone);
+
     public PixelWorld(IPixelPilotClient client)
     {
         _client = client;
         _worldData = new IPixelBlock[3, 0, 0];
         _labels = new Dictionary<string, TextLabel>();
+        _zones = new Dictionary<string, Zone>();
+        _zoneOrder = new List<string>();
     }
 
     /// <summary>
@@ -166,6 +185,79 @@ public class PixelWorld
     }
 
     /// <summary>
+    /// Get all zones in the world, in the order maintained by the server
+    /// (as delivered on load and updated by zone-reorder packets).
+    /// </summary>
+    /// <returns></returns>
+    public List<IPlacedZone> GetZones()
+    {
+        return _zoneOrder
+            .Where(id => _zones.ContainsKey(id))
+            .Select(id => new PlacedZone()
+            {
+                Id = id,
+                Zone = _zones[id]
+            })
+            .Cast<IPlacedZone>()
+            .ToList();
+    }
+
+    /// <summary>
+    /// Get an existing zone.
+    /// </summary>
+    /// <param name="zoneId"></param>
+    /// <returns></returns>
+    public IPlacedZone? GetZone(string zoneId)
+    {
+        if (_zones.TryGetValue(zoneId, out var zone))
+        {
+            return new PlacedZone()
+            {
+                Id = zoneId,
+                Zone = zone
+            };
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Waits for the next <see cref="OnZoneUpserted"/> event matching <paramref name="predicate"/>.
+    /// Meant to learn a newly created zone's server-assigned id: subscribe by calling this
+    /// *before* sending the create request (so the echo can't be missed), await the returned
+    /// task, then send it alongside the request.
+    /// </summary>
+    /// <param name="predicate">Matched against the zone as it is right after the upsert.</param>
+    /// <param name="timeout">How long to wait before giving up.</param>
+    /// <exception cref="PixelGameException">Thrown if no matching zone upsert arrives in time.</exception>
+    public Task<IPlacedZone> WaitForZoneUpsert(Func<IZone, bool> predicate, TimeSpan timeout)
+    {
+        var tcs = new TaskCompletionSource<IPlacedZone>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        ZoneUpserted handler = null!;
+        handler = (_, zone) =>
+        {
+            if (!predicate(zone.Zone)) return;
+            if (tcs.TrySetResult(zone))
+            {
+                OnZoneUpserted -= handler;
+            }
+        };
+
+        OnZoneUpserted += handler;
+
+        Task.Delay(timeout).ContinueWith(_ =>
+        {
+            if (tcs.TrySetException(new PixelGameException("Timed out waiting for a matching zone upsert.")))
+            {
+                OnZoneUpserted -= handler;
+            }
+        });
+
+        return tcs.Task;
+    }
+
+    /// <summary>
     /// Utility method that can attached to the client.
     /// This allows for an easy hook without having to write this each time.
     /// </summary>
@@ -187,6 +279,7 @@ public class PixelWorld
                 ForegroundData = init.ForegroundLayerData.ToByteArray(),
                 OverlayData = init.OverlayLayerData.ToByteArray(),
                 TextLabels = init.TextLabels.ToList(),
+                Zones = init.Zones.ToList(),
             });
             
             OnWorldInit?.Invoke(this);
@@ -212,6 +305,30 @@ public class PixelWorld
             return;
         }
 
+        if (packet is WorldZoneUpsertPacket zoneUpsert)
+        {
+            HandleZoneUpsert(zoneUpsert);
+            return;
+        }
+
+        if (packet is WorldZoneDeletePacket zoneDelete)
+        {
+            HandleZoneDelete(zoneDelete);
+            return;
+        }
+
+        if (packet is WorldZoneAreaEditPacket zoneAreaEdit)
+        {
+            HandleZoneAreaEdit(zoneAreaEdit);
+            return;
+        }
+
+        if (packet is WorldZoneReorderPacket zoneReorder)
+        {
+            HandleZoneReorder(zoneReorder);
+            return;
+        }
+
         if (packet is WorldReloadedPacket reload)
         {
             HandleWorldReload(new WorldBlockData
@@ -221,6 +338,7 @@ public class PixelWorld
                 ForegroundData = reload.ForegroundLayerData.ToByteArray(),
                 OverlayData = reload.OverlayLayerData.ToByteArray(),
                 TextLabels = reload.TextLabels.ToList(),
+                Zones = reload.Zones.ToList(),
             });
             OnWorldReloaded?.Invoke(this);
             return;
@@ -230,6 +348,8 @@ public class PixelWorld
         {
             _worldData = new IPixelBlock[3, Width, Height];
             _labels.Clear();
+            _zones.Clear();
+            _zoneOrder.Clear();
             for (int l = 0; l < 3; l++)
             {
                 for (int x = 0; x < Width; x++)
@@ -296,19 +416,23 @@ public class PixelWorld
         public required byte[] OverlayData { get; set; }
         
         public required List<ProtoTextLabel> TextLabels { get; set; }
+        public required List<ProtoZone> Zones { get; set; }
     }
 
     private void HandleWorldReload(WorldBlockData worldBlockData)
     {
         _worldData = new IPixelBlock[3, Width, Height];
         _labels.Clear();
-        
+        _zones.Clear();
+        _zoneOrder.Clear();
+
         var pallet = worldBlockData.Pallet;
         SerializeLayer(pallet, worldBlockData.BackgroundData, (int) WorldLayer.Background);
         SerializeLayer(pallet, worldBlockData.ForegroundData, (int) WorldLayer.Foreground);
         SerializeLayer(pallet, worldBlockData.OverlayData, (int) WorldLayer.Overlay);
-        
+
         SerializeTextLabels(worldBlockData.TextLabels);
+        SerializeZones(worldBlockData.Zones);
     }
 
     private void HandleTextLabelUpsert(WorldLabelUpsertPacket packet)
@@ -332,6 +456,59 @@ public class PixelWorld
         foreach (var label in textLabels)
         {
             _labels.Add(label.Id, TextLabel.FromProtoTextLabel(label));
+        }
+    }
+
+    private void HandleZoneUpsert(WorldZoneUpsertPacket packet)
+    {
+        if (_zones.TryGetValue(packet.Zone.Id, out var zone))
+        {
+            zone.UpdateWithProtoZone(packet.Zone);
+        }
+        else
+        {
+            zone = Zone.FromProtoZone(packet.Zone);
+            _zones.Add(packet.Zone.Id, zone);
+            _zoneOrder.Add(packet.Zone.Id);
+        }
+
+        OnZoneUpserted?.Invoke(this, new PlacedZone { Id = packet.Zone.Id, Zone = zone });
+    }
+
+    private void HandleZoneDelete(WorldZoneDeletePacket packet)
+    {
+        _zones.Remove(packet.Id);
+        _zoneOrder.Remove(packet.Id);
+    }
+
+    private void HandleZoneAreaEdit(WorldZoneAreaEditPacket packet)
+    {
+        if (!_zones.TryGetValue(packet.ZoneId, out var zone)) return;
+
+        for (var x = packet.X; x < packet.X + packet.Width; x++)
+        {
+            for (var y = packet.Y; y < packet.Y + packet.Height; y++)
+            {
+                if (x < 0 || y < 0 || x >= zone.Width || y >= zone.Height) continue;
+                zone.Membership[x, y] = packet.Add;
+            }
+        }
+    }
+
+    private void HandleZoneReorder(WorldZoneReorderPacket packet)
+    {
+        if (!_zoneOrder.Remove(packet.Id)) return;
+
+        var index = Math.Clamp(packet.Index, 0, _zoneOrder.Count);
+        _zoneOrder.Insert(index, packet.Id);
+    }
+
+    private void SerializeZones(List<ProtoZone> zones)
+    {
+        foreach (var zone in zones)
+        {
+            _zones.Add(zone.Id, Zone.FromProtoZone(zone));
+            _zoneOrder.Add(zone.Id);
         }
     }
 

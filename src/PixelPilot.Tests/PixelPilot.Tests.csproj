@@ -29,6 +29,9 @@
       <None Update="Structures\TestFiles\*">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update=".env" Condition="Exists('.env')">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

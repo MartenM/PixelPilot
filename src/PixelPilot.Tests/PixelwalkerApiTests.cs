@@ -91,6 +91,5 @@ public class PixelwalkerApiTests
     public async Task TestGetGameVersion()
     {
         var version = await _client.GetGameVersion();
-        var i = 0;
     }
 }

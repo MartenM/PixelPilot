@@ -1,4 +1,5 @@
 ﻿using PixelPilot.Client.World.Labels;
+using PixelPilot.Client.World.Zones;
 
 namespace PixelPilot.Structures.Converters.Pilot2;
 
@@ -17,7 +18,9 @@ public class PilotStructureSave
     public int BlocksVersion { get; set; }
 
     public List<TextLabel> Labels { get; set; } = new();
-    
+
+    public List<Zone> Zones { get; set; } = new();
+
     /// <summary>
     /// Stores the 'block data' once such that it can be referenced in the blockReferences.
     /// </summary>

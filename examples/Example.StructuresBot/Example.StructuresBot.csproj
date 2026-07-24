@@ -14,6 +14,7 @@
       <None Update="config.development.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Include="bin\Debug\net8.0\zones.json" />
     </ItemGroup>
 
     <ItemGroup>
@@ -24,6 +25,10 @@
       <ProjectReference Include="..\..\src\PixelPilot.Core\PixelPilot.Core.csproj" />
       <ProjectReference Include="..\..\src\PixelPilot.Structures\PixelPilot.Structures.csproj" />
       <ProjectReference Include="..\Example.BasicBot\Example.BasicBot.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="bin\Debug\net8.0\Websocket.Client.dll" />
     </ItemGroup>
 
 </Project>

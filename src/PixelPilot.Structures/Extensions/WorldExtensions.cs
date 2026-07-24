@@ -7,6 +7,8 @@ using PixelPilot.Client.World.Blocks;
 using PixelPilot.Client.World.Blocks.Placed;
 using PixelPilot.Client.World.Constants;
 using PixelPilot.Client.World.Labels;
+using PixelPilot.Client.World.Zones;
+using PixelWalker.Networking.Protobuf.WorldPackets;
 
 namespace PixelPilot.Structures.Extensions;
 
@@ -61,7 +63,32 @@ public static class WorldExtensions
             }
         }
         
-        return new Structure(width, height, new Dictionary<string, string>(), copyEmpty, blocks, labels);
+        List<IZone> zones = new List<IZone>();
+        foreach (var placedZone in world.GetZones())
+        {
+            var zone = new Zone(placedZone.Zone);
+
+            if (!wholeWorld)
+            {
+                // Crop the zone's membership grid to the extracted region.
+                var cropped = new bool[width, height];
+                for (var dx = 0; dx < width; dx++)
+                {
+                    for (var dy = 0; dy < height; dy++)
+                    {
+                        cropped[dx, dy] = zone.IsBlockInZone(x + dx, y + dy);
+                    }
+                }
+
+                zone.Width = width;
+                zone.Height = height;
+                zone.Membership = cropped;
+            }
+
+            zones.Add(zone);
+        }
+
+        return new Structure(width, height, new Dictionary<string, string>(), copyEmpty, blocks, labels, zones);
     }
     
     /// <summary>
@@ -92,14 +119,50 @@ public static class WorldExtensions
         return worldStructure;
     }
 
+    /// <summary>
+    /// A zone that needs to be created in the target world: the create request itself, plus the
+    /// fully-translated target zone (name/settings/membership) needed to recognize the server's
+    /// echoed creation and build its membership's area-edit requests afterward.
+    /// </summary>
+    public class ZoneCreation
+    {
+        public required IMessage UpsertPacket { get; init; }
+        public required IZone TargetZone { get; init; }
+    }
+
     public class WorldDifference
     {
         public required List<IPlacedBlock> Blocks { get; init; }
         public required List<ITextLabel> Labels { get; init; }
 
+        /// <summary>
+        /// Update-settings requests for zones that already exist in the target world (only sent
+        /// when a setting actually differs).
+        /// </summary>
+        public required List<IMessage> ZoneUpserts { get; init; }
+
+        /// <summary>
+        /// Zones that don't exist in the target world yet and need to be created. See
+        /// <see cref="ZoneCreation"/> — creating one and then populating its membership requires
+        /// waiting for the server to echo back its assigned id (<see cref="PasteDifference"/>
+        /// does this; <see cref="AsPackets"/> cannot, since it's synchronous, so it only sends the
+        /// create request and leaves the new zone's membership empty).
+        /// </summary>
+        public required List<ZoneCreation> ZoneCreations { get; init; }
+
+        /// <summary>
+        /// Zone membership add/remove requests for zones that already exist in the target world
+        /// (only the cells that changed).
+        /// </summary>
+        public required List<IMessage> ZoneAreaEdits { get; init; }
+
         public IEnumerable<IMessage> AsPackets()
         {
-            return Blocks.ToChunkedPackets().Concat(Labels.Select(l => l.ToUpsertPacket()));
+            return Blocks.ToChunkedPackets()
+                .Concat(Labels.Select(l => l.ToUpsertPacket()))
+                .Concat(ZoneUpserts)
+                .Concat(ZoneCreations.Select(c => c.UpsertPacket))
+                .Concat(ZoneAreaEdits);
         }
     }
 
@@ -149,22 +212,65 @@ public static class WorldExtensions
             return true;
         }).ToList();
 
+        // Zone difference. The server only lets a client change zone membership via rectangle
+        // add/remove requests (never a raw membership blob), and a settings-upsert always needs
+        // either no id (create) or an existing zone's id (update) — so, unlike blocks/labels,
+        // zone packets are always built in world space here regardless of `translate`: matching a
+        // structure zone to an existing world zone (by name) is what decides whether we can even
+        // target an id for area edits.
+        var worldZones = world.GetZones();
+        var zoneUpserts = new List<IMessage>();
+        var zoneCreations = new List<ZoneCreation>();
+        var zoneAreaEdits = new List<IMessage>();
+
+        foreach (var structureZone in structure.Zones)
+        {
+            var translatedZone = TranslateZoneToWorld(structureZone, world.Width, world.Height, x, y);
+            var existingZone = worldZones.FirstOrDefault(z => z.Zone.Name == translatedZone.Name);
+
+            if (existingZone == null)
+            {
+                // No matching zone in the target world: create it (empty id — the server assigns
+                // its own; a non-empty but unrecognized id is treated as an edit of a
+                // non-existent zone and silently does nothing). See ZoneCreation/PasteDifference
+                // for how its membership gets populated once the server echoes back its new id.
+                zoneCreations.Add(new ZoneCreation
+                {
+                    UpsertPacket = translatedZone.ToUpsertPacket(),
+                    TargetZone = translatedZone
+                });
+                continue;
+            }
+
+            if (!translatedZone.SettingsEqual(existingZone.Zone))
+            {
+                zoneUpserts.Add(translatedZone.ToUpsertPacket(existingZone.Id));
+            }
+
+            var (add, remove) = ZoneMembershipRects.Diff(existingZone.Zone.Membership, translatedZone.Membership);
+            zoneAreaEdits.AddRange(add.Select(rect => BuildAreaEditPacket(existingZone.Id, rect, true)));
+            zoneAreaEdits.AddRange(remove.Select(rect => BuildAreaEditPacket(existingZone.Id, rect, false)));
+        }
+
         // If not translated, just return the stucture differences.
         if (!translate)
         {
             return new WorldDifference()
             {
                 Blocks = difference,
-                Labels = labelDifference
+                Labels = labelDifference,
+                ZoneUpserts = zoneUpserts,
+                ZoneCreations = zoneCreations,
+                ZoneAreaEdits = zoneAreaEdits
             };
         }
-        
+
         // Deep copy the blocks and translate them.
         var translatedBlocks = difference.Select(pb => new PlacedBlock(pb.X + x, pb.Y + y, pb.Layer, (IPixelBlock) pb.Block.Clone())).ToList();
         var translatedLabels = labelDifference.Select(label =>
         {
             var translatedLabel = new TextLabel(label);
-            translatedLabel.Position = new Point(label.Position.X + (x * 16), label.Position.Y + (y * 16)); 
+            translatedLabel.Position = new Point(label.Position.X + (x * 16), label.Position.Y + (y * 16));
 
             return translatedLabel;
         });
@@ -172,10 +278,108 @@ public static class WorldExtensions
         return new WorldDifference()
         {
             Blocks = translatedBlocks.Cast<IPlacedBlock>().ToList(),
-            Labels = translatedLabels.Cast<ITextLabel>().ToList()
+            Labels = translatedLabels.Cast<ITextLabel>().ToList(),
+            ZoneUpserts = zoneUpserts,
+            ZoneCreations = zoneCreations,
+            ZoneAreaEdits = zoneAreaEdits
         };
     }
-    
+
+    private static IMessage BuildAreaEditPacket(string zoneId, Rectangle rect, bool add)
+    {
+        return new WorldZoneAreaEditRequestPacket
+        {
+            ZoneId = zoneId,
+            X = rect.X,
+            Y = rect.Y,
+            Width = rect.Width,
+            Height = rect.Height,
+            Add = add,
+        };
+    }
+
+    /// <summary>
+    /// Expands a zone's membership grid into a world-sized grid positioned at (x, y).
+    /// Cells outside the zone's own grid are left unset (not a member).
+    /// </summary>
+    private static Zone TranslateZoneToWorld(IZone zone, int worldWidth, int worldHeight, int x, int y)
+    {
+        var translated = new Zone(zone)
+        {
+            Width = worldWidth,
+            Height = worldHeight,
+            Membership = new bool[worldWidth, worldHeight]
+        };
+
+        for (var dx = 0; dx < zone.Width; dx++)
+        {
+            for (var dy = 0; dy < zone.Height; dy++)
+            {
+                var wx = dx + x;
+                var wy = dy + y;
+                if (wx < 0 || wy < 0 || wx >= worldWidth || wy >= worldHeight) continue;
+
+                translated.Membership[wx, wy] = zone.Membership[dx, dy];
+            }
+        }
+
+        return translated;
+    }
+
+    /// <summary>
+    /// Sends a <see cref="WorldDifference"/> to the server. Blocks, labels, zone-settings updates
+    /// and zone-creation requests are sent first. Zone area edits (membership add/remove) are
+    /// sent afterward, delayed by <paramref name="areaEditDelayMs"/>, since an area edit targets a
+    /// zone id that may only just have been created or had its settings changed moments before.
+    /// For each <see cref="ZoneCreation"/>, this method starts waiting for the server to echo back
+    /// the new zone's assigned id (via <see cref="PixelWorld.WaitForZoneUpsert"/>) *before* sending
+    /// its create request, so the echo can't be missed; if it doesn't arrive within
+    /// <paramref name="zoneCreationTimeoutMs"/>, that zone's membership is simply left empty.
+    /// </summary>
+    public static async Task PasteDifference(
+        this PixelWorld world,
+        PixelPilotClient client,
+        WorldDifference difference,
+        int zoneCreationTimeoutMs = 500)
+    {
+        // Subscribe before sending, so a fast echo can't arrive before we start listening.
+        var pendingCreations = difference.ZoneCreations.Select(creation => (
+            creation.TargetZone,
+            Wait: world.WaitForZoneUpsert(z => z.SettingsEqual(creation.TargetZone), TimeSpan.FromMilliseconds(zoneCreationTimeoutMs))
+        )).ToList();
+
+        var packets = difference.Blocks.ToChunkedPackets();
+        packets.AddRange(difference.Labels.Select(l => l.ToUpsertPacket()));
+        packets.AddRange(difference.ZoneUpserts);
+        packets.AddRange(difference.ZoneCreations.Select(c => c.UpsertPacket));
+
+        if (packets.Count > 0)
+        {
+            client.SendRange(packets);
+        }
+
+        var newZoneAreaEdits = new List<IMessage>();
+        foreach (var (targetZone, wait) in pendingCreations)
+        {
+            try
+            {
+                var createdZone = await wait;
+                var rects = ZoneMembershipRects.Decompose(targetZone.Membership);
+                newZoneAreaEdits.AddRange(rects.Select(rect => BuildAreaEditPacket(createdZone.Id, rect, true)));
+            }
+            catch (PixelGameException)
+            {
+                // Timed out waiting for the server to echo this zone's creation; its membership
+                // is left empty rather than risk targeting the wrong (or no) zone id.
+            }
+        }
+
+        var areaEdits = difference.ZoneAreaEdits.Concat(newZoneAreaEdits).ToList();
+        if (areaEdits.Count == 0) return;
+        
+        client.SendRange(areaEdits);
+    }
+
     public static async Task PasteSafe(this PixelWorld world, Structure structure, PixelPilotClient client, Point pasteLocation, int maxAttempts = 5)
     {
         int attempts = 0;
@@ -188,7 +392,12 @@ public static class WorldExtensions
             
             // Labels
             diffPackets.AddRange(difference.Labels.Select(l => l.ToUpsertPacket()));
-            
+
+            // Zones
+            diffPackets.AddRange(difference.ZoneUpserts);
+            diffPackets.AddRange(difference.ZoneCreations.Select(c => c.UpsertPacket));
+            diffPackets.AddRange(difference.ZoneAreaEdits);
+
             // If no diff, return.
             if (diffPackets.Count == 0) return;
             
