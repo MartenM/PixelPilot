@@ -335,7 +335,7 @@ public class PixelApiClient : IDisposable
             throw new PixelApiException("An unknown exception occured while attempting to fetch the worlds");
         }
 
-        return response["proton"];
+        return response["protoVersion"];
     }
     
     public void Dispose()
