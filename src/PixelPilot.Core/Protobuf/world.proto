@@ -39,6 +39,7 @@ message WorldPacket {
         PlayerMagicPacket player_magic_packet = 41;
         GameTicksSyncRequestPacket game_ticks_sync_request_packet = 42;
         GameTicksSyncResponsePacket game_ticks_sync_response_packet = 43;
+        PlayerLeaderboardUpdatePacket player_leaderboard_update_packet = 60;
 
         /* World packets - Mostly send out by the server */
         WorldReloadedPacket world_reloaded_packet = 26;
@@ -50,22 +51,23 @@ message WorldPacket {
         WorldLabelDeleteRequestPacket world_label_delete_request_packet = 47;
         WorldLabelUpsertPacket world_label_upsert_packet = 48;
         WorldLabelDeletePacket world_label_delete_packet = 49;
-        WorldResizePacket world_resize_packet = 50;
+        WorldVerifyPacket world_verify_packet = 50;
+        WorldResizePacket world_resize_packet = 51;
 
         /* Zone packets */
-        WorldZoneUpsertRequestPacket world_zone_upsert_request_packet = 51;
-        WorldZoneUpsertPacket world_zone_upsert_packet = 52;
-        WorldZoneDeleteRequestPacket world_zone_delete_request_packet = 53;
-        WorldZoneDeletePacket world_zone_delete_packet = 54;
-        WorldZoneAreaEditRequestPacket world_zone_area_edit_request_packet = 55;
-        WorldZoneAreaEditPacket world_zone_area_edit_packet = 56;
-        WorldZoneReorderRequestPacket world_zone_reorder_request_packet = 57;
-        WorldZoneReorderPacket world_zone_reorder_packet = 58;
+        WorldZoneUpsertRequestPacket world_zone_upsert_request_packet = 52;
+        WorldZoneUpsertPacket world_zone_upsert_packet = 53;
+        WorldZoneDeleteRequestPacket world_zone_delete_request_packet = 54;
+        WorldZoneDeletePacket world_zone_delete_packet = 55;
+        WorldZoneAreaEditRequestPacket world_zone_area_edit_request_packet = 56;
+        WorldZoneAreaEditPacket world_zone_area_edit_packet = 57;
+        WorldZoneReorderRequestPacket world_zone_reorder_request_packet = 58;
+        WorldZoneReorderPacket world_zone_reorder_packet = 59;
 
         /* MISC */
         OldChatMessagesPacket old_chat_messages_packet = 31;
         SystemMessagePacket system_message_packet = 32;
-        
+
         GlobalSwitchChangedPacket global_switch_changed_packet = 33;
         GlobalSwitchResetPacket global_switch_reset_packet = 34;
 
@@ -180,7 +182,7 @@ message BlockFieldValue {
 
 message WorldBlockPlacedPacket {
     optional int32 player_id = 1;
-    
+
     // Repeated for use in fill operations
     repeated PointInteger positions = 2;
     int32 layer = 3;
@@ -220,6 +222,12 @@ message WorldLabelUpsertPacket {
 
 message WorldLabelDeletePacket {
     string id = 1;
+}
+
+message WorldVerifyPacket {
+    int32 verifier = 1;
+    int32 difficulty = 2;
+    repeated string tags = 3;
 }
 
 /*
@@ -299,13 +307,13 @@ message PlayerInitPacket {
 
     // Text labels to display in the world
     repeated ProtoTextLabel text_labels = 7;
-    
+
     // Structured world data format
     repeated BlockDataInfo block_data_palette = 8;
     bytes background_layer_data = 9;
     bytes foreground_layer_data = 10;
     bytes overlay_layer_data = 11;
-    
+
     // Elapsed ticks since game started (100 ticks per second) - clients use this as reference point (0)
     int64 game_elapsed_time = 12;
 
@@ -327,8 +335,8 @@ message PlayerInitReceivedPacket {
 }
 
 message PlayerJoinedPacket {
-  PlayerProperties properties = 1;
-  PlayerWorldState world_state = 2;
+    PlayerProperties properties = 1;
+    PlayerWorldState world_state = 2;
 }
 
 message PlayerLeftPacket {
@@ -348,7 +356,7 @@ message PlayerUpdateRightsPacket {
 
 message PlayerMovedPacket {
     optional int32 player_id = 1;
-    
+
     PointDouble position = 2;
     double velocity_x = 3;
     double velocity_y = 4;
@@ -413,6 +421,8 @@ message PlayerTouchBlockPacket {
     optional PointInteger position = 2;
     int32 layer = 3;
     int32 block_id = 4;
+
+    int32 tick_id = 5;
 }
 
 message PlayerAddEffectPacket {
@@ -500,6 +510,10 @@ message GameTicksSyncResponsePacket {
     bool is_paused = 2;
 }
 
+message PlayerLeaderboardUpdatePacket {
+    /* Empty - signal for client to refetch own leaderboard placement */
+}
+
 /*
      ============================================
             PARTS, not messages themselves.
@@ -563,6 +577,13 @@ message WorldMeta {
     int32 background_color = 18;
     bool has_void_color = 19;
     int32 void_color = 20;
+
+    // Library info, set when the world is published to the library.
+    string library_id = 21;
+    int32 library_difficulty = 22;
+    string library_quality = 23;
+    string library_status = 24;
+    int32 library_completions = 25;
 
     enum WorldType {
         Saved = 0;
