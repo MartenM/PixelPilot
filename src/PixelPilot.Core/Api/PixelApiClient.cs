@@ -230,7 +230,7 @@ public class PixelApiClient : IDisposable
         if (page == 0)
             throw new PixelApiException("Pages start at 1. Not 0!");
         
-        var apiUrl = $"{EndPoints.ApiEndpoint}/api/collections/worlds/records?page={page}&perPage={perPage}{qb?.Build() ?? ""}";
+        var apiUrl = $"{EndPoints.ApiEndpoint}/api/collections/worlds/records?expand=worldData&page={page}&perPage={perPage}{qb?.Build() ?? ""}";
         _logger.LogInformation($"API Request: {apiUrl}");
 
         var worldCollection =
@@ -285,7 +285,7 @@ public class PixelApiClient : IDisposable
     /// <returns>PNG Byte[]</returns>
     public async Task<byte[]> GetMinimap(WorldEntry world)
     {
-        var apiUrl = $"{EndPoints.ApiEndpoint}/api/files/omma7comumpv34j/{world.Id}/{world.Minimap}";
+        var apiUrl = $"{EndPoints.ApiEndpoint}/api/files/pbc_2374435111/{world.Id}/{world.Expand.WorldData.Minimap}";
         _logger.LogInformation($"API Request: {apiUrl}");
         
         byte[] bytes = await _client.GetByteArrayAsync(apiUrl);

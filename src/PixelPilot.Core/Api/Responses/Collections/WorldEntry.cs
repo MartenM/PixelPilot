@@ -20,4 +20,11 @@ public class WorldEntry : ICollectionEntry
     public string Visibility { get; set; } = null!;
     public string Created { get; set; } = null!;
     public string Data { get; set; } = null!;
+
+    public Expanded Expand { get; set; } = null!;
+}
+
+public class Expanded
+{
+    public WorldData WorldData { get; set; } = null!;
 }
