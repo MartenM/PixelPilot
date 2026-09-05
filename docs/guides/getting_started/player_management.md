@@ -26,7 +26,7 @@ client.OnPacketReceived += (_, packet) =>
             var player = playerManager.GetPlayer(chat.PlayerId);
             if (player == null) return;
 
-            client.Send(new PlayerChatOutPacket($"Pong! ({player.Username}, {player.X}, {player.Y})"));
+            client.SendChat($"Pong! ({player.Username}, {player.X}, {player.Y})");
             break;
         }
     }

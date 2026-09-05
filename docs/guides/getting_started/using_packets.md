@@ -44,7 +44,7 @@ We will now extend this example with a simple `.stop` command for the bot. Note 
 switch (packet)
 {
     case PlayerChatPacket { Message: ".stop" }:
-        client.Disconnect();
+        await client.Disconnect();
         Environment.Exit(0);
         return;
     case PlayerJoinedPacket joinData:

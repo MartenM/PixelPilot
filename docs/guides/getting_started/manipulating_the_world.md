@@ -16,8 +16,7 @@ To get started with the `PixelWorld` class, create an instance of it and ensure 
 
 ```csharp
 // Create a PixelWorld class and attach the client to it.
-// Allow it to listen to client updates. Not required!
-var world = new PixelWorld();
+var world = new PixelWorld(client);
 client.OnPacketReceived += world.HandlePacket;
 ```
 
@@ -34,8 +33,8 @@ In order to get a block at a specific coordinate and layer you can use the follo
 We then check if it's a coin. Note that the `block.Block` gives us an enum. This enum can be cast to an INT if required.
 ```csharp
 var worldBlock = world.BlockAt(layer, x, y);
-Console.WriteLine($"Is this a coin? ({worldBlock.Block == PixelBlock.Coin})");
-Console.WriteLine($"It is a: {worldBlock.Block} with ID {block.BlockId}");
+Console.WriteLine($"Is this a coin? ({worldBlock.Block == PixelBlock.CoinGold})");
+Console.WriteLine($"It is a: {worldBlock.Block} with ID {worldBlock.BlockId}");
 ```
 
 ### Blocks with additional data.

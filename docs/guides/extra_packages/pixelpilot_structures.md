@@ -27,11 +27,14 @@ string json = File.ReadAllText("test-struct.json");
 var structure = PilotSaveSerializer.Deserialize(json);
 
 // Various methods for getting the list of blocks.
-List<IPlacedBlock> diff = world.GetDifference(structure, x, y);
+WorldDifference diff = world.GetDifference(structure, x, y);
 List<IPlacedBlock> blocks = structure.Blocks;
 List<IPlacedBlock> blocks = structure.BlocksWithEmpty;
 
 // Helper methods for pasting the blocks.
 structure.Blocks.PasteInOrder(client, new Point(x, y), 5);
-structure.Blocks.PasteShuffeled(client, new Point(x, y), 5);
+structure.Blocks.PasteShuffled(client, new Point(x, y), 5);
+
+// Preferred: paste only the diff, retrying if a placement gets rejected (e.g. a player standing on the block).
+await world.PasteSafe(structure, client, new Point(x, y));
 ```

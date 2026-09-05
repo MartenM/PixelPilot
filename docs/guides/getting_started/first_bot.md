@@ -38,7 +38,7 @@ Copy the world ID and use it to connect to the world.
 await client.Connect("r082b210d67df52");
 ```
 
-Our bot has now joined the world but it since the end of the program has been reached it will terminate.
+Our bot has now joined the world but since the end of the program has been reached it will terminate.
 You can prevent this by adding either one of the following lines of code to the end of your program.
 ```csharp
 // Don't terminate.
