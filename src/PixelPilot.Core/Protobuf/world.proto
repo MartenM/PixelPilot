@@ -64,6 +64,9 @@ message WorldPacket {
         WorldZoneReorderRequestPacket world_zone_reorder_request_packet = 58;
         WorldZoneReorderPacket world_zone_reorder_packet = 59;
 
+        /* Area copy/paste packets */
+        WorldAreaPasteRequestPacket world_area_paste_request_packet = 61;
+
         /* MISC */
         OldChatMessagesPacket old_chat_messages_packet = 31;
         SystemMessagePacket system_message_packet = 32;
@@ -225,7 +228,7 @@ message WorldLabelDeletePacket {
 }
 
 message WorldVerifyPacket {
-    int32 verifier = 1;
+    repeated int32 verifiers = 1;
     int32 difficulty = 2;
     repeated string tags = 3;
 }
@@ -288,6 +291,25 @@ message WorldZoneReorderPacket {
 }
 
 /*
+ * Area copy/paste PACKETS
+ */
+
+// Encoded the same way as PlayerInitPacket's structured world data. Palette index 0 is reserved as a
+// "skip" sentinel meaning "leave the destination cell untouched" (used for cells outside a non-rectangular selection).
+message WorldAreaPasteRequestPacket {
+    PointInteger origin = 1;
+    int32 width = 2;
+    int32 height = 3;
+    repeated BlockDataInfo palette = 4;
+    bytes background_layer_data = 5;
+    bytes foreground_layer_data = 6;
+    bytes overlay_layer_data = 7;
+
+    // Present only when this paste didn't fit in one packet and multiple packets are used.
+    optional uint32 batch_id = 8;
+}
+
+/*
  * PLAYER PACKETS
  */
 message PlayerInitPacket {
@@ -322,6 +344,9 @@ message PlayerInitPacket {
 
     // Zones defined in the world
     repeated ProtoZone zones = 14;
+
+    // Library state
+    bool is_completed = 15;
 }
 
 // Information about a block data type for the palette
@@ -336,7 +361,6 @@ message PlayerInitReceivedPacket {
 
 message PlayerJoinedPacket {
     PlayerProperties properties = 1;
-    PlayerWorldState world_state = 2;
 }
 
 message PlayerLeftPacket {
@@ -531,6 +555,8 @@ message PlayerWorldState {
     bool modmode = 9;
     int32 team_id = 10;
     repeated int32 counters = 11;
+    optional PointInteger checkpoint = 12;
+    repeated PlayerAddEffectPacket effects = 13;
 }
 
 message PlayerProperties {
@@ -544,6 +570,8 @@ message PlayerProperties {
     PlayerMovedPacket lastMovementPacket = 8;
     bool is_world_owner = 9;
     PlayerRights rights = 10;
+    PlayerWorldState world_state = 11;
+    int32 ticks_elapsed = 12;
 }
 
 message PlayerRights {
