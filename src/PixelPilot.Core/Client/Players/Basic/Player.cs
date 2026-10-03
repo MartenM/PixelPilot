@@ -20,13 +20,13 @@ public class Player : IPixelPlayer
         CanEdit = packet.Properties.Rights.CanEdit;
         X = packet.Properties.LastMovementPacket.Position.X;
         Y = packet.Properties.LastMovementPacket.Position.Y;
-        GoldCoins = packet.WorldState.CoinsGold;
-        BlueCoins = packet.WorldState.CoinsBlue;
-        Deaths = packet.WorldState.Deaths;
-        HasCrown = packet.WorldState.HasGoldCrown;
-        HasCompletedWorld = packet.WorldState.HasSilverCrown;
-        Godmode = packet.WorldState.Godmode;
-        Modmode = packet.WorldState.Modmode;
+        GoldCoins = packet.Properties.WorldState.CoinsGold;
+        BlueCoins = packet.Properties.WorldState.CoinsBlue;
+        Deaths = packet.Properties.WorldState.Deaths;
+        HasCrown = packet.Properties.WorldState.HasGoldCrown;
+        HasCompletedWorld = packet.Properties.WorldState.HasSilverCrown;
+        Godmode = packet.Properties.WorldState.Godmode;
+        Modmode = packet.Properties.WorldState.Modmode;
     }
 
     public Player(int id, string accountId, string username, string smiley, string role, Color chatColor, double x, double y, int coins, int blueCoins, int deaths, bool godmode, bool modmode, bool hasCrown, bool canGod, bool canEdit)
