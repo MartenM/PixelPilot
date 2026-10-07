@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Net;
+using System.Net.Http.Json;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
@@ -93,12 +94,20 @@ public class PixelApiClient : IDisposable
     /// <returns></returns>
     public async Task<JoinKeyResponse?> GetJoinKey(string roomType, string roomId)
     {
-        var roomTokenUrl = $"{EndPoints.ApiEndpoint}/api/joinkey/{roomType}/{roomId}";
+        var roomTokenUrl = $"{EndPoints.ApiEndpoint}/api/joinkey/{roomId}";
         _logger.LogInformation($"API Request: {roomTokenUrl}");
 
+        var gameVersion = await GetGameVersion();
+        
+        var body = new
+        {
+            ProtoVersion = gameVersion,
+        };
+        
         try
         {
-            return await JsonSerializer.DeserializeAsync<JoinKeyResponse>(await _client.GetStreamAsync(roomTokenUrl));
+            var request = await _client.PostAsJsonAsync(roomTokenUrl, body);
+            return await JsonSerializer.DeserializeAsync<JoinKeyResponse>(await request.Content.ReadAsStreamAsync());
         }
         catch (HttpRequestException ex)
         {
