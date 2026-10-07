@@ -10,4 +10,9 @@ public class PlayerEntry : ICollectionEntry
     public int Face { get; set; }
     public string Id { get; set; } = null!;
     public string Username { get; set; } = null!;
+
+    /// <summary>
+    /// Aura color as 0xRRGGBB. Defaults to white (0xFFFFFF).
+    /// </summary>
+    public uint AuraColor { get; set; } = 0xFFFFFF;
 }

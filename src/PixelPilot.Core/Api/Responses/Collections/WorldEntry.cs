@@ -27,4 +27,9 @@ public class WorldEntry : ICollectionEntry
 public class Expanded
 {
     public WorldData WorldData { get; set; } = null!;
+
+    /// <summary>
+    /// Only populated when the owner is expanded, e.g. by <see cref="PixelApiClient.GetPublishedWorlds"/>.
+    /// </summary>
+    public PlayerEntry? Owner { get; set; }
 }

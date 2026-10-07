@@ -46,6 +46,38 @@ public class PixelwalkerApiTests
     }
     
     [Test]
+    public async Task TestGetPublishedWorlds()
+    {
+        var query = new QueryArgumentBuilder()
+            .AddFilter("difficulty", ">=", 1)
+            .AddFilter("difficulty", "<=", 3);
+        var worlds = await _client.GetPublishedWorlds(1, 10, query);
+
+        Assert.That(worlds.Items, Is.Not.Empty);
+        Assert.That(worlds.Items.All(w => w.Difficulty is >= 1 and <= 3), Is.True);
+        Assert.That(worlds.Items[0].Expand?.World?.Expand.Owner, Is.Not.Null);
+    }
+
+    [Test]
+    public async Task TestGetWorldLeaderboard()
+    {
+        var published = await _client.GetPublishedWorlds(1, 1, new QueryArgumentBuilder().SortDescending().SortBy("completions"));
+        var leaderboard = await _client.GetWorldLeaderboard(published.Items[0].Id);
+
+        Assert.That(leaderboard, Is.Not.Empty);
+        Assert.That(leaderboard[0].Index, Is.EqualTo(1));
+    }
+
+    [Test]
+    public async Task TestGetWorldLeaderboardWithWorldIdIsEmpty()
+    {
+        var published = await _client.GetPublishedWorlds(1, 1);
+        var leaderboard = await _client.GetWorldLeaderboard(published.Items[0].World);
+
+        Assert.That(leaderboard, Is.Empty);
+    }
+
+    [Test]
     public async Task TestGetPlayer()
     {
         // Test getting worlds of MartenM

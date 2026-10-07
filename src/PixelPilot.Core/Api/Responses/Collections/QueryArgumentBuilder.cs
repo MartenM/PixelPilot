@@ -7,7 +7,9 @@ namespace PixelPilot.Api.Responses.Collections;
 /// </summary>
 public class QueryArgumentBuilder
 {
-    private List<(string, dynamic)>? _filters;
+    private static readonly HashSet<string> SupportedOperators = new() { "=", "!=", ">", ">=", "<", "<=", "~", "!~" };
+
+    private List<(string, string, dynamic)>? _filters;
     private string? _sortBy;
     private bool _sortAscending = true;
     
@@ -24,8 +26,25 @@ public class QueryArgumentBuilder
     /// <returns>The builder</returns>
     public QueryArgumentBuilder AddFilter(string key, dynamic value)
     {
+        return AddFilter(key, "=", value);
+    }
+
+    /// <summary>
+    /// Add a filter for a specific field using a comparison operator.
+    /// Multiple filters are combined with AND.
+    /// </summary>
+    /// <param name="key">Key of the field</param>
+    /// <param name="op">Comparison operator: =, !=, &gt;, &gt;=, &lt;, &lt;=, ~ (like) or !~ (not like)</param>
+    /// <param name="value">Value of the field</param>
+    /// <returns>The builder</returns>
+    /// <exception cref="PixelApiException">When the operator is not supported.</exception>
+    public QueryArgumentBuilder AddFilter(string key, string op, dynamic value)
+    {
+        if (!SupportedOperators.Contains(op))
+            throw new PixelApiException($"Unsupported filter operator '{op}'.");
+
         if (_filters == null) _filters = new();
-        _filters.Add((key, value));
+        _filters.Add((key, op, value));
         return this;
     }
 
@@ -70,7 +89,7 @@ public class QueryArgumentBuilder
         StringBuilder sb = new();
         if (_filters != null)
         {
-            sb.Append($"&filter={ConstructFilter(_filters)}");
+            sb.Append($"&filter={Uri.EscapeDataString(ConstructFilter(_filters))}");
         }
 
         if (_sortBy != null)
@@ -84,33 +103,30 @@ public class QueryArgumentBuilder
     /// <summary>
     /// Constructs the filter based on the input
     /// </summary>
-    /// <param name="filters">Key, value pairs of filter entries</param>
+    /// <param name="filters">Key, operator, value entries</param>
     /// <returns></returns>
-    /// <exception cref="PixelApiException">When the filter is mis-used.</exception>
-    private static string ConstructFilter(List<(string, dynamic)> filters)
+    private static string ConstructFilter(List<(string, string, dynamic)> filters)
     {
         StringBuilder filterBuilder = new();
         for (int i = 0; i < filters.Count; i++)
         {
-            var fe = filters[i];
-            if (fe.Item2.GetType().Equals(typeof(string)))
+            var (key, op, value) = filters[i];
+            if (value.GetType().Equals(typeof(string)))
             {
-                filterBuilder.Append($"{fe.Item1}=\"{fe.Item2}\"");
+                filterBuilder.Append($"{key}{op}\"{value}\"");
             }
-            else if (fe.Item2.GetType().Equals(typeof(bool)))
+            else if (value.GetType().Equals(typeof(bool)))
             {
-                filterBuilder.Append($"{fe.Item1}={(fe.Item2 ? "true" : "false")}");
+                filterBuilder.Append($"{key}{op}{(value ? "true" : "false")}");
             }
             else
             {
-                filterBuilder.Append($"{fe.Item1}={fe.Item2}");
+                filterBuilder.Append($"{key}{op}{value}");
             }
-            
-            
+
             if (filters.Count - 1 == i) continue;
-            
-            // Append the AND
-            throw new PixelApiException("Currently it's not possible to filter on multiple fields!");
+
+            filterBuilder.Append(" && ");
         }
 
         return filterBuilder.ToString();

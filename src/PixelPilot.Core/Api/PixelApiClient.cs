@@ -246,6 +246,52 @@ public class PixelApiClient : IDisposable
         var worlds = await GetPublicWorlds(1, 1, query);
         return worlds.TotalItems == 0 ? null : worlds.Items.First();
     }
+
+    /// <summary>
+    /// Fetches worlds published to the world library, with the world and its owner expanded.
+    /// </summary>
+    /// <example>
+    /// Filter on a difficulty range:
+    /// <code>
+    /// new QueryArgumentBuilder().AddFilter("difficulty", ">=", 1).AddFilter("difficulty", "&lt;=", 3)
+    /// </code>
+    /// </example>
+    /// <param name="page">Page to be fetched</param>
+    /// <param name="perPage">Entries per page</param>
+    /// <param name="qb">Query builder</param>
+    /// <returns>The page requested</returns>
+    /// <exception cref="PixelApiException">When the published worlds could not be fetched</exception>
+    public async Task<CollectionResponse<PublishedWorldEntry>> GetPublishedWorlds(int page, int perPage, QueryArgumentBuilder? qb = null)
+    {
+        if (page == 0)
+            throw new PixelApiException("Pages start at 1. Not 0!");
+
+        var apiUrl = $"{EndPoints.ApiEndpoint}/api/collections/published_worlds/records?expand=world%2Cworld.owner&page={page}&perPage={perPage}{qb?.Build() ?? ""}";
+        _logger.LogInformation($"API Request: {apiUrl}");
+
+        var worldCollection =
+            await JsonSerializer.DeserializeAsync<CollectionResponse<PublishedWorldEntry>>(await _client.GetStreamAsync(apiUrl), _jsonOptions);
+        return worldCollection ?? throw new PixelApiException("An unknown exception occured while attempting to fetch the published worlds");
+    }
+
+    /// <summary>
+    /// Fetches the leaderboard of a published world.
+    /// </summary>
+    /// <param name="publishedWorldId">
+    /// The published world id (<see cref="PublishedWorldEntry.Id"/>), not the world id. Passing a
+    /// world id returns an empty leaderboard.
+    /// </param>
+    /// <returns>The leaderboard entries, best first. Empty if the published world is unknown.</returns>
+    /// <exception cref="PixelApiException">When the leaderboard could not be fetched</exception>
+    public async Task<List<LeaderboardEntry>> GetWorldLeaderboard(string publishedWorldId)
+    {
+        var apiUrl = $"{EndPoints.ApiEndpoint}/api/library/world_leaderboard/{Uri.EscapeDataString(publishedWorldId)}";
+        _logger.LogInformation($"API Request: {apiUrl}");
+
+        var leaderboard =
+            await JsonSerializer.DeserializeAsync<List<LeaderboardEntry>>(await _client.GetStreamAsync(apiUrl), _jsonOptions);
+        return leaderboard ?? throw new PixelApiException("An unknown exception occured while attempting to fetch the leaderboard");
+    }
     
     /// <summary>
     /// Asynchronously retrieves a player entry by username.
