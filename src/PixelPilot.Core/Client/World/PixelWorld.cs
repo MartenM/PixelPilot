@@ -463,11 +463,11 @@ public class PixelWorld
     {
         if (_zones.TryGetValue(packet.Zone.Id, out var zone))
         {
-            zone.UpdateWithProtoZone(packet.Zone);
+            zone.UpdateWithProtoZone(packet.Zone, Width, Height);
         }
         else
         {
-            zone = Zone.FromProtoZone(packet.Zone);
+            zone = Zone.FromProtoZone(packet.Zone, Width, Height);
             _zones.Add(packet.Zone.Id, zone);
             _zoneOrder.Add(packet.Zone.Id);
         }
@@ -507,7 +507,7 @@ public class PixelWorld
     {
         foreach (var zone in zones)
         {
-            _zones.Add(zone.Id, Zone.FromProtoZone(zone));
+            _zones.Add(zone.Id, Zone.FromProtoZone(zone, Width, Height));
             _zoneOrder.Add(zone.Id);
         }
     }

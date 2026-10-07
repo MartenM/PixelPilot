@@ -26,6 +26,7 @@ public class ZoneStructureTests
             Membership = membership,
 
             Vision = ZoneVisionState.On,
+            VisionCombine = ZoneVisionState.On,
             VisionOutside = ZoneVisionState.Off,
             HasVisionColor = true,
             VisionColor = Color.FromArgb(255, 20, 40, 60),
@@ -37,9 +38,7 @@ public class ZoneStructureTests
             CameraFollowMovement = ZoneCameraMovementState.Instant,
 
             Lighting = ZoneLightingState.On,
-            LightDarkness = 50,
-            LightHue = 180,
-            LightTint = 25,
+            LightColor = Color.FromArgb(255, 128, 140, 200),
             LightFeatherTop = 1,
             LightFeatherRight = 2,
             LightFeatherBottom = 3,
@@ -53,12 +52,10 @@ public class ZoneStructureTests
             PlayerLight = ZonePlayerLightState.On,
             PlayerLightRadius = 100,
             PlayerLightStrength = 60,
-            PlayerLightHue = 90,
-            PlayerLightSaturation = 70,
+            PlayerLightColor = Color.FromArgb(255, 255, 220, 150),
 
             Fog = ZoneFogState.On,
-            FogHue = 15,
-            FogSaturation = 55,
+            FogColor = Color.FromArgb(255, 90, 100, 110),
             FogOpacity = 65,
             FogDensity = 75,
             FogDirection = 45,

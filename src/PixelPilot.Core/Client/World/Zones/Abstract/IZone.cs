@@ -14,7 +14,15 @@ public interface IZone
     /// </summary>
     public int Hue { get; }
 
+    /// <summary>
+    /// Width of the <see cref="Membership"/> grid. For zones received from the server this is the
+    /// world width; for zones in a structure it is the structure width.
+    /// </summary>
     public int Width { get; }
+
+    /// <summary>
+    /// Height of the <see cref="Membership"/> grid. See <see cref="Width"/>.
+    /// </summary>
     public int Height { get; }
 
     /// <summary>
@@ -28,6 +36,12 @@ public interface IZone
     public int Size { get; }
 
     public ZoneVisionState Vision { get; }
+
+    /// <summary>
+    /// When standing in several overlapping vision zones: On keeps them all visible (union),
+    /// Off shows only the highest-priority one.
+    /// </summary>
+    public ZoneVisionState VisionCombine { get; }
 
     /// <summary>
     /// Hides the zone's interior from players outside it.
@@ -52,9 +66,11 @@ public interface IZone
     public ZoneCameraMovementState CameraFollowMovement { get; }
 
     public ZoneLightingState Lighting { get; }
-    public int LightDarkness { get; }
-    public int LightHue { get; }
-    public int LightTint { get; }
+
+    /// <summary>
+    /// Ambient light color; white means no darkening or tint.
+    /// </summary>
+    public Color LightColor { get; }
     public int LightFeatherTop { get; }
     public int LightFeatherRight { get; }
     public int LightFeatherBottom { get; }
@@ -71,12 +87,10 @@ public interface IZone
     public ZonePlayerLightState PlayerLight { get; }
     public int PlayerLightRadius { get; }
     public int PlayerLightStrength { get; }
-    public int PlayerLightHue { get; }
-    public int PlayerLightSaturation { get; }
+    public Color PlayerLightColor { get; }
 
     public ZoneFogState Fog { get; }
-    public int FogHue { get; }
-    public int FogSaturation { get; }
+    public Color FogColor { get; }
     public int FogOpacity { get; }
     public int FogDensity { get; }
     public int FogDirection { get; }
@@ -110,7 +124,7 @@ public interface IZone
     /// <summary>
     /// Builds a create/update-settings request. Pass an existing zone's id to update its
     /// settings; omit it to create a new zone (server-assigned id). The server ignores
-    /// Width/Height/MembershipRle on this packet — membership can only be changed via area-edit
+    /// MembershipRle on this packet — membership can only be changed via area-edit
     /// requests (see <see cref="ZoneMembershipRects"/>).
     /// </summary>
     public IMessage ToUpsertPacket(string? id = null);

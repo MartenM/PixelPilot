@@ -32,6 +32,7 @@ public class Zone : IZone
     }
 
     public ZoneVisionState Vision { get; set; }
+    public ZoneVisionState VisionCombine { get; set; }
     public ZoneVisionState VisionOutside { get; set; }
     public bool HasVisionColor { get; set; }
     public Color VisionColor { get; set; }
@@ -43,9 +44,7 @@ public class Zone : IZone
     public ZoneCameraMovementState CameraFollowMovement { get; set; }
 
     public ZoneLightingState Lighting { get; set; }
-    public int LightDarkness { get; set; }
-    public int LightHue { get; set; }
-    public int LightTint { get; set; }
+    public Color LightColor { get; set; } = Color.White;
     public int LightFeatherTop { get; set; }
     public int LightFeatherRight { get; set; }
     public int LightFeatherBottom { get; set; }
@@ -59,12 +58,10 @@ public class Zone : IZone
     public ZonePlayerLightState PlayerLight { get; set; }
     public int PlayerLightRadius { get; set; }
     public int PlayerLightStrength { get; set; }
-    public int PlayerLightHue { get; set; }
-    public int PlayerLightSaturation { get; set; }
+    public Color PlayerLightColor { get; set; } = Color.White;
 
     public ZoneFogState Fog { get; set; }
-    public int FogHue { get; set; }
-    public int FogSaturation { get; set; }
+    public Color FogColor { get; set; } = Color.White;
     public int FogOpacity { get; set; }
     public int FogDensity { get; set; }
     public int FogDirection { get; set; }
@@ -105,6 +102,7 @@ public class Zone : IZone
         Membership = (bool[,]) zone.Membership.Clone();
 
         Vision = zone.Vision;
+        VisionCombine = zone.VisionCombine;
         VisionOutside = zone.VisionOutside;
         HasVisionColor = zone.HasVisionColor;
         VisionColor = zone.VisionColor;
@@ -116,9 +114,7 @@ public class Zone : IZone
         CameraFollowMovement = zone.CameraFollowMovement;
 
         Lighting = zone.Lighting;
-        LightDarkness = zone.LightDarkness;
-        LightHue = zone.LightHue;
-        LightTint = zone.LightTint;
+        LightColor = zone.LightColor;
         LightFeatherTop = zone.LightFeatherTop;
         LightFeatherRight = zone.LightFeatherRight;
         LightFeatherBottom = zone.LightFeatherBottom;
@@ -132,12 +128,10 @@ public class Zone : IZone
         PlayerLight = zone.PlayerLight;
         PlayerLightRadius = zone.PlayerLightRadius;
         PlayerLightStrength = zone.PlayerLightStrength;
-        PlayerLightHue = zone.PlayerLightHue;
-        PlayerLightSaturation = zone.PlayerLightSaturation;
+        PlayerLightColor = zone.PlayerLightColor;
 
         Fog = zone.Fog;
-        FogHue = zone.FogHue;
-        FogSaturation = zone.FogSaturation;
+        FogColor = zone.FogColor;
         FogOpacity = zone.FogOpacity;
         FogDensity = zone.FogDensity;
         FogDirection = zone.FogDirection;
@@ -167,26 +161,34 @@ public class Zone : IZone
         DistortionSmoothing = zone.DistortionSmoothing;
     }
 
-    public static Zone FromProtoZone(ProtoZone protoZone)
+    /// <param name="protoZone">The zone as received from the server.</param>
+    /// <param name="worldWidth">Width of the world the zone belongs to.</param>
+    /// <param name="worldHeight">Height of the world the zone belongs to.</param>
+    public static Zone FromProtoZone(ProtoZone protoZone, int worldWidth, int worldHeight)
     {
         var zone = new Zone();
-        zone.UpdateWithProtoZone(protoZone);
+        zone.UpdateWithProtoZone(protoZone, worldWidth, worldHeight);
         return zone;
     }
 
-    public void UpdateWithProtoZone(ProtoZone zone)
+    /// <summary>
+    /// Overwrites this zone with the server's state. The membership mask on the wire always spans
+    /// the whole world, so the world's dimensions are needed to decode it.
+    /// </summary>
+    public void UpdateWithProtoZone(ProtoZone zone, int worldWidth, int worldHeight)
     {
         Name = zone.Name;
         Priority = zone.Priority;
         Hue = zone.Hue;
-        Width = zone.Width;
-        Height = zone.Height;
-        Membership = MembershipRle.Decode(zone.MembershipRle, zone.Width, zone.Height);
+        Width = worldWidth;
+        Height = worldHeight;
+        Membership = MembershipRle.Decode(zone.MembershipRle, worldWidth, worldHeight);
 
         Vision = zone.Vision.ToZoneVisionState();
+        VisionCombine = zone.VisionCombine.ToZoneVisionState();
         VisionOutside = zone.VisionOutside.ToZoneVisionState();
         HasVisionColor = zone.HasVisionColor;
-        VisionColor = zone.VisionColor.ToColor();
+        VisionColor = FromRgb(zone.VisionColor);
 
         CameraModeX = zone.CameraModeX.ToZoneCameraModeState();
         CameraModeY = zone.CameraModeY.ToZoneCameraModeState();
@@ -195,9 +197,7 @@ public class Zone : IZone
         CameraFollowMovement = zone.CameraFollowMovement.ToZoneCameraMovementState();
 
         Lighting = zone.Lighting.ToZoneLightingState();
-        LightDarkness = zone.LightDarkness;
-        LightHue = zone.LightHue;
-        LightTint = zone.LightTint;
+        LightColor = FromRgb(zone.LightColor);
         LightFeatherTop = zone.LightFeatherTop;
         LightFeatherRight = zone.LightFeatherRight;
         LightFeatherBottom = zone.LightFeatherBottom;
@@ -211,12 +211,10 @@ public class Zone : IZone
         PlayerLight = zone.PlayerLight.ToZonePlayerLightState();
         PlayerLightRadius = zone.PlayerLightRadius;
         PlayerLightStrength = zone.PlayerLightStrength;
-        PlayerLightHue = zone.PlayerLightHue;
-        PlayerLightSaturation = zone.PlayerLightSaturation;
+        PlayerLightColor = FromRgb(zone.PlayerLightColor);
 
         Fog = zone.Fog.ToZoneFogState();
-        FogHue = zone.FogHue;
-        FogSaturation = zone.FogSaturation;
+        FogColor = FromRgb(zone.FogColor);
         FogOpacity = zone.FogOpacity;
         FogDensity = zone.FogDensity;
         FogDirection = zone.FogDirection;
@@ -253,14 +251,13 @@ public class Zone : IZone
             Name = Name,
             Priority = Priority,
             Hue = Hue,
-            Width = Width,
-            Height = Height,
             MembershipRle = MembershipRle.Encode(Membership),
 
             Vision = Vision.ToProtoZoneVision(),
+            VisionCombine = VisionCombine.ToProtoZoneVision(),
             VisionOutside = VisionOutside.ToProtoZoneVision(),
             HasVisionColor = HasVisionColor,
-            VisionColor = VisionColor.ToInt(),
+            VisionColor = ToRgb(VisionColor),
 
             CameraModeX = CameraModeX.ToProtoZoneCameraMode(),
             CameraModeY = CameraModeY.ToProtoZoneCameraMode(),
@@ -269,9 +266,7 @@ public class Zone : IZone
             CameraFollowMovement = CameraFollowMovement.ToProtoZoneCameraMovement(),
 
             Lighting = Lighting.ToProtoZoneLighting(),
-            LightDarkness = LightDarkness,
-            LightHue = LightHue,
-            LightTint = LightTint,
+            LightColor = ToRgb(LightColor),
             LightFeatherTop = LightFeatherTop,
             LightFeatherRight = LightFeatherRight,
             LightFeatherBottom = LightFeatherBottom,
@@ -285,12 +280,10 @@ public class Zone : IZone
             PlayerLight = PlayerLight.ToProtoZonePlayerLight(),
             PlayerLightRadius = PlayerLightRadius,
             PlayerLightStrength = PlayerLightStrength,
-            PlayerLightHue = PlayerLightHue,
-            PlayerLightSaturation = PlayerLightSaturation,
+            PlayerLightColor = ToRgb(PlayerLightColor),
 
             Fog = Fog.ToProtoZoneFog(),
-            FogHue = FogHue,
-            FogSaturation = FogSaturation,
+            FogColor = ToRgb(FogColor),
             FogOpacity = FogOpacity,
             FogDensity = FogDensity,
             FogDirection = FogDirection,
@@ -322,8 +315,8 @@ public class Zone : IZone
     }
 
     /// <summary>
-    /// Builds a create/update-settings request. The server ignores Width/Height/MembershipRle on
-    /// this packet entirely — a newly created zone always starts with empty membership, and an
+    /// Builds a create/update-settings request. The server ignores MembershipRle on this packet
+    /// entirely — a newly created zone always starts with empty membership, and an
     /// existing zone's membership is untouched; membership can only be changed via area-edit
     /// requests (see <see cref="ZoneMembershipRects"/>).
     /// </summary>
@@ -342,6 +335,13 @@ public class Zone : IZone
         };
     }
 
+    /// <summary>
+    /// Zone colors are packed 0xRRGGBB on the wire, without alpha.
+    /// </summary>
+    private static Color FromRgb(int rgb) => Color.FromArgb(255, (rgb >> 16) & 0xFF, (rgb >> 8) & 0xFF, rgb & 0xFF);
+
+    private static int ToRgb(Color color) => color.R << 16 | color.G << 8 | color.B;
+
     public bool IsBlockInZone(int x, int y)
     {
         if (x < 0 || y < 0 || x >= Width || y >= Height) return false;
@@ -359,6 +359,7 @@ public class Zone : IZone
                Priority == other.Priority &&
                Hue == other.Hue &&
                Vision == other.Vision &&
+               VisionCombine == other.VisionCombine &&
                VisionOutside == other.VisionOutside &&
                HasVisionColor == other.HasVisionColor &&
                VisionColor.EqualColor(other.VisionColor) &&
@@ -368,9 +369,7 @@ public class Zone : IZone
                CameraMovement == other.CameraMovement &&
                CameraFollowMovement == other.CameraFollowMovement &&
                Lighting == other.Lighting &&
-               LightDarkness == other.LightDarkness &&
-               LightHue == other.LightHue &&
-               LightTint == other.LightTint &&
+               LightColor.EqualColor(other.LightColor) &&
                LightFeatherTop == other.LightFeatherTop &&
                LightFeatherRight == other.LightFeatherRight &&
                LightFeatherBottom == other.LightFeatherBottom &&
@@ -383,11 +382,9 @@ public class Zone : IZone
                PlayerLight == other.PlayerLight &&
                PlayerLightRadius == other.PlayerLightRadius &&
                PlayerLightStrength == other.PlayerLightStrength &&
-               PlayerLightHue == other.PlayerLightHue &&
-               PlayerLightSaturation == other.PlayerLightSaturation &&
+               PlayerLightColor.EqualColor(other.PlayerLightColor) &&
                Fog == other.Fog &&
-               FogHue == other.FogHue &&
-               FogSaturation == other.FogSaturation &&
+               FogColor.EqualColor(other.FogColor) &&
                FogOpacity == other.FogOpacity &&
                FogDensity == other.FogDensity &&
                FogDirection == other.FogDirection &&
@@ -425,6 +422,7 @@ public class Zone : IZone
                Height == other.Height &&
                MembershipEquals(other.Membership) &&
                Vision == other.Vision &&
+               VisionCombine == other.VisionCombine &&
                VisionOutside == other.VisionOutside &&
                HasVisionColor == other.HasVisionColor &&
                VisionColor.EqualColor(other.VisionColor) &&
@@ -434,9 +432,7 @@ public class Zone : IZone
                CameraMovement == other.CameraMovement &&
                CameraFollowMovement == other.CameraFollowMovement &&
                Lighting == other.Lighting &&
-               LightDarkness == other.LightDarkness &&
-               LightHue == other.LightHue &&
-               LightTint == other.LightTint &&
+               LightColor.EqualColor(other.LightColor) &&
                LightFeatherTop == other.LightFeatherTop &&
                LightFeatherRight == other.LightFeatherRight &&
                LightFeatherBottom == other.LightFeatherBottom &&
@@ -449,11 +445,9 @@ public class Zone : IZone
                PlayerLight == other.PlayerLight &&
                PlayerLightRadius == other.PlayerLightRadius &&
                PlayerLightStrength == other.PlayerLightStrength &&
-               PlayerLightHue == other.PlayerLightHue &&
-               PlayerLightSaturation == other.PlayerLightSaturation &&
+               PlayerLightColor.EqualColor(other.PlayerLightColor) &&
                Fog == other.Fog &&
-               FogHue == other.FogHue &&
-               FogSaturation == other.FogSaturation &&
+               FogColor.EqualColor(other.FogColor) &&
                FogOpacity == other.FogOpacity &&
                FogDensity == other.FogDensity &&
                FogDirection == other.FogDirection &&
@@ -515,6 +509,7 @@ public class Zone : IZone
         hashCode.Add(Width);
         hashCode.Add(Height);
         hashCode.Add(Vision);
+        hashCode.Add(VisionCombine);
         hashCode.Add(VisionOutside);
         hashCode.Add(HasVisionColor);
         hashCode.Add(VisionColor);
@@ -524,7 +519,7 @@ public class Zone : IZone
         hashCode.Add(CameraMovement);
         hashCode.Add(CameraFollowMovement);
         hashCode.Add(Lighting);
-        hashCode.Add(LightDarkness);
+        hashCode.Add(LightColor);
         hashCode.Add(PlayerLight);
         hashCode.Add(Fog);
         hashCode.Add(Distortion);
