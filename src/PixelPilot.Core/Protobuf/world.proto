@@ -41,6 +41,14 @@ message WorldPacket {
         GameTicksSyncResponsePacket game_ticks_sync_response_packet = 43;
         PlayerLeaderboardUpdatePacket player_leaderboard_update_packet = 60;
 
+        /* Friend packets - Pushed by the server when a friendship or request changes */
+        FriendRequestPacket friend_request_packet = 62;
+        FriendUpdatePacket friend_update_packet = 63;
+
+        /* Ghost replay packets - Replays of world library completions */
+        GhostReplayRequestPacket ghost_replay_request_packet = 64;
+        GhostReplayPacket ghost_replay_packet = 65;
+
         /* World packets - Mostly send out by the server */
         WorldReloadedPacket world_reloaded_packet = 26;
         WorldClearedPacket world_cleared_packet = 27;
@@ -109,6 +117,7 @@ message SystemMessagePacket {
         CHAT = 0;
         TOAST = 1;
         DIALOG = 2;
+        NOTIFICATION = 3;
     }
 
     string title = 1;
@@ -409,6 +418,8 @@ message PlayerSmileyPacket {
 message PlayerAuraPacket {
     optional int32 player_id = 1;
     string aura_id = 2;
+    // 0xRRGGBB
+    uint32 aura_color = 3;
 }
 
 message PlayerSpectatePacket {
@@ -512,10 +523,12 @@ message PlayerSetCollectiblesPacket {
 message PlayerMagicPacket {
     enum MagicType {
         SMALL = 0;
+        ITEM = 1;
     }
     int32 player_id = 1;
     MagicType type = 2;
     int32 amount = 3;
+    string owned_item_id = 4;
 }
 
 message PlayerWoot {
@@ -536,6 +549,53 @@ message GameTicksSyncResponsePacket {
 
 message PlayerLeaderboardUpdatePacket {
     /* Empty - signal for client to refetch own leaderboard placement */
+}
+
+/*
+ * A friend request involving this player was sent, or was accepted, declined
+ * or withdrawn (removed).
+ */
+message FriendRequestPacket {
+    string request_id = 1;
+    /* The other party of the request. */
+    string account_id = 2;
+    string username = 3;
+    /* Whether the other party sent the request to this player. */
+    bool incoming = 4;
+    bool removed = 5;
+}
+
+/*
+ * This player became friends with an account, or stopped being friends.
+ */
+message FriendUpdatePacket {
+    string account_id = 1;
+    string username = 2;
+    bool is_friend = 3;
+}
+
+/*
+ * Requests the replay of a player's best completion of the current published world.
+ */
+message GhostReplayRequestPacket {
+    string account_id = 1;
+}
+
+/*
+ * The replay of a completion. The moves are the packets the player sent during the run.
+ * If the replay couldn't be loaded, error is set and moves is empty.
+ */
+message GhostReplayPacket {
+    string account_id = 1;
+    int32 time_ticks = 2;
+    repeated GhostReplayMove moves = 3;
+    optional string error = 4;
+}
+
+message GhostReplayMove {
+    /* Milliseconds since the previous move */
+    int64 delay = 1;
+    WorldPacket packet = 2;
 }
 
 /*
@@ -572,6 +632,8 @@ message PlayerProperties {
     PlayerRights rights = 10;
     PlayerWorldState world_state = 11;
     int32 ticks_elapsed = 12;
+    // 0xRRGGBB
+    uint32 aura_color = 13;
 }
 
 message PlayerRights {
@@ -742,81 +804,79 @@ message ProtoZone {
     int32 priority = 3;
     // Display color as a hue (0-359)
     int32 hue = 4;
+    // Per-block 0/1 mask over the whole world, RLE-compressed.
+    bytes membership_rle = 5;
 
-    int32 width = 5;
-    int32 height = 6;
-    bytes membership_rle = 7; // per-block 0/1 mask, RLE-compressed
-
-    ZoneVision vision = 8;
+    ZoneVision vision = 6;
+    // When standing in several overlapping vision zones: ON keeps them all
+    // visible (union), OFF shows only the highest-priority one.
+    ZoneVision vision_combine = 7;
     // Hides the zone's interior from players outside it.
-    ZoneVision vision_outside = 9;
+    ZoneVision vision_outside = 8;
     // Fill color (0xRRGGBB) for hidden areas; overrides the world's void color.
-    bool has_vision_color = 10;
-    int32 vision_color = 11;
+    bool has_vision_color = 9;
+    int32 vision_color = 10;
 
-    ZoneCameraMode camera_mode_x = 12;
-    ZoneCameraMode camera_mode_y = 13;
-    ZoneCameraTarget camera_target = 14;
-    ZoneCameraMovement camera_movement = 15;
+    ZoneCameraMode camera_mode_x = 11;
+    ZoneCameraMode camera_mode_y = 12;
+    ZoneCameraTarget camera_target = 13;
+    ZoneCameraMovement camera_movement = 14;
     // Camera follow smoothing while not locked to this zone.
-    ZoneCameraMovement camera_follow_movement = 16;
+    ZoneCameraMovement camera_follow_movement = 15;
 
     // Each effect below has per-side feather widths (px), signed per-side
     // margins (px, positive grows outward) and edge smoothing (px, rounds
     // corners of the feathered coverage).
 
     // Lighting (darken + tint)
-    ZoneLighting lighting = 17;
-    int32 light_darkness = 18;   // 0-100
-    int32 light_hue = 19;        // 0-359
-    int32 light_tint = 20;       // 0-100
-    int32 light_feather_top = 21;
-    int32 light_feather_right = 22;
-    int32 light_feather_bottom = 23;
-    int32 light_feather_left = 24;
-    int32 light_margin_top = 25;
-    int32 light_margin_right = 26;
-    int32 light_margin_bottom = 27;
-    int32 light_margin_left = 28;
-    int32 light_smoothing = 29;
+    ZoneLighting lighting = 16;
+    // Ambient light color (0xRRGGBB); white = no darkening or tint.
+    int32 light_color = 17;
+    int32 light_feather_top = 18;
+    int32 light_feather_right = 19;
+    int32 light_feather_bottom = 20;
+    int32 light_feather_left = 21;
+    int32 light_margin_top = 22;
+    int32 light_margin_right = 23;
+    int32 light_margin_bottom = 24;
+    int32 light_margin_left = 25;
+    int32 light_smoothing = 26;
 
     // Personal light carried by players inside the zone.
-    ZonePlayerLight player_light = 30;
-    int32 player_light_radius = 31;     // px
-    int32 player_light_strength = 32;   // 0-100
-    int32 player_light_hue = 33;        // 0-359
-    int32 player_light_saturation = 34; // 0-100
+    ZonePlayerLight player_light = 27;
+    int32 player_light_radius = 28;     // px
+    int32 player_light_strength = 29;   // 0-100
+    int32 player_light_color = 30;      // 0xRRGGBB
 
     // Fog
-    ZoneFog fog = 35;
-    int32 fog_hue = 36;        // 0-359
-    int32 fog_saturation = 37; // 0-100
-    int32 fog_opacity = 38;    // 0-100
-    int32 fog_density = 39;    // 0-100
-    int32 fog_direction = 40;  // 0-359 degrees, clockwise from east
-    int32 fog_speed = 41;      // 0-100
-    int32 fog_feather_top = 42;
-    int32 fog_feather_right = 43;
-    int32 fog_feather_bottom = 44;
-    int32 fog_feather_left = 45;
-    int32 fog_margin_top = 46;
-    int32 fog_margin_right = 47;
-    int32 fog_margin_bottom = 48;
-    int32 fog_margin_left = 49;
-    int32 fog_smoothing = 50;
+    ZoneFog fog = 31;
+    int32 fog_color = 32;      // 0xRRGGBB
+    int32 fog_opacity = 33;    // 0-100
+    int32 fog_density = 34;    // 0-100
+    int32 fog_direction = 35;  // 0-359 degrees, clockwise from east
+    int32 fog_speed = 36;      // 0-100
+    int32 fog_feather_top = 37;
+    int32 fog_feather_right = 38;
+    int32 fog_feather_bottom = 39;
+    int32 fog_feather_left = 40;
+    int32 fog_margin_top = 41;
+    int32 fog_margin_right = 42;
+    int32 fog_margin_bottom = 43;
+    int32 fog_margin_left = 44;
+    int32 fog_smoothing = 45;
 
     // Distortion
-    ZoneDistortion distortion = 51;
-    int32 distortion_strength = 52; // 0-100
-    int32 distortion_scale = 53;    // 0-100
-    int32 distortion_speed = 54;    // 0-100
-    int32 distortion_feather_top = 55;
-    int32 distortion_feather_right = 56;
-    int32 distortion_feather_bottom = 57;
-    int32 distortion_feather_left = 58;
-    int32 distortion_margin_top = 59;
-    int32 distortion_margin_right = 60;
-    int32 distortion_margin_bottom = 61;
-    int32 distortion_margin_left = 62;
-    int32 distortion_smoothing = 63;
+    ZoneDistortion distortion = 46;
+    int32 distortion_strength = 47; // 0-100
+    int32 distortion_scale = 48;    // 0-100
+    int32 distortion_speed = 49;    // 0-100
+    int32 distortion_feather_top = 50;
+    int32 distortion_feather_right = 51;
+    int32 distortion_feather_bottom = 52;
+    int32 distortion_feather_left = 53;
+    int32 distortion_margin_top = 54;
+    int32 distortion_margin_right = 55;
+    int32 distortion_margin_bottom = 56;
+    int32 distortion_margin_left = 57;
+    int32 distortion_smoothing = 58;
 }
